@@ -22,26 +22,30 @@ ZMK Studio対応のキーボードなら**どれでもキーマップ編集**に
 
 ### ② 自分のキーボードに差し替える
 
-作ったリポジトリで、次の2箇所を編集します(GitHubの画面上で鉛筆アイコンから編集できます):
+作ったリポジトリで、次の2箇所を編集します(GitHubの画面上で鉛筆アイコンから編集できます)。
 
-1. **build.yaml** — シールド名を自分のキーボードのものに変える
-   ```yaml
-   include:
-     - board: nice_nano_v2        # 自分のキーボードのボード名
-       shield: corne_left         # 自分のキーボードのシールド名
-       snippet: studio-rpc-usb-uart   # ←アプリと話す側(左/central)に必ず付ける
-     - board: nice_nano_v2
-       shield: corne_right
-   ```
-   ZMK本家に入っている機種(Corne, Sofle, Lily58など)はシールド名を書くだけでOK。
-   自作シールドの場合は `config/boards/shields/` に自分のシールド一式を置いてください。
+**その1: build.yaml** — シールド名を自分のキーボードのものに変えます。
 
-2. **自分のキーマップ(config/◯◯.keymap)** — 先頭付近に1行追加:
-   ```c
-   #include "spare_slots.dtsi"
-   ```
-   `spare_slots.dtsi` はテンプレートに同梱されています(アプリが書き換えるための
-   「空のコンボ/タップダンス/マクロ枠」の定義です)。
+```yaml
+include:
+  - board: nice_nano_v2        # 自分のキーボードのボード名
+    shield: corne_left         # 自分のキーボードのシールド名
+    snippet: studio-rpc-usb-uart   # アプリと話す側(左/central)に必ず付ける
+  - board: nice_nano_v2
+    shield: corne_right
+```
+
+ZMK本家に入っている機種(Corne, Sofle, Lily58など)はシールド名を書くだけでOK。
+自作シールドの場合は `config/boards/shields/` に自分のシールド一式を置いてください。
+
+**その2: 自分のキーマップ(config/◯◯.keymap)** — 先頭付近に1行追加します。
+
+```c
+#include "spare_slots.dtsi"
+```
+
+`spare_slots.dtsi` はテンプレートに同梱されています(アプリが書き換えるための
+「空のコンボ/タップダンス/マクロ枠」の定義です)。
 
 ### ③ ビルドしてダウンロード
 
