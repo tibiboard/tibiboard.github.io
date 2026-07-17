@@ -23,7 +23,7 @@ Cherry MXなど通常の背の高いスイッチは、**ケースの底と干渉
 - Kailh Choc V2(標準搭載)
 - Isle(AliExpressで購入可・Choc V2互換ロープロファイル)
 - Ghost(同上)
-- ほか1種確認済み(掲載準備中)
+- Kailh Saker Mini(ロープロファイル・リニア)
 
 ※Choc V2互換のロープロファイルスイッチであれば、多くの場合お使いいただけます。
 
