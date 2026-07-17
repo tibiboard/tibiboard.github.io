@@ -1,8 +1,3 @@
----
-layout: default
-title: 他のZMKキーボードをちびボードアプリ対応にする
----
-
 # 他のZMKキーボードをちびボードアプリ対応にする
 
 [ちびボードの設定アプリ(ブラウザ版)](https://tibiboard.github.io/app/)は、
