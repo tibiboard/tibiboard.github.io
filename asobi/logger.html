@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>スマホセンサー生データロガー | ちびボード あそび場</title>
+<meta name="description" content="スマホの加速度・角速度・向きセンサーの生データをそのまま記録してファイルに保存するツール。">
+<style>
+  :root{
+    --acc:#ff6fa5; --acc2:#ffd166; --acc3:#06d6a0; --purple:#7b61ff;
+    --ink:#2b2140; --bg:#fff5fb; --card:#ffffff; --line:#ffd9ec;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ overflow-x:hidden; }
+  body{
+    font-family:"Hiragino Sans","Yu Gothic",Meiryo,sans-serif; margin:0;
+    background:var(--bg); color:var(--ink); line-height:1.7;
+  }
+  .wrap{ max-width:520px; margin:0 auto; padding:0 14px 60px; }
+  header{
+    background:linear-gradient(135deg,var(--acc),var(--purple));
+    color:#fff; padding:22px 16px 18px; margin-bottom:4px;
+    border-radius:0 0 24px 24px; box-shadow:0 6px 18px rgba(123,97,255,.25);
+    text-align:center;
+  }
+  header h1{ font-size:20px; margin:0 0 4px; letter-spacing:.02em; }
+  header .catch{ font-size:12.5px; opacity:.95; }
+
+  .howto{ background:var(--card); border:2px solid var(--line); border-radius:16px;
+          padding:12px 14px; margin:14px 0; font-size:12.5px; color:#5c4a66; }
+  .howto ol{ margin:4px 0 0; padding-left:20px; }
+  .howto li{ margin:2px 0; }
+
+  .panel{ background:var(--card); border:2px solid var(--line); border-radius:20px;
+          padding:20px 16px; margin:16px 0; text-align:center; }
+  .panel h2{ margin:6px 0 10px; font-size:17px; }
+  .panel p{ font-size:13.5px; color:#5c4a66; margin:8px 0; }
+  .gate-note{ font-size:11.5px; color:#a68fae; }
+
+  label.field-label{ display:block; font-size:12.5px; color:#5c4a66; text-align:left; margin:10px 2px 4px; font-weight:bold; }
+  input[type=text]{
+    width:100%; padding:11px 12px; border:2px solid var(--line); border-radius:12px;
+    font-size:14px; color:var(--ink); background:#fff;
+  }
+  input[type=text]:disabled{ background:#f3eef5; color:#a68fae; }
+
+  .big-btn{
+    display:block; width:100%; margin:14px 0 4px; padding:16px 10px;
+    font-size:16px; font-weight:bold; color:#fff; background:linear-gradient(135deg,var(--acc),#ff9fc4);
+    border:none; border-radius:16px; box-shadow:0 6px 0 #d94f85; cursor:pointer;
+    touch-action:manipulation;
+  }
+  .big-btn:active{ transform:translateY(3px); box-shadow:0 3px 0 #d94f85; }
+  .big-btn:disabled{ opacity:.55; }
+  .big-btn.stop{ background:linear-gradient(135deg,#ff5c5c,#ff8a5c); box-shadow:0 6px 0 #c23e3e; }
+  .big-btn.save{ background:linear-gradient(135deg,var(--acc3),#3ee6b8); box-shadow:0 6px 0 #049e75; }
+  .big-btn.secondary{ background:linear-gradient(135deg,#8f8aa8,#6c6685); box-shadow:0 6px 0 #4f4a68; }
+
+  .rec-panel{ background:var(--card); border:2px solid var(--line); border-radius:20px; padding:18px 16px 20px; }
+  .rec-badge{ display:inline-flex; align-items:center; gap:6px; background:#ffe6ef; color:#c23e6e;
+              border-radius:999px; padding:4px 12px; font-size:12px; font-weight:bold; margin-bottom:6px; }
+  .rec-dot{ width:9px; height:9px; border-radius:50%; background:#ff3b6f; animation:pulse 1s infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
+  .elapsed{ text-align:center; font-size:46px; font-weight:bold; color:var(--purple); line-height:1; margin:4px 0 2px; }
+  .elapsed small{ font-size:16px; font-weight:normal; color:#8a7592; }
+  .samplecount{ text-align:center; font-size:12px; color:#8a7592; margin-bottom:10px; }
+  .memoline{ text-align:center; font-size:12px; color:#a68fae; margin-bottom:10px; word-break:break-all; }
+
+  .readout-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px; }
+  .readout-box{ background:#fdf3f8; border:1px solid var(--line); border-radius:12px; padding:8px 10px; }
+  .readout-box h3{ margin:0 0 4px; font-size:11px; color:#a06a95; font-weight:bold; }
+  .readout-box .row{ display:flex; justify-content:space-between; font-size:12.5px; font-family:"SF Mono",Consolas,monospace; }
+  .readout-box .row span:first-child{ color:#8a7592; }
+  .readout-box .row span:last-child{ font-weight:bold; }
+
+  .result-list{ text-align:left; font-size:13.5px; margin:10px 0; }
+  .result-list .row{ display:flex; justify-content:space-between; padding:6px 2px; border-bottom:1px dashed var(--line); }
+  .result-list .row span:first-child{ color:#5c4a66; }
+  .result-list .row span:last-child{ font-weight:bold; color:var(--ink); }
+
+  .warn{ background:#fff0e6; border:2px solid #ffcda3; color:#a05a1a; font-size:12px;
+         border-radius:12px; padding:9px 12px; margin:10px 0; font-weight:bold; }
+  .note{ background:#f1ecff; border:2px solid #d9ccff; color:#5b4b9c; font-size:11.5px;
+         border-radius:12px; padding:8px 12px; margin:10px 0; }
+
+  .foot{ color:#a68fae; font-size:11px; text-align:center; margin-top:22px; }
+  [hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📡 スマホセンサー生データロガー</h1>
+  <div class="catch">加速度・角速度・向きセンサーの生データをそのままファイルに記録</div>
+</header>
+
+<div class="wrap">
+
+  <div class="howto">
+    <b>使い方</b>
+    <ol>
+      <li>下の「記録開始」を押す(iPhoneは権限の確認が出ます)</li>
+      <li>スマホを動かす(装着する・振る・置くなど自由に)</li>
+      <li>「記録停止」→「ファイルで保存」→FEアプリの「スマホから受信」フォルダへ入れる</li>
+    </ol>
+  </div>
+
+  <!-- ゲート(記録開始前) -->
+  <div class="panel" id="gate">
+    <h2>🎬 記録の準備</h2>
+    <label class="field-label" for="memoInput">メモ(何をしたか・1行)</label>
+    <input type="text" id="memoInput" placeholder="例: 腰に装着してジャンプ3回" maxlength="200">
+    <button class="big-btn" id="startBtn">🔴 記録開始</button>
+    <p class="gate-note">最大120秒で自動的に停止します。iPhoneはSafariでHTTPSのページを開いて使ってください。</p>
+  </div>
+
+  <!-- 記録中 -->
+  <div class="rec-panel" id="recPanel" hidden>
+    <div style="text-align:center;">
+      <span class="rec-badge"><span class="rec-dot"></span>記録中</span>
+    </div>
+    <div class="elapsed" id="elapsedNum">0.0<small>秒 / 最大120秒</small></div>
+    <div class="samplecount" id="sampleCountLine">サンプル数: 0(motion 0 / orientation 0)</div>
+    <div class="memoline" id="memoLine"></div>
+
+    <div class="readout-grid">
+      <div class="readout-box">
+        <h3>加速度 acceleration (m/s²)</h3>
+        <div class="row"><span>x</span><span id="ax">—</span></div>
+        <div class="row"><span>y</span><span id="ay">—</span></div>
+        <div class="row"><span>z</span><span id="az">—</span></div>
+      </div>
+      <div class="readout-box">
+        <h3>重力込み accelerationIncludingGravity</h3>
+        <div class="row"><span>x</span><span id="agx">—</span></div>
+        <div class="row"><span>y</span><span id="agy">—</span></div>
+        <div class="row"><span>z</span><span id="agz">—</span></div>
+      </div>
+      <div class="readout-box">
+        <h3>回転速度 rotationRate (°/s)</h3>
+        <div class="row"><span>α</span><span id="ra">—</span></div>
+        <div class="row"><span>β</span><span id="rb">—</span></div>
+        <div class="row"><span>γ</span><span id="rg">—</span></div>
+      </div>
+      <div class="readout-box">
+        <h3>向き orientation (°)</h3>
+        <div class="row"><span>α</span><span id="oa">—</span></div>
+        <div class="row"><span>β</span><span id="ob">—</span></div>
+        <div class="row"><span>γ</span><span id="og">—</span></div>
+        <div class="row"><span>方位(webkit)</span><span id="oh">—</span></div>
+      </div>
+    </div>
+
+    <div class="warn" id="noSensorWarn" hidden>まだセンサーの反応がありません。iPhoneはSafariで、HTTPSのページで試してください。</div>
+
+    <button class="big-btn stop" id="stopBtn">⏹ 記録停止</button>
+  </div>
+
+  <!-- 結果 -->
+  <div class="panel" id="resultPanel" hidden>
+    <h2>✅ 記録完了</h2>
+    <div class="result-list" id="resultList"></div>
+    <button class="big-btn save" id="saveBtn">💾 ファイルで保存</button>
+    <p class="note" id="iosNote">iPhone(Safari)では保存ボタンを押すと共有シートが開きます。「ファイルに保存」を選ぶとそのままファイルとして保存できます(FEアプリの「スマホから受信」フォルダに入れてください)。</p>
+    <button class="big-btn secondary" id="resetBtn">🔁 もう一度記録する</button>
+  </div>
+
+  <!-- 非対応 -->
+  <div class="panel" id="unsupported" hidden>
+    <h2>😢 センサーが使えません</h2>
+    <p id="unsupportedMsg"></p>
+    <button class="big-btn secondary" id="retryBtn">もう一度試す</button>
+  </div>
+
+  <div class="foot">ちびボード あそび場 / センサー生データロガー</div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var memoInput = document.getElementById('memoInput');
+  var startBtn = document.getElementById('startBtn');
+  var stopBtn = document.getElementById('stopBtn');
+  var saveBtn = document.getElementById('saveBtn');
+  var resetBtn = document.getElementById('resetBtn');
+  var retryBtn = document.getElementById('retryBtn');
+
+  var gate = document.getElementById('gate');
+  var recPanel = document.getElementById('recPanel');
+  var resultPanel = document.getElementById('resultPanel');
+  var unsupported = document.getElementById('unsupported');
+  var unsupportedMsg = document.getElementById('unsupportedMsg');
+  var noSensorWarn = document.getElementById('noSensorWarn');
+
+  var elapsedNum = document.getElementById('elapsedNum');
+  var sampleCountLine = document.getElementById('sampleCountLine');
+  var memoLine = document.getElementById('memoLine');
+  var resultList = document.getElementById('resultList');
+
+  var elAx=document.getElementById('ax'), elAy=document.getElementById('ay'), elAz=document.getElementById('az');
+  var elAgx=document.getElementById('agx'), elAgy=document.getElementById('agy'), elAgz=document.getElementById('agz');
+  var elRa=document.getElementById('ra'), elRb=document.getElementById('rb'), elRg=document.getElementById('rg');
+  var elOa=document.getElementById('oa'), elOb=document.getElementById('ob'), elOg=document.getElementById('og'), elOh=document.getElementById('oh');
+
+  var MAX_MS = 120000; // 最大120秒で自動停止
+
+  var recording = false;
+  var records = [];
+  var motionCount = 0, orientationCount = 0;
+  var startedAtPerf = 0, startedAtEpoch = 0, stoppedAtPerf = 0;
+  var memoText = '';
+  var rafId = null;
+  var autoStopTimer = null;
+  var lastSampleAt = 0;
+  var sensorsSeen = false;
+
+  function round(v, n){
+    if (typeof v !== 'number' || isNaN(v)) return null;
+    var m = Math.pow(10, n);
+    return Math.round(v * m) / m;
+  }
+  function fmt(v, digits){
+    if (v === null || v === undefined || (typeof v === 'number' && isNaN(v))) return '—';
+    return v.toFixed(digits === undefined ? 2 : digits);
+  }
+  function pad2(n){ return (n < 10 ? '0' : '') + n; }
+
+  // ---- センサーイベント: 発火ごとに全部タイムスタンプ付きで records に記録 ----
+  function onMotion(e){
+    if (!recording) return;
+    sensorsSeen = true;
+    lastSampleAt = performance.now();
+    var acc = e.acceleration || {};
+    var accG = e.accelerationIncludingGravity || {};
+    var rot = e.rotationRate || {};
+    var ax = round(acc.x, 5), ay = round(acc.y, 5), az = round(acc.z, 5);
+    var agx = round(accG.x, 5), agy = round(accG.y, 5), agz = round(accG.z, 5);
+    var ra = round(rot.alpha, 5), rb = round(rot.beta, 5), rg = round(rot.gamma, 5);
+
+    records.push({
+      t: round(performance.now() - startedAtPerf, 3),
+      ts: Date.now(),
+      type: 'motion',
+      acc: { x: ax, y: ay, z: az },
+      accG: { x: agx, y: agy, z: agz },
+      rot: { alpha: ra, beta: rb, gamma: rg },
+      interval: (typeof e.interval === 'number') ? round(e.interval, 4) : null
+    });
+    motionCount++;
+
+    elAx.textContent = fmt(ax); elAy.textContent = fmt(ay); elAz.textContent = fmt(az);
+    elAgx.textContent = fmt(agx); elAgy.textContent = fmt(agy); elAgz.textContent = fmt(agz);
+    elRa.textContent = fmt(ra); elRb.textContent = fmt(rb); elRg.textContent = fmt(rg);
+  }
+
+  function onOrientation(e){
+    if (!recording) return;
+    sensorsSeen = true;
+    lastSampleAt = performance.now();
+    var alpha = round(e.alpha, 4), beta = round(e.beta, 4), gamma = round(e.gamma, 4);
+    var heading = (typeof e.webkitCompassHeading === 'number') ? round(e.webkitCompassHeading, 4) : null;
+
+    records.push({
+      t: round(performance.now() - startedAtPerf, 3),
+      ts: Date.now(),
+      type: 'orientation',
+      alpha: alpha, beta: beta, gamma: gamma,
+      webkitCompassHeading: heading,
+      absolute: (typeof e.absolute === 'boolean') ? e.absolute : null
+    });
+    orientationCount++;
+
+    elOa.textContent = fmt(alpha); elOb.textContent = fmt(beta); elOg.textContent = fmt(gamma);
+    elOh.textContent = (heading === null) ? '—' : fmt(heading, 1);
+  }
+
+  window.addEventListener('devicemotion', onMotion);
+  window.addEventListener('deviceorientation', onOrientation);
+
+  // ---- 表示更新ループ(経過秒数・サンプル数・自動停止) ----
+  function tick(){
+    if (!recording) return;
+    var elapsedMs = performance.now() - startedAtPerf;
+    elapsedNum.innerHTML = fmt(elapsedMs / 1000, 1) + '<small>秒 / 最大120秒</small>';
+    sampleCountLine.textContent = 'サンプル数: ' + (motionCount + orientationCount) +
+      '(motion ' + motionCount + ' / orientation ' + orientationCount + ')';
+    noSensorWarn.hidden = sensorsSeen || elapsedMs < 2000;
+
+    if (elapsedMs >= MAX_MS) {
+      stopRecording();
+      return;
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  // ---- iOS権限リクエスト: startBtn の click ハンドラ内で同期的に呼び出す ----
+  function requestPermissions(){
+    var tasks = [];
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      tasks.push(DeviceOrientationEvent.requestPermission());
+    } else {
+      tasks.push(Promise.resolve('granted'));
+    }
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      tasks.push(DeviceMotionEvent.requestPermission());
+    } else {
+      tasks.push(Promise.resolve('granted'));
+    }
+    return Promise.all(tasks);
+  }
+
+  function showUnsupported(kind){
+    gate.hidden = true; recPanel.hidden = true; resultPanel.hidden = true; unsupported.hidden = false;
+    var msgs = {
+      denied: '権限が許可されませんでした。iPhoneの「設定 > Safari > モーションと方向」を確認して許可し、もう一度お試しください。',
+      'no-sensor': 'このブラウザ・端末では加速度/向きセンサーが使えないようです。iPhoneはSafariで、HTTPSのページを開いて試してください。パソコンのブラウザでは使えません。',
+      error: 'センサーの利用でエラーが発生しました。iPhoneはSafariで、HTTPSのページを開いて試してください。'
+    };
+    unsupportedMsg.textContent = msgs[kind] || msgs['no-sensor'];
+  }
+
+  retryBtn.addEventListener('click', function(){ unsupported.hidden = true; gate.hidden = false; });
+
+  function startRecording(){
+    records = [];
+    motionCount = 0; orientationCount = 0;
+    sensorsSeen = false;
+    memoText = (memoInput.value || '').trim();
+    memoLine.textContent = memoText ? ('メモ: ' + memoText) : '';
+    startedAtPerf = performance.now();
+    startedAtEpoch = Date.now();
+    recording = true;
+
+    gate.hidden = true; unsupported.hidden = true; resultPanel.hidden = true;
+    recPanel.hidden = false;
+    noSensorWarn.hidden = true;
+
+    autoStopTimer = setTimeout(function(){ if (recording) stopRecording(); }, MAX_MS + 300);
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function stopRecording(){
+    if (!recording) return;
+    recording = false;
+    stoppedAtPerf = performance.now();
+    if (rafId) cancelAnimationFrame(rafId);
+    if (autoStopTimer) clearTimeout(autoStopTimer);
+
+    var durationSec = (stoppedAtPerf - startedAtPerf) / 1000;
+    var motionHz = durationSec > 0 ? motionCount / durationSec : 0;
+    var orientationHz = durationSec > 0 ? orientationCount / durationSec : 0;
+
+    resultList.innerHTML =
+      '<div class="row"><span>記録時間</span><span>' + fmt(durationSec, 2) + ' 秒</span></div>' +
+      '<div class="row"><span>サンプル数(合計)</span><span>' + (motionCount + orientationCount) + '</span></div>' +
+      '<div class="row"><span>&nbsp;&nbsp;motion(加速度・回転速度)</span><span>' + motionCount + ' 件 / ' + fmt(motionHz, 1) + ' Hz</span></div>' +
+      '<div class="row"><span>&nbsp;&nbsp;orientation(向き)</span><span>' + orientationCount + ' 件 / ' + fmt(orientationHz, 1) + ' Hz</span></div>' +
+      '<div class="row"><span>メモ</span><span>' + (memoText ? escapeHtml(memoText) : '(なし)') + '</span></div>';
+
+    recPanel.hidden = true;
+    resultPanel.hidden = false;
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function buildFilename(){
+    var d = new Date(startedAtEpoch);
+    var name = 'sensor_log_' +
+      d.getFullYear() + pad2(d.getMonth()+1) + pad2(d.getDate()) + '_' +
+      pad2(d.getHours()) + pad2(d.getMinutes()) + pad2(d.getSeconds()) + '.jsonl';
+    return name;
+  }
+
+  function buildJsonlContent(){
+    var meta = {
+      type: 'meta',
+      note: memoText,
+      recordedAt: new Date(startedAtEpoch).toISOString(),
+      durationMs: round(stoppedAtPerf - startedAtPerf, 1),
+      counts: { motion: motionCount, orientation: orientationCount, total: motionCount + orientationCount },
+      userAgent: navigator.userAgent,
+      channels: {
+        motion: ['acc.x/y/z (m/s^2, gravity除去)', 'accG.x/y/z (m/s^2, 重力込み)', 'rot.alpha/beta/gamma (deg/s)', 'interval (ms, 端末が返す場合のみ)'],
+        orientation: ['alpha/beta/gamma (deg)', 'webkitCompassHeading (deg, iOS Safariのみ。無い場合null)', 'absolute (true/false/null)']
+      },
+      tField: 't = 記録開始からの経過ms(performance.now基準、高精度)',
+      tsField: 'ts = Date.now()の絶対epoch ms'
+    };
+    var lines = [JSON.stringify(meta)];
+    for (var i = 0; i < records.length; i++) {
+      lines.push(JSON.stringify(records[i]));
+    }
+    return lines.join('\n') + '\n';
+  }
+
+  function saveFile(){
+    var content = buildJsonlContent();
+    var blob = new Blob([content], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = buildFilename();
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+  }
+
+  startBtn.addEventListener('click', function(){
+    // no-sensor: APIが端末に一切存在しない場合は権限要求すら不要
+    if (typeof DeviceMotionEvent === 'undefined' && typeof DeviceOrientationEvent === 'undefined') {
+      showUnsupported('no-sensor');
+      return;
+    }
+    startBtn.disabled = true;
+    startBtn.textContent = '確認中…';
+    requestPermissions().then(function(results){
+      startBtn.disabled = false;
+      startBtn.textContent = '🔴 記録開始';
+      if (results.indexOf('denied') !== -1) {
+        showUnsupported('denied');
+        return;
+      }
+      startRecording();
+    }).catch(function(){
+      startBtn.disabled = false;
+      startBtn.textContent = '🔴 記録開始';
+      showUnsupported('error');
+    });
+  });
+
+  stopBtn.addEventListener('click', function(){ stopRecording(); });
+  saveBtn.addEventListener('click', function(){ saveFile(); });
+  resetBtn.addEventListener('click', function(){
+    resultPanel.hidden = true;
+    memoInput.value = '';
+    gate.hidden = false;
+  });
+
+})();
+</script>
+</body>
+</html>
