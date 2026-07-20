@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>スマホセンサー競技場 | ちびボード あそび場</title>
-<meta name="description" content="スマホの向き・揺れセンサーで遊ぶ5つのミニ競技。バツベイと一緒に体を動かそう。">
+<meta name="description" content="スマホの向き・揺れセンサーで遊ぶ7つのミニ競技。バツベイと一緒に体を動かそう。">
 <style>
   :root{
     --acc:#ff6fa5; --acc2:#ffd166; --acc3:#06d6a0; --purple:#7b61ff;
@@ -59,6 +59,7 @@
   .target-btn{ padding:6px 12px; border-radius:999px; background:#fff; color:var(--purple);
                border:2px solid var(--line); font-size:13px; font-weight:bold; cursor:pointer; }
   .target-btn.on{ background:var(--purple); color:#fff; border-color:var(--purple); }
+  .point-target{ font-size:21px; font-weight:bold; color:var(--purple); margin:4px 0; }
 
   .game-panel{ background:var(--card); border:2px solid var(--line); border-radius:20px; padding:18px 16px 22px; }
   .game-panel h2{ font-size:19px; margin:2px 0 6px; text-align:center; }
@@ -158,7 +159,7 @@
 
 <header>
   <h1>📱 スマホセンサー競技場</h1>
-  <div class="catch">バツベイと一緒に、スマホのセンサーで5つのミニ競技!</div>
+  <div class="catch">バツベイと一緒に、スマホのセンサーで7つのミニ競技!</div>
 </header>
 
 <div class="wrap">
@@ -166,7 +167,7 @@
   <div id="gate" class="panel">
     <div class="gate-icon">📱⚡️</div>
     <h2>はじめる前に</h2>
-    <p>このページはスマホの「向き」「揺れ」センサーを使った5つのミニ競技です。iPhoneでは「はじめる」を押すとセンサー使用の許可ダイアログが出ます。<b>「許可」</b>を選んでください。</p>
+    <p>このページはスマホの「向き」「揺れ」センサーを使った7つのミニ競技です。iPhoneでは「はじめる」を押すとセンサー使用の許可ダイアログが出ます。<b>「許可」</b>を選んでください。<b>「あっちを向けば」</b>では現在地を使うので、位置情報の許可ダイアログも出ることがあります。</p>
     <button id="startBtn" class="big-btn">🚀 はじめる</button>
     <p class="gate-note">iPhoneはSafariで、https:// のページを開いてください</p>
   </div>
@@ -184,7 +185,9 @@
       <button class="tabbtn" data-tab="punch">👊 パンチ速度計</button>
       <button class="tabbtn" data-tab="level">📏 水平の達人</button>
       <button class="tabbtn" data-tab="still">🗿 置物チャレンジ</button>
-      <button class="tabbtn" data-tab="jump">🤸 回転ジャンプ</button>
+      <button class="tabbtn" data-tab="jump">🎯 ねらって着地</button>
+      <button class="tabbtn" data-tab="spin">🌀 最大回転チャレンジ</button>
+      <button class="tabbtn" data-tab="point">📍 あっちを向けば</button>
     </div>
 
     <!-- 真北ピタリ -->
@@ -256,7 +259,7 @@
     <!-- 置物チャレンジ -->
     <section id="tab-still" class="game-panel" hidden>
       <h2>🗿 置物チャレンジ</h2>
-      <p class="desc">スマホを持ったまま、置物のようにピタッと止まっていよう。自分では気づかない手の震えが下のメーターに丸見え!震えが大きいまま続くと終了。何秒耐えられるかな?</p>
+      <p class="desc">スタートを押すとまず「落ち着くのを待つ」モード。スマホがピタッと静かになったら自動で計測スタート!自分では気づかない手の震えが下のメーターに丸見え。30秒を超えるとさらに判定が厳しくなるよ。何秒耐えられるかな?</p>
       <div id="stillRival" class="rival-badge" hidden></div>
       <div id="stillStage" class="char-stage"><img id="stillChar" class="batsubei" alt="バツベイ"></div>
       <div class="shake-meter-wrap">
@@ -264,8 +267,8 @@
         <div class="shake-meter-label">🫨 震度メーター</div>
       </div>
       <div class="stage-readout">
-        <div class="timer-num" id="stillTimer">0.0</div>
-        <div class="stage-sub">秒 静止中</div>
+        <div class="timer-num" id="stillTimer">--</div>
+        <div class="stage-sub" id="stillStageSub">📱 落ち着くのを待っています…</div>
       </div>
       <button id="stillStartBtn" class="big-btn">🚀 スタート</button>
       <button id="stillStopBtn" class="big-btn secondary small" hidden>⏹ ここでやめる(記録する)</button>
@@ -278,10 +281,10 @@
       </div>
     </section>
 
-    <!-- 回転ジャンプ -->
+    <!-- ねらって着地(旧: 回転ジャンプ) -->
     <section id="tab-jump" class="game-panel" hidden>
-      <h2>🤸 回転ジャンプ</h2>
-      <p class="desc">スマホを持ったままジャンプ!空中で目標方向に体を回して着地しよう。着地の衝撃で自動判定!</p>
+      <h2>🎯 ねらって着地</h2>
+      <p class="desc">スマホを持ったままジャンプ!空中でねらった方角に体を回して、ピタッと着地を決めよう。着地の衝撃で自動判定!</p>
       <div class="warn">⚠️ 周りに物や人がない、広くて安全な場所で行ってください。スマホは必ず固く握ってください(できればストラップも使ってください)。</div>
       <div id="jumpRival" class="rival-badge" hidden></div>
       <div class="target-picker" id="jumpTargetPicker">
@@ -303,6 +306,72 @@
         <div class="score-label" id="jumpRotationInfo"></div>
         <div class="score-label" id="jumpComment"></div>
         <button class="big-btn secondary retry-btn" data-retry="jump">もう一度</button>
+      </div>
+    </section>
+
+    <!-- 最大回転チャレンジ -->
+    <section id="tab-spin" class="game-panel" hidden>
+      <h2>🌀 最大回転チャレンジ</h2>
+      <p class="desc">1回のジャンプ(またはその場での回転)で、合計何度回れたかの最大値だけを競うシンプル勝負!ジャイロと方位センサーの「二刀流」でしっかり計測するよ。</p>
+      <div class="warn">⚠️ 回りすぎての転倒・めまいに注意!周りに物や人がない、広くて安全な場所で行ってください。スマホは必ずしっかり握ってください(できればストラップも使ってください)。</div>
+      <div id="spinRival" class="rival-badge" hidden></div>
+      <div id="spinStage" class="char-stage"><img id="spinChar" class="batsubei" alt="バツベイ"></div>
+      <div class="stage-readout">
+        <div class="compass-num"><span id="spinLiveDeg">0°</span></div>
+        <div class="stage-sub" id="spinStatus">「回転スタート」を押してから回ろう</div>
+      </div>
+      <button id="spinStartBtn" class="big-btn">🚀 回転スタート</button>
+      <button id="spinStopBtn" class="big-btn secondary small" hidden>⏹ ここで止める(記録する)</button>
+      <div id="spinResult" class="result" hidden>
+        <div id="spinRank" class="rank" hidden>-</div>
+        <div class="score-num"><span id="spinScore">--</span> <small>° 回転</small></div>
+        <div class="score-label" id="spinTrick"></div>
+        <div class="score-label">ベスト: <span id="spinBest">--</span>°</div>
+        <div class="score-label" id="spinMatch" style="font-size:11px;color:#a68fae;"></div>
+        <div class="score-label" id="spinComment"></div>
+        <button class="big-btn secondary retry-btn" data-retry="spin">もう一度</button>
+      </div>
+    </section>
+
+    <!-- あっちを向けば -->
+    <section id="tab-point" class="game-panel" hidden>
+      <h2>📍 あっちを向けば</h2>
+      <p class="desc">出題された場所のほうへ体を向けてタップ!真の方角とのズレで採点だよ。まずはコースを選んでね。</p>
+
+      <div id="pointCourseSelect">
+        <div class="target-label" style="display:block;text-align:center;margin-bottom:8px;">コースを選んでね(今日の3問が出るよ)</div>
+        <button class="big-btn" data-course="tokyo">🗼 東京編</button>
+        <button class="big-btn" data-course="kanto">⛩️ 関東編</button>
+        <button class="big-btn" data-course="japan">🗻 日本編</button>
+        <button class="big-btn" data-course="world">🌍 世界編</button>
+        <div class="stage-sub" id="pointLocateStatus" style="margin-top:8px;"></div>
+      </div>
+
+      <div id="pointQuiz" hidden>
+        <div class="trivia" id="pointFallbackNote" hidden>📍 現在地が使えなかったので、東京駅から出題するよ!</div>
+        <div class="trivia">💡 近場ほど上級者向け!わずかな角度のズレが距離のズレになるよ。</div>
+        <div class="stage-sub" id="pointProgress">今日の3問 - 問1/3</div>
+        <div id="pointStage" class="char-stage"><img id="pointChar" class="batsubei" alt="バツベイ"></div>
+        <div class="stage-readout">
+          <div class="point-target" id="pointTargetName">-</div>
+          <div class="stage-sub">の方向を向いてタップ!</div>
+        </div>
+        <button id="pointAnswerBtn" class="big-btn">📍 この方向だ!</button>
+        <div id="pointFeedback" class="result" hidden>
+          <div class="score-num" id="pointFeedbackDiff">--</div>
+          <div class="score-label" id="pointFeedbackDistance"></div>
+          <button id="pointNextBtn" class="big-btn secondary small">つぎの問題へ</button>
+        </div>
+      </div>
+
+      <div id="pointResult" class="result" hidden>
+        <div id="pointRank" class="rank" hidden>-</div>
+        <div class="score-num"><span id="pointScore">--</span>° <small>平均ズレ</small></div>
+        <div class="score-label" id="pointBreakdown"></div>
+        <div class="score-label">このコースのベスト: <span id="pointBest">--</span>°</div>
+        <div class="score-label" id="pointComment"></div>
+        <button id="pointRetryBtn" class="big-btn secondary small">🔁 同じコースでもう一度</button>
+        <button id="pointChangeCourseBtn" class="big-btn secondary small">🔄 コースを選び直す</button>
       </div>
     </section>
 
@@ -343,7 +412,9 @@ var punchChar = document.getElementById('punchChar');
 var levelChar = document.getElementById('levelChar');
 var stillChar = document.getElementById('stillChar');
 var jumpChar = document.getElementById('jumpChar');
-[northChar, punchChar, levelChar, stillChar, jumpChar].forEach(function(el){ el.src = BATSUBEI.normal; });
+var spinChar = document.getElementById('spinChar');
+var pointChar = document.getElementById('pointChar');
+[northChar, punchChar, levelChar, stillChar, jumpChar, spinChar, pointChar].forEach(function(el){ el.src = BATSUBEI.normal; });
 
 // ---- センサー状態 ----
 var orientationState = { alpha:null, beta:null, gamma:null, heading:null };
@@ -360,6 +431,7 @@ function onOrientation(e){
   orientationState.heading = (typeof e.webkitCompassHeading === 'number')
     ? e.webkitCompassHeading
     : e.alpha;
+  if (typeof spinState !== 'undefined' && spinState === 'spinning') feedSpinOrientation(e);
 }
 function onMotion(e){
   sensorsDetected = true;
@@ -368,7 +440,8 @@ function onMotion(e){
   var ax = a.x||0, ay = a.y||0, az = a.z||0;
   var mag = Math.sqrt(ax*ax + ay*ay + az*az);
   if (punchMeasuring && mag > punchPeak) punchPeak = mag;
-  if (stillState === 'running') feedStillSample(mag);
+  if (stillState === 'running' || stillState === 'settling') feedStillSample(mag);
+  if (typeof spinState !== 'undefined' && spinState === 'spinning') feedSpinMotion(e);
 
   // 回転ジャンプ用: 重力を含む合成加速度(単位はおおよそm/s^2、静止時は約9.8=1G)で着地の衝撃を検知する
   var ag = e.accelerationIncludingGravity;
@@ -570,7 +643,8 @@ var RIVAL_LABEL = {
   punch: function(v){ return '🎯 相手の記録: ' + v.toFixed(1) + ' m/s² (これより速く!)'; },
   level: function(v){ return '🎯 相手は仕切り直し ' + v + ' 回でクリア (これより少なく!)'; },
   still: function(v){ return '🎯 相手の記録: ' + v.toFixed(1) + ' 秒 (これより長く!)'; },
-  jump: function(v){ return '🎯 相手の記録: ' + v.toFixed(1) + '° ズレ (これより小さく!)'; }
+  jump: function(v){ return '🎯 相手の記録: ' + v.toFixed(1) + '° ズレ (これより小さく!)'; },
+  spin: function(v){ return '🎯 相手の最大回転: ' + v.toFixed(0) + '° (これを超えろ!)'; }
 };
 function parseHashResults(){
   if (!location.hash) return;
@@ -687,7 +761,8 @@ startBtn.addEventListener('click', function(){
 var tabButtons = Array.prototype.slice.call(document.querySelectorAll('.tabbtn'));
 var panels = { north: document.getElementById('tab-north'), punch: document.getElementById('tab-punch'),
                level: document.getElementById('tab-level'), still: document.getElementById('tab-still'),
-               jump: document.getElementById('tab-jump') };
+               jump: document.getElementById('tab-jump'), spin: document.getElementById('tab-spin'),
+               point: document.getElementById('tab-point') };
 var activeTab = 'north';
 tabButtons.forEach(function(btn){
   btn.addEventListener('click', function(){
@@ -886,15 +961,25 @@ function renderLevelResult(){
 // ================= 4. 置物チャレンジ =================
 // 「自分では気づかない手の震えが見える」が核。瞬間の分散ではなく、なめらかに追従する
 // 震えレベル(移動平均寄りのEMA)が閾値を「数ティック連続」で超えたら失敗、という判定にして
-// 一瞬のノイズで理不尽に落ちないようにする。閾値はまず0.15付近から実機で調整する想定。
-var stillState = 'idle';
+// 一瞬のノイズで理不尽に落ちないようにする。
+// v3: スタート直後はタップの手ブレが残っているため、いきなり計測を始めると即失敗しやすい
+//     バグがあった。→ 「落ち着くのを待つ」settlingフェーズを新設し、震えレベルが静穏しきい値を
+//     1秒連続で下回ってから初めて計測(running)を開始する。settling突入のたびに全バッファを
+//     完全リセットする(resetStillMeasurement)ことで、直前の失敗の余韻を持ち越さない。
+//     また難度アップとして判定しきい値を旧実装の約半分にし、30秒を超えるとさらに0.8倍に厳しくする。
+var stillState = 'idle'; // idle | settling | running
 var STILL_EMA_ALPHA = 0.06;       // 基準値(ゆっくり動く重力ベースライン)の追従速度
 var STILL_DEV_SMOOTH = 0.35;      // 震えレベルの平滑化係数(大きいほど反応が速い)
-var STILL_FAIL_THRESHOLD = 0.15;  // 震えレベルがこれを超えたら「危険」(要実機調整。旧実装は分散1.2)
+var STILL_FAIL_THRESHOLD = 0.075; // 震えレベルがこれを超えたら「危険」(旧実装0.15のおよそ半分)
+var STILL_FAIL_LATE_SEC = 30;     // これを超えて生存し続けると、さらに判定が厳しくなる
+var STILL_FAIL_LATE_MULT = 0.8;   // 30秒超のしきい値倍率
 var STILL_FAIL_CONSEC = 3;        // 危険ティックが何回連続したら失敗にするか(100ms間隔=約300ms)
+var STILL_SETTLE_THRESHOLD = 0.05; // このレベル未満が1秒続いたら自動で計測スタート
+var STILL_SETTLE_MS = 1000;
 var stillBaseline = null;
 var stillShakeLevel = 0;
 var stillOverCount = 0;
+var stillSettleCalmSince = null;
 var stillStartTime = 0;
 var stillTimerHandle = null;
 var stillHeartbeatHandle = null;
@@ -902,10 +987,22 @@ var stillStartBtn = document.getElementById('stillStartBtn');
 var stillStopBtn = document.getElementById('stillStopBtn');
 var stillResult = document.getElementById('stillResult');
 var stillStage = document.getElementById('stillStage');
+var stillStageSub = document.getElementById('stillStageSub');
 var stillMeterFill = document.getElementById('stillMeterFill');
 var STILL_BEST_KEY = 'sensorArena.stillBest';
 COMMENTS.still = { S:'置物マスター!微動だにしなかった', A:'かなり静止できてる!', B:'まずまず耐えた', C:'すぐ動いちゃった…' };
 document.getElementById('stillBest').textContent = getBest(STILL_BEST_KEY).toFixed(1);
+
+function getStillFailThreshold(elapsedSec){
+  return elapsedSec > STILL_FAIL_LATE_SEC ? STILL_FAIL_THRESHOLD * STILL_FAIL_LATE_MULT : STILL_FAIL_THRESHOLD;
+}
+// 毎回の計測開始(settling突入)時に呼ぶ完全リセット。直前の失敗の余韻を持ち越さないための核。
+function resetStillMeasurement(){
+  stillBaseline = null;
+  stillShakeLevel = 0;
+  stillOverCount = 0;
+  stillSettleCalmSince = null;
+}
 
 // 緊張演出: 心臓の音が経過時間とともにどんどん速くなる(WebAudioのみ)
 function playHeartbeatThump(){
@@ -933,40 +1030,74 @@ function scheduleHeartbeat(){
 
 stillStartBtn.addEventListener('click', function(){
   if (stillState !== 'idle') return;
-  stillState = 'running';
+  stillState = 'settling';
   stillResult.hidden = true;
   document.getElementById('stillRank').hidden = true;
-  stillBaseline = null;
-  stillShakeLevel = 0;
-  stillOverCount = 0;
-  stillStartTime = performance.now();
+  resetStillMeasurement(); // ★毎回完全リセット(直前の失敗直後でも即死しないための核)
+  stillStartTime = 0;
   stillStartBtn.disabled = true;
   stillStopBtn.hidden = false;
+  stillStopBtn.textContent = '❌ やめる';
   stillChar.src = BATSUBEI.normal;
   stillChar.style.transform = '';
   stillMeterFill.style.width = '0%';
   stillMeterFill.classList.remove('warn','danger');
-  stillTimerHandle = setInterval(function(){
-    var el = (performance.now() - stillStartTime) / 1000;
-    document.getElementById('stillTimer').textContent = el.toFixed(1);
-    // 判定は生の加速度サンプルではなく、この100ms刻みのティックで「連続何回危険域か」を見る
-    if (stillShakeLevel >= STILL_FAIL_THRESHOLD) {
+  document.getElementById('stillTimer').textContent = '--';
+  stillStageSub.textContent = '📱 落ち着くのを待っています…';
+  clearInterval(stillTimerHandle);
+  stillTimerHandle = setInterval(stillTick, 100);
+});
+function stillTick(){
+  var now = performance.now();
+  if (stillState === 'settling') {
+    // 震えレベルが静穏しきい値を1秒連続で下回ったら、そこで初めて計測(running)を開始する
+    if (stillShakeLevel < STILL_SETTLE_THRESHOLD) {
+      if (stillSettleCalmSince == null) stillSettleCalmSince = now;
+      if (now - stillSettleCalmSince >= STILL_SETTLE_MS) {
+        stillState = 'running';
+        stillStartTime = now;
+        stillOverCount = 0;
+        stillStopBtn.textContent = '⏹ ここでやめる(記録する)';
+        stillStageSub.textContent = '秒 静止中';
+        scheduleHeartbeat();
+      }
+    } else {
+      stillSettleCalmSince = null; // 揺れたらバッファ(静穏の連続時間)をリセット
+    }
+    return;
+  }
+  if (stillState === 'running') {
+    var elapsed = (now - stillStartTime) / 1000;
+    document.getElementById('stillTimer').textContent = elapsed.toFixed(1);
+    // 判定は生の加速度サンプルではなく、この100ms刻みのティックで「連続何回危険域か」を見る(瞬間値で殺さない)
+    var threshold = getStillFailThreshold(elapsed);
+    if (stillShakeLevel >= threshold) {
       stillOverCount++;
-      if (stillOverCount >= STILL_FAIL_CONSEC) endStill(el, true);
+      if (stillOverCount >= STILL_FAIL_CONSEC) endStill(elapsed, true);
     } else {
       stillOverCount = 0;
     }
-  }, 100);
-  scheduleHeartbeat();
-});
+  }
+}
 stillStopBtn.addEventListener('click', function(){
+  if (stillState === 'settling') {
+    // 計測開始前のキャンセル(記録なし)
+    stillState = 'idle';
+    clearInterval(stillTimerHandle);
+    stillStartBtn.disabled = false;
+    stillStopBtn.hidden = true;
+    stillStageSub.textContent = '秒 静止中';
+    document.getElementById('stillTimer').textContent = '0.0';
+    return;
+  }
   if (stillState !== 'running') return;
   var elapsed = (performance.now() - stillStartTime) / 1000;
   endStill(elapsed, false);
 });
-// devicemotionの生サンプルは震えレベルの平滑化更新とメーター表示にのみ使う(判定は上の100msティック側)
+// devicemotionの生サンプルは震えレベルの平滑化更新とメーター表示にのみ使う(判定は上の100msティック側)。
+// settling中もこの平滑化パイプラインを流し続けることで、「落ち着いたかどうか」の判定にも使う。
 function feedStillSample(mag){
-  if (stillState !== 'running') return;
+  if (stillState !== 'running' && stillState !== 'settling') return;
   if (stillBaseline == null) stillBaseline = mag;
   else stillBaseline += (mag - stillBaseline) * STILL_EMA_ALPHA;
   var dev = Math.abs(mag - stillBaseline);
@@ -974,7 +1105,9 @@ function feedStillSample(mag){
   updateShakeMeter();
 }
 function updateShakeMeter(){
-  var ratio = stillShakeLevel / STILL_FAIL_THRESHOLD;
+  var elapsed = (stillState === 'running') ? (performance.now() - stillStartTime) / 1000 : 0;
+  var threshold = getStillFailThreshold(elapsed);
+  var ratio = stillShakeLevel / threshold;
   var pct = Math.min(100, ratio * 100);
   stillMeterFill.style.width = pct + '%';
   stillMeterFill.classList.remove('warn','danger');
@@ -994,6 +1127,7 @@ function endStill(elapsed, failed){
   stillStartBtn.disabled = false;
   stillStopBtn.hidden = true;
   stillChar.style.transform = '';
+  stillStageSub.textContent = '秒 静止中';
   if (failed) {
     stillStage.classList.add('shake');
     setTimeout(function(){ stillStage.classList.remove('shake'); }, 500);
@@ -1033,7 +1167,7 @@ var jumpCancelBtn = document.getElementById('jumpCancelBtn');
 var jumpResult = document.getElementById('jumpResult');
 var jumpStatus = document.getElementById('jumpStatus');
 var JUMP_TARGET_LABEL = {0:'北', 90:'東', 180:'南', 270:'西'};
-COMMENTS.jump = { S:'見事な着地!ほぼ完璧な回転!', A:'いい回転!着地もキマってる', B:'おしい!もう少し合わせよう', C:'あわわ…回転しきれなかった?' };
+COMMENTS.jump = { S:'ねらいどおりの神着地!', A:'いい着地!ねらいはバッチリ', B:'おしい!もう少し合わせよう', C:'あわわ…方向がずれちゃった?' };
 
 function angularDiff(a, b){
   var d = Math.abs(a - b) % 360;
@@ -1130,6 +1264,361 @@ function renderJumpResult(diff, landingHeading){
   }, jumpChar);
 }
 
+// ================= 6. 最大回転チャレンジ =================
+// 計測は「二刀流フュージョン」: ①ジャイロ(rotationRate.alpha)の時間積分=主、
+// ②方位(webkitCompassHeading優先/なければorientation alpha)を毎サンプル±180度超で
+// 巻き戻り補正(アンラップ)した累積角=副。実機ピボットでジャイロが1467度/秒を記録した実績があり、
+// 1800度/秒を超えるサンプルが1回でもあれば「ジャイロ飽和」とみなして②の方位側を採用する。
+// 結果には二重計測の一致度(%)を小さく表示し、フュージョンの信頼度を可視化する。
+var spinState = 'idle'; // idle | spinning
+var SPIN_GYRO_SATURATION = 1800; // deg/s。これ以上のサンプルがあればジャイロ飽和とみなす
+var spinGyroNet = 0;
+var spinGyroLastTs = null;
+var spinGyroSaturated = false;
+var spinGyroAvailable = false;
+var spinCompassNet = 0;
+var spinCompassLastRaw = null;
+var spinCompassAvailable = false;
+var spinStartBtn = document.getElementById('spinStartBtn');
+var spinStopBtn = document.getElementById('spinStopBtn');
+var spinResult = document.getElementById('spinResult');
+var spinStatus = document.getElementById('spinStatus');
+var spinLiveDeg = document.getElementById('spinLiveDeg');
+var SPIN_BEST_KEY = 'sensorArena.spinBest';
+COMMENTS.spin = { S:'伝説級!2回転オーバー!!', A:'すごい回転力!', B:'ぐるっと一周できた!', C:'まだまだ伸びしろあり!' };
+document.getElementById('spinBest').textContent = getBest(SPIN_BEST_KEY).toFixed(0);
+
+// 技名はおまけ演出(合計回転量から一番大きく達成した技を表示するだけで、スコアには影響しない)
+function spinTrickName(deg){
+  if (deg >= 900) return '2回転半、すごい!';
+  if (deg >= 720) return 'ダブル!';
+  if (deg >= 540) return '1回転半!';
+  if (deg >= 360) return 'シングル!';
+  if (deg >= 180) return 'ハーフ!';
+  return '';
+}
+
+spinStartBtn.addEventListener('click', function(){
+  if (spinState !== 'idle') return;
+  spinState = 'spinning';
+  spinResult.hidden = true;
+  document.getElementById('spinRank').hidden = true;
+  spinGyroNet = 0; spinGyroLastTs = null; spinGyroSaturated = false; spinGyroAvailable = false;
+  spinCompassNet = 0; spinCompassLastRaw = null; spinCompassAvailable = false;
+  spinChar.src = BATSUBEI.normal;
+  spinChar.style.transform = '';
+  spinStartBtn.hidden = true;
+  spinStopBtn.hidden = false;
+  spinStatus.textContent = '📳 回転中!止まったら「ここで止める」を押してね';
+  spinLiveDeg.textContent = '0°';
+});
+spinStopBtn.addEventListener('click', function(){
+  if (spinState !== 'spinning') return;
+  finishSpin();
+});
+// devicemotionから毎回呼ばれる(spinning中のみ)。ジャイロのz軸回転レート(rotationRate.alpha)を
+// 実測dtで時間積分して、正味の累積回転角を主計測として求める。
+function feedSpinMotion(e){
+  var rr = e.rotationRate;
+  if (!rr || typeof rr.alpha !== 'number') return;
+  spinGyroAvailable = true;
+  if (Math.abs(rr.alpha) > SPIN_GYRO_SATURATION) spinGyroSaturated = true;
+  var now = performance.now();
+  if (spinGyroLastTs != null) {
+    var dt = (now - spinGyroLastTs) / 1000;
+    if (dt > 0 && dt < 0.5) spinGyroNet += rr.alpha * dt; // 極端に長いdt(バックグラウンド復帰等)は無視
+  }
+  spinGyroLastTs = now;
+}
+// deviceorientationから毎回呼ばれる(spinning中のみ)。副計測: 方位を毎サンプルアンラップして累積する。
+function feedSpinOrientation(e){
+  var raw = (typeof e.webkitCompassHeading === 'number') ? e.webkitCompassHeading : e.alpha;
+  if (typeof raw !== 'number') return;
+  spinCompassAvailable = true;
+  if (spinCompassLastRaw != null) {
+    var delta = raw - spinCompassLastRaw;
+    while (delta > 180) delta -= 360;
+    while (delta < -180) delta += 360;
+    spinCompassNet += delta;
+  }
+  spinCompassLastRaw = raw;
+}
+function updateSpinDisplay(){
+  if (spinState !== 'spinning') return;
+  var live = (spinGyroSaturated || !spinGyroAvailable) ? Math.abs(spinCompassNet) : Math.abs(spinGyroNet);
+  spinLiveDeg.textContent = Math.round(live) + '°';
+}
+function finishSpin(){
+  if (spinState !== 'spinning') return;
+  spinState = 'idle';
+  spinStartBtn.hidden = false;
+  spinStopBtn.hidden = true;
+  spinStatus.textContent = '「回転スタート」を押してから回ろう';
+  var gyroTotal = Math.abs(spinGyroNet);
+  var compassTotal = Math.abs(spinCompassNet);
+  // ジャイロが飽和した(または取得できなかった)場合は方位側の計測を採用する
+  var useCompass = spinGyroSaturated || !spinGyroAvailable;
+  var finalTotal = useCompass ? compassTotal : gyroTotal;
+  if (useCompass && !spinCompassAvailable) finalTotal = gyroTotal; // 両方欠けた時の保険
+  var matchPct = null;
+  if (spinGyroAvailable && spinCompassAvailable) {
+    var denom = Math.max(gyroTotal, compassTotal, 1);
+    matchPct = Math.max(0, Math.round(100 * (1 - Math.abs(gyroTotal - compassTotal) / denom)));
+  }
+  renderSpinResult(finalTotal, matchPct, useCompass);
+}
+function renderSpinResult(total, matchPct, useCompass){
+  var rank = total >= 720 ? 'S' : total >= 540 ? 'A' : total >= 360 ? 'B' : 'C';
+  var imgKey = (rank === 'S' || rank === 'A') ? 'heart' : rank === 'B' ? 'jito' : 'round';
+  spinChar.src = BATSUBEI[imgKey];
+  spinResult.hidden = false;
+  animateCountUp(document.getElementById('spinScore'), total, 0);
+  var trick = spinTrickName(total);
+  document.getElementById('spinTrick').textContent = trick ? ('技名: ' + trick) : '技にはあと一歩!';
+  var best = setBestIfHigher(SPIN_BEST_KEY, total);
+  document.getElementById('spinBest').textContent = best.toFixed(0);
+  var matchMsg = (matchPct != null) ? ('二重計測の一致度 ' + matchPct + '%') : '';
+  if (useCompass) matchMsg += (matchMsg ? ' / ' : '') + '方位センサーで計測(ジャイロ飽和 または非対応)';
+  document.getElementById('spinMatch').textContent = matchMsg;
+  myResults.spin = Math.round(total);
+  updateChallengeBar();
+  revealRank(document.getElementById('spinRank'), rank, function(){
+    document.getElementById('spinComment').textContent = COMMENTS.spin[rank];
+  }, spinChar);
+}
+
+// ================= 7. あっちを向けば =================
+// コース(東京/関東/日本/世界)ごとにランドマークを約7件ずつ用意し、「今日の3問」を
+// 日付+コースをシードにした疑似乱数で選ぶ(同じ日は誰がやっても同じ3問になる)。
+// 現在地(タップ起点でGeolocation)からランドマークへの初期方位を球面三角法atan2で求め、
+// 実際に向いた方角とのズレで採点する。位置情報が拒否/失敗した場合は東京駅を起点にフォールバックする。
+var LANDMARKS = {
+  tokyo: [
+    {name:'東京タワー', lat:35.6586, lng:139.7454},
+    {name:'東京スカイツリー', lat:35.7101, lng:139.8107},
+    {name:'渋谷スクランブル交差点', lat:35.6595, lng:139.7004},
+    {name:'上野動物園', lat:35.7166, lng:139.7713},
+    {name:'東京ドーム', lat:35.7056, lng:139.7519},
+    {name:'浅草寺', lat:35.7148, lng:139.7967},
+    {name:'新宿駅', lat:35.6896, lng:139.7006}
+  ],
+  kanto: [
+    {name:'横浜中華街', lat:35.4437, lng:139.6486},
+    {name:'鎌倉大仏', lat:35.3168, lng:139.5359},
+    {name:'日光東照宮', lat:36.7581, lng:139.5991},
+    {name:'筑波山', lat:36.2262, lng:140.1064},
+    {name:'江の島', lat:35.2999, lng:139.4803},
+    {name:'成田空港', lat:35.7719, lng:140.3928},
+    {name:'箱根(芦ノ湖)', lat:35.2012, lng:139.0247}
+  ],
+  japan: [
+    {name:'富士山', lat:35.3606, lng:138.7274},
+    {name:'金閣寺', lat:35.0394, lng:135.7292},
+    {name:'大阪城', lat:34.6873, lng:135.5262},
+    {name:'札幌時計台', lat:43.0621, lng:141.3544},
+    {name:'原爆ドーム', lat:34.3955, lng:132.4536},
+    {name:'那覇(首里城)', lat:26.2170, lng:127.7199},
+    {name:'青森ねぶたの里', lat:40.8244, lng:140.7400}
+  ],
+  world: [
+    {name:'ピラミッド(ギザ)', lat:29.9792, lng:31.1342},
+    {name:'エッフェル塔', lat:48.8584, lng:2.2945},
+    {name:'自由の女神', lat:40.6892, lng:-74.0445},
+    {name:'万里の長城(八達嶺)', lat:40.4319, lng:116.5704},
+    {name:'シドニー・オペラハウス', lat:-33.8568, lng:151.2153},
+    {name:'コロッセオ', lat:41.8902, lng:12.4922},
+    {name:'南極点', lat:-90, lng:0}
+  ]
+};
+// 初期方位(bearing)を球面三角法のatan2で求める(0-360、真北基準)
+function bearingTo(lat1, lng1, lat2, lng2){
+  var p1 = lat1 * Math.PI / 180, p2 = lat2 * Math.PI / 180;
+  var dLng = (lng2 - lng1) * Math.PI / 180;
+  var y = Math.sin(dLng) * Math.cos(p2);
+  var x = Math.cos(p1) * Math.sin(p2) - Math.sin(p1) * Math.cos(p2) * Math.cos(dLng);
+  var th = Math.atan2(y, x);
+  return (th * 180 / Math.PI + 360) % 360;
+}
+// 2点間距離(km)をハーバーサイン公式で求める
+function distanceKm(lat1, lng1, lat2, lng2){
+  var R = 6371;
+  var p1 = lat1 * Math.PI / 180, p2 = lat2 * Math.PI / 180;
+  var dLat = (lat2 - lat1) * Math.PI / 180, dLng = (lng2 - lng1) * Math.PI / 180;
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(p1) * Math.cos(p2) * Math.sin(dLng/2) * Math.sin(dLng/2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+function fmtDistance(km){
+  return km < 100 ? km.toFixed(1) : String(Math.round(km));
+}
+// 文字列シードの疑似乱数生成器(mulberry32ベース)。同じシードなら同じ乱数列になる。
+function seededRng(seed){
+  var h = 1779033703 ^ seed.length;
+  for (var i = 0; i < seed.length; i++) {
+    h = Math.imul(h ^ seed.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  return function(){
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    h ^= h >>> 16;
+    return (h >>> 0) / 4294967296;
+  };
+}
+// 「今日の3問」: 日付+コース名をシードにしたFisher-Yatesシャッフルの先頭3件(同じ日は誰でも同じ3問)
+function todaysThree(courseKey){
+  var list = LANDMARKS[courseKey].slice();
+  var dateStr = new Date().toISOString().slice(0, 10);
+  var rng = seededRng(dateStr + '_' + courseKey);
+  for (var i = list.length - 1; i > 0; i--) {
+    var j = Math.floor(rng() * (i + 1));
+    var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+  }
+  return list.slice(0, 3);
+}
+
+var pointState = 'courseSelect'; // courseSelect | locating | quiz | result
+var pointCourseKey = null;
+var pointOrigin = null; // {lat, lng, fallback}
+var pointQuestions = [];
+var pointIndex = 0;
+var pointAnswers = [];
+var POINT_BEST_PREFIX = 'sensorArena.pointBest.';
+COMMENTS.point = { S:'方向感覚の天才!ほぼドンピシャ', A:'かなり近い!いい勘してる', B:'おしい!もう少し感覚を磨こう', C:'あさっての方向…?次はいけるはず' };
+
+var pointCourseSelectEl = document.getElementById('pointCourseSelect');
+var pointQuizEl = document.getElementById('pointQuiz');
+var pointResultEl = document.getElementById('pointResult');
+var pointFallbackNote = document.getElementById('pointFallbackNote');
+var pointLocateStatus = document.getElementById('pointLocateStatus');
+var pointProgress = document.getElementById('pointProgress');
+var pointTargetName = document.getElementById('pointTargetName');
+var pointAnswerBtn = document.getElementById('pointAnswerBtn');
+var pointFeedback = document.getElementById('pointFeedback');
+var pointFeedbackDiff = document.getElementById('pointFeedbackDiff');
+var pointFeedbackDistance = document.getElementById('pointFeedbackDistance');
+var pointNextBtn = document.getElementById('pointNextBtn');
+var pointCourseBtns = Array.prototype.slice.call(pointCourseSelectEl.querySelectorAll('[data-course]'));
+
+function getPointBest(course){
+  var v = parseFloat(localStorage.getItem(POINT_BEST_PREFIX + course));
+  return isNaN(v) ? null : v;
+}
+function setPointBestIfLower(course, val){
+  var b = getPointBest(course);
+  if (b == null || val < b) { localStorage.setItem(POINT_BEST_PREFIX + course, String(val)); return val; }
+  return b;
+}
+
+pointCourseBtns.forEach(function(btn){
+  btn.addEventListener('click', function(){
+    if (pointState !== 'courseSelect') return;
+    ensureAudio();
+    startPointCourse(btn.getAttribute('data-course'));
+  });
+});
+
+function startPointCourse(courseKey){
+  pointCourseKey = courseKey;
+  pointState = 'locating';
+  pointLocateStatus.textContent = '📍 現在地を取得中…';
+  pointCourseBtns.forEach(function(b){ b.disabled = true; });
+
+  function proceedWithOrigin(lat, lng, fallback){
+    pointOrigin = { lat:lat, lng:lng, fallback: !!fallback };
+    pointFallbackNote.hidden = !fallback;
+    pointCourseBtns.forEach(function(b){ b.disabled = false; });
+    pointLocateStatus.textContent = '';
+    pointQuestions = todaysThree(courseKey);
+    pointAnswers = [];
+    pointIndex = 0;
+    pointCourseSelectEl.hidden = true;
+    pointResultEl.hidden = true;
+    pointQuizEl.hidden = false;
+    pointState = 'quiz';
+    showPointQuestion();
+  }
+  // 東京駅(フォールバック用の出発点)
+  var TOKYO_STATION = { lat:35.6812, lng:139.7671 };
+  if (!('geolocation' in navigator)) {
+    proceedWithOrigin(TOKYO_STATION.lat, TOKYO_STATION.lng, true);
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(function(pos){
+    proceedWithOrigin(pos.coords.latitude, pos.coords.longitude, false);
+  }, function(){
+    proceedWithOrigin(TOKYO_STATION.lat, TOKYO_STATION.lng, true); // 拒否/失敗時は東京駅から出題
+  }, { enableHighAccuracy:true, timeout:8000, maximumAge:60000 });
+}
+
+function showPointQuestion(){
+  pointFeedback.hidden = true;
+  var q = pointQuestions[pointIndex];
+  pointProgress.textContent = '今日の3問 - 問' + (pointIndex + 1) + '/3';
+  pointTargetName.textContent = q.name;
+  pointChar.src = BATSUBEI.normal;
+  pointChar.style.transform = '';
+  pointAnswerBtn.hidden = false;
+}
+pointAnswerBtn.addEventListener('click', function(){
+  if (pointState !== 'quiz') return;
+  var heading = orientationState.heading;
+  var q = pointQuestions[pointIndex];
+  if (heading == null || !pointOrigin) { showUnsupported('no-sensor'); return; }
+  var bearing = bearingTo(pointOrigin.lat, pointOrigin.lng, q.lat, q.lng);
+  var diff = angularDiff(heading, bearing);
+  var dist = distanceKm(pointOrigin.lat, pointOrigin.lng, q.lat, q.lng);
+  pointAnswers.push({ name:q.name, diff:diff, distanceKm:dist });
+  pointAnswerBtn.hidden = true;
+  var rank1 = diff <= 10 ? 'S' : diff <= 25 ? 'A' : diff <= 45 ? 'B' : 'C';
+  var imgKey = (rank1 === 'S' || rank1 === 'A') ? 'heart' : (rank1 === 'B' ? 'jito' : 'round');
+  pointChar.src = BATSUBEI[imgKey];
+  pointFeedbackDiff.textContent = diff.toFixed(1) + '° ズレ';
+  pointFeedbackDistance.textContent = 'その方向へ' + fmtDistance(dist) + 'kmで' + q.name + '!';
+  pointFeedback.hidden = false;
+});
+pointNextBtn.addEventListener('click', function(){
+  pointIndex++;
+  if (pointIndex >= pointQuestions.length) finishPointCourse();
+  else showPointQuestion();
+});
+function finishPointCourse(){
+  pointState = 'result';
+  pointQuizEl.hidden = true;
+  pointResultEl.hidden = false;
+  document.getElementById('pointRank').hidden = true;
+  var totalDiff = pointAnswers.reduce(function(s, a){ return s + a.diff; }, 0);
+  var avg = totalDiff / pointAnswers.length;
+  var rank = avg <= 10 ? 'S' : avg <= 25 ? 'A' : avg <= 45 ? 'B' : 'C';
+  var imgKey = (rank === 'S' || rank === 'A') ? 'heart' : (rank === 'B' ? 'jito' : 'round');
+  pointChar.src = BATSUBEI[imgKey];
+  animateCountUp(document.getElementById('pointScore'), avg, 1);
+  document.getElementById('pointBreakdown').textContent = pointAnswers.map(function(a, i){
+    return '問' + (i+1) + ': ' + a.name + ' ' + a.diff.toFixed(1) + '°(' + fmtDistance(a.distanceKm) + 'km)';
+  }).join(' / ');
+  var best = setPointBestIfLower(pointCourseKey, avg);
+  document.getElementById('pointBest').textContent = best.toFixed(1);
+  revealRank(document.getElementById('pointRank'), rank, function(){
+    document.getElementById('pointComment').textContent = COMMENTS.point[rank];
+  }, pointChar);
+}
+document.getElementById('pointRetryBtn').addEventListener('click', function(){
+  if (!pointCourseKey || !pointOrigin) return;
+  pointAnswers = [];
+  pointIndex = 0;
+  pointQuestions = todaysThree(pointCourseKey); // 同じ日なら同じ3問(「今日の3問」の再挑戦)
+  pointResultEl.hidden = true;
+  pointQuizEl.hidden = false;
+  pointState = 'quiz';
+  showPointQuestion();
+});
+document.getElementById('pointChangeCourseBtn').addEventListener('click', function(){
+  pointResultEl.hidden = true;
+  pointQuizEl.hidden = true;
+  pointCourseSelectEl.hidden = false;
+  pointState = 'courseSelect';
+});
+
 // ================= 描画ループ(向き系の常時更新)=================
 function updateNorthDisplay(){
   var el = document.getElementById('northHeadingNow');
@@ -1156,6 +1645,7 @@ function renderLoop(){
   if (!app.hidden) {
     if (activeTab === 'north') updateNorthDisplay();
     if (activeTab === 'level') updateLevelDisplay();
+    if (activeTab === 'spin') updateSpinDisplay();
   }
   requestAnimationFrame(renderLoop);
 }
