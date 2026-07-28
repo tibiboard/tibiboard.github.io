@@ -112,19 +112,11 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;fon
 <section id="ticket-sec">
   <button class="ticketbtn" id="ticketBtn">🎫 次回の先行入場券に ちょうせんする</button>
   <div id="ticket-detail">
-    <div class="desc">①きょうぎに かつ → 🪙コイン → ②ガチャかスロットで あたりをひく<br>1にち1かい・むりょう<br>つぎのドロップのとき、みんなより2じかん はやく おみせに はいれるよ。</div>
+    <div class="desc">①きょうぎに かつ → ②そのばで ガチャかスロットを えらんで あたりをひく<br>1にち1かい・むりょう</div>
     <div class="btns">
-      <a class="keybtn mint" href="../asobi/">🏟 ①きょうぎじょうへ</a>
+      <a class="keybtn mint" href="../asobi/">🏟 きょうぎに ちょうせんする</a>
     </div>
-    <button class="keybtn coinbtn" id="coinBtn" style="margin-top:12px;width:100%;max-width:460px;background:#fff9d6;border-color:#e0b400">きょうぎに かったら おしてね →『🪙 コインをうけとる』</button>
-    <div id="coinGot" style="display:none;margin-top:10px;font-weight:900;color:var(--mint-deep)">コイン1まい もってるよ🪙</div>
-    <div id="chooseMsg" style="display:none;margin-top:8px;font-weight:900;font-size:16px">✨ どっちで あそぶ? ✨</div>
-    <div class="btns" style="margin-top:14px">
-      <a class="keybtn" id="slotBtn" href="slot.html">🎰スロット</a>
-      <a class="keybtn pink" id="gachaBtn" href="gacha.html">🔮ガチャ</a>
-    </div>
-    <div class="testnote" id="coinHint">まず きょうぎで コインをとってね</div>
-    <div class="testnote">※テスト版: ほんばんは きょうぎの きろくで じどうてきに コインがもらえます</div>
+    <div class="testnote">(テスト用: かったつもりで <a href="win.html" style="color:inherit">win.html</a> へ)</div>
   </div>
 </section>
 
@@ -143,11 +135,11 @@ function renderUsagi(ari){
   u.classList.remove('ari','nashi');
   if (ari){
     u.classList.add('ari');
-    img.src = 'img/heart.svg?v=4';
+    img.src = 'img/heart.svg?v=5';
     msg.textContent = '🌟 いまお店に いるよ!';
   } else {
     u.classList.add('nashi');
-    img.src = 'img/cry.svg?v=4';
+    img.src = 'img/cry.svg?v=5';
     msg.textContent = '…みんな旅立ったよ。つぎの子をまっててね';
   }
   renderShelf(ari);
@@ -206,46 +198,6 @@ document.getElementById('ticketBtn').onclick = function(){
   document.getElementById('ticket-detail').classList.toggle('show');
 };
 
-/* ============ コイン導線(テスト用自己申告) ============ */
-const COIN_KEY = 'asobiTestCoin';
-
-function hasCoin(){ return localStorage.getItem(COIN_KEY) === '1'; }
-
-function renderCoinState(){
-  const got = hasCoin();
-  document.getElementById('coinGot').style.display = got ? 'block' : 'none';
-  document.getElementById('coinBtn').style.display = got ? 'none' : 'inline-block';
-  document.getElementById('coinHint').style.display = got ? 'none' : 'block';
-  /* コインを取るまでスロット/ガチャは「存在しない」(表示すらしない) */
-  ['slotBtn','gachaBtn'].forEach(id=>{
-    const el = document.getElementById(id);
-    el.style.display = got ? 'inline-block' : 'none';
-    el.classList.remove('disabled');
-    el.removeAttribute('aria-disabled');
-    el.title = '';
-  });
-  /* コイン獲得の瞬間に「どっちであそぶ?」の見出しを出す */
-  const chooser = document.getElementById('chooseMsg');
-  if (chooser) chooser.style.display = got ? 'block' : 'none';
-}
-
-document.getElementById('coinBtn').onclick = function(){
-  localStorage.setItem(COIN_KEY, '1');
-  renderCoinState();
-};
-
-['slotBtn','gachaBtn'].forEach(id=>{
-  document.getElementById(id).addEventListener('click', function(e){
-    if (!hasCoin()){
-      e.preventDefault();
-      return;
-    }
-    /* コインを使ってスロット/ガチャへ向かう→消費してリセット */
-    localStorage.removeItem(COIN_KEY);
-  });
-});
-
-renderCoinState();
 </script>
 </body>
 </html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>かった! — テストページ</title>
+<style>
+:root{--pink:#e84898;--pink-deep:#e0197a;--mint:#5fd6c4;--mint-deep:#1fae99;--ink:#3a2233}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:#120818;color:#fff;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+.back{position:fixed;left:14px;top:14px;color:#8d7f89;font-size:13px;text-decoration:none}
+.win{font-size:26px;font-weight:900;letter-spacing:2px;animation:pop .5s cubic-bezier(.2,1.5,.4,1)}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.coin{font-size:60px;margin:18px 0;animation:coinspin 1.4s ease-in-out infinite}
+@keyframes coinspin{0%,100%{transform:rotateY(0)}50%{transform:rotateY(180deg)}}
+.got{font-size:16px;font-weight:900;color:#ffd54f;margin-bottom:30px}
+.ask{font-size:19px;font-weight:900;margin-bottom:6px}
+.sub{font-size:12px;color:#c9a9bd;margin-bottom:22px}
+.choices{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;width:100%;max-width:460px}
+.choice{flex:1;min-width:150px;display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:linear-gradient(135deg,#241521,#2e1a2a);border:3px solid var(--mint);border-radius:18px;
+  padding:24px 12px;text-decoration:none;color:#fff;font-weight:900;font-size:16px;
+  border-bottom:8px solid var(--mint-deep)}
+.choice:active{border-bottom-width:3px;transform:translateY(5px)}
+.choice.pink{border-color:var(--pink);border-bottom-color:var(--pink-deep)}
+.choice .ico{font-size:40px}
+.testnote{margin-top:34px;font-size:11px;color:#8d7f89;line-height:1.7;max-width:420px}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← もどる</a>
+
+<div class="win">🎉 かった! 🎉</div>
+<div class="coin">🪙</div>
+<div class="got">🪙コインを 1まい げっと!</div>
+
+<div class="ask">✨ どっちで あそぶ? ✨</div>
+<div class="sub">(コインは 1かいで つかいきり)</div>
+
+<div class="choices">
+  <a class="choice" href="slot.html"><span class="ico">🎰</span>スロット</a>
+  <a class="choice pink" href="gacha.html"><span class="ico">🔮</span>ガチャ</a>
+</div>
+
+<div class="testnote">※ほんばんは きょうぎに かつと じどうで この画面になります</div>
+</body>
+</html>
