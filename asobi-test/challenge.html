@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>ボッチャ風・力かげんゲーム(試作) — ちびボード</title>
+<title>せんこうにゅうじょうけん チャレンジ — ちびボード</title>
 <style>
 :root{
   --pink:#e84898; --pink-deep:#e0197a; --pink-pale:#ffe3f0;
@@ -15,18 +15,21 @@
 html,body{width:100%;overflow-x:hidden;overscroll-behavior:none}
 body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--dark);color:#fff;min-height:100vh;user-select:none}
 
-header{text-align:center;padding:14px 10px 8px}
-header h1{font-size:18px;font-weight:900;letter-spacing:1px}
-header .sub{font-size:11px;color:#c9a9bd;margin-top:4px}
+header{text-align:center;padding:18px 10px 8px}
+header h1{font-size:19px;font-weight:900;letter-spacing:1px}
+a.back{display:inline-block;margin-top:8px;color:#c9a9bd;font-size:12px;text-decoration:none}
 
 .wrap{max-width:520px;margin:0 auto;padding:0 14px 30px}
 
 .panel{background:#241a22;border-radius:16px;padding:18px;margin-top:14px;border:2px solid #3c2233}
 
-/* ---------- 注意書き ---------- */
-.warn{background:linear-gradient(135deg,#ffe3f0,#fff);color:var(--ink);border-radius:14px;padding:14px;
-  font-weight:900;font-size:15px;text-align:center;border:3px solid var(--pink-deep);box-shadow:0 0 22px 2px rgba(232,72,152,.5);
-  margin-top:12px;line-height:1.6}
+/* ---------- 確率表示(最初にいちばん大きく・正直に) ---------- */
+.probbox{background:linear-gradient(135deg,#fff,var(--pink-pale));color:var(--ink);border-radius:16px;padding:20px 16px;
+  text-align:center;border:3px solid var(--pink-deep);box-shadow:0 0 22px 2px rgba(232,72,152,.5);margin-top:12px}
+.probbox .num{font-size:20px;font-weight:900;line-height:1.5}
+.probbox .sub{font-size:12.5px;margin-top:6px;color:#7a5c6d}
+
+.rule1{text-align:center;font-size:13px;color:#c9a9bd;margin-top:12px;line-height:1.6}
 
 /* ---------- モード選択 ---------- */
 .modebtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
@@ -57,9 +60,7 @@ header .sub{font-size:11px;color:#c9a9bd;margin-top:4px}
   pointer-events:none;z-index:6;background:rgba(0,0,0,.15)}
 .ready-overlay.show{display:flex}
 
-.hud{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:#c9a9bd}
-.hud .turn{font-weight:900;color:var(--pink);font-size:15px}
-.hud .score{font-weight:900;color:var(--mint)}
+.hud{display:flex;justify-content:center;align-items:center;margin-top:10px;font-size:14px;color:var(--pink);font-weight:900}
 
 .powerwrap{margin-top:12px}
 .powerbar{position:relative;height:22px;background:#241a22;border-radius:11px;border:2px solid #3c2233;overflow:hidden}
@@ -89,31 +90,34 @@ header .sub{font-size:11px;color:#c9a9bd;margin-top:4px}
 #sensorGate.show{display:block}
 .gate-icon{font-size:40px;text-align:center;margin-bottom:6px}
 
+/* ---------- 本日終了 ---------- */
+#usedNote{margin-top:14px;background:#2a2229;border:3px solid var(--pink);border-radius:16px;padding:22px 18px;text-align:center;
+  font-weight:900;font-size:16px;line-height:1.8;display:none}
+#usedNote.show{display:block}
+
 footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🎯 ボッチャ風・力かげんゲーム(試作)</h1>
-  <div class="sub">ちびボード あそび場 — 家族テスト用</div>
+  <h1>🎫 せんこうにゅうじょうけん チャレンジ</h1>
+  <a class="back" href="index.html">← もどる</a>
 </header>
 
 <div class="wrap">
 
-  <div class="warn">⚠ スマホは しっかり にぎってね!<br>(なげないで!ふるだけ)</div>
+  <div class="probbox">
+    <div class="num" id="probText"></div>
+  </div>
 
-  <div class="panel">
-    <div style="font-weight:900;font-size:14px;margin-bottom:8px">① あそびかた</div>
+  <div class="rule1">きょう1かい だけ ちょうせんできるよ</div>
+
+  <div class="panel" id="startPanel">
+    <div style="font-weight:900;font-size:14px;margin-bottom:8px">あそびかた</div>
     <div class="modebtns">
       <button class="mbtn on" id="modeSensorBtn">📱 センサーで ふる</button>
       <button class="mbtn" id="modeSwipeBtn">👆 ゆびで はじく</button>
-    </div>
-
-    <div style="font-weight:900;font-size:14px;margin:16px 0 8px">② にんずう</div>
-    <div class="modebtns">
-      <button class="mbtn on" id="mode1pBtn">🧍 ひとりで</button>
-      <button class="mbtn" id="mode2pBtn">🧍🧍 ふたりで たいけつ</button>
     </div>
 
     <!-- iOSセンサー許可ゲート -->
@@ -124,15 +128,12 @@ footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
       </div>
     </div>
 
-    <button class="bigbtn" id="startBtn">🚀 はじめる</button>
+    <button class="bigbtn" id="startBtn">🚀 チャレンジする</button>
     <div id="startMsg" style="text-align:center;font-size:12px;color:#e0197a;margin-top:8px"></div>
   </div>
 
   <div class="panel" id="gameScreen">
-    <div class="hud">
-      <div class="turn" id="turnLabel">ばん: プレイヤー1</div>
-      <div class="score" id="scoreLabel"></div>
-    </div>
+    <div class="hud"><div class="turn">🎯 ど真ん中を ねらえ!</div></div>
 
     <div class="court-wrap">
       <canvas id="court" width="360" height="560"></canvas>
@@ -148,13 +149,11 @@ footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
     <div class="swipe-hint" id="swipeHintUi" style="display:none">
       コートを した から うえ に むかって ゆびで はじいてね(弱く〜強く)
     </div>
-
-    <div style="text-align:center">
-      <button class="smallbtn mint" id="resetBtn">🔄 さいしょから</button>
-    </div>
   </div>
 
-  <footer>試作版・家族テスト用 / noindex</footer>
+  <div id="usedNote">🌙 きょうのちょうせんは おわったよ。<br>またあした!</div>
+
+  <footer>ちびボード あそび場 / noindex</footer>
 </div>
 
 <div id="resultOverlay">
@@ -169,7 +168,33 @@ footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
 
 <script>
 /* =========================================================================
-   チューニング定数(ここを調整すればゲームの手ざわりが変わる)
+   券チャレンジ: 正直な確率表示・1日1回制
+   ========================================================================= */
+const PROB_TEXT = 'あたる かくりつは 100ぶんの1。おまけ ていどに たのしんでね';
+document.getElementById('probText').textContent = PROB_TEXT;
+
+function challengeTodayKey(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return 'chibi_challenge_' + y + '-' + m + '-' + day;
+}
+function isChallengeUsedToday(){
+  try { return localStorage.getItem(challengeTodayKey()) === '1'; } catch(e){ return false; }
+}
+function consumeChallengeToday(){
+  try { localStorage.setItem(challengeTodayKey(), '1'); } catch(e){}
+}
+(function(){
+  const params = new URLSearchParams(location.search);
+  if (params.get('reset') === '1') {
+    try { localStorage.removeItem(challengeTodayKey()); } catch(e){}
+  }
+})();
+
+/* =========================================================================
+   チューニング定数(boccha.htmlと同じ手ざわり。ここを調整すればゲームの手ざわりが変わる)
    ========================================================================= */
 const TUNE = {
   // --- コート寸法(canvas座標。上がゴール側、下が投げる側) ---
@@ -218,12 +243,10 @@ const TUNE = {
 
 const $ = (id)=>document.getElementById(id);
 
-let mode = { input:'sensor', players:1 }; // input: 'sensor' | 'swipe'
+let mode = { input:'sensor' }; // input: 'sensor' | 'swipe'
 let game = {
-  turn: 1,           // 1人目 or 2人目
-  scores: [null, null], // 各プレイヤーの「中心からの距離」(小さいほど良い)
   goalCx: 0, goalCy: 0,
-  ballShown: false,
+  ball: null,
   throwing: false,
 };
 
@@ -240,16 +263,6 @@ $('modeSwipeBtn').onclick = ()=>{
   $('modeSensorBtn').classList.remove('on');
   updateGateVisibility();
 };
-$('mode1pBtn').onclick = ()=>{
-  mode.players = 1;
-  $('mode1pBtn').classList.add('on');
-  $('mode2pBtn').classList.remove('on');
-};
-$('mode2pBtn').onclick = ()=>{
-  mode.players = 2;
-  $('mode2pBtn').classList.add('on');
-  $('mode1pBtn').classList.remove('on');
-};
 
 function needsIOSPermission(){
   return (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function');
@@ -262,13 +275,28 @@ function updateGateVisibility(){
     gate.classList.remove('show');
   }
 }
-updateGateVisibility();
+
+/* ---------- 本日ぶんチェック ---------- */
+function applyUsedState(){
+  if (isChallengeUsedToday()){
+    $('startPanel').style.display = 'none';
+    $('gameScreen').classList.remove('show');
+    $('usedNote').classList.add('show');
+    return true;
+  }
+  $('usedNote').classList.remove('show');
+  $('startPanel').style.display = 'block';
+  updateGateVisibility();
+  return false;
+}
+applyUsedState();
 
 /* ---------- はじめる ---------- */
 let sensorReady = false;
 let sensorSupported = false;
 
 $('startBtn').onclick = function(){
+  if (isChallengeUsedToday()){ applyUsedState(); return; }
   ensureAudio(); // iOS対策: 必ずユーザー操作(このクリック)起点で生成する
   if (mode.input === 'sensor'){
     $('startMsg').textContent = '';
@@ -301,8 +329,9 @@ $('startBtn').onclick = function(){
 };
 
 function beginGame(){
-  game.turn = 1;
-  game.scores = [null, null];
+  // 「はじめる」を押した時点(=挑戦した時点)で1日1回の枠を消費
+  consumeChallengeToday();
+  $('startPanel').style.display = 'none';
   $('gameScreen').classList.add('show');
   $('sensorPowerUi').style.display = (mode.input === 'sensor') ? 'block' : 'none';
   $('swipeHintUi').style.display = (mode.input === 'swipe') ? 'block' : 'none';
@@ -339,11 +368,6 @@ function startSensorCountdown(){
   }, TUNE.READY_COUNTDOWN_MS);
   setTimeout(()=>{ el.classList.remove('show'); }, TUNE.READY_COUNTDOWN_MS + 450);
 }
-
-$('resetBtn').onclick = function(){
-  $('gameScreen').classList.remove('show');
-  window.scrollTo({top:0, behavior:'smooth'});
-};
 
 /* =========================================================================
    サウンド(Web Audio APIで自作。音源ファイルは使わない)
@@ -460,25 +484,11 @@ function newRound(){
   game.goalCx = TUNE.COURT_W/2 + (Math.random()*30 - 15);
   game.ball = null;
   game.throwing = false;
-  updateHud();
   drawCourt();
   resetPowerUi();
 }
 
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-
-function updateHud(){
-  if (mode.players === 2){
-    $('turnLabel').textContent = 'ばん: プレイヤー' + game.turn;
-  } else {
-    $('turnLabel').textContent = 'チャレンジちゅう';
-  }
-  const s = game.scores;
-  let txt = '';
-  if (s[0] != null) txt += 'P1: ' + rankOf(s[0]);
-  if (mode.players === 2 && s[1] != null) txt += (txt?' / ':'') + 'P2: ' + rankOf(s[1]);
-  $('scoreLabel').textContent = txt;
-}
 
 function drawCourt(ballPos, heightFactor){
   heightFactor = heightFactor || 0;
@@ -530,8 +540,8 @@ function drawCourt(ballPos, heightFactor){
 
   // ボール本体
   ctx.beginPath();
-  ctx.fillStyle = (mode.players===2 && game.turn===2) ? '#5fd6c4' : '#ffe3f0';
-  ctx.strokeStyle = (mode.players===2 && game.turn===2) ? '#1fae99' : '#e0197a';
+  ctx.fillStyle = '#ffe3f0';
+  ctx.strokeStyle = '#e0197a';
   ctx.lineWidth = 3;
   ctx.ellipse(bx, by, 12, 12, 0, 0, Math.PI*2);
   ctx.fill();
@@ -603,59 +613,40 @@ function rankOf(d){
   return 'C';
 }
 
-function finishThrow(d, landX, landY){
-  const idx = game.turn - 1;
-  game.scores[idx] = d;
-  updateHud();
+function finishThrow(d){
   showResult(d);
 }
 
 function showResult(d){
   const rank = rankOf(d);
+  const isWin = (rank === 'S');
   const cfg = {
-    S: {emoji:'🌟', msg:'かんぺき！ど真ん中！', cls:'rankS'},
-    A: {emoji:'🎉', msg:'すごい！おしい神わざ！', cls:'rankA'},
-    B: {emoji:'😊', msg:'いいかんじ！', cls:'rankB'},
-    C: {emoji:'😅', msg:'おしい！つぎ がんばろう', cls:'rankC'},
+    S: {emoji:'🎉', msg:'かんぺき!ど真ん中!', cls:'rankS'},
+    A: {emoji:'😅', msg:'おしい！でも ざんねん', cls:'rankA'},
+    B: {emoji:'😅', msg:'ざんねん、またあした🐰', cls:'rankB'},
+    C: {emoji:'😅', msg:'ざんねん、またあした🐰', cls:'rankC'},
   }[rank];
   $('resultEmoji').textContent = cfg.emoji;
   $('resultRank').textContent = rank;
   $('resultRank').className = 'rank ' + cfg.cls;
-  $('resultMsg').textContent = cfg.msg;
+  $('resultMsg').textContent = isWin ? '🎉 かち!' : cfg.msg;
   $('resultDist').textContent = '中心からの きょり: ' + d.toFixed(0) + 'px';
+  $('nextBtn').textContent = isWin ? 'けっかへ すすむ ▶' : 'とじる';
+  $('nextBtn').dataset.win = isWin ? '1' : '0';
   $('resultOverlay').classList.add('show');
-  if (rank === 'S'){
+  if (isWin){
     setTimeout(playSparkle, 150); // ピタッと止まった直後にキラーン
   }
 }
 
 $('nextBtn').onclick = function(){
   $('resultOverlay').classList.remove('show');
-  if (mode.players === 2 && game.turn === 1 && game.scores[1] == null){
-    game.turn = 2;
-    newRound();
-  } else if (mode.players === 2 && game.scores[0] != null && game.scores[1] != null){
-    announceWinner();
+  if ($('nextBtn').dataset.win === '1'){
+    location.href = 'win.html';
   } else {
-    // 1人モード or 2人目終わったら次のラウンドへ(継続チャレンジ)
-    game.turn = (mode.players===2) ? 1 : 1;
-    game.scores = [null, null];
-    newRound();
+    applyUsedState(); // 本日は終了(既に開始時点で消費済み)
   }
 };
-
-function announceWinner(){
-  const s = game.scores;
-  let winner;
-  if (s[0] < s[1]) winner = 'プレイヤー1';
-  else if (s[1] < s[0]) winner = 'プレイヤー2';
-  else winner = 'ひきわけ';
-  $('resultEmoji').textContent = '🏆';
-  $('resultRank').textContent = '';
-  $('resultMsg').textContent = winner === 'ひきわけ' ? 'ひきわけ！同点だ！' : (winner + ' の勝ち！');
-  $('resultDist').textContent = 'P1: ' + rankOf(s[0]) + '(' + s[0].toFixed(0) + 'px) / P2: ' + rankOf(s[1]) + '(' + s[1].toFixed(0) + 'px)';
-  $('resultOverlay').classList.add('show');
-}
 
 function resetPowerUi(){
   $('powerFill').style.width = '0%';

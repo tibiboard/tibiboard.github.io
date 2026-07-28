@@ -113,14 +113,7 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;fon
 </section>
 
 <section id="ticket-sec">
-  <button class="ticketbtn" id="ticketBtn">🎫 次回の先行入場券に ちょうせんする</button>
-  <div id="ticket-detail">
-    <div class="desc">①きょうぎに かつ → ②そのばで ガチャかスロットを えらんで あたりをひく<br>1にち1かい・むりょう</div>
-    <div class="btns">
-      <a class="keybtn mint" href="kyogi.html">🏟 きょうぎに ちょうせんする</a>
-    </div>
-    <div class="testnote">(テスト用: かったつもりで <a href="win.html" style="color:inherit">win.html</a> へ)</div>
-  </div>
+  <a class="ticketbtn" id="ticketBtn" href="challenge.html">🎫 次回の先行入場券に ちょうせんする</a>
 </section>
 
 <footer>ちびボード工房 — うさぎと、世界にひとつのキーボード。</footer>
@@ -196,10 +189,6 @@ document.getElementById('sw').onclick = function(){
   setTimeout(()=>{
     document.getElementById('usagi').classList.add('show');
   }, 1100);
-};
-
-document.getElementById('ticketBtn').onclick = function(){
-  document.getElementById('ticket-detail').classList.toggle('show');
 };
 
 </script>
