@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ちびボード — テストページ</title>
+<style>
+:root{
+  --pink:#e84898; --pink-deep:#e0197a; --pink-pale:#ffe3f0;
+  --mint:#5fd6c4; --mint-pale:#d9f4ee; --mint-deep:#1fae99;
+  --ink:#3a2233; --dark:#180a14;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--dark);color:#fff;min-height:100vh}
+
+/* ============ 開幕: 電源スイッチ ============ */
+#boot{position:fixed;inset:0;background:var(--dark);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s}
+#boot.off{opacity:0;pointer-events:none}
+#boot .hint{color:#5c4152;font-size:13px;letter-spacing:4px;margin-top:34px;animation:hintblink 3s infinite;text-align:center;padding:0 12px}
+@keyframes hintblink{50%{opacity:.25}}
+.sw{width:92px;height:150px;border-radius:22px;background:#241521;border:3px solid #3c2233;cursor:pointer;position:relative;box-shadow:inset 0 0 24px #000}
+.sw .knob{position:absolute;left:8px;right:8px;bottom:8px;height:62px;border-radius:14px;background:linear-gradient(#4a2c40,#332030);transition:all .18s;box-shadow:0 4px 8px #000}
+.sw.on .knob{bottom:76px;background:linear-gradient(var(--pink),var(--pink-deep))}
+body.rumble{animation:rumble .5s}
+@keyframes rumble{0%,100%{transform:translate(0)}15%{transform:translate(-7px,3px)}30%{transform:translate(6px,-4px)}45%{transform:translate(-5px,-3px)}60%{transform:translate(5px,4px)}75%{transform:translate(-3px,2px)}}
+#bootflash{position:fixed;inset:0;background:#fff;opacity:0;z-index:199;pointer-events:none}
+#bootflash.go{animation:bfl .9s}
+@keyframes bfl{15%{opacity:1}100%{opacity:0}}
+
+/* ============ うさぎドン ============ */
+#usagi{position:fixed;inset:0;z-index:150;display:none;flex-direction:column;align-items:center;justify-content:center;background:var(--dark);text-align:center;padding:20px}
+#usagi.show{display:flex;animation:appear .4s}
+@keyframes appear{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+#usagi img{width:min(64vw,320px);filter:drop-shadow(0 14px 0 rgba(0,0,0,.4))}
+#usagi .msg{font-size:18px;font-weight:900;margin-top:14px;letter-spacing:2px}
+#usagi.ari .msg{color:var(--pink)}
+#usagi.nashi .msg{color:#8fb8ff}
+
+.btns{margin-top:26px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;padding:0 16px}
+.keybtn{display:inline-block;background:#fff;border:3px solid var(--ink);border-bottom-width:8px;border-radius:12px;
+  padding:14px 22px;font-weight:900;font-size:15px;color:var(--ink);cursor:pointer;user-select:none;text-decoration:none}
+.keybtn:active{border-bottom-width:3px;transform:translateY(5px)}
+.keybtn.pink{background:var(--pink);color:#fff;border-color:var(--pink-deep)}
+.keybtn.mint{background:var(--mint);border-color:var(--mint-deep)}
+
+#toggle{position:fixed;left:8px;bottom:8px;z-index:250;background:#241521;color:#8d7f89;font-size:10px;
+  border:1px solid #3c2233;border-radius:6px;padding:4px 8px;opacity:.6;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div id="bootflash"></div>
+<div id="boot">
+  <div class="sw" id="sw"><div class="knob"></div></div>
+  <div class="hint">— でんげんをいれてください —</div>
+</div>
+
+<div id="usagi">
+  <img id="usagiImg" src="" alt="うさぎ">
+  <div class="msg" id="usagiMsg"></div>
+  <div class="btns">
+    <a class="keybtn pink" href="slot.html">🎰 スロットであそぶ</a>
+    <a class="keybtn" href="gacha.html">🔮 ガチャであそぶ</a>
+    <a class="keybtn mint" href="../asobi/">🏟 きょうぎじょう(センサーあそび)</a>
+  </div>
+</div>
+
+<div id="toggle" onclick="toggleArimasu()">切替(テスト用)</div>
+
+<script>
+/* テスト用: 在庫あり/なしをここで切替 */
+const ARIMASU = true;
+
+function renderUsagi(ari){
+  const u = document.getElementById('usagi');
+  const img = document.getElementById('usagiImg');
+  const msg = document.getElementById('usagiMsg');
+  u.classList.remove('ari','nashi');
+  if (ari){
+    u.classList.add('ari');
+    img.src = 'img/本物_8_ハート目.png';
+    msg.textContent = '🌟 いまお店に いるよ!';
+  } else {
+    u.classList.add('nashi');
+    img.src = 'img/本物_9_泣き.png';
+    msg.textContent = '…みんな旅立ったよ。つぎの子をまっててね';
+  }
+}
+let ariCur = ARIMASU;
+renderUsagi(ariCur);
+function toggleArimasu(){
+  ariCur = !ariCur;
+  renderUsagi(ariCur);
+}
+
+document.getElementById('sw').onclick = function(){
+  this.classList.add('on');
+  setTimeout(()=>{
+    document.body.classList.add('rumble');
+    if(navigator.vibrate) navigator.vibrate([80,40,120]);
+  }, 200);
+  setTimeout(()=>{
+    document.getElementById('bootflash').classList.add('go');
+    document.getElementById('boot').classList.add('off');
+  }, 800);
+  setTimeout(()=>{
+    document.getElementById('usagi').classList.add('show');
+  }, 1100);
+};
+</script>
+</body>
+</html>
