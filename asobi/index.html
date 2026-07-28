@@ -147,6 +147,14 @@
           opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:600; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
+  .challenge-win-banner{ position:fixed; left:0; right:0; bottom:0; z-index:700;
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    background:linear-gradient(135deg,#fff4d0,#ffe1a0); border-top:3px solid #ff9d00;
+    box-shadow:0 -6px 20px rgba(0,0,0,.18);
+    transform:translateY(120%); transition:transform .35s cubic-bezier(.2,1.4,.4,1); }
+  .challenge-win-banner.show{ transform:translateY(0); }
+  .challenge-win-btn{ margin:0; background:linear-gradient(135deg,#ff9d00,#ffcf5c); box-shadow:0 6px 0 #c47500; color:#5c3d00; }
+
   .foot{ color:#a68fae; font-size:11.5px; text-align:center; margin-top:24px; }
   [hidden]{ display:none !important; }
 </style>
@@ -407,6 +415,39 @@ var app = document.getElementById('app');
 var startBtn = document.getElementById('startBtn');
 var retryBtn = document.getElementById('retryBtn');
 
+// ---- 先行入場券チャレンジモード(?challenge=1 の時だけ有効。通常アクセスは無変化) ----
+var CHALLENGE_MODE = (function(){
+  try { return new URLSearchParams(location.search).get('challenge') === '1'; }
+  catch (e) { return false; }
+})();
+function challengeTodayKey(){
+  var d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return 'chibi_challenge_' + y + '-' + m + '-' + day;
+}
+function consumeChallengeToday(){
+  try { localStorage.setItem(challengeTodayKey(), '1'); } catch (e) {}
+}
+function showChallengeWinButton(){
+  var banner = document.getElementById('challengeWinBanner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'challengeWinBanner';
+    banner.className = 'challenge-win-banner';
+    var btn = document.createElement('button');
+    btn.className = 'big-btn challenge-win-btn';
+    btn.textContent = '🎉 かち! せんこうにゅうじょうけんチャレンジへ';
+    btn.addEventListener('click', function(){
+      location.href = '../asobi-test/win.html';
+    });
+    banner.appendChild(btn);
+    document.body.appendChild(banner);
+  }
+  banner.classList.add('show');
+}
+
 var northChar = document.getElementById('northChar');
 var punchChar = document.getElementById('punchChar');
 var levelChar = document.getElementById('levelChar');
@@ -630,6 +671,7 @@ function revealRank(rankEl, rank, after, charImgEl){
     if (rank === 'S') {
       spawnConfetti(true);
       if (charImgEl) zoomChar(charImgEl.src);
+      if (CHALLENGE_MODE) showChallengeWinButton();
     }
     if (after) after();
   });
@@ -731,6 +773,7 @@ retryBtn.addEventListener('click', function(){ unsupported.hidden = true; gate.h
 function showApp(){
   gate.hidden = true; unsupported.hidden = true; app.hidden = false;
   showRivalBadges();
+  if (CHALLENGE_MODE) consumeChallengeToday();
 }
 startBtn.addEventListener('click', function(){
   ensureAudio(); // AudioContextはユーザー操作内で生成/resumeする必要があるためここで行う

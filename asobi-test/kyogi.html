@@ -50,6 +50,11 @@ section.group h2{font-size:14px;letter-spacing:2px;color:#c9a9bd;margin-bottom:1
 
 .testnote{margin-top:26px;font-size:11px;color:#8d7f89;line-height:1.7;text-align:center}
 
+#usedNote{margin-top:20px;background:#2a2229;border:3px solid var(--pink);border-radius:16px;padding:20px 18px;text-align:center;display:none;font-weight:900;font-size:15px;line-height:1.7}
+#usedNote.show{display:block}
+.card.usedlock{background:#2a2229;border-color:#4a3f47;color:#7a6d76;cursor:not-allowed;pointer-events:none}
+.card.usedlock .badge{position:absolute;top:8px;right:8px;background:#4a3f47;color:#d8c9d1;font-size:10px;font-weight:900;border-radius:999px;padding:3px 8px;letter-spacing:1px}
+
 /* ---- かおなじみけんてい (自作・センサー不要ミニ競技) ---- */
 #kaoModal{position:fixed;inset:0;background:rgba(10,4,9,.92);z-index:300;display:none;align-items:center;justify-content:center;padding:16px}
 #kaoModal.show{display:flex}
@@ -66,9 +71,10 @@ section.group h2{font-size:14px;letter-spacing:2px;color:#c9a9bd;margin-bottom:1
 .kaoChoice.wrong{border-color:var(--pink-deep)!important;background:var(--pink-pale)}
 #kaoResult{margin-top:14px;font-weight:900;font-size:15px;display:none}
 #kaoResult.show{display:block}
-#kaoCloseBtn,#kaoNextBtn,#kaoStartBtn{margin-top:14px;background:var(--pink);color:#fff;border:0;border-bottom:6px solid var(--pink-deep);
+#kaoCloseBtn,#kaoNextBtn,#kaoStartBtn,#kaoWinBtn{margin-top:14px;background:var(--pink);color:#fff;border:0;border-bottom:6px solid var(--pink-deep);
   border-radius:12px;padding:12px 20px;font-weight:900;font-size:14px;cursor:pointer}
-#kaoCloseBtn:active,#kaoNextBtn:active,#kaoStartBtn:active{border-bottom-width:2px;transform:translateY(4px)}
+#kaoCloseBtn:active,#kaoNextBtn:active,#kaoStartBtn:active,#kaoWinBtn:active{border-bottom-width:2px;transform:translateY(4px)}
+#kaoWinBtn{background:linear-gradient(135deg,#ff9d00,#ffcf5c);border-bottom-color:#c47500;color:#5c3d00}
 .kaoProgress{font-size:12px;color:#8d7f89;margin-top:6px}
 </style>
 </head>
@@ -97,7 +103,9 @@ section.group h2{font-size:14px;letter-spacing:2px;color:#c9a9bd;margin-bottom:1
     <div class="url">https://tibiboard.github.io/asobi-test/kyogi.html</div>
   </div>
 
-  <div class="testnote">(テスト用: かったつもりで <a href="win.html" style="color:inherit">win.html</a> へ)</div>
+  <div id="usedNote">🌙 きょうのちょうせんは おわったよ。<br>またあした!</div>
+
+  <div class="testnote">(テスト用: かったつもりで <a href="win.html" style="color:inherit">win.html</a> へ)<br>(テスト用: ?reset=1 を付けると きょうの記録をリセット)</div>
 </main>
 
 <!-- かおなじみけんてい モーダル -->
@@ -121,6 +129,31 @@ section.group h2{font-size:14px;letter-spacing:2px;color:#c9a9bd;margin-bottom:1
 </div>
 
 <script>
+/* ---------------------------------------------------------------
+   0) 先行入場券チャレンジ: 1日1回制
+      どの競技(センサー7種+かおなじみ)も「開始した時点」で消費される共通の
+      1日1枠。?reset=1 でテスト用にきょうの記録をクリアできる。
+------------------------------------------------------------------*/
+function challengeTodayKey(){
+  var d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return 'chibi_challenge_' + y + '-' + m + '-' + day;
+}
+function isChallengeUsedToday(){
+  try { return localStorage.getItem(challengeTodayKey()) === '1'; } catch(e){ return false; }
+}
+function consumeChallengeToday(){
+  try { localStorage.setItem(challengeTodayKey(), '1'); } catch(e){}
+}
+(function(){
+  var params = new URLSearchParams(location.search);
+  if (params.get('reset') === '1') {
+    try { localStorage.removeItem(challengeTodayKey()); } catch(e){}
+  }
+})();
+
 /* ---------------------------------------------------------------
    1) センサー可用性のフィージビリティ判定
    存在チェック(window.DeviceOrientationEvent / DeviceMotionEvent)に加え、
@@ -184,10 +217,13 @@ var SENSOR_GAMES = [
 
 function renderSensorGrid(supported){
   var grid = document.getElementById('sensorGrid');
+  var used = isChallengeUsedToday();
   var html = '';
   SENSOR_GAMES.forEach(function(g){
-    if (supported){
-      html += '<a class="card own" href="../asobi/"><div class="ico">'+g.ico+'</div><div class="nm">'+g.nm+'</div><div class="tag">'+g.tag+'</div></a>';
+    if (used){
+      html += '<div class="card usedlock" aria-disabled="true"><div class="badge">🌙 きょうは終了</div><div class="ico">'+g.ico+'</div><div class="nm">'+g.nm+'</div><div class="tag">'+g.tag+'</div></div>';
+    } else if (supported){
+      html += '<a class="card own" href="../asobi/?challenge=1"><div class="ico">'+g.ico+'</div><div class="nm">'+g.nm+'</div><div class="tag">'+g.tag+'</div></a>';
     } else {
       html += '<div class="card locked" aria-disabled="true"><div class="badge">📱スマホせんよう</div><div class="ico">'+g.ico+'</div><div class="nm">'+g.nm+'</div><div class="tag">'+g.tag+'</div></div>';
     }
@@ -197,6 +233,12 @@ function renderSensorGrid(supported){
 
 function renderFreeGrid(){
   var grid = document.getElementById('freeGrid');
+  var used = isChallengeUsedToday();
+  if (used){
+    grid.innerHTML =
+      '<div class="card usedlock" aria-disabled="true"><div class="badge">🌙 きょうは終了</div><div class="ico">🐰</div><div class="nm">かおなじみけんてい</div><div class="tag">タップだけ・全端末OK</div></div>';
+    return;
+  }
   grid.innerHTML =
     '<div class="card own" id="kaoCard"><div class="ico">🐰</div><div class="nm">かおなじみけんてい</div><div class="tag">タップだけ・全端末OK</div></div>';
   document.getElementById('kaoCard').addEventListener('click', openKao);
@@ -207,6 +249,9 @@ detectSensor().then(function(supported){
   renderFreeGrid();
   if (!supported){
     document.getElementById('pcNote').classList.add('show');
+  }
+  if (isChallengeUsedToday()){
+    document.getElementById('usedNote').classList.add('show');
   }
 });
 
@@ -258,6 +303,8 @@ document.getElementById('kaoStartBtn').addEventListener('click', function(){
   kaoCorrectCount = 0;
   document.getElementById('kaoIntro').style.display = 'none';
   document.getElementById('kaoPlay').style.display = 'block';
+  // 「開始した時点」で1日1回のちょうせん枠を消費(勝敗に関わらず)
+  consumeChallengeToday();
   showKaoQuestion();
 });
 
@@ -277,6 +324,17 @@ function showKaoQuestion(){
     nextBtn.style.display = 'none';
     resultEl.classList.add('show');
     resultEl.innerHTML = '🎉 '+kaoCorrectCount+' / '+kaoQuiz.length+' もん せいかい!';
+    if (kaoCorrectCount === kaoQuiz.length){
+      var winBtn = document.createElement('button');
+      winBtn.id = 'kaoWinBtn';
+      winBtn.textContent = '🎉 かち! せんこうにゅうじょうけんチャレンジへ';
+      winBtn.style.marginTop = '14px';
+      winBtn.addEventListener('click', function(){
+        location.href = 'win.html';
+      });
+      resultEl.appendChild(document.createElement('br'));
+      resultEl.appendChild(winBtn);
+    }
     return;
   }
 
