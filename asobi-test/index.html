@@ -74,6 +74,7 @@ body.rumble{animation:rumble .5s}
 .keybtn:active{border-bottom-width:3px;transform:translateY(5px)}
 .keybtn.pink{background:var(--pink);color:#fff;border-color:var(--pink-deep)}
 .keybtn.mint{background:var(--mint);border-color:var(--mint-deep)}
+.keybtn.disabled{background:#3a3038!important;color:#7a6d76!important;border-color:#4a3f47!important;cursor:not-allowed;pointer-events:none;box-shadow:none}
 .testnote{margin-top:16px;font-size:11px;color:#8d7f89;line-height:1.7;text-align:center}
 
 footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;font-size:13px;letter-spacing:2px}
@@ -105,13 +106,18 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;fon
 <section id="ticket-sec">
   <button class="ticketbtn" id="ticketBtn">🎫 次回の先行入場券に ちょうせんする</button>
   <div id="ticket-detail">
-    <div class="desc">きょうぎに かって → ガチャかスロットで あたりを ひこう。<br>1にち1かい・むりょう<br>つぎのドロップのとき、みんなより2じかん はやく おみせに はいれるよ。</div>
+    <div class="desc">①きょうぎに かつ → 🪙コイン → ②ガチャかスロットで あたりをひく<br>1にち1かい・むりょう<br>つぎのドロップのとき、みんなより2じかん はやく おみせに はいれるよ。</div>
     <div class="btns">
-      <a class="keybtn mint" href="../asobi/">🏟きょうぎじょうへ</a>
-      <a class="keybtn" href="slot.html">🎰スロット</a>
-      <a class="keybtn pink" href="gacha.html">🔮ガチャ</a>
+      <a class="keybtn mint" href="../asobi/">🏟 ①きょうぎじょうへ</a>
     </div>
-    <div class="testnote">※本番では「きょうぎに合格→抽選」の順に進みます。このテスト版では全部じゆうに触れます。</div>
+    <button class="keybtn coinbtn" id="coinBtn" style="margin-top:12px;width:100%;max-width:460px;background:#fff9d6;border-color:#e0b400">きょうぎに かったら おしてね →『🪙 コインをうけとる』</button>
+    <div id="coinGot" style="display:none;margin-top:10px;font-weight:900;color:var(--mint-deep)">コイン1まい もってるよ🪙</div>
+    <div class="btns" style="margin-top:14px">
+      <a class="keybtn" id="slotBtn" href="slot.html">🎰スロット</a>
+      <a class="keybtn pink" id="gachaBtn" href="gacha.html">🔮ガチャ</a>
+    </div>
+    <div class="testnote" id="coinHint">まず きょうぎで コインをとってね</div>
+    <div class="testnote">※テスト版: ほんばんは きょうぎの きろくで じどうてきに コインがもらえます</div>
   </div>
 </section>
 
@@ -130,11 +136,11 @@ function renderUsagi(ari){
   u.classList.remove('ari','nashi');
   if (ari){
     u.classList.add('ari');
-    img.src = 'img/本物_8_ハート目.png';
+    img.src = 'img/heart.png';
     msg.textContent = '🌟 いまお店に いるよ!';
   } else {
     u.classList.add('nashi');
-    img.src = 'img/本物_9_泣き.png';
+    img.src = 'img/cry.png';
     msg.textContent = '…みんな旅立ったよ。つぎの子をまっててね';
   }
   renderShelf(ari);
@@ -192,6 +198,48 @@ document.getElementById('sw').onclick = function(){
 document.getElementById('ticketBtn').onclick = function(){
   document.getElementById('ticket-detail').classList.toggle('show');
 };
+
+/* ============ コイン導線(テスト用自己申告) ============ */
+const COIN_KEY = 'asobiTestCoin';
+
+function hasCoin(){ return localStorage.getItem(COIN_KEY) === '1'; }
+
+function renderCoinState(){
+  const got = hasCoin();
+  document.getElementById('coinGot').style.display = got ? 'block' : 'none';
+  document.getElementById('coinBtn').style.display = got ? 'none' : 'inline-block';
+  document.getElementById('coinHint').style.display = got ? 'none' : 'block';
+  ['slotBtn','gachaBtn'].forEach(id=>{
+    const el = document.getElementById(id);
+    if (got){
+      el.classList.remove('disabled');
+      el.removeAttribute('aria-disabled');
+      el.title = '';
+    } else {
+      el.classList.add('disabled');
+      el.setAttribute('aria-disabled','true');
+      el.title = 'まず きょうぎで コインをとってね';
+    }
+  });
+}
+
+document.getElementById('coinBtn').onclick = function(){
+  localStorage.setItem(COIN_KEY, '1');
+  renderCoinState();
+};
+
+['slotBtn','gachaBtn'].forEach(id=>{
+  document.getElementById(id).addEventListener('click', function(e){
+    if (!hasCoin()){
+      e.preventDefault();
+      return;
+    }
+    /* コインを使ってスロット/ガチャへ向かう→消費してリセット */
+    localStorage.removeItem(COIN_KEY);
+  });
+});
+
+renderCoinState();
 </script>
 </body>
 </html>
