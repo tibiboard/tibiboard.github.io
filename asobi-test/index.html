@@ -35,10 +35,11 @@ body.rumble{animation:rumble .5s}
 @keyframes appear{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
 /* 黒うさぎが黒背景に溶けないよう、光の後光を敷く */
 #usagi .halo{position:relative;display:flex;align-items:center;justify-content:center;
-  width:min(80vw,420px);height:min(80vw,420px);border-radius:50%;
+  width:min(96vw,88vh);height:min(96vw,88vh);border-radius:50%;
   background:radial-gradient(circle, #fff 0%, #ffe3f0 45%, rgba(255,227,240,.25) 70%, transparent 75%)}
 #usagi.nashi .halo{background:radial-gradient(circle, #fff 0%, #dce9ff 45%, rgba(220,233,255,.25) 70%, transparent 75%)}
-#usagi img{width:min(58vw,300px);filter:drop-shadow(0 10px 24px rgba(0,0,0,.5))}
+#usagi img{height:min(76vh,90vw);max-width:92vw;object-fit:contain;filter:drop-shadow(0 10px 24px rgba(0,0,0,.5))}
+#usagi .msg{margin-top:6px}
 #usagi .msg{font-size:18px;font-weight:900;margin-top:14px;letter-spacing:2px}
 #usagi.ari .msg{color:var(--pink)}
 #usagi.nashi .msg{color:#8fb8ff}
