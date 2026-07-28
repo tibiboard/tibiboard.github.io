@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>あっちを向けば シン・とうごうばん(試作) | ちびボード あそび場</title>
+<link rel="stylesheet" href="lib/leaflet.css">
+<style>
+  :root{
+    --acc:#e84898; --acc-deep:#c22d78; --mint:#5fd6c4; --mint-deep:#1fae99;
+    --ink:#3a2233; --bg:#fff6fb; --card:#ffffff; --line:#ffd3ea; --mintline:#c9f1e9;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ overflow-x:hidden; }
+  body{
+    font-family:"Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif; margin:0;
+    background:var(--bg); color:var(--ink); line-height:1.7;
+    transition:background .6s ease;
+  }
+  body.rank-flash-S{ background:linear-gradient(160deg,#fff4d0,#ffe1a0); }
+  body.rank-flash-A{ background:linear-gradient(160deg,#e3fbf3,#c8f5e0); }
+  body.rank-flash-B{ background:linear-gradient(160deg,#fff7e0,#ffe9b0); }
+  body.rank-flash-C{ background:linear-gradient(160deg,#ece3f5,#dcd0ea); }
+  .wrap{ max-width:520px; margin:0 auto; padding:0 14px 60px; }
+  header{
+    background:linear-gradient(135deg,var(--acc),var(--mint-deep));
+    color:#fff; padding:26px 16px 20px; margin-bottom:4px;
+    border-radius:0 0 28px 28px; box-shadow:0 6px 18px rgba(31,174,153,.25);
+    text-align:center;
+  }
+  header h1{ font-size:21px; margin:0 0 4px; letter-spacing:.02em; }
+  header .catch{ font-size:13px; opacity:.95; }
+  .badge-test{ display:inline-block; margin-top:8px; background:#fff; color:var(--acc-deep); font-size:11px;
+               font-weight:bold; padding:3px 10px; border-radius:999px; }
+
+  .panel{ background:var(--card); border:2px solid var(--line); border-radius:20px;
+          padding:22px 18px; margin:18px 0; text-align:center; }
+  .gate-icon{ font-size:44px; margin-bottom:6px; }
+  .panel h2{ margin:6px 0 10px; font-size:19px; }
+  .panel p{ font-size:14px; color:#5c4a66; margin:8px 0; }
+  .gate-note{ font-size:12px; color:#a68fae; }
+
+  .big-btn{
+    display:block; width:100%; margin:14px 0 4px; padding:16px 10px;
+    font-size:17px; font-weight:bold; color:#fff; background:linear-gradient(135deg,var(--acc),#ff8fc0);
+    border:none; border-radius:16px; box-shadow:0 6px 0 var(--acc-deep); cursor:pointer;
+    touch-action:manipulation;
+  }
+  .big-btn:active{ transform:translateY(3px); box-shadow:0 3px 0 var(--acc-deep); }
+  .big-btn:disabled{ opacity:.55; }
+  .big-btn.secondary{ background:linear-gradient(135deg,#8f8aa8,#6c6685); box-shadow:0 6px 0 #4f4a68; }
+  .big-btn.mintbtn{ background:linear-gradient(135deg,var(--mint),#8ee9db); box-shadow:0 6px 0 var(--mint-deep); color:#123; }
+  .big-btn.small{ font-size:14px; padding:11px 10px; box-shadow:0 4px 0 var(--acc-deep); }
+
+  .tabbar{ display:flex; gap:6px; flex-wrap:wrap; margin:16px 0 10px; justify-content:center; }
+  .tabbtn{ flex:1 1 30%; padding:10px 6px; border-radius:14px; background:#fff; color:var(--acc);
+           border:2px solid var(--line); font-size:13px; font-weight:bold; cursor:pointer; }
+  .tabbtn.on{ background:var(--acc); color:#fff; border-color:var(--acc); }
+
+  .judge-toggle{ display:flex; align-items:center; justify-content:center; gap:8px; margin:4px 0 16px;
+                 background:#fff; border:2px solid var(--mintline); border-radius:14px; padding:10px 12px; }
+  .judge-toggle label{ font-size:13.5px; font-weight:bold; color:var(--mint-deep); display:flex; align-items:center; gap:6px; cursor:pointer; }
+  .judge-toggle input{ width:18px; height:18px; accent-color:var(--mint-deep); }
+  .judge-note{ font-size:11.5px; color:#8a7592; margin-top:2px; }
+
+  .game-panel{ background:var(--card); border:2px solid var(--line); border-radius:20px; padding:18px 16px 22px; }
+  .game-panel h2{ font-size:19px; margin:2px 0 6px; text-align:center; }
+  .desc{ font-size:13.5px; color:#5c4a66; text-align:center; margin-bottom:10px; }
+  .warn{ background:#fff0e6; border:2px solid #ffcda3; color:#a05a1a; font-size:12.5px;
+         border-radius:12px; padding:9px 12px; margin-bottom:10px; font-weight:bold; }
+  .trivia{ background:#e3fbf6; border:2px solid var(--mintline); color:#106e5f; font-size:12px;
+           border-radius:12px; padding:8px 12px; margin-bottom:10px; }
+
+  .target-card{ background:linear-gradient(135deg,#fff0f7,#fff); border:2px dashed var(--acc);
+                border-radius:16px; padding:14px 10px; margin-bottom:10px; }
+  .target-label{ font-size:12px; color:#8a7592; }
+  .target-name{ font-size:24px; font-weight:900; color:var(--acc-deep); margin:2px 0; }
+
+  .char-stage{ font-size:64px; text-align:center; margin:6px 0 8px; transition:transform .05s linear; }
+
+  .stage-readout{ text-align:center; margin-bottom:6px; }
+  .compass-num{ font-size:40px; font-weight:bold; color:var(--mint-deep); }
+  .stage-sub{ font-size:12px; color:#8a7592; margin-bottom:6px; }
+
+  .progress-note{ text-align:center; font-size:12.5px; color:#8a7592; margin-bottom:8px; }
+
+  .result{ margin-top:14px; padding-top:14px; border-top:2px dashed var(--line); }
+  .rank{ display:inline-block; font-size:38px; font-weight:900; width:76px; height:76px; line-height:76px;
+         border-radius:50%; margin-bottom:8px; }
+  .rank-S{ background:linear-gradient(135deg,#ffe27a,#ff9d00); color:#5c3d00;
+           box-shadow:0 0 0 4px #fff, 0 0 0 7px #ffd166; }
+  .rank-A{ background:var(--mint); color:#123; }
+  .rank-B{ background:#ffd166; color:#5c3d00; }
+  .rank-C{ background:#cbb9ac; color:#4a352b; }
+  .score-num{ font-size:30px; font-weight:bold; margin:4px 0; }
+  .score-num small{ font-size:14px; font-weight:normal; }
+  .score-label{ font-size:13px; color:#5c4a66; margin-bottom:8px; }
+
+  #resultMap{ width:100%; height:230px; border-radius:16px; margin:10px 0; border:2px solid var(--line); background:#eef; }
+  .map-legend{ display:flex; justify-content:center; gap:16px; font-size:12px; margin-bottom:8px; }
+  .map-legend span{ display:inline-flex; align-items:center; gap:4px; }
+  .map-legend i{ display:inline-block; width:16px; height:3px; border-radius:2px; }
+
+  .shake{ animation:shakeKf .5s; }
+  @keyframes shakeKf{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-10px); } 40%{ transform:translateX(9px); }
+    60%{ transform:translateX(-7px); } 80%{ transform:translateX(7px); }
+  }
+
+  #confettiLayer{ position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:9998; }
+  .confetti-piece{ position:absolute; top:-20px; width:8px; height:14px; opacity:.9; border-radius:2px;
+                    animation-name:confettiFall; animation-timing-function:ease-in; animation-fill-mode:forwards; }
+  @keyframes confettiFall{
+    0%{ transform:translateY(0) rotate(0deg); opacity:1; }
+    100%{ transform:translateY(112vh) rotate(540deg); opacity:0; }
+  }
+
+  .toast{ position:fixed; left:50%; bottom:20px; transform:translateX(-50%) translateY(10px);
+          background:var(--ink); color:#fff; font-size:13px; padding:10px 16px; border-radius:999px;
+          opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:600; }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  .pc-banner{ background:#fff0e6; border:2px solid #ffcda3; color:#a05a1a; font-size:12.5px;
+              border-radius:14px; padding:10px 12px; margin-bottom:12px; font-weight:bold; text-align:center; }
+
+  .foot{ color:#a68fae; font-size:11.5px; text-align:center; margin-top:24px; }
+  [hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+<div id="confettiLayer"></div>
+<div id="toast" class="toast"></div>
+
+<header>
+  <h1>🧭 あっちを向けば</h1>
+  <div class="catch">シン・とうごうばん — ほうがくをあてて、まちをめぐろう!</div>
+  <div class="badge-test">かぞくテストよう しさくばん</div>
+</header>
+
+<div class="wrap">
+
+  <div id="gate" class="panel">
+    <div class="gate-icon">📱🧭</div>
+    <h2>はじめる前に</h2>
+    <p>このページはスマホの「むき」センサーと「いち情報」をつかいます。iPhoneでは「はじめる」を押すと、それぞれの許可(きょか)ダイアログが出ます。どちらも<b>「許可」</b>を選んでください。</p>
+    <button id="startBtn" class="big-btn">🚀 はじめる</button>
+    <p class="gate-note">iPhoneはSafariで、https:// のページを開いてください</p>
+  </div>
+
+  <div id="app" hidden>
+    <div id="pcBanner" class="pc-banner" hidden>
+      💻 このたんまつでは方位(ほうい)センサーが見つからなかったよ。ボタン判定だけ、おためしできます(ジャンプ判定は使えません)。スマホのSafari/Chromeで見ると本番の遊びかたになるよ。
+    </div>
+
+    <div class="tabbar">
+      <button class="tabbtn on" data-mode="kita">🧭 真北編</button>
+      <button class="tabbtn" data-mode="japan">🗾 日本編</button>
+      <button class="tabbtn" data-mode="world">🌍 世界編</button>
+    </div>
+
+    <div class="judge-toggle">
+      <label><input type="checkbox" id="jumpJudgeChk"> 🦘 ジャンプ判定にする(オフ=ボタン判定)</label>
+    </div>
+    <div class="judge-note" id="judgeNote" style="text-align:center;margin-bottom:10px;">いまは<b>ボタン判定</b>: むきたい方向を向いて、ボタンを押すだけ!どこでも遊べるよ。</div>
+
+    <section class="game-panel">
+      <h2 id="modeTitle">🧭 真北編</h2>
+      <p class="desc" id="modeDesc">スマホを持って、地図の「真北」だと思う方向を向いてみよう!</p>
+      <div class="trivia" id="northTrivia">💡 豆知識: スマホが示す北はふつう<b>磁北</b>(方位磁石が指す北)。地図の<b>真北</b>とは場所によって数度〜十数度ズレています。</div>
+
+      <div class="target-card" id="targetCard" hidden>
+        <div class="target-label" id="targetLabel">めざす方角</div>
+        <div class="target-name" id="targetName">北</div>
+      </div>
+      <div class="progress-note" id="progressNote"></div>
+
+      <div class="char-stage"><span id="charEmoji">🐰</span></div>
+      <div class="stage-readout" id="readout">
+        <div class="compass-num"><span id="headingNow">--°</span></div>
+        <div class="stage-sub">いまの向き</div>
+      </div>
+      <div class="stage-sub" id="jumpStatus" hidden>「ジャンプ!」を押してスタート</div>
+
+      <button id="questionBtn" class="big-btn">🎲 もんだいを出す</button>
+      <button id="answerBtn" class="big-btn mintbtn" hidden>📍 この方向!</button>
+      <button id="jumpStartBtn" class="big-btn mintbtn" hidden>🦘 ジャンプ!</button>
+      <button id="jumpCancelBtn" class="big-btn secondary small" hidden>❌ やめる</button>
+
+      <div id="result" class="result" hidden>
+        <div id="rank" class="rank" hidden>-</div>
+        <div class="score-num"><span id="diffNum">--</span>° ズレ</div>
+        <div class="score-label" id="resultComment"></div>
+        <div class="map-legend">
+          <span><i style="background:#e84898"></i>きみの向き</span>
+          <span><i style="background:#1fae99"></i>正解の方角</span>
+        </div>
+        <div id="resultMap"></div>
+        <div class="score-label" id="mapNote"></div>
+        <button id="nextBtn" class="big-btn secondary">🎲 つぎのもんだい</button>
+      </div>
+    </section>
+
+    <p class="foot">これはかぞくテストよう試作版だよ。方位センサーの精度は端末やアプリによって差があります。<br>地図データ: © OpenStreetMap contributors</p>
+  </div>
+
+</div>
+
+<script src="lib/leaflet.js"></script>
+<script>
+// ================= 都市データ =================
+var CITIES = {
+  japan: [
+    {name:'札幌', lat:43.0642, lng:141.3469},
+    {name:'函館', lat:41.7687, lng:140.7288},
+    {name:'青森', lat:40.8244, lng:140.7400},
+    {name:'盛岡', lat:39.7036, lng:141.1527},
+    {name:'仙台', lat:38.2682, lng:140.8694},
+    {name:'新潟', lat:37.9026, lng:139.0236},
+    {name:'金沢', lat:36.5613, lng:136.6562},
+    {name:'東京', lat:35.6812, lng:139.7671},
+    {name:'横浜', lat:35.4437, lng:139.6380},
+    {name:'名古屋', lat:35.1815, lng:136.9066},
+    {name:'京都', lat:35.0116, lng:135.7681},
+    {name:'大阪', lat:34.6937, lng:135.5023},
+    {name:'神戸', lat:34.6901, lng:135.1955},
+    {name:'広島', lat:34.3853, lng:132.4553},
+    {name:'松山', lat:33.8392, lng:132.7657},
+    {name:'福岡', lat:33.5904, lng:130.4017},
+    {name:'長崎', lat:32.7503, lng:129.8779},
+    {name:'熊本', lat:32.8032, lng:130.7079},
+    {name:'鹿児島', lat:31.5966, lng:130.5571},
+    {name:'那覇', lat:26.2124, lng:127.6809}
+  ],
+  world: [
+    {name:'ニューヨーク', lat:40.7128, lng:-74.0060},
+    {name:'ロンドン', lat:51.5074, lng:-0.1278},
+    {name:'パリ', lat:48.8566, lng:2.3522},
+    {name:'カイロ', lat:30.0444, lng:31.2357},
+    {name:'モスクワ', lat:55.7558, lng:37.6173},
+    {name:'北京', lat:39.9042, lng:116.4074},
+    {name:'シドニー', lat:-33.8688, lng:151.2093},
+    {name:'リオデジャネイロ', lat:-22.9068, lng:-43.1729},
+    {name:'ケープタウン', lat:-33.9249, lng:18.4241},
+    {name:'ホノルル', lat:21.3069, lng:-157.8583}
+  ]
+};
+var TOKYO_STATION = { lat:35.6812, lng:139.7671 };
+
+function bearingTo(lat1, lng1, lat2, lng2){
+  var p1 = lat1 * Math.PI / 180, p2 = lat2 * Math.PI / 180;
+  var dLng = (lng2 - lng1) * Math.PI / 180;
+  var y = Math.sin(dLng) * Math.cos(p2);
+  var x = Math.cos(p1) * Math.sin(p2) - Math.sin(p1) * Math.cos(p2) * Math.cos(dLng);
+  var th = Math.atan2(y, x);
+  return (th * 180 / Math.PI + 360) % 360;
+}
+function distanceKm(lat1, lng1, lat2, lng2){
+  var R = 6371;
+  var p1 = lat1 * Math.PI / 180, p2 = lat2 * Math.PI / 180;
+  var dLat = (lat2 - lat1) * Math.PI / 180, dLng = (lng2 - lng1) * Math.PI / 180;
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(p1) * Math.cos(p2) * Math.sin(dLng/2) * Math.sin(dLng/2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+function fmtDistance(km){ return km < 100 ? km.toFixed(1) : String(Math.round(km)); }
+function angularDiff(a, b){
+  var d = Math.abs(a - b) % 360;
+  return d > 180 ? 360 - d : d;
+}
+// 出発点から bearing 方向・distKm 先の地点(球面三角法)
+function destPoint(lat, lng, bearingDeg, distKm){
+  var R = 6371;
+  var d = distKm / R;
+  var brng = bearingDeg * Math.PI / 180;
+  var lat1 = lat * Math.PI / 180, lng1 = lng * Math.PI / 180;
+  var lat2 = Math.asin(Math.sin(lat1)*Math.cos(d) + Math.cos(lat1)*Math.sin(d)*Math.cos(brng));
+  var lng2 = lng1 + Math.atan2(Math.sin(brng)*Math.sin(d)*Math.cos(lat1), Math.cos(d) - Math.sin(lat1)*Math.sin(lat2));
+  return { lat: lat2 * 180 / Math.PI, lng: lng2 * 180 / Math.PI };
+}
+
+// ================= 紙吹雪・トースト =================
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+function spawnConfetti(){
+  var layer = document.getElementById('confettiLayer');
+  var colors = ['#e84898','#5fd6c4','#ffd166','#7b61ff','#ff9d00'];
+  for (var i=0;i<40;i++){
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (Math.random()*100) + 'vw';
+    p.style.background = colors[i % colors.length];
+    p.style.animationDuration = (1.6 + Math.random()*1.2) + 's';
+    p.style.animationDelay = (Math.random()*0.3) + 's';
+    layer.appendChild(p);
+    (function(el){ setTimeout(function(){ el.remove(); }, 3200); })(p);
+  }
+}
+var rankFlashTimeout = null;
+function flashRankBackground(rank){
+  ['rank-flash-S','rank-flash-A','rank-flash-B','rank-flash-C'].forEach(function(c){ document.body.classList.remove(c); });
+  document.body.classList.add('rank-flash-' + rank);
+  clearTimeout(rankFlashTimeout);
+  rankFlashTimeout = setTimeout(function(){ document.body.classList.remove('rank-flash-' + rank); }, 2200);
+}
+function animateCountUp(el, target, decimals, duration){
+  if (!el) return;
+  duration = duration || 650;
+  var startTime = null;
+  function step(ts){
+    if (startTime === null) startTime = ts;
+    var p = Math.min(1, (ts - startTime) / duration);
+    var eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = (target * eased).toFixed(decimals);
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target.toFixed(decimals);
+  }
+  requestAnimationFrame(step);
+}
+
+var COMMENTS = { S:'方向感覚の天才!ほぼドンピシャ!', A:'かなり近い!いい勘してる', B:'おしい!もう少し感覚を磨こう', C:'あさっての方向…?次はいけるはず' };
+var CHAR_EMOJI = { normal:'🐰', heart:'😍', jito:'😐', round:'😵' };
+
+function rankOf(diff){ return diff <= 5 ? 'S' : diff <= 15 ? 'A' : diff <= 35 ? 'B' : 'C'; }
+
+// ================= センサー状態 =================
+var orientationState = { heading:null };
+var sensorsDetected = false;
+var pcMode = false;
+function onOrientation(e){
+  sensorsDetected = true;
+  orientationState.heading = (typeof e.webkitCompassHeading === 'number') ? e.webkitCompassHeading : e.alpha;
+}
+function onMotion(e){
+  sensorsDetected = true;
+  var ag = e.accelerationIncludingGravity;
+  var gmag;
+  if (ag && ag.x != null) {
+    var gx = ag.x||0, gy = ag.y||0, gz = ag.z||0;
+    gmag = Math.sqrt(gx*gx + gy*gy + gz*gz);
+  } else {
+    var a = e.acceleration || {x:0,y:0,z:0};
+    var mag = Math.sqrt((a.x||0)*(a.x||0) + (a.y||0)*(a.y||0) + (a.z||0)*(a.z||0));
+    gmag = mag + 9.8;
+  }
+  feedJumpSample(gmag);
+}
+window.addEventListener('deviceorientation', onOrientation);
+window.addEventListener('devicemotion', onMotion);
+
+function requestPermissions(){
+  var tasks = [];
+  if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+    tasks.push(DeviceOrientationEvent.requestPermission());
+  } else { tasks.push(Promise.resolve('granted')); }
+  if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+    tasks.push(DeviceMotionEvent.requestPermission());
+  } else { tasks.push(Promise.resolve('granted')); }
+  return Promise.all(tasks);
+}
+
+var origin = null; // {lat,lng,fallback}
+function locate(cb){
+  if (!('geolocation' in navigator)) { cb(TOKYO_STATION.lat, TOKYO_STATION.lng, true); return; }
+  navigator.geolocation.getCurrentPosition(function(pos){
+    cb(pos.coords.latitude, pos.coords.longitude, false);
+  }, function(){
+    cb(TOKYO_STATION.lat, TOKYO_STATION.lng, true);
+  }, { enableHighAccuracy:true, timeout:8000, maximumAge:60000 });
+}
+
+var gate = document.getElementById('gate');
+var app = document.getElementById('app');
+var startBtn = document.getElementById('startBtn');
+var pcBanner = document.getElementById('pcBanner');
+
+startBtn.addEventListener('click', function(){
+  startBtn.disabled = true;
+  startBtn.textContent = '確認中…';
+  requestPermissions().then(function(){
+    sensorsDetected = false;
+    setTimeout(function(){
+      pcMode = !sensorsDetected;
+      locate(function(lat, lng, fallback){
+        origin = { lat:lat, lng:lng, fallback:!!fallback };
+        showApp();
+      });
+    }, 1200);
+  }).catch(function(){
+    pcMode = true;
+    locate(function(lat, lng, fallback){
+      origin = { lat:lat, lng:lng, fallback:!!fallback };
+      showApp();
+    });
+  });
+});
+
+function showApp(){
+  gate.hidden = true;
+  app.hidden = false;
+  if (pcMode) {
+    pcBanner.hidden = false;
+    jumpJudgeChk.checked = false;
+    jumpJudgeChk.disabled = true;
+    updateJudgeNote();
+  }
+  newQuestion();
+}
+
+// ================= モード切替 =================
+var MODE_TITLE = { kita:'🧭 真北編', japan:'🗾 日本編', world:'🌍 世界編' };
+var MODE_DESC = {
+  kita:'スマホを持って、地図の「真北」だと思う方向を向いてみよう!',
+  japan:'いまいる場所から見て、その都市はどっちの方角にあるかな?',
+  world:'世界の都市は、いまいる場所からどっちの方角?地球儀を思い浮かべてみよう!'
+};
+var currentMode = 'kita';
+var currentTarget = null; // {label, bearing}
+var tabButtons = Array.prototype.slice.call(document.querySelectorAll('.tabbtn'));
+tabButtons.forEach(function(btn){
+  btn.addEventListener('click', function(){
+    currentMode = btn.getAttribute('data-mode');
+    tabButtons.forEach(function(b){ b.classList.toggle('on', b === btn); });
+    document.getElementById('modeTitle').textContent = MODE_TITLE[currentMode];
+    document.getElementById('modeDesc').textContent = MODE_DESC[currentMode];
+    document.getElementById('northTrivia').hidden = (currentMode !== 'kita');
+    resetRoundUI();
+    newQuestion();
+  });
+});
+
+// ================= ジャッジ切替 =================
+var jumpJudgeChk = document.getElementById('jumpJudgeChk');
+var judgeNote = document.getElementById('judgeNote');
+function updateJudgeNote(){
+  if (jumpJudgeChk.checked) {
+    judgeNote.innerHTML = 'いまは<b>ジャンプ判定</b>: むきたい方向を向いてジャンプ!着地のしゅんかんの向きで判定するよ。';
+  } else {
+    judgeNote.innerHTML = 'いまは<b>ボタン判定</b>: むきたい方向を向いて、ボタンを押すだけ!どこでも遊べるよ。';
+  }
+  document.getElementById('answerBtn').hidden = jumpJudgeChk.checked || questionState !== 'ready';
+  document.getElementById('jumpStartBtn').hidden = !jumpJudgeChk.checked || questionState !== 'ready';
+}
+jumpJudgeChk.addEventListener('change', updateJudgeNote);
+
+// ================= 出題 =================
+var questionState = 'idle'; // idle | ready | jump-armed | done
+var progressCount = 0;
+function pickTarget(){
+  if (currentMode === 'kita') return { label:'北', bearing:0 };
+  var pool = CITIES[currentMode];
+  var city = pool[Math.floor(Math.random() * pool.length)];
+  var bearing = bearingTo(origin.lat, origin.lng, city.lat, city.lng);
+  return { label:city.name, bearing:bearing, lat:city.lat, lng:city.lng };
+}
+function resetRoundUI(){
+  document.getElementById('result').hidden = true;
+  document.getElementById('rank').hidden = true;
+  document.getElementById('targetCard').hidden = true;
+  document.getElementById('readout').hidden = false;
+  document.getElementById('jumpStatus').hidden = true;
+  document.getElementById('questionBtn').hidden = false;
+  document.getElementById('answerBtn').hidden = true;
+  document.getElementById('jumpStartBtn').hidden = true;
+  document.getElementById('jumpCancelBtn').hidden = true;
+  document.getElementById('charEmoji').textContent = CHAR_EMOJI.normal;
+  questionState = 'idle';
+}
+function newQuestion(){
+  resetRoundUI();
+  currentTarget = pickTarget();
+  document.getElementById('targetLabel').textContent = currentMode === 'kita' ? 'めざす方角' : 'めざす都市';
+  document.getElementById('targetName').textContent = currentTarget.label;
+  document.getElementById('targetCard').hidden = false;
+  progressCount++;
+  document.getElementById('progressNote').textContent = (origin.fallback ? '📍 現在地が取れなかったので東京駅を基準にしています / ' : '') + (progressCount) + '問目';
+  document.getElementById('questionBtn').hidden = true;
+  questionState = 'ready';
+  updateJudgeNote();
+}
+document.getElementById('questionBtn').addEventListener('click', newQuestion);
+document.getElementById('nextBtn').addEventListener('click', newQuestion);
+
+// ---- 現在の向き表示 ----
+(function tickHeading(){
+  var el = document.getElementById('headingNow');
+  if (orientationState.heading != null) el.textContent = Math.round(orientationState.heading) + '°';
+  else if (pcMode) el.textContent = '(センサーなし)';
+  requestAnimationFrame(tickHeading);
+})();
+
+// ================= ボタン判定 =================
+document.getElementById('answerBtn').addEventListener('click', function(){
+  if (questionState !== 'ready') return;
+  var heading = orientationState.heading;
+  if (heading == null) heading = 0; // PCなどセンサー無しの場合は0°として仮判定
+  finishQuestion(heading);
+});
+
+// ================= ジャンプ判定(旧・ねらって着地を吸収) =================
+var jumpBuffer = [];
+var JUMP_BUFFER_SIZE = 6;
+var JUMP_SPIKE_THRESHOLD = 2.5 * 9.8;
+var JUMP_BASELINE_MIN = 7, JUMP_BASELINE_MAX = 13;
+var JUMP_TIMEOUT_MS = 10000;
+var jumpSpikeDetected = false;
+var jumpTimeoutHandle = null;
+var jumpStartBtn = document.getElementById('jumpStartBtn');
+var jumpCancelBtn = document.getElementById('jumpCancelBtn');
+var jumpStatusEl = document.getElementById('jumpStatus');
+
+function cancelJump(){
+  questionState = 'ready';
+  clearTimeout(jumpTimeoutHandle);
+  jumpBuffer = [];
+  jumpSpikeDetected = false;
+  jumpStartBtn.hidden = false;
+  jumpCancelBtn.hidden = true;
+  jumpStatusEl.hidden = true;
+}
+jumpCancelBtn.addEventListener('click', function(){
+  if (questionState !== 'jump-armed') return;
+  cancelJump();
+});
+jumpStartBtn.addEventListener('click', function(){
+  if (questionState !== 'ready') return;
+  questionState = 'jump-armed';
+  jumpBuffer = [];
+  jumpSpikeDetected = false;
+  jumpStartBtn.hidden = true;
+  jumpCancelBtn.hidden = false;
+  jumpStatusEl.hidden = false;
+  jumpStatusEl.textContent = '📳 ジャンプして、むきたい方向へ回って着地!(検知中…)';
+  jumpTimeoutHandle = setTimeout(function(){
+    if (questionState === 'jump-armed') {
+      cancelJump();
+      showToast('ジャンプを検知できなかったよ。もう一度試してね');
+    }
+  }, JUMP_TIMEOUT_MS);
+});
+function feedJumpSample(gmag){
+  if (questionState !== 'jump-armed') return;
+  jumpBuffer.push(gmag);
+  if (jumpBuffer.length > JUMP_BUFFER_SIZE) jumpBuffer.shift();
+  if (!jumpSpikeDetected) {
+    if (gmag >= JUMP_SPIKE_THRESHOLD) {
+      jumpSpikeDetected = true;
+      jumpStatusEl.textContent = '💥 着地検知!安定待ち…';
+      jumpBuffer = [];
+    }
+    return;
+  }
+  if (jumpBuffer.length < JUMP_BUFFER_SIZE) return;
+  var allStable = jumpBuffer.every(function(v){ return v >= JUMP_BASELINE_MIN && v <= JUMP_BASELINE_MAX; });
+  if (allStable) {
+    clearTimeout(jumpTimeoutHandle);
+    jumpStartBtn.hidden = false;
+    jumpCancelBtn.hidden = true;
+    jumpStatusEl.hidden = true;
+    var landingHeading = orientationState.heading;
+    if (landingHeading == null) landingHeading = 0;
+    finishQuestion(landingHeading);
+  }
+}
+
+// ================= 判定・結果表示 =================
+var resultMapInstance = null;
+function finishQuestion(heading){
+  questionState = 'done';
+  var diff = angularDiff(heading, currentTarget.bearing);
+  var rank = rankOf(diff);
+  document.getElementById('charEmoji').textContent = (rank === 'S' || rank === 'A') ? CHAR_EMOJI.heart : (rank === 'B' ? CHAR_EMOJI.jito : CHAR_EMOJI.round);
+  document.getElementById('questionBtn').hidden = true;
+  document.getElementById('answerBtn').hidden = true;
+  document.getElementById('jumpStartBtn').hidden = true;
+  document.getElementById('jumpCancelBtn').hidden = true;
+  document.getElementById('result').hidden = false;
+  document.getElementById('rank').hidden = true;
+  animateCountUp(document.getElementById('diffNum'), diff, 1, 500);
+
+  var noteText = '';
+  if (currentMode !== 'kita') {
+    var dist = distanceKm(origin.lat, origin.lng, currentTarget.lat, currentTarget.lng);
+    noteText = 'そのほうこうへ約' + fmtDistance(dist) + 'kmで' + currentTarget.label + '!';
+  } else {
+    noteText = '真北(0°)がめざす方角だよ。';
+  }
+  document.getElementById('mapNote').textContent = noteText;
+
+  drawResultMap(heading, currentTarget.bearing);
+
+  setTimeout(function(){
+    document.getElementById('rank').hidden = false;
+    document.getElementById('rank').textContent = rank;
+    document.getElementById('rank').className = 'rank rank-' + rank;
+    document.getElementById('resultComment').textContent = COMMENTS[rank];
+    flashRankBackground(rank);
+    if (rank === 'S') spawnConfetti();
+  }, 350);
+}
+
+function drawResultMap(userHeading, correctBearing){
+  var mapEl = document.getElementById('resultMap');
+  if (!resultMapInstance) {
+    resultMapInstance = L.map(mapEl, { zoomControl:false, attributionControl:true });
+  }
+  var lat = origin.lat, lng = origin.lng;
+  resultMapInstance.setView([lat, lng], 6);
+  // 前回の描画レイヤーを消す
+  resultMapInstance.eachLayer(function(l){ resultMapInstance.removeLayer(l); });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(resultMapInstance);
+
+  var originIcon = L.divIcon({ html:'📍', className:'', iconSize:[24,24], iconAnchor:[12,20] });
+  L.marker([lat, lng], { icon: originIcon }).addTo(resultMapInstance);
+
+  var lineDist = (currentMode === 'kita') ? 150 : Math.min(600, Math.max(120, distanceKm(lat, lng, currentTarget.lat || lat, currentTarget.lng || lng) * 0.15));
+  var userPt = destPoint(lat, lng, userHeading, lineDist);
+  var correctPt = destPoint(lat, lng, correctBearing, lineDist);
+
+  var userLine = L.polyline([[lat,lng],[userPt.lat,userPt.lng]], { color:'#e84898', weight:4, opacity:0.9 }).addTo(resultMapInstance);
+  var correctLine = L.polyline([[lat,lng],[correctPt.lat,correctPt.lng]], { color:'#1fae99', weight:4, opacity:0.9, dashArray:'6,6' }).addTo(resultMapInstance);
+
+  try {
+    resultMapInstance.fitBounds(L.latLngBounds([[lat,lng],[userPt.lat,userPt.lng],[correctPt.lat,correctPt.lng]]), { padding:[24,24] });
+  } catch(e){}
+  setTimeout(function(){ resultMapInstance.invalidateSize(); }, 60);
+}
+</script>
+</body>
+</html>
