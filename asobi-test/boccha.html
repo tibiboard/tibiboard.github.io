@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>ボッチャ風・力かげんゲーム(試作) — ちびボード</title>
+<style>
+:root{
+  --pink:#e84898; --pink-deep:#e0197a; --pink-pale:#ffe3f0;
+  --mint:#5fd6c4; --mint-pale:#d9f4ee; --mint-deep:#1fae99;
+  --ink:#3a2233; --dark:#180a14;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;overflow-x:hidden;overscroll-behavior:none}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--dark);color:#fff;min-height:100vh;user-select:none}
+
+header{text-align:center;padding:14px 10px 8px}
+header h1{font-size:18px;font-weight:900;letter-spacing:1px}
+header .sub{font-size:11px;color:#c9a9bd;margin-top:4px}
+
+.wrap{max-width:520px;margin:0 auto;padding:0 14px 30px}
+
+.panel{background:#241a22;border-radius:16px;padding:18px;margin-top:14px;border:2px solid #3c2233}
+
+/* ---------- 注意書き ---------- */
+.warn{background:linear-gradient(135deg,#ffe3f0,#fff);color:var(--ink);border-radius:14px;padding:14px;
+  font-weight:900;font-size:15px;text-align:center;border:3px solid var(--pink-deep);box-shadow:0 0 22px 2px rgba(232,72,152,.5);
+  margin-top:12px;line-height:1.6}
+
+/* ---------- モード選択 ---------- */
+.modebtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.mbtn{flex:1;min-width:130px;background:#fff;border:3px solid var(--ink);border-bottom-width:8px;border-radius:12px;
+  padding:14px 10px;font-weight:900;font-size:14px;color:var(--ink);cursor:pointer;text-align:center}
+.mbtn:active{border-bottom-width:3px;transform:translateY(5px)}
+.mbtn.on{background:var(--pink);color:#fff;border-color:var(--pink-deep)}
+
+.bigbtn{display:block;width:100%;margin-top:16px;background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;
+  border:0;border-bottom:9px solid var(--pink-deep);border-radius:16px;padding:20px;font-weight:900;font-size:19px;cursor:pointer;
+  box-shadow:0 0 0 4px #fff2,0 0 26px 4px rgba(232,72,152,.5)}
+.bigbtn:active{border-bottom-width:3px;transform:translateY(6px)}
+.bigbtn:disabled{opacity:.5;cursor:not-allowed}
+
+.smallbtn{display:inline-block;background:#fff;border:3px solid var(--ink);border-bottom-width:7px;border-radius:10px;
+  padding:10px 16px;font-weight:900;font-size:13px;color:var(--ink);cursor:pointer;margin-top:10px}
+.smallbtn:active{border-bottom-width:2px;transform:translateY(5px)}
+.smallbtn.mint{background:var(--mint);border-color:var(--mint-deep)}
+
+/* ---------- ゲーム画面 ---------- */
+#gameScreen{display:none}
+#gameScreen.show{display:block}
+.court-wrap{position:relative;margin-top:12px;border-radius:16px;overflow:hidden;border:3px solid var(--mint-deep);
+  background:linear-gradient(#0f3f36,#134a3f 60%,#0a2b24)}
+#court{display:block;width:100%;height:auto;touch-action:none}
+
+.hud{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:#c9a9bd}
+.hud .turn{font-weight:900;color:var(--pink);font-size:15px}
+.hud .score{font-weight:900;color:var(--mint)}
+
+.powerwrap{margin-top:12px}
+.powerbar{position:relative;height:22px;background:#241a22;border-radius:11px;border:2px solid #3c2233;overflow:hidden}
+.powerbar .fill{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,var(--mint),var(--pink));transition:width .05s linear}
+.powerlabel{text-align:center;font-size:12px;color:#8d7f89;margin-top:4px}
+
+.swipe-hint{text-align:center;font-size:13px;color:#c9a9bd;margin-top:10px;line-height:1.6}
+.throw-hint{text-align:center;font-size:13px;color:#c9a9bd;margin-top:10px;line-height:1.6}
+
+/* ---------- 結果 ---------- */
+#resultOverlay{position:fixed;inset:0;background:rgba(10,5,8,.85);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+#resultOverlay.show{display:flex;animation:appear .3s}
+@keyframes appear{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.resultCard{background:linear-gradient(135deg,var(--pink-pale),#fff);color:var(--ink);border-radius:22px;padding:28px 24px;
+  text-align:center;max-width:360px;width:100%;border:4px solid var(--pink-deep);box-shadow:0 0 40px 8px rgba(232,72,152,.5)}
+.resultCard .rank{font-size:64px;font-weight:900;line-height:1;margin-bottom:6px}
+.resultCard .rankS{color:#ffb400;text-shadow:0 0 18px rgba(255,180,0,.7)}
+.resultCard .rankA{color:var(--pink-deep)}
+.resultCard .rankB{color:var(--mint-deep)}
+.resultCard .rankC{color:#8d7f89}
+.resultCard .msg{font-size:16px;font-weight:900;margin-bottom:4px}
+.resultCard .dist{font-size:13px;color:#7a5c6d;margin-bottom:16px}
+.resultCard .emoji{font-size:40px;margin-bottom:8px}
+
+/* ---------- iOSゲート ---------- */
+#sensorGate{display:none;text-align:center}
+#sensorGate.show{display:block}
+.gate-icon{font-size:40px;text-align:center;margin-bottom:6px}
+
+footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎯 ボッチャ風・力かげんゲーム(試作)</h1>
+  <div class="sub">ちびボード あそび場 — 家族テスト用</div>
+</header>
+
+<div class="wrap">
+
+  <div class="warn">⚠ スマホは しっかり にぎってね!<br>(なげないで!ふるだけ)</div>
+
+  <div class="panel">
+    <div style="font-weight:900;font-size:14px;margin-bottom:8px">① あそびかた</div>
+    <div class="modebtns">
+      <button class="mbtn on" id="modeSensorBtn">📱 センサーで ふる</button>
+      <button class="mbtn" id="modeSwipeBtn">👆 ゆびで はじく</button>
+    </div>
+
+    <div style="font-weight:900;font-size:14px;margin:16px 0 8px">② にんずう</div>
+    <div class="modebtns">
+      <button class="mbtn on" id="mode1pBtn">🧍 ひとりで</button>
+      <button class="mbtn" id="mode2pBtn">🧍🧍 ふたりで たいけつ</button>
+    </div>
+
+    <!-- iOSセンサー許可ゲート -->
+    <div id="sensorGate">
+      <div class="gate-icon">📱⚡️</div>
+      <div style="font-size:12.5px;color:#c9a9bd;margin-top:6px;line-height:1.7">
+        センサーモードは「はじめる」を押すと iPhone で「うごきセンサー」の許可がでます。<b style="color:#fff">「きょか」</b>を えらんでね。
+      </div>
+    </div>
+
+    <button class="bigbtn" id="startBtn">🚀 はじめる</button>
+    <div id="startMsg" style="text-align:center;font-size:12px;color:#e0197a;margin-top:8px"></div>
+  </div>
+
+  <div class="panel" id="gameScreen">
+    <div class="hud">
+      <div class="turn" id="turnLabel">ばん: プレイヤー1</div>
+      <div class="score" id="scoreLabel"></div>
+    </div>
+
+    <div class="court-wrap">
+      <canvas id="court" width="360" height="560"></canvas>
+    </div>
+
+    <div class="powerwrap" id="sensorPowerUi" style="display:none">
+      <div class="powerbar"><div class="fill" id="powerFill"></div></div>
+      <div class="powerlabel" id="powerLabel">スマホを 下手投げの形で かまえてね</div>
+      <div class="throw-hint">かまえたら「ふりかぶり → スイング」の動きをしてね(手からは はなさないで!)</div>
+    </div>
+
+    <div class="swipe-hint" id="swipeHintUi" style="display:none">
+      コートを した から うえ に むかって ゆびで はじいてね(弱く〜強く)
+    </div>
+
+    <div style="text-align:center">
+      <button class="smallbtn mint" id="resetBtn">🔄 さいしょから</button>
+    </div>
+  </div>
+
+  <footer>試作版・家族テスト用 / noindex</footer>
+</div>
+
+<div id="resultOverlay">
+  <div class="resultCard">
+    <div class="emoji" id="resultEmoji">🎉</div>
+    <div class="rank" id="resultRank">S</div>
+    <div class="msg" id="resultMsg">かんぺき!</div>
+    <div class="dist" id="resultDist"></div>
+    <button class="smallbtn" id="nextBtn">つぎへ ▶</button>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   チューニング定数(ここを調整すればゲームの手ざわりが変わる)
+   ========================================================================= */
+const TUNE = {
+  // --- コート寸法(canvas座標。上がゴール側、下が投げる側) ---
+  COURT_W: 360,
+  COURT_H: 560,
+  PLAYER_Y: 520,     // 自分のボールの初期表示位置(下側)
+  GOAL_Y_NEAR: 170,  // ゴール中心Yの範囲(近い場合の目安)
+  GOAL_Y_FAR: 90,    // ゴール中心Yの範囲(遠い場合の目安)
+  GOAL_Y_MIN: 60,
+  GOAL_Y_MAX: 260,
+
+  // --- リング半径(中心ほど高得点。S/A/B/Cの境界半径) ---
+  RING_S: 22,
+  RING_A: 48,
+  RING_B: 84,
+  RING_C: 130,       // これを超えたら圏外(C未満=はずれ)
+
+  // --- センサー投げ: 加速度積分 → 距離変換 ---
+  SWING_THRESHOLD: 1.2,     // これを超える加速度変化でスイング区間開始とみなす(m/s^2)
+  SWING_END_QUIET_MS: 160,  // 加速度が落ち着いてからこのms経過でスイング終了
+  SWING_MAX_MS: 900,        // スイング区間の最大長(暴走防止)
+  SWING_MIN_MS: 60,         // これより短い区間は無視(ノイズ対策)
+  POWER_GAMMA: 0.55,        // べき乗補正の指数(<1で低域の分解能を上げる。sqrt=0.5相当)
+  POWER_SCALE: 0.020,       // 積分値(速度相当)→ 0〜1powerへのスケール係数(実機で要調整)
+  POWER_MIN_FOR_THROW: 0.04,// これ未満のpowerは「弱すぎて届かない」明確化のための下限可視化のみに使用
+
+  // --- スワイプ投げ: フリック速度 → 距離変換 ---
+  SWIPE_MIN_PX: 24,         // これ未満の移動距離は投げとみなさない
+  SWIPE_MAX_VELOCITY: 2.4,  // px/ms。これ以上は最大パワーとして頭打ち
+  SWIPE_POWER_GAMMA: 0.55,  // べき乗補正の指数(センサーと同様の効きにする)
+
+  // --- 飛距離計算: power(0〜1) → 実際に飛ぶY距離(px) ---
+  DIST_MIN: 40,      // power=0付近での最小飛距離(コート下端付近)
+  DIST_MAX: 480,     // power=1での最大飛距離(コート上端を大きく超えてオーバー)
+  DIST_SWEET: 0.62,  // このpower付近でゴール近辺に届く想定(調整の目安値。実際はゴール距離で変わる)
+
+  // --- 球のブレ(左右のランダムなズレ。難易度調整用) ---
+  LATERAL_JITTER_SENSOR: 14,
+  LATERAL_JITTER_SWIPE: 10,
+};
+
+/* ========================================================================= */
+
+const $ = (id)=>document.getElementById(id);
+
+let mode = { input:'sensor', players:1 }; // input: 'sensor' | 'swipe'
+let game = {
+  turn: 1,           // 1人目 or 2人目
+  scores: [null, null], // 各プレイヤーの「中心からの距離」(小さいほど良い)
+  goalCx: 0, goalCy: 0,
+  ballShown: false,
+  throwing: false,
+};
+
+/* ---------- UI: モード切替 ---------- */
+$('modeSensorBtn').onclick = ()=>{
+  mode.input = 'sensor';
+  $('modeSensorBtn').classList.add('on');
+  $('modeSwipeBtn').classList.remove('on');
+  updateGateVisibility();
+};
+$('modeSwipeBtn').onclick = ()=>{
+  mode.input = 'swipe';
+  $('modeSwipeBtn').classList.add('on');
+  $('modeSensorBtn').classList.remove('on');
+  updateGateVisibility();
+};
+$('mode1pBtn').onclick = ()=>{
+  mode.players = 1;
+  $('mode1pBtn').classList.add('on');
+  $('mode2pBtn').classList.remove('on');
+};
+$('mode2pBtn').onclick = ()=>{
+  mode.players = 2;
+  $('mode2pBtn').classList.add('on');
+  $('mode1pBtn').classList.remove('on');
+};
+
+function needsIOSPermission(){
+  return (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function');
+}
+function updateGateVisibility(){
+  const gate = $('sensorGate');
+  if (mode.input === 'sensor' && needsIOSPermission()){
+    gate.classList.add('show');
+  } else {
+    gate.classList.remove('show');
+  }
+}
+updateGateVisibility();
+
+/* ---------- はじめる ---------- */
+let sensorReady = false;
+let sensorSupported = false;
+
+$('startBtn').onclick = function(){
+  if (mode.input === 'sensor'){
+    $('startMsg').textContent = '';
+    if (needsIOSPermission()){
+      // iOS: ユーザー操作内で同期的に呼ぶ必要がある
+      DeviceMotionEvent.requestPermission().then(function(res){
+        if (res === 'granted'){
+          sensorSupported = true;
+          bindMotion();
+          beginGame();
+        } else {
+          $('startMsg').textContent = '許可されなかったよ。設定 > Safari > モーションと方向 を確認してね(または「ゆびで はじく」モードで遊べます)';
+        }
+      }).catch(function(){
+        $('startMsg').textContent = 'センサーのエラーが発生したよ。「ゆびで はじく」モードで遊べます';
+      });
+      return;
+    } else if (typeof DeviceMotionEvent !== 'undefined'){
+      sensorSupported = true;
+      bindMotion();
+      beginGame();
+      return;
+    } else {
+      $('startMsg').textContent = 'このブラウザ・端末はセンサー非対応みたい。「ゆびで はじく」モードで遊んでね';
+      return;
+    }
+  } else {
+    beginGame();
+  }
+};
+
+function beginGame(){
+  game.turn = 1;
+  game.scores = [null, null];
+  $('gameScreen').classList.add('show');
+  $('sensorPowerUi').style.display = (mode.input === 'sensor') ? 'block' : 'none';
+  $('swipeHintUi').style.display = (mode.input === 'swipe') ? 'block' : 'none';
+  window.scrollTo({top: $('gameScreen').offsetTop - 10, behavior:'smooth'});
+  newRound();
+}
+
+$('resetBtn').onclick = function(){
+  $('gameScreen').classList.remove('show');
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+
+/* ---------- コート描画 ---------- */
+const canvas = $('court');
+const ctx = canvas.getContext('2d');
+
+function newRound(){
+  // ゴールまでの距離をランダムに(近い/遠いをランダム抽選)
+  const far = Math.random() < 0.5;
+  const base = far ? TUNE.GOAL_Y_FAR : TUNE.GOAL_Y_NEAR;
+  game.goalCy = clamp(base + (Math.random()*40 - 20), TUNE.GOAL_Y_MIN, TUNE.GOAL_Y_MAX);
+  game.goalCx = TUNE.COURT_W/2 + (Math.random()*30 - 15);
+  game.ball = null;
+  game.throwing = false;
+  updateHud();
+  drawCourt();
+  resetPowerUi();
+}
+
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+function updateHud(){
+  if (mode.players === 2){
+    $('turnLabel').textContent = 'ばん: プレイヤー' + game.turn;
+  } else {
+    $('turnLabel').textContent = 'チャレンジちゅう';
+  }
+  const s = game.scores;
+  let txt = '';
+  if (s[0] != null) txt += 'P1: ' + rankOf(s[0]);
+  if (mode.players === 2 && s[1] != null) txt += (txt?' / ':'') + 'P2: ' + rankOf(s[1]);
+  $('scoreLabel').textContent = txt;
+}
+
+function drawCourt(ballPos){
+  ctx.clearRect(0,0,TUNE.COURT_W,TUNE.COURT_H);
+  // コート地
+  ctx.fillStyle = '#134a3f';
+  ctx.fillRect(0,0,TUNE.COURT_W,TUNE.COURT_H);
+  // レーンライン
+  ctx.strokeStyle = 'rgba(255,255,255,.18)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(30,0); ctx.lineTo(30,TUNE.COURT_H);
+  ctx.moveTo(TUNE.COURT_W-30,0); ctx.lineTo(TUNE.COURT_W-30,TUNE.COURT_H);
+  ctx.stroke();
+
+  // ゴールリング(同心円。中心ほど高得点)
+  const rings = [
+    {r:TUNE.RING_C, color:'rgba(232,72,152,.18)'},
+    {r:TUNE.RING_B, color:'rgba(232,72,152,.30)'},
+    {r:TUNE.RING_A, color:'rgba(232,72,152,.5)'},
+    {r:TUNE.RING_S, color:'#e84898'},
+  ];
+  rings.forEach(function(ring){
+    ctx.beginPath();
+    ctx.fillStyle = ring.color;
+    ctx.arc(game.goalCx, game.goalCy, ring.r, 0, Math.PI*2);
+    ctx.fill();
+  });
+  ctx.beginPath();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.arc(game.goalCx, game.goalCy, TUNE.RING_S, 0, Math.PI*2);
+  ctx.stroke();
+  ctx.font = '20px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#fff';
+  ctx.fillText('🎯', game.goalCx, game.goalCy+7);
+
+  // 自分のボール(スタート位置 or 投球後の位置)
+  const bx = ballPos ? ballPos.x : TUNE.COURT_W/2;
+  const by = ballPos ? ballPos.y : TUNE.PLAYER_Y;
+  ctx.beginPath();
+  ctx.fillStyle = (mode.players===2 && game.turn===2) ? '#5fd6c4' : '#ffe3f0';
+  ctx.strokeStyle = (mode.players===2 && game.turn===2) ? '#1fae99' : '#e0197a';
+  ctx.lineWidth = 3;
+  ctx.arc(bx, by, 12, 0, Math.PI*2);
+  ctx.fill();
+  ctx.stroke();
+}
+
+/* ---------- パワー→距離の共通変換(べき乗補正込み) ---------- */
+function powerToDistance(power, gamma){
+  const p = clamp(power, 0, 1);
+  const shaped = Math.pow(p, gamma); // gamma<1で低域の分解能を確保
+  return TUNE.DIST_MIN + shaped * (TUNE.DIST_MAX - TUNE.DIST_MIN);
+}
+
+function resolveThrow(power, gamma, lateralJitter){
+  const dist = powerToDistance(power, gamma);
+  const landY = clamp(TUNE.PLAYER_Y - dist, -60, TUNE.COURT_H + 40);
+  const landX = TUNE.COURT_W/2 + (Math.random()*2-1) * lateralJitter;
+  const dx = landX - game.goalCx;
+  const dy = landY - game.goalCy;
+  const d = Math.sqrt(dx*dx + dy*dy);
+  animateThrow(landX, landY, d);
+}
+
+function animateThrow(landX, landY, finalDist){
+  game.throwing = true;
+  const startY = TUNE.PLAYER_Y;
+  const t0 = performance.now();
+  const DUR = 500;
+  function step(now){
+    const t = Math.min(1, (now - t0)/DUR);
+    const ease = 1 - Math.pow(1-t, 3);
+    const y = startY + (landY - startY) * ease;
+    const x = TUNE.COURT_W/2 + (landX - TUNE.COURT_W/2) * ease;
+    drawCourt({x:x, y:y});
+    if (t < 1){
+      requestAnimationFrame(step);
+    } else {
+      game.throwing = false;
+      finishThrow(finalDist, landX, landY);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+function rankOf(d){
+  if (d <= TUNE.RING_S) return 'S';
+  if (d <= TUNE.RING_A) return 'A';
+  if (d <= TUNE.RING_B) return 'B';
+  return 'C';
+}
+
+function finishThrow(d, landX, landY){
+  const idx = game.turn - 1;
+  game.scores[idx] = d;
+  updateHud();
+  showResult(d);
+}
+
+function showResult(d){
+  const rank = rankOf(d);
+  const cfg = {
+    S: {emoji:'🌟', msg:'かんぺき！ど真ん中！', cls:'rankS'},
+    A: {emoji:'🎉', msg:'すごい！おしい神わざ！', cls:'rankA'},
+    B: {emoji:'😊', msg:'いいかんじ！', cls:'rankB'},
+    C: {emoji:'😅', msg:'おしい！つぎ がんばろう', cls:'rankC'},
+  }[rank];
+  $('resultEmoji').textContent = cfg.emoji;
+  $('resultRank').textContent = rank;
+  $('resultRank').className = 'rank ' + cfg.cls;
+  $('resultMsg').textContent = cfg.msg;
+  $('resultDist').textContent = '中心からの きょり: ' + d.toFixed(0) + 'px';
+  $('resultOverlay').classList.add('show');
+}
+
+$('nextBtn').onclick = function(){
+  $('resultOverlay').classList.remove('show');
+  if (mode.players === 2 && game.turn === 1 && game.scores[1] == null){
+    game.turn = 2;
+    newRound();
+  } else if (mode.players === 2 && game.scores[0] != null && game.scores[1] != null){
+    announceWinner();
+  } else {
+    // 1人モード or 2人目終わったら次のラウンドへ(継続チャレンジ)
+    game.turn = (mode.players===2) ? 1 : 1;
+    game.scores = [null, null];
+    newRound();
+  }
+};
+
+function announceWinner(){
+  const s = game.scores;
+  let winner;
+  if (s[0] < s[1]) winner = 'プレイヤー1';
+  else if (s[1] < s[0]) winner = 'プレイヤー2';
+  else winner = 'ひきわけ';
+  $('resultEmoji').textContent = '🏆';
+  $('resultRank').textContent = '';
+  $('resultMsg').textContent = winner === 'ひきわけ' ? 'ひきわけ！同点だ！' : (winner + ' の勝ち！');
+  $('resultDist').textContent = 'P1: ' + rankOf(s[0]) + '(' + s[0].toFixed(0) + 'px) / P2: ' + rankOf(s[1]) + '(' + s[1].toFixed(0) + 'px)';
+  $('resultOverlay').classList.add('show');
+}
+
+function resetPowerUi(){
+  $('powerFill').style.width = '0%';
+  $('powerLabel').textContent = 'スマホを 下手投げの形で かまえてね';
+}
+
+/* =========================================================================
+   センサー入力: DeviceMotion の加速度を「スイング区間」だけ積分してpowerを算出
+   ========================================================================= */
+let motionBound = false;
+let swingState = 'idle'; // idle | swinging
+let swingStartT = 0;
+let swingIntegral = 0; // Σ|a|*dt 相当(速度っぽい量)
+let lastT = 0;
+let quietSinceT = 0;
+
+function bindMotion(){
+  if (motionBound) return;
+  motionBound = true;
+  window.addEventListener('devicemotion', onMotion, true);
+}
+
+function onMotion(e){
+  if (!$('gameScreen').classList.contains('show')) return;
+  if (game.throwing) return;
+  const acc = e.acceleration || e.accelerationIncludingGravity;
+  if (!acc || acc.x == null) return;
+  const mag = Math.sqrt((acc.x||0)**2 + (acc.y||0)**2 + (acc.z||0)**2);
+  const now = performance.now();
+  const dt = lastT ? Math.min(0.05, (now-lastT)/1000) : 0.016;
+  lastT = now;
+
+  if (swingState === 'idle'){
+    if (mag > TUNE.SWING_THRESHOLD){
+      swingState = 'swinging';
+      swingStartT = now;
+      swingIntegral = 0;
+      quietSinceT = 0;
+    }
+  }
+  if (swingState === 'swinging'){
+    swingIntegral += mag * dt;
+    const elapsed = now - swingStartT;
+    const power = clamp(swingIntegral * TUNE.POWER_SCALE, 0, 1);
+    $('powerFill').style.width = (power*100).toFixed(0) + '%';
+    $('powerLabel').textContent = 'ふりの つよさ: ' + Math.round(power*100) + '%';
+
+    if (mag < TUNE.SWING_THRESHOLD){
+      if (!quietSinceT) quietSinceT = now;
+    } else {
+      quietSinceT = 0;
+    }
+
+    const quietEnough = quietSinceT && (now - quietSinceT > TUNE.SWING_END_QUIET_MS);
+    const tooLong = elapsed > TUNE.SWING_MAX_MS;
+    if ((quietEnough && elapsed > TUNE.SWING_MIN_MS) || tooLong){
+      swingState = 'idle';
+      const finalPower = clamp(swingIntegral * TUNE.POWER_SCALE, 0, 1);
+      if (elapsed >= TUNE.SWING_MIN_MS){
+        resolveThrow(finalPower, TUNE.POWER_GAMMA, TUNE.LATERAL_JITTER_SENSOR);
+      }
+    }
+  }
+}
+
+/* =========================================================================
+   スワイプ入力: 指のフリック速度(下→上方向)をpowerに変換
+   ========================================================================= */
+let touchStart = null;
+canvas.addEventListener('touchstart', function(e){
+  if (mode.input !== 'swipe' || game.throwing) return;
+  const t = e.touches[0];
+  touchStart = {x:t.clientX, y:t.clientY, t:performance.now()};
+}, {passive:true});
+
+canvas.addEventListener('touchend', function(e){
+  if (mode.input !== 'swipe' || game.throwing || !touchStart) return;
+  const t = e.changedTouches[0];
+  handleSwipeEnd(t.clientX, t.clientY);
+}, {passive:true});
+
+// PC(マウス)でも同じロジックで試せるように
+let mouseDown = false;
+canvas.addEventListener('mousedown', function(e){
+  if (mode.input !== 'swipe' || game.throwing) return;
+  mouseDown = true;
+  touchStart = {x:e.clientX, y:e.clientY, t:performance.now()};
+});
+window.addEventListener('mouseup', function(e){
+  if (mode.input !== 'swipe' || game.throwing || !mouseDown || !touchStart) return;
+  mouseDown = false;
+  handleSwipeEnd(e.clientX, e.clientY);
+});
+
+function handleSwipeEnd(endX, endY){
+  if (!touchStart) return;
+  const dx = endX - touchStart.x;
+  const dy = endY - touchStart.y; // 上方向へのスワイプは負
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  const dt = Math.max(16, performance.now() - touchStart.t);
+  touchStart = null;
+  if (dist < TUNE.SWIPE_MIN_PX || dy > 0) return; // 下向きや弱すぎる操作は無視
+
+  const velocity = dist / dt; // px/ms
+  const power = clamp(velocity / TUNE.SWIPE_MAX_VELOCITY, 0, 1);
+  resolveThrow(power, TUNE.SWIPE_POWER_GAMMA, TUNE.LATERAL_JITTER_SWIPE);
+}
+
+/* 初期描画 */
+drawCourt();
+</script>
+</body>
+</html>
