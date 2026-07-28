@@ -23,11 +23,6 @@ header .sub{font-size:11px;color:#c9a9bd;margin-top:4px}
 
 .panel{background:#241a22;border-radius:16px;padding:18px;margin-top:14px;border:2px solid #3c2233}
 
-/* ---------- 注意書き ---------- */
-.warn{background:linear-gradient(135deg,#ffe3f0,#fff);color:var(--ink);border-radius:14px;padding:14px;
-  font-weight:900;font-size:15px;text-align:center;border:3px solid var(--pink-deep);box-shadow:0 0 22px 2px rgba(232,72,152,.5);
-  margin-top:12px;line-height:1.6}
-
 /* ---------- モード選択 ---------- */
 .modebtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
 .mbtn{flex:1;min-width:130px;background:#fff;border:3px solid var(--ink);border-bottom-width:8px;border-radius:12px;
@@ -61,13 +56,7 @@ header .sub{font-size:11px;color:#c9a9bd;margin-top:4px}
 .hud .turn{font-weight:900;color:var(--pink);font-size:15px}
 .hud .score{font-weight:900;color:var(--mint)}
 
-.powerwrap{margin-top:12px}
-.powerbar{position:relative;height:22px;background:#241a22;border-radius:11px;border:2px solid #3c2233;overflow:hidden}
-.powerbar .fill{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,var(--mint),var(--pink));transition:width .05s linear}
-.powerlabel{text-align:center;font-size:12px;color:#8d7f89;margin-top:4px}
-
 .swipe-hint{text-align:center;font-size:13px;color:#c9a9bd;margin-top:10px;line-height:1.6}
-.throw-hint{text-align:center;font-size:13px;color:#c9a9bd;margin-top:10px;line-height:1.6}
 
 /* ---------- 結果 ---------- */
 #resultOverlay{position:fixed;inset:0;background:rgba(10,5,8,.85);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
@@ -84,11 +73,6 @@ header .sub{font-size:11px;color:#c9a9bd;margin-top:4px}
 .resultCard .dist{font-size:13px;color:#7a5c6d;margin-bottom:16px}
 .resultCard .emoji{font-size:40px;margin-bottom:8px}
 
-/* ---------- iOSゲート ---------- */
-#sensorGate{display:none;text-align:center}
-#sensorGate.show{display:block}
-.gate-icon{font-size:40px;text-align:center;margin-bottom:6px}
-
 footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
 </style>
 </head>
@@ -101,27 +85,11 @@ footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
 
 <div class="wrap">
 
-  <div class="warn">⚠ スマホは しっかり にぎってね!<br>(なげないで!ふるだけ)</div>
-
   <div class="panel">
-    <div style="font-weight:900;font-size:14px;margin-bottom:8px">① あそびかた</div>
-    <div class="modebtns">
-      <button class="mbtn on" id="modeSensorBtn">📱 センサーで ふる</button>
-      <button class="mbtn" id="modeSwipeBtn">👆 ゆびで はじく</button>
-    </div>
-
-    <div style="font-weight:900;font-size:14px;margin:16px 0 8px">② にんずう</div>
+    <div style="font-weight:900;font-size:14px;margin-bottom:8px">にんずう</div>
     <div class="modebtns">
       <button class="mbtn on" id="mode1pBtn">🧍 ひとりで</button>
       <button class="mbtn" id="mode2pBtn">🧍🧍 ふたりで たいけつ</button>
-    </div>
-
-    <!-- iOSセンサー許可ゲート -->
-    <div id="sensorGate">
-      <div class="gate-icon">📱⚡️</div>
-      <div style="font-size:12.5px;color:#c9a9bd;margin-top:6px;line-height:1.7">
-        センサーモードは「はじめる」を押すと iPhone で「うごきセンサー」の許可がでます。<b style="color:#fff">「きょか」</b>を えらんでね。
-      </div>
     </div>
 
     <button class="bigbtn" id="startBtn">🚀 はじめる</button>
@@ -139,13 +107,7 @@ footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
       <div class="ready-overlay" id="readyOverlay"></div>
     </div>
 
-    <div class="powerwrap" id="sensorPowerUi" style="display:none">
-      <div class="powerbar"><div class="fill" id="powerFill"></div></div>
-      <div class="powerlabel" id="powerLabel">スマホを 下手投げの形で かまえてね</div>
-      <div class="throw-hint">かまえたら「ふりかぶり → スイング」の動きをしてね(手からは はなさないで!)</div>
-    </div>
-
-    <div class="swipe-hint" id="swipeHintUi" style="display:none">
+    <div class="swipe-hint" id="swipeHintUi">
       コートを した から うえ に むかって ゆびで はじいてね(弱く〜強く)
     </div>
 
@@ -187,22 +149,13 @@ const TUNE = {
   RING_B: 84,
   RING_C: 130,       // これを超えたら圏外(C未満=はずれ)
 
-  // --- センサー投げ: 加速度積分 → 距離変換 ---
-  READY_COUNTDOWN_MS: 1700, // 「はじめる」後、合図が終わり計測を始めるまでの時間(かまえて→3→2→1→なげて!)
-  SWING_THRESHOLD: 7.0,     // これを超える加速度変化でスイング区間開始とみなす(m/s^2)。本気のスイングだけ拾うため大幅UP
-  SWING_MICRO_THRESHOLD: 2.2, // 合図後、これを超えるがSWING_THRESHOLD未満の小さな動きは「まだ」判定に使う
-  SWING_MIN_WORK: 3.0,      // スイング区間の積分値(Σ|a|*dt)がこれ未満なら「本気の一振り」とみなさず不発扱い(実機で要調整)
-  SWING_END_QUIET_MS: 160,  // 加速度が落ち着いてからこのms経過でスイング終了
-  SWING_MAX_MS: 900,        // スイング区間の最大長(暴走防止)
-  SWING_MIN_MS: 60,         // これより短い区間は無視(ノイズ対策)
-  POWER_GAMMA: 0.55,        // べき乗補正の指数(<1で低域の分解能を上げる。sqrt=0.5相当)
-  POWER_SCALE: 0.0080,      // 積分値(速度相当)→ 0〜1powerへのスケール係数(実機で要調整) / 2026-07-29実機: 全力で中間→SCALE調整済み
-  POWER_MIN_FOR_THROW: 0.04,// これ未満のpowerは「弱すぎて届かない」明確化のための下限可視化のみに使用
+  // --- かまえ合図: 「はじめる」後、合図が終わりスワイプを受け付けるまでの時間(かまえて→3→2→1→なげて!) ---
+  READY_COUNTDOWN_MS: 1700,
 
   // --- スワイプ投げ: フリック速度 → 距離変換 ---
   SWIPE_MIN_PX: 24,         // これ未満の移動距離は投げとみなさない
   SWIPE_MAX_VELOCITY: 2.4,  // px/ms。これ以上は最大パワーとして頭打ち
-  SWIPE_POWER_GAMMA: 0.55,  // べき乗補正の指数(センサーと同様の効きにする)
+  SWIPE_POWER_GAMMA: 0.55,  // べき乗補正の指数(低域の分解能を上げる)
 
   // --- 飛距離計算: power(0〜1) → 実際に飛ぶY距離(px) ---
   DIST_MIN: 40,      // power=0付近での最小飛距離(コート下端付近)
@@ -210,7 +163,6 @@ const TUNE = {
   DIST_SWEET: 0.62,  // このpower付近でゴール近辺に届く想定(調整の目安値。実際はゴール距離で変わる)
 
   // --- 球のブレ(左右のランダムなズレ。難易度調整用) ---
-  LATERAL_JITTER_SENSOR: 14,
   LATERAL_JITTER_SWIPE: 10,
 };
 
@@ -218,7 +170,7 @@ const TUNE = {
 
 const $ = (id)=>document.getElementById(id);
 
-let mode = { input:'sensor', players:1 }; // input: 'sensor' | 'swipe'
+let mode = { players:1 };
 let game = {
   turn: 1,           // 1人目 or 2人目
   scores: [null, null], // 各プレイヤーの「中心からの距離」(小さいほど良い)
@@ -228,18 +180,6 @@ let game = {
 };
 
 /* ---------- UI: モード切替 ---------- */
-$('modeSensorBtn').onclick = ()=>{
-  mode.input = 'sensor';
-  $('modeSensorBtn').classList.add('on');
-  $('modeSwipeBtn').classList.remove('on');
-  updateGateVisibility();
-};
-$('modeSwipeBtn').onclick = ()=>{
-  mode.input = 'swipe';
-  $('modeSwipeBtn').classList.add('on');
-  $('modeSensorBtn').classList.remove('on');
-  updateGateVisibility();
-};
 $('mode1pBtn').onclick = ()=>{
   mode.players = 1;
   $('mode1pBtn').classList.add('on');
@@ -251,91 +191,36 @@ $('mode2pBtn').onclick = ()=>{
   $('mode1pBtn').classList.remove('on');
 };
 
-function needsIOSPermission(){
-  return (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function');
-}
-function updateGateVisibility(){
-  const gate = $('sensorGate');
-  if (mode.input === 'sensor' && needsIOSPermission()){
-    gate.classList.add('show');
-  } else {
-    gate.classList.remove('show');
-  }
-}
-updateGateVisibility();
-
 /* ---------- はじめる ---------- */
-let sensorReady = false;
-let sensorSupported = false;
+let inputReady = false; // かまえ合図が終わってスワイプを受け付けてよいか
 
 $('startBtn').onclick = function(){
   ensureAudio(); // iOS対策: 必ずユーザー操作(このクリック)起点で生成する
-  if (mode.input === 'sensor'){
-    $('startMsg').textContent = '';
-    if (needsIOSPermission()){
-      // iOS: ユーザー操作内で同期的に呼ぶ必要がある
-      DeviceMotionEvent.requestPermission().then(function(res){
-        if (res === 'granted'){
-          sensorSupported = true;
-          bindMotion();
-          beginGame();
-        } else {
-          $('startMsg').textContent = '許可されなかったよ。設定 > Safari > モーションと方向 を確認してね(または「ゆびで はじく」モードで遊べます)';
-        }
-      }).catch(function(){
-        $('startMsg').textContent = 'センサーのエラーが発生したよ。「ゆびで はじく」モードで遊べます';
-      });
-      return;
-    } else if (typeof DeviceMotionEvent !== 'undefined'){
-      sensorSupported = true;
-      bindMotion();
-      beginGame();
-      return;
-    } else {
-      $('startMsg').textContent = 'このブラウザ・端末はセンサー非対応みたい。「ゆびで はじく」モードで遊んでね';
-      return;
-    }
-  } else {
-    beginGame();
-  }
+  beginGame();
 };
 
 function beginGame(){
   game.turn = 1;
   game.scores = [null, null];
   $('gameScreen').classList.add('show');
-  $('sensorPowerUi').style.display = (mode.input === 'sensor') ? 'block' : 'none';
-  $('swipeHintUi').style.display = (mode.input === 'swipe') ? 'block' : 'none';
   window.scrollTo({top: $('gameScreen').offsetTop - 10, behavior:'smooth'});
   newRound();
-  if (mode.input === 'sensor'){
-    startSensorCountdown();
-  } else {
-    sensorReady = true; // スワイプ操作には合図待ちは不要
-  }
+  startReadyCountdown();
 }
 
-/* ---------- センサーモード: 開始直後の「かまえて…3,2,1,なげて!」合図 ---------- */
-function startSensorCountdown(){
-  sensorReady = false;
-  swingState = 'idle';
-  swingIntegral = 0;
-  quietSinceT = 0;
+/* ---------- 開始直後の「かまえて…3,2,1,なげて!」合図(締まりを出すため継続。合図後にスワイプ受付) ---------- */
+function startReadyCountdown(){
+  inputReady = false;
   const el = $('readyOverlay');
   el.classList.add('show');
   el.textContent = 'かまえて…';
-  $('powerLabel').textContent = 'かまえて まってね…';
   const seg = TUNE.READY_COUNTDOWN_MS / 4.25; // 「かまえて」枠をやや長めに配分
   setTimeout(()=>{ el.textContent = '3'; }, seg*1.25);
   setTimeout(()=>{ el.textContent = '2'; }, seg*2.25);
   setTimeout(()=>{ el.textContent = '1'; }, seg*3.25);
   setTimeout(()=>{
     el.textContent = 'なげて!';
-    sensorReady = true;
-    swingState = 'idle';
-    swingIntegral = 0;
-    quietSinceT = 0;
-    $('powerLabel').textContent = 'ふりかぶって なげて!';
+    inputReady = true;
   }, TUNE.READY_COUNTDOWN_MS);
   setTimeout(()=>{ el.classList.remove('show'); }, TUNE.READY_COUNTDOWN_MS + 450);
 }
@@ -462,7 +347,6 @@ function newRound(){
   game.throwing = false;
   updateHud();
   drawCourt();
-  resetPowerUi();
 }
 
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
@@ -657,93 +541,18 @@ function announceWinner(){
   $('resultOverlay').classList.add('show');
 }
 
-function resetPowerUi(){
-  $('powerFill').style.width = '0%';
-  $('powerLabel').textContent = 'スマホを 下手投げの形で かまえてね';
-}
-
-/* =========================================================================
-   センサー入力: DeviceMotion の加速度を「スイング区間」だけ積分してpowerを算出
-   ========================================================================= */
-let motionBound = false;
-let swingState = 'idle'; // idle | swinging
-let swingStartT = 0;
-let swingIntegral = 0; // Σ|a|*dt 相当(速度っぽい量)
-let lastT = 0;
-let quietSinceT = 0;
-
-function bindMotion(){
-  if (motionBound) return;
-  motionBound = true;
-  window.addEventListener('devicemotion', onMotion, true);
-}
-
-function onMotion(e){
-  if (!$('gameScreen').classList.contains('show')) return;
-  if (game.throwing) return;
-  if (!sensorReady) return; // 合図(かまえて…3,2,1,なげて!)が終わるまでは完全無視
-  const acc = e.acceleration || e.accelerationIncludingGravity;
-  if (!acc || acc.x == null) return;
-  const mag = Math.sqrt((acc.x||0)**2 + (acc.y||0)**2 + (acc.z||0)**2);
-  const now = performance.now();
-  const dt = lastT ? Math.min(0.05, (now-lastT)/1000) : 0.016;
-  lastT = now;
-
-  if (swingState === 'idle'){
-    if (mag > TUNE.SWING_THRESHOLD){
-      swingState = 'swinging';
-      swingStartT = now;
-      swingIntegral = 0;
-      quietSinceT = 0;
-    } else if (mag > TUNE.SWING_MICRO_THRESHOLD){
-      // 合図後でも微小な動きは「投げ」とみなさず、もっと振るよう促すだけ
-      $('powerLabel').textContent = 'もっと おもいきって!';
-    }
-  }
-  if (swingState === 'swinging'){
-    swingIntegral += mag * dt;
-    const elapsed = now - swingStartT;
-    const power = clamp(swingIntegral * TUNE.POWER_SCALE, 0, 1);
-    $('powerFill').style.width = (power*100).toFixed(0) + '%';
-    $('powerLabel').textContent = 'ふりの つよさ: ' + Math.round(power*100) + '%';
-
-    if (mag < TUNE.SWING_THRESHOLD){
-      if (!quietSinceT) quietSinceT = now;
-    } else {
-      quietSinceT = 0;
-    }
-
-    const quietEnough = quietSinceT && (now - quietSinceT > TUNE.SWING_END_QUIET_MS);
-    const tooLong = elapsed > TUNE.SWING_MAX_MS;
-    if ((quietEnough && elapsed > TUNE.SWING_MIN_MS) || tooLong){
-      swingState = 'idle';
-      // 最低仕事量チェック: スイング区間の積分がしきい値未満なら「本気の一振り」とみなさず不発扱い
-      if (swingIntegral < TUNE.SWING_MIN_WORK){
-        $('powerFill').style.width = '0%';
-        $('powerLabel').textContent = 'もっと おもいきって!';
-        swingIntegral = 0;
-        return;
-      }
-      const finalPower = clamp(swingIntegral * TUNE.POWER_SCALE, 0, 1);
-      if (elapsed >= TUNE.SWING_MIN_MS){
-        resolveThrow(finalPower, TUNE.POWER_GAMMA, TUNE.LATERAL_JITTER_SENSOR);
-      }
-    }
-  }
-}
-
 /* =========================================================================
    スワイプ入力: 指のフリック速度(下→上方向)をpowerに変換
    ========================================================================= */
 let touchStart = null;
 canvas.addEventListener('touchstart', function(e){
-  if (mode.input !== 'swipe' || game.throwing) return;
+  if (!inputReady || game.throwing) return;
   const t = e.touches[0];
   touchStart = {x:t.clientX, y:t.clientY, t:performance.now()};
 }, {passive:true});
 
 canvas.addEventListener('touchend', function(e){
-  if (mode.input !== 'swipe' || game.throwing || !touchStart) return;
+  if (!inputReady || game.throwing || !touchStart) return;
   const t = e.changedTouches[0];
   handleSwipeEnd(t.clientX, t.clientY);
 }, {passive:true});
@@ -751,12 +560,12 @@ canvas.addEventListener('touchend', function(e){
 // PC(マウス)でも同じロジックで試せるように
 let mouseDown = false;
 canvas.addEventListener('mousedown', function(e){
-  if (mode.input !== 'swipe' || game.throwing) return;
+  if (!inputReady || game.throwing) return;
   mouseDown = true;
   touchStart = {x:e.clientX, y:e.clientY, t:performance.now()};
 });
 window.addEventListener('mouseup', function(e){
-  if (mode.input !== 'swipe' || game.throwing || !mouseDown || !touchStart) return;
+  if (!inputReady || game.throwing || !mouseDown || !touchStart) return;
   mouseDown = false;
   handleSwipeEnd(e.clientX, e.clientY);
 });
