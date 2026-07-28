@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>きょうぎを えらぶ — テストページ</title>
+<style>
+:root{
+  --pink:#e84898; --pink-deep:#e0197a; --pink-pale:#ffe3f0;
+  --mint:#5fd6c4; --mint-pale:#d9f4ee; --mint-deep:#1fae99;
+  --ink:#3a2233; --dark:#180a14;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--dark);color:#fff;min-height:100vh}
+
+header{background:var(--pink-deep);padding:22px 16px 18px;text-align:center}
+header h1{font-size:20px;font-weight:900;letter-spacing:2px}
+header .sub{font-size:12.5px;color:#ffd6ea;margin-top:6px}
+a.back{display:inline-block;margin-top:10px;color:#ffd6ea;font-size:12px;text-decoration:none}
+
+main{max-width:640px;margin:0 auto;padding:20px 16px 60px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-top:6px}
+.card{background:#241521;border-radius:16px;padding:16px 12px;text-align:center;
+  border:3px solid var(--mint);border-bottom-width:7px;text-decoration:none;color:#fff;
+  display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;cursor:pointer}
+.card:active{border-bottom-width:3px;transform:translateY(4px)}
+.card .ico{font-size:34px}
+.card .nm{font-weight:900;font-size:14.5px;line-height:1.4}
+.card .tag{font-size:11px;color:#c9a9bd}
+
+.card.locked{background:#2a2229;border-color:#4a3f47;color:#7a6d76;cursor:not-allowed;pointer-events:none}
+.card.locked .badge{position:absolute;top:8px;right:8px;background:#4a3f47;color:#d8c9d1;font-size:10px;
+  font-weight:900;border-radius:999px;padding:3px 8px;letter-spacing:1px}
+.card.own{border-color:var(--pink)}
+.card.own:not(.locked){box-shadow:0 0 0 2px #fff1,0 0 18px 2px rgba(232,72,152,.35)}
+
+section.group{margin-top:28px}
+section.group h2{font-size:14px;letter-spacing:2px;color:#c9a9bd;margin-bottom:10px;
+  display:inline-block;border-bottom:2px solid var(--mint);padding-bottom:2px}
+
+#pcNote{margin-top:36px;background:#241521;border:3px solid var(--mint);border-radius:16px;padding:22px 18px;text-align:center;display:none}
+#pcNote.show{display:block}
+#pcNote .msg{font-weight:900;font-size:16px;margin-bottom:14px;line-height:1.6}
+#pcNote .qrwrap{display:inline-block;background:#fff;border-radius:12px;padding:12px}
+#pcNote .qrwrap img{width:150px;height:150px;display:block}
+#pcNote .url{margin-top:10px;font-size:11px;color:#8d7f89;word-break:break-all}
+
+.testnote{margin-top:26px;font-size:11px;color:#8d7f89;line-height:1.7;text-align:center}
+
+/* ---- かおなじみけんてい (自作・センサー不要ミニ競技) ---- */
+#kaoModal{position:fixed;inset:0;background:rgba(10,4,9,.92);z-index:300;display:none;align-items:center;justify-content:center;padding:16px}
+#kaoModal.show{display:flex}
+#kaoBox{background:#241521;border:3px solid var(--mint);border-radius:18px;padding:22px 18px;max-width:420px;width:100%;text-align:center;max-height:90vh;overflow-y:auto}
+#kaoBox h3{font-size:17px;font-weight:900;margin-bottom:10px}
+#kaoBox .kaoImgWrap{width:150px;height:150px;margin:10px auto;border-radius:16px;overflow:hidden;background:var(--pink-pale)}
+#kaoBox .kaoImgWrap img{width:100%;height:100%;object-fit:contain}
+#kaoBox .kaoDesc{font-size:12.5px;color:#c9a9bd;margin-bottom:10px}
+#kaoChoices{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+.kaoChoice{background:#fff;border:3px solid var(--ink);border-bottom-width:7px;border-radius:12px;padding:8px;cursor:pointer}
+.kaoChoice img{width:100%;height:64px;object-fit:contain}
+.kaoChoice:active{border-bottom-width:3px;transform:translateY(3px)}
+.kaoChoice.correct{border-color:var(--mint-deep)!important;background:var(--mint-pale)}
+.kaoChoice.wrong{border-color:var(--pink-deep)!important;background:var(--pink-pale)}
+#kaoResult{margin-top:14px;font-weight:900;font-size:15px;display:none}
+#kaoResult.show{display:block}
+#kaoCloseBtn,#kaoNextBtn,#kaoStartBtn{margin-top:14px;background:var(--pink);color:#fff;border:0;border-bottom:6px solid var(--pink-deep);
+  border-radius:12px;padding:12px 20px;font-weight:900;font-size:14px;cursor:pointer}
+#kaoCloseBtn:active,#kaoNextBtn:active,#kaoStartBtn:active{border-bottom-width:2px;transform:translateY(4px)}
+.kaoProgress{font-size:12px;color:#8d7f89;margin-top:6px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏟 きょうぎを えらぶ</h1>
+  <div class="sub">かって、コインを ゲットしよう!</div>
+  <a class="back" href="index.html">← もどる</a>
+</header>
+
+<main>
+  <section class="group">
+    <h2>スマホせんよう きょうぎ</h2>
+    <div class="grid" id="sensorGrid"></div>
+  </section>
+
+  <section class="group">
+    <h2>だれでも あそべる きょうぎ</h2>
+    <div class="grid" id="freeGrid"></div>
+  </section>
+
+  <div id="pcNote">
+    <div class="msg">📱 スマホでひらくと<br>ぜんきょうぎに ちょうせんできるよ</div>
+    <div class="qrwrap"><img src="img/kyogi-qr.svg" alt="QRコード"></div>
+    <div class="url">https://tibiboard.github.io/asobi-test/kyogi.html</div>
+  </div>
+
+  <div class="testnote">(テスト用: かったつもりで <a href="win.html" style="color:inherit">win.html</a> へ)</div>
+</main>
+
+<!-- かおなじみけんてい モーダル -->
+<div id="kaoModal">
+  <div id="kaoBox">
+    <h3>🐰 かおなじみけんてい</h3>
+    <div id="kaoIntro">
+      <p class="kaoDesc">うさぎの顔を3びょう見せるよ。おぼえたら、あとで4つの中からえらんでね!ぜんぶで3もん。</p>
+      <button id="kaoStartBtn">🚀 はじめる</button>
+    </div>
+    <div id="kaoPlay" style="display:none">
+      <div class="kaoProgress" id="kaoProgress">もん 1/3</div>
+      <div class="kaoImgWrap"><img id="kaoShowImg" src="" alt="うさぎ"></div>
+      <div class="kaoDesc" id="kaoStatus">よく見て おぼえてね…</div>
+      <div id="kaoChoices" style="display:none"></div>
+      <div id="kaoResult"></div>
+      <button id="kaoNextBtn" style="display:none">つぎへ ▶</button>
+    </div>
+    <button id="kaoCloseBtn">とじる</button>
+  </div>
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   1) センサー可用性のフィージビリティ判定
+   存在チェック(window.DeviceOrientationEvent / DeviceMotionEvent)に加え、
+   実際にイベントが飛ぶかを短時間だけ試す(iOS等の許可プロンプトは各競技側で
+   処理される前提なので、ここでは「イベントが1回でも来るか」だけ見る)。
+   PCブラウザ(Chrome等)は window.DeviceOrientationEvent 自体は定義されて
+   いてもイベントが一切飛ばないケースが多いため、存在チェックだけでは
+   PCを誤って「対応」判定してしまう。そこで短いタイムアウト内に実イベントが
+   発火したかどうかで最終判定する。
+------------------------------------------------------------------*/
+function detectSensor(){
+  return new Promise(function(resolve){
+    var hasOrientationApi = (typeof window.DeviceOrientationEvent !== 'undefined');
+    var hasMotionApi = (typeof window.DeviceMotionEvent !== 'undefined');
+
+    if (!hasOrientationApi && !hasMotionApi){
+      resolve(false);
+      return;
+    }
+
+    // iOS(許可が必要な端末)は requestPermission 関数が生えている。
+    // この場合は「許可待ち」の状態であり、実イベントはまだ飛ばないのが正常。
+    // つまりAPIが存在する時点でスマホ機種とみなしてよい。
+    var needsPermission =
+      (hasOrientationApi && typeof DeviceOrientationEvent.requestPermission === 'function') ||
+      (hasMotionApi && typeof DeviceMotionEvent.requestPermission === 'function');
+    if (needsPermission){
+      resolve(true);
+      return;
+    }
+
+    var settled = false;
+    function done(v){
+      if (settled) return;
+      settled = true;
+      window.removeEventListener('deviceorientation', onO, true);
+      window.removeEventListener('devicemotion', onM, true);
+      resolve(v);
+    }
+    function onO(e){ if (e.alpha !== null || e.beta !== null || e.gamma !== null) done(true); }
+    function onM(e){ if (e.accelerationIncludingGravity && (e.accelerationIncludingGravity.x !== null)) done(true); }
+    window.addEventListener('deviceorientation', onO, true);
+    window.addEventListener('devicemotion', onM, true);
+    setTimeout(function(){ done(false); }, 700);
+  });
+}
+
+/* ---------------------------------------------------------------
+   2) F:\zmk-dev\site\asobi\ の7競技(いずれもDeviceOrientation/DeviceMotion
+      必須。単一の「はじめる」ゲートで権限確認してから遊ぶ作り)
+------------------------------------------------------------------*/
+var SENSOR_GAMES = [
+  {ico:'🧭', nm:'真北ピタリ',        tag:'向きセンサー'},
+  {ico:'👊', nm:'パンチ速度計',      tag:'揺れセンサー'},
+  {ico:'📏', nm:'水平の達人',        tag:'向きセンサー'},
+  {ico:'🗿', nm:'置物チャレンジ',    tag:'揺れセンサー'},
+  {ico:'🎯', nm:'ねらって着地',      tag:'向き+揺れ'},
+  {ico:'🌀', nm:'最大回転チャレンジ', tag:'向き+揺れ'},
+  {ico:'📍', nm:'あっちを向けば',    tag:'向き+位置情報'}
+];
+
+function renderSensorGrid(supported){
+  var grid = document.getElementById('sensorGrid');
+  var html = '';
+  SENSOR_GAMES.forEach(function(g){
+    if (supported){
+      html += '<a class="card own" href="../asobi/"><div class="ico">'+g.ico+'</div><div class="nm">'+g.nm+'</div><div class="tag">'+g.tag+'</div></a>';
+    } else {
+      html += '<div class="card locked" aria-disabled="true"><div class="badge">📱スマホせんよう</div><div class="ico">'+g.ico+'</div><div class="nm">'+g.nm+'</div><div class="tag">'+g.tag+'</div></div>';
+    }
+  });
+  grid.innerHTML = html;
+}
+
+function renderFreeGrid(){
+  var grid = document.getElementById('freeGrid');
+  grid.innerHTML =
+    '<div class="card own" id="kaoCard"><div class="ico">🐰</div><div class="nm">かおなじみけんてい</div><div class="tag">タップだけ・全端末OK</div></div>';
+  document.getElementById('kaoCard').addEventListener('click', openKao);
+}
+
+detectSensor().then(function(supported){
+  renderSensorGrid(supported);
+  renderFreeGrid();
+  if (!supported){
+    document.getElementById('pcNote').classList.add('show');
+  }
+});
+
+/* ---------------------------------------------------------------
+   3) かおなじみけんてい(自作・クリックのみ・全端末対応)
+      うさぎの顔画像を数秒見せて隠し、4択から選ばせる簡易記憶ゲーム。
+      3問・正解率を最後に表示するだけの簡易版。
+------------------------------------------------------------------*/
+var KAO_IMAGES = [
+  'img/cute_01.png','img/cute_04.png','img/cute_15.png',
+  'img/edgy_11.png','img/street_02.png','img/street_05.png'
+];
+var kaoQuiz = [];
+var kaoIdx = 0;
+var kaoCorrectCount = 0;
+
+function shuffle(arr){
+  var a = arr.slice();
+  for (var i=a.length-1;i>0;i--){
+    var j = Math.floor(Math.random()*(i+1));
+    var t=a[i]; a[i]=a[j]; a[j]=t;
+  }
+  return a;
+}
+
+function buildKaoQuiz(){
+  var pool = shuffle(KAO_IMAGES);
+  var quiz = [];
+  for (var q=0; q<3; q++){
+    var answer = pool[q];
+    var others = shuffle(KAO_IMAGES.filter(function(u){ return u!==answer; })).slice(0,3);
+    var choices = shuffle([answer].concat(others));
+    quiz.push({answer:answer, choices:choices});
+  }
+  return quiz;
+}
+
+function openKao(){
+  document.getElementById('kaoModal').classList.add('show');
+  document.getElementById('kaoIntro').style.display = 'block';
+  document.getElementById('kaoPlay').style.display = 'none';
+}
+document.getElementById('kaoCloseBtn').addEventListener('click', function(){
+  document.getElementById('kaoModal').classList.remove('show');
+});
+document.getElementById('kaoStartBtn').addEventListener('click', function(){
+  kaoQuiz = buildKaoQuiz();
+  kaoIdx = 0;
+  kaoCorrectCount = 0;
+  document.getElementById('kaoIntro').style.display = 'none';
+  document.getElementById('kaoPlay').style.display = 'block';
+  showKaoQuestion();
+});
+
+function showKaoQuestion(){
+  var qEl = document.getElementById('kaoProgress');
+  var img = document.getElementById('kaoShowImg');
+  var status = document.getElementById('kaoStatus');
+  var choicesEl = document.getElementById('kaoChoices');
+  var resultEl = document.getElementById('kaoResult');
+  var nextBtn = document.getElementById('kaoNextBtn');
+
+  if (kaoIdx >= kaoQuiz.length){
+    qEl.textContent = 'けっか';
+    img.style.visibility = 'hidden';
+    status.textContent = '';
+    choicesEl.style.display = 'none';
+    nextBtn.style.display = 'none';
+    resultEl.classList.add('show');
+    resultEl.innerHTML = '🎉 '+kaoCorrectCount+' / '+kaoQuiz.length+' もん せいかい!';
+    return;
+  }
+
+  var item = kaoQuiz[kaoIdx];
+  qEl.textContent = 'もん '+(kaoIdx+1)+'/'+kaoQuiz.length;
+  img.style.visibility = 'visible';
+  img.src = item.answer;
+  status.textContent = 'よく見て おぼえてね…';
+  choicesEl.style.display = 'none';
+  choicesEl.innerHTML = '';
+  resultEl.classList.remove('show');
+  resultEl.innerHTML = '';
+  nextBtn.style.display = 'none';
+
+  setTimeout(function(){
+    img.style.visibility = 'hidden';
+    status.textContent = 'どのうさぎだったかな?';
+    var html = '';
+    item.choices.forEach(function(src){
+      html += '<div class="kaoChoice" data-src="'+src+'"><img src="'+src+'" alt="うさぎ"></div>';
+    });
+    choicesEl.innerHTML = html;
+    choicesEl.style.display = 'grid';
+    Array.prototype.forEach.call(choicesEl.querySelectorAll('.kaoChoice'), function(el){
+      el.addEventListener('click', function(){ answerKao(el, item.answer); });
+    });
+  }, 3000);
+}
+
+function answerKao(el, answer){
+  var choicesEl = document.getElementById('kaoChoices');
+  var nextBtn = document.getElementById('kaoNextBtn');
+  var resultEl = document.getElementById('kaoResult');
+  Array.prototype.forEach.call(choicesEl.querySelectorAll('.kaoChoice'), function(c){
+    c.style.pointerEvents = 'none';
+    if (c.dataset.src === answer) c.classList.add('correct');
+  });
+  var ok = (el.dataset.src === answer);
+  if (!ok) el.classList.add('wrong');
+  else kaoCorrectCount++;
+  resultEl.classList.add('show');
+  resultEl.innerHTML = ok ? '⭕ せいかい!' : '❌ ざんねん!';
+  nextBtn.style.display = 'inline-block';
+}
+document.getElementById('kaoNextBtn').addEventListener('click', function(){
+  kaoIdx++;
+  showKaoQuestion();
+});
+</script>
+</body>
+</html>
