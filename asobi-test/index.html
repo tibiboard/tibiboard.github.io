@@ -30,20 +30,53 @@ body.rumble{animation:rumble .5s}
 @keyframes bfl{15%{opacity:1}100%{opacity:0}}
 
 /* ============ うさぎドン ============ */
-#usagi{position:fixed;inset:0;z-index:150;display:none;flex-direction:column;align-items:center;justify-content:center;background:var(--dark);text-align:center;padding:20px}
+#usagi{min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;background:var(--dark);text-align:center;padding:20px}
 #usagi.show{display:flex;animation:appear .4s}
 @keyframes appear{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
 #usagi img{width:min(64vw,320px);filter:drop-shadow(0 14px 0 rgba(0,0,0,.4))}
 #usagi .msg{font-size:18px;font-weight:900;margin-top:14px;letter-spacing:2px}
 #usagi.ari .msg{color:var(--pink)}
 #usagi.nashi .msg{color:#8fb8ff}
+#usagi .down{margin-top:30px;color:#8d7f89;font-size:13px;letter-spacing:3px;animation:hintblink 2.2s infinite;cursor:pointer}
 
-.btns{margin-top:26px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;padding:0 16px}
+/* ============ 棚 ============ */
+#shelf-sec{max-width:980px;margin:0 auto;padding:56px 20px 40px}
+#shelf-sec h2{font-size:22px;font-weight:900;margin-bottom:6px;display:inline-block;background:var(--pink-deep);color:#fff;padding:4px 18px;border-radius:4px;letter-spacing:3px}
+#shelf-sec .sub{font-size:13px;margin:14px 0 24px;color:#c9a9bd}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+.item{background:#241a22;border-radius:14px;padding:16px;text-align:center;color:#8d7f89;position:relative;overflow:hidden}
+.item .ph{height:70px;display:flex;align-items:center;justify-content:center;font-size:36px;filter:grayscale(1);opacity:.5}
+.item .nm{font-weight:900;margin:6px 0 2px;color:#c9bcc5;font-size:14px}
+.item .st{font-size:12px}
+.item .stamp{position:absolute;top:12px;right:-38px;transform:rotate(35deg);background:var(--mint-deep);color:#fff;font-size:11px;font-weight:900;padding:3px 40px}
+.item.live{background:linear-gradient(135deg,var(--pink-pale),#fff);color:var(--ink);box-shadow:0 0 0 3px var(--pink),0 0 26px 4px rgba(232,72,152,.55);animation:glow 1.6s infinite alternate}
+@keyframes glow{from{box-shadow:0 0 0 3px var(--pink),0 0 18px 2px rgba(232,72,152,.4)}to{box-shadow:0 0 0 3px var(--pink),0 0 30px 8px rgba(232,72,152,.75)}}
+.item.live .ph{filter:none;opacity:1}
+.item.live .nm{color:var(--pink-deep)}
+.item.live .tag{display:inline-block;background:var(--mint);color:var(--ink);font-weight:900;font-size:11px;border-radius:999px;padding:3px 10px;margin-bottom:6px}
+.item.live .price{font-weight:900;color:var(--pink-deep);margin:4px 0}
+.item.live .go{display:inline-block;margin-top:8px;background:var(--pink);color:#fff;font-weight:900;font-size:12.5px;border-radius:10px;padding:9px 14px;cursor:pointer;border:0;border-bottom:5px solid var(--pink-deep)}
+.item.live .go:active{border-bottom-width:2px;transform:translateY(3px)}
+
+/* ============ 先行入場券 ============ */
+#ticket-sec{max-width:700px;margin:0 auto;padding:20px 20px 50px;text-align:center}
+.ticketbtn{display:inline-block;background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;border:0;border-bottom:9px solid var(--pink-deep);border-radius:18px;
+  padding:26px 30px;font-weight:900;font-size:21px;cursor:pointer;letter-spacing:1px;width:100%;max-width:460px;
+  box-shadow:0 0 0 4px #fff2,0 0 30px 6px rgba(232,72,152,.55);animation:ticketpulse 2.2s infinite}
+.ticketbtn:active{border-bottom-width:3px;transform:translateY(5px)}
+@keyframes ticketpulse{0%,100%{transform:scale(1);box-shadow:0 0 0 4px #fff2,0 0 20px 4px rgba(232,72,152,.45)}50%{transform:scale(1.045);box-shadow:0 0 0 4px #fff3,0 0 42px 10px rgba(232,72,152,.8)}}
+#ticket-detail{display:none;margin-top:22px;background:#241521;border:3px solid var(--mint);border-radius:16px;padding:20px;text-align:left}
+#ticket-detail.show{display:block;animation:appear .4s}
+#ticket-detail .desc{font-size:14px;line-height:1.9;color:#e6d6e0;margin-bottom:18px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .keybtn{display:inline-block;background:#fff;border:3px solid var(--ink);border-bottom-width:8px;border-radius:12px;
-  padding:14px 22px;font-weight:900;font-size:15px;color:var(--ink);cursor:pointer;user-select:none;text-decoration:none}
+  padding:14px 20px;font-weight:900;font-size:14px;color:var(--ink);cursor:pointer;user-select:none;text-decoration:none;text-align:center}
 .keybtn:active{border-bottom-width:3px;transform:translateY(5px)}
 .keybtn.pink{background:var(--pink);color:#fff;border-color:var(--pink-deep)}
 .keybtn.mint{background:var(--mint);border-color:var(--mint-deep)}
+.testnote{margin-top:16px;font-size:11px;color:#8d7f89;line-height:1.7;text-align:center}
+
+footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;font-size:13px;letter-spacing:2px}
 
 #toggle{position:fixed;left:8px;bottom:8px;z-index:250;background:#241521;color:#8d7f89;font-size:10px;
   border:1px solid #3c2233;border-radius:6px;padding:4px 8px;opacity:.6;cursor:pointer}
@@ -60,12 +93,29 @@ body.rumble{animation:rumble .5s}
 <div id="usagi">
   <img id="usagiImg" src="" alt="うさぎ">
   <div class="msg" id="usagiMsg"></div>
-  <div class="btns">
-    <a class="keybtn pink" href="slot.html">🎰 スロットであそぶ</a>
-    <a class="keybtn" href="gacha.html">🔮 ガチャであそぶ</a>
-    <a class="keybtn mint" href="../asobi/">🏟 きょうぎじょう(センサーあそび)</a>
-  </div>
+  <div class="down" onclick="document.getElementById('shelf-sec').scrollIntoView({behavior:'smooth'})">▼ したへ</div>
 </div>
+
+<section id="shelf-sec">
+  <h2>旅立った子たち</h2>
+  <div class="sub">スタンプは旅立ちの日付</div>
+  <div class="shelf" id="shelf"></div>
+</section>
+
+<section id="ticket-sec">
+  <button class="ticketbtn" id="ticketBtn">🎫 次回の先行入場券に ちょうせんする</button>
+  <div id="ticket-detail">
+    <div class="desc">きょうぎに かって → ガチャかスロットで あたりを ひこう。<br>1にち1かい・むりょう<br>つぎのドロップのとき、みんなより2じかん はやく おみせに はいれるよ。</div>
+    <div class="btns">
+      <a class="keybtn mint" href="../asobi/">🏟きょうぎじょうへ</a>
+      <a class="keybtn" href="slot.html">🎰スロット</a>
+      <a class="keybtn pink" href="gacha.html">🔮ガチャ</a>
+    </div>
+    <div class="testnote">※本番では「きょうぎに合格→抽選」の順に進みます。このテスト版では全部じゆうに触れます。</div>
+  </div>
+</section>
+
+<footer>ちびボード工房 — うさぎと、世界にひとつのキーボード。</footer>
 
 <div id="toggle" onclick="toggleArimasu()">切替(テスト用)</div>
 
@@ -87,7 +137,36 @@ function renderUsagi(ari){
     img.src = 'img/本物_9_泣き.png';
     msg.textContent = '…みんな旅立ったよ。つぎの子をまっててね';
   }
+  renderShelf(ari);
 }
+
+const SOLD_ITEMS = [
+  {nm:'シカク 1号', date:'2026.8.1'},
+  {nm:'マル 1号',   date:'2026.8.1'},
+  {nm:'シカク 2号', date:'2026.8.9'},
+  {nm:'30Z 1号',    date:'2026.8.9'},
+  {nm:'マル 2号',   date:'2026.8.16'},
+  {nm:'30Z 2号',    date:'2026.8.16'}
+];
+
+function renderShelf(ari){
+  const shelf = document.getElementById('shelf');
+  let html = '';
+  if (ari){
+    html += `<div class="item live">
+      <div class="tag">🐰 いまここにいます</div>
+      <div class="ph">⌨️</div>
+      <div class="nm">シカク 3号</div>
+      <div class="price">¥35,000</div>
+      <button class="go" onclick="alert('本番はここからBASEの購入ページへ飛びます')">むかえにいく ▶</button>
+    </div>`;
+  }
+  SOLD_ITEMS.forEach(it=>{
+    html += `<div class="item"><div class="stamp">${it.date}</div><div class="ph">⌨️</div><div class="nm">${it.nm}</div><div class="st">SOLD OUT</div></div>`;
+  });
+  shelf.innerHTML = html;
+}
+
 let ariCur = ARIMASU;
 renderUsagi(ariCur);
 function toggleArimasu(){
@@ -108,6 +187,10 @@ document.getElementById('sw').onclick = function(){
   setTimeout(()=>{
     document.getElementById('usagi').classList.add('show');
   }, 1100);
+};
+
+document.getElementById('ticketBtn').onclick = function(){
+  document.getElementById('ticket-detail').classList.toggle('show');
 };
 </script>
 </body>
