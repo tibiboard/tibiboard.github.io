@@ -52,6 +52,10 @@ header .sub{font-size:11px;color:#c9a9bd;margin-top:4px}
 .court-wrap{position:relative;margin-top:12px;border-radius:16px;overflow:hidden;border:3px solid var(--mint-deep);
   background:linear-gradient(#0f3f36,#134a3f 60%,#0a2b24)}
 #court{display:block;width:100%;height:auto;touch-action:none}
+.ready-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  font-size:clamp(28px,10vw,56px);font-weight:900;color:#fff;text-shadow:0 0 18px rgba(0,0,0,.85),0 0 4px #000;
+  pointer-events:none;z-index:6;background:rgba(0,0,0,.15)}
+.ready-overlay.show{display:flex}
 
 .hud{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:#c9a9bd}
 .hud .turn{font-weight:900;color:var(--pink);font-size:15px}
@@ -132,6 +136,7 @@ footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
 
     <div class="court-wrap">
       <canvas id="court" width="360" height="560"></canvas>
+      <div class="ready-overlay" id="readyOverlay"></div>
     </div>
 
     <div class="powerwrap" id="sensorPowerUi" style="display:none">
@@ -183,7 +188,10 @@ const TUNE = {
   RING_C: 130,       // これを超えたら圏外(C未満=はずれ)
 
   // --- センサー投げ: 加速度積分 → 距離変換 ---
-  SWING_THRESHOLD: 1.2,     // これを超える加速度変化でスイング区間開始とみなす(m/s^2)
+  READY_COUNTDOWN_MS: 1700, // 「はじめる」後、合図が終わり計測を始めるまでの時間(かまえて→3→2→1→なげて!)
+  SWING_THRESHOLD: 7.0,     // これを超える加速度変化でスイング区間開始とみなす(m/s^2)。本気のスイングだけ拾うため大幅UP
+  SWING_MICRO_THRESHOLD: 2.2, // 合図後、これを超えるがSWING_THRESHOLD未満の小さな動きは「まだ」判定に使う
+  SWING_MIN_WORK: 3.0,      // スイング区間の積分値(Σ|a|*dt)がこれ未満なら「本気の一振り」とみなさず不発扱い(実機で要調整)
   SWING_END_QUIET_MS: 160,  // 加速度が落ち着いてからこのms経過でスイング終了
   SWING_MAX_MS: 900,        // スイング区間の最大長(暴走防止)
   SWING_MIN_MS: 60,         // これより短い区間は無視(ノイズ対策)
@@ -261,6 +269,7 @@ let sensorReady = false;
 let sensorSupported = false;
 
 $('startBtn').onclick = function(){
+  ensureAudio(); // iOS対策: 必ずユーザー操作(このクリック)起点で生成する
   if (mode.input === 'sensor'){
     $('startMsg').textContent = '';
     if (needsIOSPermission()){
@@ -299,12 +308,145 @@ function beginGame(){
   $('swipeHintUi').style.display = (mode.input === 'swipe') ? 'block' : 'none';
   window.scrollTo({top: $('gameScreen').offsetTop - 10, behavior:'smooth'});
   newRound();
+  if (mode.input === 'sensor'){
+    startSensorCountdown();
+  } else {
+    sensorReady = true; // スワイプ操作には合図待ちは不要
+  }
+}
+
+/* ---------- センサーモード: 開始直後の「かまえて…3,2,1,なげて!」合図 ---------- */
+function startSensorCountdown(){
+  sensorReady = false;
+  swingState = 'idle';
+  swingIntegral = 0;
+  quietSinceT = 0;
+  const el = $('readyOverlay');
+  el.classList.add('show');
+  el.textContent = 'かまえて…';
+  $('powerLabel').textContent = 'かまえて まってね…';
+  const seg = TUNE.READY_COUNTDOWN_MS / 4.25; // 「かまえて」枠をやや長めに配分
+  setTimeout(()=>{ el.textContent = '3'; }, seg*1.25);
+  setTimeout(()=>{ el.textContent = '2'; }, seg*2.25);
+  setTimeout(()=>{ el.textContent = '1'; }, seg*3.25);
+  setTimeout(()=>{
+    el.textContent = 'なげて!';
+    sensorReady = true;
+    swingState = 'idle';
+    swingIntegral = 0;
+    quietSinceT = 0;
+    $('powerLabel').textContent = 'ふりかぶって なげて!';
+  }, TUNE.READY_COUNTDOWN_MS);
+  setTimeout(()=>{ el.classList.remove('show'); }, TUNE.READY_COUNTDOWN_MS + 450);
 }
 
 $('resetBtn').onclick = function(){
   $('gameScreen').classList.remove('show');
   window.scrollTo({top:0, behavior:'smooth'});
 };
+
+/* =========================================================================
+   サウンド(Web Audio APIで自作。音源ファイルは使わない)
+   ========================================================================= */
+let AC = null;
+function ensureAudio(){
+  try{
+    if (!AC) AC = new (window.AudioContext||window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+  }catch(err){ /* Audio非対応環境では無視 */ }
+}
+
+function playLaunch(){ // 発射: ポンッ(短い破裂音)
+  if (!AC) return;
+  const t = AC.currentTime;
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(340, t);
+  o.frequency.exponentialRampToValueAtTime(110, t+0.1);
+  g.gain.setValueAtTime(0.5, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.13);
+  o.connect(g); g.connect(AC.destination);
+  o.start(t); o.stop(t+0.14);
+}
+
+let windNode = null;
+function startWind(){ // 飛んでる間: ヒューという風切り音(ノイズ+バンドパス)
+  if (!AC) return;
+  stopWind();
+  const dur = 1.2;
+  const len = Math.floor(AC.sampleRate*dur);
+  const buf = AC.createBuffer(1, len, AC.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i=0;i<len;i++) data[i] = Math.random()*2-1;
+  const src = AC.createBufferSource();
+  src.buffer = buf; src.loop = true;
+  const filter = AC.createBiquadFilter();
+  filter.type = 'bandpass'; filter.Q.value = 1.1; filter.frequency.value = 500;
+  const gain = AC.createGain();
+  gain.gain.value = 0.0001;
+  src.connect(filter); filter.connect(gain); gain.connect(AC.destination);
+  src.start();
+  gain.gain.linearRampToValueAtTime(0.16, AC.currentTime+0.08);
+  windNode = {src, filter, gain};
+}
+function updateWind(heightFactor){ // heightFactor: 0(地面)〜1(頂点) で音高を上下
+  if (!windNode) return;
+  const freq = 380 + heightFactor*1000;
+  windNode.filter.frequency.setTargetAtTime(freq, AC.currentTime, 0.04);
+}
+function stopWind(){
+  if (!windNode) return;
+  const {src, gain} = windNode;
+  const t = AC.currentTime;
+  try{
+    gain.gain.cancelScheduledValues(t);
+    gain.gain.setValueAtTime(gain.gain.value, t);
+    gain.gain.linearRampToValueAtTime(0.0001, t+0.1);
+    src.stop(t+0.12);
+  }catch(err){}
+  windNode = null;
+}
+
+function playLand(){ // 着地: ポトッ+コロコロ(減衰する複数回のコツコツ音)
+  if (!AC) return;
+  const t = AC.currentTime;
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(190, t);
+  o.frequency.exponentialRampToValueAtTime(65, t+0.12);
+  g.gain.setValueAtTime(0.55, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.16);
+  o.connect(g); g.connect(AC.destination);
+  o.start(t); o.stop(t+0.17);
+
+  const knocks = 5;
+  for (let i=0;i<knocks;i++){
+    const kt = t + 0.15 + i*0.06;
+    const ko = AC.createOscillator(), kg = AC.createGain();
+    ko.type = 'triangle';
+    ko.frequency.setValueAtTime(230 - i*16, kt);
+    const vol = 0.22 * (1 - i/knocks);
+    kg.gain.setValueAtTime(vol, kt);
+    kg.gain.exponentialRampToValueAtTime(0.001, kt+0.05);
+    ko.connect(kg); kg.connect(AC.destination);
+    ko.start(kt); ko.stop(kt+0.06);
+  }
+}
+
+function playSparkle(){ // S判定: キラーン(高音のきらめき)
+  if (!AC) return;
+  const t = AC.currentTime;
+  [1568, 2093, 2637].forEach(function(freq, i){
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    const st = t + i*0.035;
+    g.gain.setValueAtTime(0.0001, st);
+    g.gain.exponentialRampToValueAtTime(0.28, st+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, st+0.6);
+    o.connect(g); g.connect(AC.destination);
+    o.start(st); o.stop(st+0.65);
+  });
+}
 
 /* ---------- コート描画 ---------- */
 const canvas = $('court');
@@ -338,7 +480,9 @@ function updateHud(){
   $('scoreLabel').textContent = txt;
 }
 
-function drawCourt(ballPos){
+function drawCourt(ballPos, heightFactor, squash){
+  heightFactor = heightFactor || 0;
+  squash = squash || {x:1, y:1};
   ctx.clearRect(0,0,TUNE.COURT_W,TUNE.COURT_H);
   // コート地
   ctx.fillStyle = '#134a3f';
@@ -374,14 +518,25 @@ function drawCourt(ballPos){
   ctx.fillStyle = '#fff';
   ctx.fillText('🎯', game.goalCx, game.goalCy+7);
 
-  // 自分のボール(スタート位置 or 投球後の位置)
+  // 自分のボール(スタート位置 or 投球後の位置)。高さ表現: heightFactorが大きいほど浮き上がり・拡大し、影は小さく薄くなる
   const bx = ballPos ? ballPos.x : TUNE.COURT_W/2;
   const by = ballPos ? ballPos.y : TUNE.PLAYER_Y;
+  const lift = heightFactor * 22;
+  const scale = 1 + heightFactor * 0.6; // 最大1.6倍
+  const shadowShrink = 1 - heightFactor * 0.6;
+
+  // 影(ボールから分離。地面位置=byに固定して薄く小さく)
+  ctx.beginPath();
+  ctx.fillStyle = 'rgba(0,0,0,' + (0.32 * shadowShrink).toFixed(3) + ')';
+  ctx.ellipse(bx, by + 2, 11*shadowShrink, 4.5*shadowShrink, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  // ボール本体(スカッシュ&ストレッチ対応)
   ctx.beginPath();
   ctx.fillStyle = (mode.players===2 && game.turn===2) ? '#5fd6c4' : '#ffe3f0';
   ctx.strokeStyle = (mode.players===2 && game.turn===2) ? '#1fae99' : '#e0197a';
   ctx.lineWidth = 3;
-  ctx.arc(bx, by, 12, 0, Math.PI*2);
+  ctx.ellipse(bx, by - lift, 12*scale*squash.x, 12*scale*squash.y, 0, 0, Math.PI*2);
   ctx.fill();
   ctx.stroke();
 }
@@ -403,21 +558,59 @@ function resolveThrow(power, gamma, lateralJitter){
   animateThrow(landX, landY, d);
 }
 
+// 放物線の時間カーブ: 前半ease-out(勢いよく飛び出す)→後半ease-in(頂点からだんだん加速して落ちる)
+function arcProgress(t){
+  if (t < 0.5){
+    const local = t/0.5;
+    const eased = 1 - Math.pow(1-local, 3); // ease-out
+    return eased * 0.5;
+  } else {
+    const local = (t-0.5)/0.5;
+    const eased = Math.pow(local, 3); // ease-in
+    return 0.5 + eased * 0.5;
+  }
+}
+
 function animateThrow(landX, landY, finalDist){
   game.throwing = true;
+  playLaunch();
+  startWind();
   const startY = TUNE.PLAYER_Y;
   const t0 = performance.now();
-  const DUR = 500;
+  const DUR = 620;
   function step(now){
     const t = Math.min(1, (now - t0)/DUR);
-    const ease = 1 - Math.pow(1-t, 3);
-    const y = startY + (landY - startY) * ease;
-    const x = TUNE.COURT_W/2 + (landX - TUNE.COURT_W/2) * ease;
-    drawCourt({x:x, y:y});
+    const progress = arcProgress(t);
+    const y = startY + (landY - startY) * progress;
+    const x = TUNE.COURT_W/2 + (landX - TUNE.COURT_W/2) * progress;
+    const heightFactor = Math.sin(t * Math.PI); // 0(地面)→1(頂点)→0(着地)の山なり
+    updateWind(heightFactor);
+    drawCourt({x:x, y:y}, heightFactor);
     if (t < 1){
       requestAnimationFrame(step);
     } else {
+      stopWind();
+      playLand();
+      bounceSquash(landX, landY, finalDist);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// 着地の瞬間にポヨンと1回バウンド(スケールのスクワッシュ)
+function bounceSquash(landX, landY, finalDist){
+  const b0 = performance.now();
+  const DUR = 200;
+  function step(now){
+    const bt = Math.min(1, (now-b0)/DUR);
+    const squashAmt = Math.sin(bt * Math.PI); // 0→1→0
+    const squash = {x: 1 + squashAmt*0.32, y: 1 - squashAmt*0.32};
+    drawCourt({x:landX, y:landY}, 0, squash);
+    if (bt < 1){
+      requestAnimationFrame(step);
+    } else {
       game.throwing = false;
+      drawCourt({x:landX, y:landY});
       finishThrow(finalDist, landX, landY);
     }
   }
@@ -452,6 +645,9 @@ function showResult(d){
   $('resultMsg').textContent = cfg.msg;
   $('resultDist').textContent = '中心からの きょり: ' + d.toFixed(0) + 'px';
   $('resultOverlay').classList.add('show');
+  if (rank === 'S'){
+    setTimeout(playSparkle, 150); // ピタッと止まった直後にキラーン
+  }
 }
 
 $('nextBtn').onclick = function(){
@@ -506,6 +702,7 @@ function bindMotion(){
 function onMotion(e){
   if (!$('gameScreen').classList.contains('show')) return;
   if (game.throwing) return;
+  if (!sensorReady) return; // 合図(かまえて…3,2,1,なげて!)が終わるまでは完全無視
   const acc = e.acceleration || e.accelerationIncludingGravity;
   if (!acc || acc.x == null) return;
   const mag = Math.sqrt((acc.x||0)**2 + (acc.y||0)**2 + (acc.z||0)**2);
@@ -519,6 +716,9 @@ function onMotion(e){
       swingStartT = now;
       swingIntegral = 0;
       quietSinceT = 0;
+    } else if (mag > TUNE.SWING_MICRO_THRESHOLD){
+      // 合図後でも微小な動きは「投げ」とみなさず、もっと振るよう促すだけ
+      $('powerLabel').textContent = 'もっと おもいきって!';
     }
   }
   if (swingState === 'swinging'){
@@ -538,6 +738,13 @@ function onMotion(e){
     const tooLong = elapsed > TUNE.SWING_MAX_MS;
     if ((quietEnough && elapsed > TUNE.SWING_MIN_MS) || tooLong){
       swingState = 'idle';
+      // 最低仕事量チェック: スイング区間の積分がしきい値未満なら「本気の一振り」とみなさず不発扱い
+      if (swingIntegral < TUNE.SWING_MIN_WORK){
+        $('powerFill').style.width = '0%';
+        $('powerLabel').textContent = 'もっと おもいきって!';
+        swingIntegral = 0;
+        return;
+      }
       const finalPower = clamp(swingIntegral * TUNE.POWER_SCALE, 0, 1);
       if (elapsed >= TUNE.SWING_MIN_MS){
         resolveThrow(finalPower, TUNE.POWER_GAMMA, TUNE.LATERAL_JITTER_SENSOR);
