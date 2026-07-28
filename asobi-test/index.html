@@ -33,7 +33,12 @@ body.rumble{animation:rumble .5s}
 #usagi{min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;background:var(--dark);text-align:center;padding:20px}
 #usagi.show{display:flex;animation:appear .4s}
 @keyframes appear{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
-#usagi img{width:min(64vw,320px);filter:drop-shadow(0 14px 0 rgba(0,0,0,.4))}
+/* 黒うさぎが黒背景に溶けないよう、光の後光を敷く */
+#usagi .halo{position:relative;display:flex;align-items:center;justify-content:center;
+  width:min(80vw,420px);height:min(80vw,420px);border-radius:50%;
+  background:radial-gradient(circle, #fff 0%, #ffe3f0 45%, rgba(255,227,240,.25) 70%, transparent 75%)}
+#usagi.nashi .halo{background:radial-gradient(circle, #fff 0%, #dce9ff 45%, rgba(220,233,255,.25) 70%, transparent 75%)}
+#usagi img{width:min(58vw,300px);filter:drop-shadow(0 10px 24px rgba(0,0,0,.5))}
 #usagi .msg{font-size:18px;font-weight:900;margin-top:14px;letter-spacing:2px}
 #usagi.ari .msg{color:var(--pink)}
 #usagi.nashi .msg{color:#8fb8ff}
@@ -92,7 +97,7 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;fon
 </div>
 
 <div id="usagi">
-  <img id="usagiImg" src="" alt="うさぎ">
+  <div class="halo"><img id="usagiImg" src="" alt="うさぎ"></div>
   <div class="msg" id="usagiMsg"></div>
   <div class="down" onclick="document.getElementById('shelf-sec').scrollIntoView({behavior:'smooth'})">▼ したへ</div>
 </div>
