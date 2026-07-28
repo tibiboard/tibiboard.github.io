@@ -155,7 +155,7 @@
     </div>
 
     <div class="tabbar">
-      <button class="tabbtn on" data-mode="kita">🧭 真北編</button>
+      <button class="tabbtn on" data-mode="kita">🧭 方角編</button>
       <button class="tabbtn" data-mode="japan">🗾 日本編</button>
       <button class="tabbtn" data-mode="world">🌍 世界編</button>
     </div>
@@ -166,8 +166,8 @@
     <div class="judge-note" id="judgeNote" style="text-align:center;margin-bottom:10px;">いまは<b>ボタン判定</b>: むきたい方向を向いて、ボタンを押すだけ!どこでも遊べるよ。</div>
 
     <section class="game-panel">
-      <h2 id="modeTitle">🧭 真北編</h2>
-      <p class="desc" id="modeDesc">スマホを持って、地図の「真北」だと思う方向を向いてみよう!</p>
+      <h2 id="modeTitle">🧭 方角編</h2>
+      <p class="desc" id="modeDesc">スマホを持って、出た方角(はちほうい)だと思う向きを向いてみよう!</p>
       <div class="trivia" id="northTrivia">💡 豆知識: スマホが示す北はふつう<b>磁北</b>(方位磁石が指す北)。地図の<b>真北</b>とは場所によって数度〜十数度ズレています。</div>
 
       <div class="target-card" id="targetCard" hidden>
@@ -177,10 +177,7 @@
       <div class="progress-note" id="progressNote"></div>
 
       <div class="char-stage"><span id="charEmoji">🐰</span></div>
-      <div class="stage-readout" id="readout">
-        <div class="compass-num"><span id="headingNow">--°</span></div>
-        <div class="stage-sub">いまの向き</div>
-      </div>
+      <div class="stage-sub" id="playHint">からだの感覚だけをたよりに、むきたい方へ向いてみよう!(数字は出ないよ)</div>
       <div class="stage-sub" id="jumpStatus" hidden>「ジャンプ!」を押してスタート</div>
 
       <button id="questionBtn" class="big-btn">🎲 もんだいを出す</button>
@@ -195,6 +192,18 @@
         <div class="map-legend">
           <span><i style="background:#e84898"></i>きみの向き</span>
           <span><i style="background:#1fae99"></i>正解の方角</span>
+        </div>
+        <div id="resultCompassWrap" hidden>
+          <svg id="resultCompassSvg" viewBox="0 0 200 200" style="width:100%;max-width:230px;display:block;margin:0 auto;">
+            <circle cx="100" cy="100" r="92" fill="#fff" stroke="#ffd3ea" stroke-width="3"></circle>
+            <text x="100" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#5c4a66">北</text>
+            <text x="182" y="105" text-anchor="middle" font-size="14" font-weight="bold" fill="#5c4a66">東</text>
+            <text x="100" y="190" text-anchor="middle" font-size="14" font-weight="bold" fill="#5c4a66">南</text>
+            <text x="18" y="105" text-anchor="middle" font-size="14" font-weight="bold" fill="#5c4a66">西</text>
+            <g id="correctArrowG"><line x1="100" y1="100" x2="100" y2="28" stroke="#1fae99" stroke-width="6" stroke-linecap="round" stroke-dasharray="2,8"></line></g>
+            <g id="userArrowG"><line x1="100" y1="100" x2="100" y2="28" stroke="#e84898" stroke-width="6" stroke-linecap="round"></line></g>
+            <circle cx="100" cy="100" r="6" fill="#3a2233"></circle>
+          </svg>
         </div>
         <div id="resultMap"></div>
         <div class="score-label" id="mapNote"></div>
@@ -413,12 +422,16 @@ function showApp(){
 }
 
 // ================= モード切替 =================
-var MODE_TITLE = { kita:'🧭 真北編', japan:'🗾 日本編', world:'🌍 世界編' };
+var MODE_TITLE = { kita:'🧭 方角編', japan:'🗾 日本編', world:'🌍 世界編' };
 var MODE_DESC = {
-  kita:'スマホを持って、地図の「真北」だと思う方向を向いてみよう!',
+  kita:'出た方角(はちほうい)だと思う向きを、からだの感覚だけで向いてみよう!',
   japan:'いまいる場所から見て、その都市はどっちの方角にあるかな?',
   world:'世界の都市は、いまいる場所からどっちの方角?地球儀を思い浮かべてみよう!'
 };
+var DIRECTIONS8 = [
+  {label:'北', bearing:0}, {label:'北東', bearing:45}, {label:'東', bearing:90}, {label:'南東', bearing:135},
+  {label:'南', bearing:180}, {label:'南西', bearing:225}, {label:'西', bearing:270}, {label:'北西', bearing:315}
+];
 var currentMode = 'kita';
 var currentTarget = null; // {label, bearing}
 var tabButtons = Array.prototype.slice.call(document.querySelectorAll('.tabbtn'));
@@ -452,7 +465,10 @@ jumpJudgeChk.addEventListener('change', updateJudgeNote);
 var questionState = 'idle'; // idle | ready | jump-armed | done
 var progressCount = 0;
 function pickTarget(){
-  if (currentMode === 'kita') return { label:'北', bearing:0 };
+  if (currentMode === 'kita') {
+    var d = DIRECTIONS8[Math.floor(Math.random() * DIRECTIONS8.length)];
+    return { label: d.label, bearing: d.bearing };
+  }
   var pool = CITIES[currentMode];
   var city = pool[Math.floor(Math.random() * pool.length)];
   var bearing = bearingTo(origin.lat, origin.lng, city.lat, city.lng);
@@ -462,7 +478,7 @@ function resetRoundUI(){
   document.getElementById('result').hidden = true;
   document.getElementById('rank').hidden = true;
   document.getElementById('targetCard').hidden = true;
-  document.getElementById('readout').hidden = false;
+  document.getElementById('playHint').hidden = false;
   document.getElementById('jumpStatus').hidden = true;
   document.getElementById('questionBtn').hidden = false;
   document.getElementById('answerBtn').hidden = true;
@@ -486,13 +502,9 @@ function newQuestion(){
 document.getElementById('questionBtn').addEventListener('click', newQuestion);
 document.getElementById('nextBtn').addEventListener('click', newQuestion);
 
-// ---- 現在の向き表示 ----
-(function tickHeading(){
-  var el = document.getElementById('headingNow');
-  if (orientationState.heading != null) el.textContent = Math.round(orientationState.heading) + '°';
-  else if (pcMode) el.textContent = '(センサーなし)';
-  requestAnimationFrame(tickHeading);
-})();
+// 注意: プレイ中(出題〜回答確定まで)は方位・角度などの数値やコンパス的なヒントを
+// 一切画面に出さない仕様(数字合わせを防ぎ、からだの感覚だけで向く体験にするため)。
+// そのため現在の向きを常時表示するtickHeading的な処理はここでは持たない。
 
 // ================= ボタン判定 =================
 document.getElementById('answerBtn').addEventListener('click', function(){
@@ -587,12 +599,18 @@ function finishQuestion(heading){
   if (currentMode !== 'kita') {
     var dist = distanceKm(origin.lat, origin.lng, currentTarget.lat, currentTarget.lng);
     noteText = 'そのほうこうへ約' + fmtDistance(dist) + 'kmで' + currentTarget.label + '!';
+    document.getElementById('resultCompassWrap').hidden = true;
+    document.getElementById('resultMap').hidden = false;
+    document.getElementById('mapNote').hidden = false;
+    drawResultMap(heading, currentTarget.bearing);
   } else {
-    noteText = '真北(0°)がめざす方角だよ。';
+    noteText = 'めざす方角は「' + currentTarget.label + '」(' + Math.round(currentTarget.bearing) + '°)だったよ。';
+    document.getElementById('resultMap').hidden = true;
+    document.getElementById('mapNote').hidden = false;
+    document.getElementById('resultCompassWrap').hidden = false;
+    drawResultCompass(heading, currentTarget.bearing);
   }
   document.getElementById('mapNote').textContent = noteText;
-
-  drawResultMap(heading, currentTarget.bearing);
 
   setTimeout(function(){
     document.getElementById('rank').hidden = false;
@@ -632,6 +650,15 @@ function drawResultMap(userHeading, correctBearing){
     resultMapInstance.fitBounds(L.latLngBounds([[lat,lng],[userPt.lat,userPt.lng],[correctPt.lat,correctPt.lng]]), { padding:[24,24] });
   } catch(e){}
   setTimeout(function(){ resultMapInstance.invalidateSize(); }, 60);
+}
+
+// 方角編の結果表示: 地図の代わりに簡易コンパス図で「きみの向き」と「正解の方角」を見せる
+// (これは回答確定後にのみ表示。出題中は一切表示しない)
+function drawResultCompass(userHeading, correctBearing){
+  var userG = document.getElementById('userArrowG');
+  var correctG = document.getElementById('correctArrowG');
+  userG.setAttribute('transform', 'rotate(' + userHeading + ' 100 100)');
+  correctG.setAttribute('transform', 'rotate(' + correctBearing + ' 100 100)');
 }
 </script>
 </body>
