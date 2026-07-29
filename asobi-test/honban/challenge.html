@@ -78,9 +78,15 @@ a.back{display:inline-block;margin-top:8px;color:#c9a9bd;font-size:12px;text-dec
 #usedNote.show{display:block}
 
 footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
+
+.renshuBanner{display:none;text-align:center;font-size:12px;font-weight:900;color:var(--dark);
+  background:var(--mint);padding:6px 10px;border-radius:0 0 10px 10px;letter-spacing:.5px}
+.renshuBanner.show{display:block}
 </style>
 </head>
 <body>
+
+<div class="renshuBanner" id="renshuBanner">🌱 れんしゅうモード(なんかいでも あそべるよ)</div>
 
 <header>
   <h1>🎫 せんこうにゅうじょうけん チャレンジ</h1>
@@ -136,6 +142,12 @@ footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
 const PROB_TEXT = 'あたる かくりつは 100ぶんの1。おまけ ていどに たのしんでね';
 document.getElementById('probText').textContent = PROB_TEXT;
 
+/* れんしゅうモード: ?renshu=1 の時だけ、1日1回制のロックを完全にスキップして何回でも遊べる */
+const isRenshu = new URLSearchParams(location.search).get('renshu') === '1';
+if (isRenshu) {
+  document.getElementById('renshuBanner').classList.add('show');
+}
+
 function challengeTodayKey(){
   const d = new Date();
   const y = d.getFullYear();
@@ -144,9 +156,11 @@ function challengeTodayKey(){
   return 'chibi_challenge_' + y + '-' + m + '-' + day;
 }
 function isChallengeUsedToday(){
+  if (isRenshu) return false; // れんしゅうモードはロックを見ない
   try { return localStorage.getItem(challengeTodayKey()) === '1'; } catch(e){ return false; }
 }
 function consumeChallengeToday(){
+  if (isRenshu) return; // れんしゅうモードは消費しない
   try { localStorage.setItem(challengeTodayKey(), '1'); } catch(e){}
 }
 (function(){
@@ -508,13 +522,16 @@ function showResult(d){
     B: {emoji:'😅', msg:'ざんねん、またあした🐰', cls:'rankB'},
     C: {emoji:'😅', msg:'ざんねん、またあした🐰', cls:'rankC'},
   }[rank];
+  const winNavigates = isWin && !isRenshu; // れんしゅうモードは勝っても本物のとびらへは誘導しない
   $('resultEmoji').textContent = cfg.emoji;
   $('resultRank').textContent = rank;
   $('resultRank').className = 'rank ' + cfg.cls;
   $('resultMsg').textContent = isWin ? '🎉 かち!' : cfg.msg;
-  $('resultDist').textContent = '中心からの きょり: ' + d.toFixed(0) + 'px';
-  $('nextBtn').textContent = isWin ? 'けっかへ すすむ ▶' : 'とじる';
-  $('nextBtn').dataset.win = isWin ? '1' : '0';
+  $('resultDist').textContent = (isWin && isRenshu)
+    ? '(れんしゅうだから とびらは ひみつ🐰)'
+    : '中心からの きょり: ' + d.toFixed(0) + 'px';
+  $('nextBtn').textContent = winNavigates ? 'けっかへ すすむ ▶' : 'とじる';
+  $('nextBtn').dataset.win = winNavigates ? '1' : '0';
   $('resultOverlay').classList.add('show');
   if (isWin){
     setTimeout(playSparkle, 150); // ピタッと止まった直後にキラーン
@@ -526,7 +543,7 @@ $('nextBtn').onclick = function(){
   if ($('nextBtn').dataset.win === '1'){
     location.href = 'win.html';
   } else {
-    applyUsedState(); // 本日は終了(既に開始時点で消費済み)
+    applyUsedState(); // 本日は終了(既に開始時点で消費済み)。れんしゅうモードは常に未使用扱いなので開始画面に戻る
   }
 };
 
