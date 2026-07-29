@@ -252,11 +252,9 @@ $('lever').onclick = () => {
         tob.innerHTML = 'れんしゅうだから けんは でないよ🐰';
       } else {
         tob.classList.remove('kanbai');
-        try{ localStorage.setItem('chibi_ticket', CONF.door_url); }catch(e){}
         tob.innerHTML = `🎫 ゆうせんにゅうじょうけん ゲット!<br>
-          けんを ほかんしたよ。つぎのドロップの 2じかんまえから とびらが ひらくよ<br>
-          <a href="index.html">トップへ もどる ▶</a>
-          <div class="note">このけんは つぎのドロップまで有効です<br>この画面を スクショか ブックマークしておくと あんしんだよ</div>`;
+          <div class="note" style="font-size:12.5px;word-break:break-all">とびらのURL: ${location.origin}${location.pathname.replace(/[^/]+$/,'')}${CONF.door_url}</div>
+          <div class="note">この がめんを スクショしてね。とびらは ドロップの 2じかんまえに ひらくよ(Xで おしらせするよ)</div>`;
       }
       $('lever').disabled = true;
     } else {

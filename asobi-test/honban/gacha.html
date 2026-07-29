@@ -283,12 +283,11 @@ function endPull(skipped){
         <div class="nm">れんしゅうだから けんは でないよ🐰</div>`;
       $('msg').innerHTML = 'れんしゅうだから けんは でないよ🐰';
     } else {
-      try{ localStorage.setItem('chibi_ticket', CONF.door_url); }catch(e){}
       card.innerHTML = `<div class="rar">🌟 S S R 🌟</div>
         <img src="img/batsubei600.png">
         <div class="nm">ばつべーのしんらい</div>
-        <div class="note">けんを ほかんしたよ。つぎのドロップの 2じかんまえから とびらが ひらくよ<br>この画面を スクショか ブックマークしておくと あんしんだよ</div>
-        <a class="tobira-btn" href="index.html">トップへ もどる ▶</a>`;
+        <div class="note" style="word-break:break-all">とびらのURL: ${location.origin}${location.pathname.replace(/[^/]+$/,'')}${CONF.door_url}</div>
+        <div class="note">この がめんを スクショしてね。とびらは ドロップの 2じかんまえに ひらくよ(Xで おしらせするよ)</div>`;
       $('msg').innerHTML='🎫 ゆうせんにゅうじょうけん ゲット!';
     }
     $('pull').disabled=true;
