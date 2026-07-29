@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ちびスロット</title>
+<script src="data/商品リスト.js"></script>
+<style>
+:root{--pink:#e84898;--pink-deep:#e0197a;--mint:#5fd6c4;--mint-pale:#d9f4ee;--ink:#3a2233}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Hiragino Maru Gothic ProN",Meiryo,sans-serif;background:#241521;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px;user-select:none}
+.back{align-self:flex-start;color:#8d7f89;font-size:13px;text-decoration:none;margin-bottom:6px}
+h1{font-size:20px;letter-spacing:4px;color:var(--mint);margin:8px 0 4px}
+.fuda{background:#fff;color:var(--ink);border-radius:12px;padding:12px 16px;font-size:12.5px;line-height:1.9;max-width:420px;margin:10px 0;border-left:6px solid var(--mint)}
+.fuda b{color:var(--pink-deep)}
+.coin{font-size:15px;font-weight:900;margin:8px 0;background:#3a2233;border-radius:999px;padding:8px 22px}
+.coin b{font-size:22px;color:#ffd54f}
+/* 台 */
+.daiwaku{background:linear-gradient(#3a2233,#241521);border:5px solid var(--pink);border-radius:20px;padding:18px;margin:8px 0;box-shadow:0 8px 0 rgba(0,0,0,.4)}
+.stage{display:flex;gap:18px;align-items:center;justify-content:center}
+.lamp{width:96px;height:130px;border-radius:18px;background:#3a2a35;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-weight:900;font-size:15px;color:#6a5a65;letter-spacing:2px;transition:all .15s;border:4px solid #4a3a45;margin-right:6px}
+.lamp .usagi-ico{font-size:44px;filter:grayscale(1);opacity:.4}
+.lamp.peka{background:#ffd54f;color:#7a4a00;border-color:#fff;box-shadow:0 0 50px 14px #ffd54fcc, 0 0 120px 40px #ffd54f66;animation:pekablink .35s 8;transform:scale(1.08)}
+.lamp.peka .usagi-ico{filter:none;opacity:1}
+@keyframes pekablink{50%{filter:brightness(1.7)}}
+.reels{display:flex;gap:10px;justify-content:center}
+.reel{width:74px;height:90px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:900;color:var(--ink);overflow:hidden;border:3px solid #d3d7dc}
+.reel.spin span{animation:sp .09s linear infinite}
+@keyframes sp{from{transform:translateY(-26px)}to{transform:translateY(26px)}}
+.lever{margin:16px auto 0;width:120px;padding:14px;border-radius:14px;background:var(--pink);border:0;border-bottom:7px solid var(--pink-deep);font-weight:900;font-size:17px;color:#fff;cursor:pointer;letter-spacing:2px;display:block}
+.lever:active{border-bottom-width:2px;transform:translateY(5px)}
+.lever:disabled{opacity:.35}
+#msg{min-height:3.2em;text-align:center;font-weight:900;font-size:15px;margin-top:12px;line-height:1.8}
+#msg .big{font-size:19px;color:#ffd54f}
+#tobira{display:none;background:var(--mint);color:var(--ink);border-radius:14px;padding:14px 20px;margin-top:10px;text-align:center;font-weight:900}
+#tobira a{display:inline-block;background:var(--pink);color:#fff;border-radius:10px;padding:12px 26px;text-decoration:none;margin-top:8px;border-bottom:5px solid var(--pink-deep)}
+#tobira .note{font-size:11px;font-weight:700;margin-top:8px;color:#0d4a41}
+#tobira.kanbai{background:#c9bcc5}
+.reset{margin-top:18px;font-size:12px;color:#8d7f89;cursor:pointer;text-decoration:underline}
+@media (max-width:400px){
+  .daiwaku{padding:12px}
+  .stage{gap:8px}
+  .lamp{width:74px;height:100px;font-size:12px;margin-right:2px}
+  .lamp .usagi-ico{font-size:34px}
+  .reels{gap:6px}
+  .reel{width:58px;height:72px;font-size:34px}
+}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← もどる</a>
+<h1>🎰 ちびスロット</h1>
+<div class="fuda">💡 <b>なにがあたるの?</b><br>
+あたり🌟がでると、つぎの新作キーボードを<b>みんなより2時間はやく</b>買いにいける「とびらのばしょ」がわかります。<b>お金はかかりません。</b><br>
+<span style="font-size:11.5px;opacity:.8">あそびかた: レバーをタッチ → 「ち・び・ボ」がそろえばあたり!(このけんは、つぎのドロップまで有効)</span></div>
+
+<div class="coin">🪙 コイン: <b id="coins">3</b> 枚(のこり<span id="left">3</span>回まわせる)</div>
+
+<div class="daiwaku">
+  <div class="stage">
+    <div class="lamp" id="lamp"><span class="usagi-ico">🐰</span>ちび<br>ボード</div>
+    <div class="reels">
+      <div class="reel" id="r0"><span>?</span></div>
+      <div class="reel" id="r1"><span>?</span></div>
+      <div class="reel" id="r2"><span>?</span></div>
+    </div>
+  </div>
+  <button class="lever" id="lever">レバー ▼</button>
+</div>
+
+<div id="msg">きょうのゲームにかったので、3回まわせます🐰</div>
+<div id="tobira">
+  🎉 とびらのばしょを おしえてもらえた!<br>
+  <a href="#" onclick="alert('本番はここが「とびらページ」へのリンク。とびら→BASEは素のリンク2歩(石橋仕様)'); return false;">とびらへすすむ ▶</a>
+  <div class="note">このページをブックマークしてね / うまくひらけないときは BASEで「ちびボード」とけんさく</div>
+</div>
+<div class="reset" onclick="location.reload()">(やりなおす)</div>
+
+<script>
+/* ===== 音: 全部Web Audioで自作(音源ファイルなし=著作権クリーン) ===== */
+let AC, MASTER;
+function ac(){
+  if(!AC){
+    AC = new (window.AudioContext||window.webkitAudioContext)();
+    /* マスターコンプレッサー: 何十層重ねても割れずに音圧が固まる */
+    const comp = AC.createDynamicsCompressor();
+    comp.threshold.value=-28; comp.knee.value=8; comp.ratio.value=14;
+    comp.attack.value=0.008; comp.release.value=0.18;   /* 一撃目の瞬発を潰さず通す */
+    MASTER = AC.createGain(); MASTER.gain.value=1.6;
+    MASTER.connect(comp); comp.connect(AC.destination);
+  }
+  return AC;
+}
+function out(){ ac(); return MASTER; }
+function tone(freq, t0, dur, type='square', gain=0.15, slide=0){
+  const a=ac(), o=a.createOscillator(), g=a.createGain();
+  o.type=type; o.frequency.setValueAtTime(freq, a.currentTime+t0);
+  if(slide) o.frequency.exponentialRampToValueAtTime(slide, a.currentTime+t0+dur);
+  g.gain.setValueAtTime(gain, a.currentTime+t0);
+  g.gain.exponentialRampToValueAtTime(0.001, a.currentTime+t0+dur);
+  o.connect(g); g.connect(out());
+  o.start(a.currentTime+t0); o.stop(a.currentTime+t0+dur+0.05);
+}
+function sndLever(){ tone(180,0,0.08,'square',0.2); tone(90,0,0.1,'sawtooth',0.15) }
+function sndStop(){ tone(320,0,0.06,'square',0.18) }
+/* 金属の打撃ノイズ(ガシャーン!の芯) */
+function crash(t0, dur, gain){
+  const a=ac(), len=a.sampleRate*dur, buf=a.createBuffer(1,len,a.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);
+  const s=a.createBufferSource(); s.buffer=buf;
+  const f=a.createBiquadFilter(); f.type='highpass'; f.frequency.value=1800;
+  const g=a.createGain(); g.gain.setValueAtTime(gain,a.currentTime+t0);
+  g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+t0+dur);
+  s.connect(f); f.connect(g); g.connect(a.destination);
+  s.start(a.currentTime+t0);
+}
+/* バンドパスノイズ(ガコッの「箱鳴り」成分) */
+function knock(t0, dur, freq, gain){
+  const a=ac(), len=a.sampleRate*dur, buf=a.createBuffer(1,len,a.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+  const s=a.createBufferSource(); s.buffer=buf;
+  const f=a.createBiquadFilter(); f.type='bandpass'; f.frequency.value=freq; f.Q.value=2.5;
+  const g=a.createGain(); g.gain.setValueAtTime(gain,a.currentTime+t0);
+  g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+t0+dur);
+  s.connect(f); f.connect(g); g.connect(out());
+  s.start(a.currentTime+t0);
+}
+/* ★花火の「ドカーン」: コンプレッサーを通さない直結の爆発回路(うるさい仕様) */
+function bomb(){
+  const a=ac();
+  const bg = a.createGain(); bg.gain.value=2.8;   /* 直結・大音量(クリップ歪み=爆発の質感) */
+  bg.connect(a.destination);
+  /* ①破裂の「バンッ」: 60msの生ノイズ全開 */
+  const len=a.sampleRate*0.06, buf=a.createBuffer(1,len,a.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,0.5);
+  const s=a.createBufferSource(); s.buffer=buf;
+  const ng=a.createGain(); ng.gain.value=1.6;
+  s.connect(ng); ng.connect(bg); s.start();
+  /* ②超低音の爆轟×10層: 26〜52Hzが一斉に立って1秒かけて轟く(体に来る帯域) */
+  [26,29,32,35,38,42,46,50,55,60].forEach((f,i)=>{
+    const o=a.createOscillator(), g=a.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(f*2.2, a.currentTime);          /* 瞬間は高めから */
+    o.frequency.exponentialRampToValueAtTime(f, a.currentTime+0.08);          /* 一瞬で落ちる=ドカッ */
+    g.gain.setValueAtTime(1.0, a.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, a.currentTime+1.1-i*0.04);     /* 長めの轟き */
+    o.connect(g); g.connect(bg);
+    o.start(); o.stop(a.currentTime+1.2);
+  });
+  /* ③胴の「ドン」×6層(70〜130Hz、短く強く) */
+  [70,80,90,100,115,130].forEach(f=>{
+    const o=a.createOscillator(), g=a.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(f*1.8, a.currentTime);
+    o.frequency.exponentialRampToValueAtTime(f*0.7, a.currentTime+0.25);
+    g.gain.setValueAtTime(0.9, a.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, a.currentTime+0.4);
+    o.connect(g); g.connect(bg);
+    o.start(); o.stop(a.currentTime+0.5);
+  });
+}
+/* 瞬間の「ドンッ」: 立ち上がり0秒の打撃層 */
+function don(){
+  const a=ac();
+  /* ①クリック衝撃: 15msの生ノイズ(フィルタなし=全帯域が一斉に鳴る「パンッ」) */
+  const len=a.sampleRate*0.015, buf=a.createBuffer(1,len,a.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len);
+  const s=a.createBufferSource(); s.buffer=buf;
+  const g=a.createGain(); g.gain.value=1.3;
+  s.connect(g); g.connect(out()); s.start();
+  /* ②低音の瞬間下降×8層(160→45Hzを90msで急降下=「ドン」の胴) */
+  [150,158,165,172,180,190,200,212].forEach(f=>
+    tone(f, 0, 0.09, 'sine', 0.85, 45));
+  /* ③超低音の芯×4層(瞬時に立ってすぐ消える) */
+  [55,60,66,72].forEach(f=>tone(f, 0, 0.12, 'sine', 0.8, 38));
+  /* ④squareの一撃(アタックのエッジ) */
+  tone(300, 0, 0.03, 'square', 0.6, 100);
+}
+/* 「ドンッ→ガゴォッ!!!」— 瞬間打撃+低音の大群+高音の大群 */
+function sndPeka(){
+  bomb();  /* ★★花火のドカーン(直結・最大火力) */
+  don();   /* ★0秒地点の瞬発 */
+  /* ◆低音の壁: 微妙にずらした超低音を12層(うねって太くなる) */
+  [34,37,40,43,46,50,54,58,63,68,74,80].forEach((f,i)=>
+    tone(f, 0, 0.9-i*0.03, 'sine', 0.55, f*0.82));
+  /* ◆パンチ層: 胴を叩く中低域を6層 */
+  [95,110,128,150,175,205].forEach((f,i)=>
+    tone(f, 0.01, 0.3-i*0.02, i%2?'triangle':'sine', 0.45, f*0.5));
+  /* ◆「ガ」のアタック: squareの塊×3 */
+  [140,180,230].forEach(f=>tone(f,0,0.08,'square',0.5,f*0.5));
+  /* ◆箱鳴りノイズ: 3帯域同時 */
+  knock(0, 0.25, 240, 1.4);
+  knock(0, 0.22, 520, 1.4);
+  knock(0, 0.18, 900, 1.0);
+  /* ◆高音の大群: 非整数倍音の金属10層(ギャリーン) */
+  [1109,1333,1479,1733,1976,2217,2489,2794,2960,3520].forEach((f,i)=>
+    tone(f, 0.015, 0.8-i*0.05, 'triangle', 0.22-i*0.015));
+  /* ◆超高域のきらめき4層 */
+  [4186,4699,5274,5920].forEach((f,i)=>tone(f,0.05+i*0.03,0.5,'sine',0.08));
+  /* ◆2発目の追い打ち(ガ・ゴォッの「ゴォッ」) */
+  knock(0.16, 0.3, 380, 1.2);
+  [40,48,56].forEach(f=>tone(f,0.16,0.5,'sine',0.5,f*0.8));
+  /* ◆長い金属の余韻 */
+  [1976,2960].forEach((f,i)=>tone(f,0.4,1.5,'sine',0.10-i*0.03));
+}
+function sndMiss(){ tone(220,0,0.15,'sine',0.12,180) }
+
+/* ===== 抽選: 3回合計で約5%(1回1.7%) ===== */
+const P_WIN = 0.017;
+const CONF = window.SHOP_CONFIG || {sponsor_week:false, door_url:'door.html'};
+let coins = 3, spinning = false;
+const KANA = ['ち','び','ボ','🐰','⌨','★'];
+const $ = id => document.getElementById(id);
+
+$('lever').onclick = () => {
+  if (spinning || coins <= 0) return;
+  spinning = true; coins--;
+  $('coins').textContent = coins; $('left').textContent = coins;
+  $('lamp').classList.remove('peka');
+  sndLever();
+  const forceWin = new URLSearchParams(location.search).get('debugwin') === '1';
+  const win = forceWin || Math.random() < P_WIN;
+  const sakipeka = win && Math.random() < 0.3;   // 当たりの3割は先ペカ
+  if (sakipeka) setTimeout(()=>{ $('lamp').classList.add('peka'); sndPeka(); }, 120);
+  const reels = [$('r0'),$('r1'),$('r2')];
+  reels.forEach(r=>{ r.classList.add('spin'); r.firstElementChild.textContent = KANA[Math.floor(Math.random()*6)]; });
+  const iv = setInterval(()=>reels.forEach(r=>{ if(r.classList.contains('spin')) r.firstElementChild.textContent = KANA[Math.floor(Math.random()*6)]; }), 90);
+  const finals = win ? ['ち','び','ボ'] : missPattern();
+  [700, 1250, 2000].forEach((t,i)=>setTimeout(()=>{
+    reels[i].classList.remove('spin');
+    reels[i].firstElementChild.textContent = finals[i];
+    sndStop();
+    if (i===2) setTimeout(()=>judge(win, sakipeka), 250);
+  }, t));
+  function judge(w){
+    clearInterval(iv);
+    spinning = false;
+    if (w){
+      if (!sakipeka){ $('lamp').classList.add('peka'); sndPeka(); }
+      $('msg').innerHTML = '<span class="big">🌟 あたり!!</span>';
+      const tob = $('tobira');
+      tob.style.display = 'block';
+      if (CONF.sponsor_week){
+        tob.classList.add('kanbai');
+        tob.innerHTML = '🌸 こんかいは かんぱい<br><div class="note">このけんは つぎのドロップまで有効です</div>';
+      } else {
+        tob.classList.remove('kanbai');
+        tob.innerHTML = `🎉 とびらのばしょを おしえてもらえた!<br>
+          <a href="${CONF.door_url}">とびらへすすむ ▶</a>
+          <div class="note">このページをブックマークしてね / このけんは つぎのドロップまで有効です<br>うまくひらけないときは BASEで「ちびボード」とけんさく</div>`;
+      }
+      $('lever').disabled = true;
+    } else {
+      sndMiss();
+      const omikuji = ['小吉🐰「あしたのほうが 北がわかる日」','中吉🐰「キーキャップを そうじすると いいことある」','吉🐰「こんやは はやくねるが かち」'];
+      $('msg').innerHTML = (finals[0]==='ち'&&finals[1]==='び' ? '<span class="big">おしい!!</span><br>' : '') +
+        'はずれ…きょうの おみくじ: ' + omikuji[Math.floor(Math.random()*3)] +
+        (coins>0 ? '<br>のこり'+coins+'回!' : '<br>また あした ちょうせんしてね🐰');
+      if (coins<=0) $('lever').disabled = true;
+    }
+  }
+};
+function missPattern(){
+  // 2割で「ち・び・×」のリーチ目(惜しい演出)
+  if (Math.random() < 0.2) return ['ち','び', KANA[3+Math.floor(Math.random()*3)]];
+  const a = () => KANA[Math.floor(Math.random()*6)];
+  let p = [a(),a(),a()];
+  if (p[0]==='ち'&&p[1]==='び'&&p[2]==='ボ') p[2]='🐰';
+  return p;
+}
+</script>
+</body>
+</html>

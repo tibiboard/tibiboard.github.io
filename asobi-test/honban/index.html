@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ちびボード — 本実装(家族テスト用)</title>
+<script src="data/商品リスト.js"></script>
+<script src="data/うさぎ図鑑.js"></script>
+<style>
+:root{
+  --pink:#e84898; --pink-deep:#e0197a; --pink-pale:#ffe3f0;
+  --mint:#5fd6c4; --mint-pale:#d9f4ee; --mint-deep:#1fae99;
+  --ink:#3a2233; --dark:#180a14;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--dark);color:#fff;min-height:100vh}
+
+/* ============ 開幕: 電源スイッチ ============ */
+#boot{position:fixed;inset:0;background:var(--dark);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s}
+#boot.off{opacity:0;pointer-events:none}
+#boot .hint{color:#5c4152;font-size:13px;letter-spacing:4px;margin-top:34px;animation:hintblink 3s infinite;text-align:center;padding:0 12px}
+@keyframes hintblink{50%{opacity:.25}}
+.sw{width:92px;height:150px;border-radius:22px;background:#241521;border:3px solid #3c2233;cursor:pointer;position:relative;box-shadow:inset 0 0 24px #000}
+.sw .knob{position:absolute;left:8px;right:8px;bottom:8px;height:62px;border-radius:14px;background:linear-gradient(#4a2c40,#332030);transition:all .18s;box-shadow:0 4px 8px #000}
+.sw.on .knob{bottom:76px;background:linear-gradient(var(--pink),var(--pink-deep))}
+body.rumble{animation:rumble .5s}
+@keyframes rumble{0%,100%{transform:translate(0)}15%{transform:translate(-7px,3px)}30%{transform:translate(6px,-4px)}45%{transform:translate(-5px,-3px)}60%{transform:translate(5px,4px)}75%{transform:translate(-3px,2px)}}
+#bootflash{position:fixed;inset:0;background:#fff;opacity:0;z-index:199;pointer-events:none}
+#bootflash.go{animation:bfl .9s}
+@keyframes bfl{15%{opacity:1}100%{opacity:0}}
+
+/* ============ うさぎドン ============ */
+#usagi{min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;background:var(--dark);text-align:center;padding:20px}
+#usagi.show{display:flex;animation:appear .4s}
+@keyframes appear{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+#usagi .halo{position:relative;display:flex;align-items:center;justify-content:center;
+  width:min(96vw,88vh);height:min(96vw,88vh);border-radius:50%;
+  background:radial-gradient(circle, #fff 0%, #ffe3f0 45%, rgba(255,227,240,.25) 70%, transparent 75%)}
+#usagi.nashi .halo{background:radial-gradient(circle, #fff 0%, #dce9ff 45%, rgba(220,233,255,.25) 70%, transparent 75%)}
+#usagi img{height:min(76vh,90vw);max-width:92vw;object-fit:contain;filter:drop-shadow(0 10px 24px rgba(0,0,0,.5))}
+#usagi .msg{font-size:18px;font-weight:900;margin-top:14px;letter-spacing:2px}
+#usagi.ari .msg{color:var(--pink)}
+#usagi.nashi .msg{color:#8fb8ff}
+#usagi .down{margin-top:30px;color:#8d7f89;font-size:13px;letter-spacing:3px;animation:hintblink 2.2s infinite;cursor:pointer}
+
+section{max-width:980px;margin:0 auto;padding:40px 20px 10px}
+h2{font-size:22px;font-weight:900;margin-bottom:6px;display:inline-block;background:var(--pink-deep);color:#fff;padding:4px 18px;border-radius:4px;letter-spacing:3px}
+.sub{font-size:13px;margin:14px 0 24px;color:#c9a9bd}
+
+/* ============ ゲート(合言葉モード) ============ */
+.gate{background:#241521;border:3px solid var(--pink-deep);border-radius:16px;padding:26px;text-align:center;max-width:500px;margin:0 auto 22px}
+.gate input{font-size:18px;font-weight:900;text-align:center;padding:11px;border-radius:10px;border:3px solid var(--mint);background:#180a14;color:#fff;width:220px;letter-spacing:4px}
+.gate .wrong{color:#ff8ab8;font-weight:900;margin-top:10px;min-height:1.3em}
+
+/* ============ 商品カード(いる) ============ */
+.pd{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;background:#241a22;border-radius:18px;padding:20px;border:3px solid var(--pink);margin-bottom:20px}
+@media(max-width:700px){.pd{grid-template-columns:1fr}}
+.pd .photo{background:var(--pink-pale);border-radius:14px;aspect-ratio:1;overflow:hidden;position:relative}
+.pd .photo img{width:100%;height:100%;object-fit:cover;display:block}
+.pd .tag{position:absolute;top:12px;left:12px;background:var(--mint);color:var(--ink);font-weight:900;font-size:12px;border-radius:999px;padding:4px 14px;z-index:2}
+.pd h3{font-size:22px;font-weight:900;color:#fff}
+.pd .col{font-size:12.5px;color:var(--pink);font-weight:900;margin:4px 0}
+.pd .story{font-size:13.5px;line-height:1.9;color:#c9a9bd;margin:8px 0}
+.pd .price{font-size:26px;font-weight:900;color:#ffd54f;margin:8px 0}
+.pd .price small{font-size:11px;color:#c9a9bd;font-weight:700}
+.keybtn{display:inline-block;background:var(--pink);color:#fff;border:0;border-bottom:7px solid var(--pink-deep);border-radius:12px;padding:15px 30px;font-weight:900;font-size:16px;cursor:pointer;letter-spacing:2px;margin-top:8px;text-decoration:none}
+.keybtn:active{border-bottom-width:2px;transform:translateY(5px)}
+.keybtn.disabled{background:#3a3038;color:#7a6d76;border-color:#4a3f47;cursor:not-allowed;pointer-events:none}
+
+/* ============ 棚 ============ */
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+.item{background:#241a22;border-radius:14px;padding:14px;text-align:center;color:#8d7f89;position:relative;overflow:hidden}
+.item .ph{height:100px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;filter:grayscale(1);opacity:.55;margin-bottom:6px}
+.item .ph img{width:100%;height:100%;object-fit:cover}
+.item .nm{font-weight:900;margin:4px 0 2px;color:#c9bcc5;font-size:14px}
+.item .st{font-size:12px}
+.item .stamp{position:absolute;top:12px;right:-38px;transform:rotate(35deg);background:var(--mint-deep);color:#fff;font-size:11px;font-weight:900;padding:3px 40px}
+.item.tenji{outline:3px dashed var(--pink)}
+.item.tenji .ph{filter:none;opacity:1}
+
+/* ============ 図鑑 ============ */
+.zukan{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px}
+.usagi-card{background:#241a22;border:3px solid var(--mint);border-radius:12px;padding:8px;text-align:center}
+.usagi-card img{width:100%;aspect-ratio:1;object-fit:contain}
+.usagi-card .nm{font-size:12px;font-weight:900;color:#fff}
+.usagi-card .stmp{font-size:11px;color:var(--pink);font-weight:900}
+
+/* ============ 先行入場券 ============ */
+#ticket-sec{max-width:700px;margin:0 auto;padding:20px 20px 50px;text-align:center}
+.ticketbtn{display:inline-block;background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;border:0;border-bottom:9px solid var(--pink-deep);border-radius:18px;
+  padding:26px 30px;font-weight:900;font-size:21px;cursor:pointer;letter-spacing:1px;width:100%;max-width:460px;
+  box-shadow:0 0 0 4px #fff2,0 0 30px 6px rgba(232,72,152,.55);animation:ticketpulse 2.2s infinite;text-decoration:none}
+.ticketbtn:active{border-bottom-width:3px;transform:translateY(5px)}
+@keyframes ticketpulse{0%,100%{transform:scale(1);box-shadow:0 0 0 4px #fff2,0 0 20px 4px rgba(232,72,152,.45)}50%{transform:scale(1.045);box-shadow:0 0 0 4px #fff3,0 0 42px 10px rgba(232,72,152,.8)}}
+
+footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;font-size:13px;letter-spacing:2px;margin-top:20px}
+
+#toggle{position:fixed;left:8px;bottom:8px;z-index:250;background:#241521;color:#8d7f89;font-size:10px;
+  border:1px solid #3c2233;border-radius:6px;padding:4px 8px;opacity:.6;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div id="bootflash"></div>
+<div id="boot">
+  <div class="sw" id="sw"><div class="knob"></div></div>
+  <div class="hint">— でんげんをいれてください —</div>
+</div>
+
+<div id="usagi">
+  <div class="halo"><img id="usagiImg" src="" alt="うさぎ"></div>
+  <div class="msg" id="usagiMsg"></div>
+  <div class="down" onclick="document.getElementById('shelf-sec').scrollIntoView({behavior:'smooth'})">▼ したへ</div>
+</div>
+
+<section id="aliveSec"></section>
+
+<section id="shelf-sec">
+  <h2>旅立った子たち</h2>
+  <div class="sub">スタンプは旅立ちの日付。点線の子は「見せて売らない」展示中</div>
+  <div class="shelf" id="shelf"></div>
+</section>
+
+<section>
+  <h2>うさぎ図鑑</h2>
+  <div class="sub">連れて帰る子を1匹えらべる(キーホルダー同梱)。スタンプ=みんなが選んだ回数</div>
+  <div class="zukan" id="zukan"></div>
+</section>
+
+<section id="ticket-sec">
+  <a class="ticketbtn" href="challenge.html">🎫 次回の先行入場券に ちょうせんする</a>
+</section>
+
+<footer>ちびボード工房 — うさぎと、世界にひとつのキーボード。(家族テスト用 / noindex)</footer>
+
+<div id="toggle" onclick="location.reload()">再読込</div>
+
+<script>
+/* ====== 商品リスト.js 解析エンジン(誠実ルール: 状態はデータの記載のみが真実) ====== */
+function parseShop(txt){
+  const items = [];
+  txt.split('\n').map(l=>l.trim()).filter(l=>l && !l.startsWith('#') && !l.startsWith('//')).forEach(l=>{
+    const c = l.split('|').map(s=>s.trim());
+    if(c.length < 2) return;
+    const st = c[1] || '';
+    items.push({
+      name:c[0],
+      state: st.startsWith('旅立ち') ? '旅立ち' : (st === '展示' ? '展示' : 'いる'),
+      date: (st.match(/\d{4}-\d{2}-\d{2}/)||[''])[0],
+      price: c[2] ? parseInt(c[2]) : null,
+      photo: c[3] || '',
+      color: c[4] || '',
+      story: c[5] || '',
+      url: (c[6]||'').trim()
+    });
+  });
+  return items;
+}
+const conf = window.SHOP_CONFIG || {mode:'simple', aikotoba:'', sponsor_week:false, door_url:'door.html'};
+const items = parseShop(window.SHOP_DATA);
+const alive = items.filter(i=>i.state==='いる');
+const yen = n => '¥' + n.toLocaleString();
+const PLACEHOLDER = 'img/photo-placeholder.svg';
+function photoHtml(p){
+  const src = p ? ('photos/'+p) : PLACEHOLDER;
+  return `<img src="${src}" onerror="this.src='${PLACEHOLDER}'" alt="しゃしんじゅんびちゅう">`;
+}
+
+/* うさぎドン: 在庫の有無で自動切替(ここも「いる」が1匹以上あるかどうかだけが真実) */
+function renderUsagi(){
+  const u = document.getElementById('usagi');
+  const img = document.getElementById('usagiImg');
+  const msg = document.getElementById('usagiMsg');
+  if (alive.length){
+    u.classList.add('ari'); u.classList.remove('nashi');
+    img.src = 'img/heart.svg';
+    msg.textContent = '🌟 いまお店に いるよ!';
+  } else {
+    u.classList.add('nashi'); u.classList.remove('ari');
+    img.src = 'img/cry.svg';
+    msg.textContent = '…みんな旅立ったよ。つぎの子をまっててね';
+  }
+}
+renderUsagi();
+
+/* いまいる子(合言葉モードならゲートを先に置く) */
+const alSec = document.getElementById('aliveSec');
+function aliveCardsHtml(){
+  return alive.map(i=>`
+  <div class="pd">
+    <div class="photo">${photoHtml(i.photo)}<div class="tag">🐰 いまここにいます</div></div>
+    <div>
+      <h3>${i.name}</h3>
+      ${i.color?`<div class="col">配色: ${i.color}</div>`:''}
+      <div class="story">${i.story}</div>
+      ${i.price!=null?`<div class="price">${yen(i.price)} <small>(税・送料込)</small></div>`:`<div class="price" style="font-size:15px;color:#c9a9bd">価格 近日発表</div>`}
+      <div style="font-size:12px;background:#180a14;border-radius:10px;padding:10px;margin:8px 0;color:#c9a9bd">🐰 連れて帰るうさぎを1匹えらべます — 購入時の備考欄に図鑑の番号をどうぞ</div>
+      ${i.url?`<a class="keybtn" href="${i.url}" target="_blank" rel="noopener">この子をむかえにいく ▶</a>`:`<span class="keybtn disabled">じゅんびちゅう…</span>`}
+      <div style="font-size:11px;color:#8a6a7d;margin-top:8px">決済はBASE / 発送まで1〜2週間(1台ずつ最終調整してお届け)</div>
+    </div>
+  </div>`).join('');
+}
+function renderAliveSection(){
+  if (!alive.length){ alSec.innerHTML = ''; return; }
+  alSec.innerHTML = `<h2>いまいる子</h2><div class="sub">世界にこの1台。旅立ったら二度と作られません</div><div id="aliveList">${aliveCardsHtml()}</div>`;
+}
+if (conf.mode === 'aikotoba' && alive.length){
+  alSec.innerHTML = `<h2>いまいる子</h2><div class="gate"><div style="font-weight:900;letter-spacing:3px;margin-bottom:12px">🕳 巣穴のばんにん</div>
+    <div style="font-size:13px;opacity:.85;margin-bottom:14px">「あいことばを知ってる子にだけ、みせてあげる」</div>
+    <input id="pw" placeholder="あいことば"><div class="keybtn" style="margin:10px 0 0" onclick="tryPw()">つたえる</div>
+    <div class="wrong" id="wrong"></div>
+    <div style="font-size:11px;opacity:.6;margin-top:10px">ヒント: Xのさいしんのドロップこくちに かくれている</div></div>`;
+} else {
+  renderAliveSection();
+}
+function tryPw(){
+  if (document.getElementById('pw').value.trim() === conf.aikotoba){
+    alSec.innerHTML = `<h2>いまいる子</h2><div class="sub">世界にこの1台。旅立ったら二度と作られません</div>${aliveCardsHtml()}`;
+  } else {
+    document.getElementById('wrong').textContent = '「…ちがうみたい。Xをよんでみて」';
+  }
+}
+
+/* 棚(旅立ち+展示) */
+document.getElementById('shelf').innerHTML = items.filter(i=>i.state!=='いる').map(i=>`
+  <div class="item ${i.state==='展示'?'tenji':''}">
+    ${i.state==='旅立ち'?`<div class="stamp">${i.date.replaceAll('-','.')}</div>`:''}
+    <div class="ph">${photoHtml(i.photo)}</div>
+    <div class="nm">${i.name}</div>
+    <div class="st">${i.state==='旅立ち'?'SOLD OUT':'展示中 — 次回ドロップ'}</div>
+  </div>`).join('') || '<div class="sub">まだ旅立った子はいません</div>';
+
+/* 図鑑 */
+document.getElementById('zukan').innerHTML = window.USAGI_DATA.split('\n').map(l=>l.trim())
+ .filter(l=>l && !l.startsWith('//')).map(l=>{
+  const c=l.split('|').map(s=>s.trim()); if(c.length<4) return '';
+  return `<div class="usagi-card"><img src="img/${c[1]}" alt="${c[2]}"><div class="nm">No.${c[0]} ${c[2]}</div>
+    <div class="stmp">${parseInt(c[3])? '旅立ち×'+c[3] : 'まだおるすばん'}</div></div>`;
+ }).join('');
+
+/* 電源スイッチ演出 */
+document.getElementById('sw').onclick = function(){
+  this.classList.add('on');
+  setTimeout(()=>{
+    document.body.classList.add('rumble');
+    if(navigator.vibrate) navigator.vibrate([80,40,120]);
+  }, 200);
+  setTimeout(()=>{
+    document.getElementById('bootflash').classList.add('go');
+    document.getElementById('boot').classList.add('off');
+  }, 800);
+  setTimeout(()=>{
+    document.getElementById('usagi').classList.add('show');
+  }, 1100);
+};
+</script>
+</body>
+</html>

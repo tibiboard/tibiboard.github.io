@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffe3f0"/>
+      <stop offset="1" stop-color="#d9f4ee"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)"/>
+  <rect x="14" y="14" width="372" height="372" rx="24" fill="none" stroke="#e84898" stroke-width="6" stroke-dasharray="14 10"/>
+  <g transform="translate(200,168)">
+    <ellipse cx="0" cy="46" rx="58" ry="52" fill="#fff"/>
+    <ellipse cx="-24" cy="-42" rx="14" ry="46" fill="#fff" transform="rotate(-12 -24 -42)"/>
+    <ellipse cx="24" cy="-42" rx="14" ry="46" fill="#fff" transform="rotate(12 24 -42)"/>
+    <ellipse cx="-24" cy="-42" rx="7" ry="30" fill="#ffe3f0" transform="rotate(-12 -24 -42)"/>
+    <ellipse cx="24" cy="-42" rx="7" ry="30" fill="#ffe3f0" transform="rotate(12 24 -42)"/>
+    <circle cx="-16" cy="40" r="5" fill="#3a2233"/>
+    <circle cx="16" cy="40" r="5" fill="#3a2233"/>
+    <path d="M -8 54 Q 0 62 8 54" stroke="#3a2233" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="-30" cy="52" r="9" fill="#ffb6d5" opacity="0.7"/>
+    <circle cx="30" cy="52" r="9" fill="#ffb6d5" opacity="0.7"/>
+  </g>
+  <text x="200" y="322" text-anchor="middle" font-family="'Hiragino Maru Gothic ProN','Yu Gothic',Meiryo,sans-serif" font-weight="900" font-size="26" fill="#e0197a">しゃしん</text>
+  <text x="200" y="356" text-anchor="middle" font-family="'Hiragino Maru Gothic ProN','Yu Gothic',Meiryo,sans-serif" font-weight="900" font-size="26" fill="#e0197a">じゅんびちゅう 🐰</text>
+</svg>
