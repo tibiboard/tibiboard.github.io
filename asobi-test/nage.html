@@ -160,7 +160,7 @@ footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
    ========================================================================= */
 const TUNE = {
   // --- 出題: 目標距離(m)の範囲・刻み ---
-  TARGET_MIN_M: 5,
+  TARGET_MIN_M: 10,  // 2026-07-29たけろう指示: 最短10m
   TARGET_MAX_M: 40,
   TARGET_STEP_M: 5,
 
@@ -182,7 +182,7 @@ const TUNE = {
   SWING_MAX_MS: 1500,        // これを超えたら強制的にスイング終了
   SWING_END_QUIET_MS: 180,   // 加速度が閾値を下回ってからこの時間静かならスイング終了
   POWER_SCALE: 0.05,         // 積分値(Σ|a|*dt) → power(0〜1)への係数
-  POWER_GAMMA: 0.55,         // べき乗補正の指数(gamma<1で弱い投げの分解能を確保)
+  POWER_GAMMA: 0.50,         // べき乗補正の指数(gamma<1で弱い投げの分解能を確保)。2026-07-29: 0.55→0.50で少し繊細に
 
   // --- power(0〜1) → 飛距離(m)への変換 ---
   DIST_MIN_M: 2,   // power=0付近での最小飛距離
