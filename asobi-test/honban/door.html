@@ -32,12 +32,31 @@ body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;backg
 const CONF = window.SHOP_CONFIG || {sponsor_week:false};
 const params = new URLSearchParams(location.search);
 const token = params.get('t') || '';
+const MIRU = params.get('miru') || '';
 const card = document.getElementById('card');
+
+/* 時刻ロック: drop_atの2時間10分前まではロック(端末時計のズレで「時間なのに開かない」を防ぐ早め解錠マージン)。
+   drop_at未設定/不正な値のときは開く側に倒す(最終権威はBASE在庫。ロックで詰まるより開いてる方がマシ)。
+   ?miru=open / ?miru=lock はリハーサル用の強制表示切替。 */
+const dropAt = CONF.drop_at ? new Date(CONF.drop_at) : null;
+const validDrop = dropAt && !isNaN(dropAt.getTime());
+const openAt = validDrop ? new Date(dropAt.getTime() - (2*60+10)*60*1000) : null;
+let locked = validDrop && new Date() < openAt;
+if (MIRU === 'open') locked = false;
+if (MIRU === 'lock') locked = true;
 
 if (CONF.sponsor_week){
   card.innerHTML = `<div class="ico">🌸</div>
     <h1>こんかいは かんばい</h1>
     <p>今回のドロップは、スポンサー・貢献者さまへの先行お迎え枠が中心です。<br>券は次のドロップまで有効です。あそんでくれてありがとう🐰</p>`;
+} else if (locked){
+  const whenText = openAt
+    ? `${openAt.getMonth()+1}がつ${openAt.getDate()}にち ${openAt.getHours()}じ${String(openAt.getMinutes()).padStart(2,'0')}ふん`
+    : 'もうすこしあと';
+  card.innerHTML = `<div class="ico">⏳</div>
+    <h1>まだ ひらかないよ</h1>
+    <p>${whenText}に きてね。<br>この券は 次のドロップまで 有効です。</p>
+    <div class="note">じかんに なってるのに ひらかないときは、ページを さいよみこみしてね。それでも ダメなときは Xで おしらせを みてね</div>`;
 } else if (!token){
   card.innerHTML = `<div class="ico">🕳</div>
     <h1>このとびらは まだ ひらかない</h1>

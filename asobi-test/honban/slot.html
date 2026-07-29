@@ -254,8 +254,9 @@ $('lever').onclick = () => {
         tob.classList.remove('kanbai');
         try{ localStorage.setItem('chibi_ticket', CONF.door_url); }catch(e){}
         tob.innerHTML = `🎫 ゆうせんにゅうじょうけん ゲット!<br>
-          <a href="${CONF.door_url}">けんで とびらを ひらく ▶</a>
-          <div class="note">このページをブックマークしてね / このけんは つぎのドロップまで有効です<br>うまくひらけないときは BASEで「ちびボード」とけんさく</div>`;
+          けんを ほかんしたよ。つぎのドロップの 2じかんまえから とびらが ひらくよ<br>
+          <a href="index.html">トップへ もどる ▶</a>
+          <div class="note">このけんは つぎのドロップまで有効です<br>この画面を スクショか ブックマークしておくと あんしんだよ</div>`;
       }
       $('lever').disabled = true;
     } else {

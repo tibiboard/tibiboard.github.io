@@ -318,14 +318,34 @@ document.getElementById('sw').onclick = function(){
   }, 1100);
 };
 
-/* 保持中の先行入場券: いまのdoor_urlと一致する場合だけ表示(ドロップ更新で自動失効) */
+/* 保持中の先行入場券: いまのdoor_urlと一致する場合だけ表示(ドロップ更新で自動失効)
+   券もちは drop_at の2時間前からとびらが開く。それより前はひらく時刻を表示するだけ */
 (function(){
   try{
+    const MIRU = new URLSearchParams(location.search).get('miru');
     const saved = localStorage.getItem('chibi_ticket');
-    if (saved && saved === conf.door_url){
-      document.getElementById('ticketHold').innerHTML = `
+    const hasTicket = (saved && saved === conf.door_url) || MIRU === 'ticket';
+    if (!hasTicket) return;
+    const doorHref = saved && saved === conf.door_url ? saved : conf.door_url;
+    const box = document.getElementById('ticketHold');
+    const dropAt = conf.drop_at ? new Date(conf.drop_at) : null;
+    const validDrop = dropAt && !isNaN(dropAt.getTime());
+    // 早め解錠マージン: drop_atの2時間10分前(端末時計のズレで「時間なのに開かない」を防ぐ)。案内表示は「2じかんまえから」のまま
+    const openAt = validDrop ? new Date(dropAt.getTime() - (2*60+10)*60*1000) : null;
+    // drop_at未設定/不正な値のときは開く側に倒す(最終権威はBASE在庫。ロックで詰まるより開いてる方がマシ)
+    const locked = validDrop && new Date() < openAt;
+    if (locked){
+      const m = openAt.getMonth()+1, d = openAt.getDate(), h = openAt.getHours(), mi = String(openAt.getMinutes()).padStart(2,'0');
+      box.innerHTML = `
         <div style="background:#241521;border:2px solid var(--mint);border-radius:14px;padding:14px;margin-bottom:16px;font-size:13px">
-          <a href="${saved}" style="color:var(--mint);font-weight:900;text-decoration:none">🎫 けんを もってるよ → とびらへ ▶</a>
+          🎫 けんを もってるよ<br>
+          とびらは ${m}がつ${d}にち ${h}じ${mi}ふんに ひらくよ
+          <div style="font-size:11px;color:#8d7f89;margin-top:6px">けんは つぎのドロップまで ゆうこう。きろくは このスマホに のこるよ</div>
+        </div>`;
+    } else {
+      box.innerHTML = `
+        <div style="background:#241521;border:2px solid var(--mint);border-radius:14px;padding:14px;margin-bottom:16px;font-size:13px">
+          <a href="${doorHref}" style="color:var(--mint);font-weight:900;text-decoration:none">🎫 けんを もってるよ → とびらへ ▶</a>
           <div style="font-size:11px;color:#8d7f89;margin-top:6px">けんは つぎのドロップまで ゆうこう。きろくは このスマホに のこるよ</div>
         </div>`;
     }
