@@ -168,6 +168,9 @@ function parseShop(txt){
 }
 const conf = window.SHOP_CONFIG || {mode:'simple', aikotoba:'', sponsor_week:false, door_url:'door.html'};
 const items = parseShop(window.SHOP_DATA);
+/* プレビュー用の隠しパラメータ: ?miru=kanbai で「全員旅立ち(泣きうさぎ)」の見た目を確認できる(データは変えない) */
+const MIRU = new URLSearchParams(location.search).get('miru');
+if (MIRU === 'kanbai') items.forEach(i => { if (i.state === 'いる') i.state = '旅立ち'; });
 const alive = items.filter(i=>i.state==='いる');
 const yen = n => '¥' + n.toLocaleString();
 const PLACEHOLDER = 'img/photo-placeholder.svg';
