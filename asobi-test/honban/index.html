@@ -294,7 +294,12 @@ function playSwitchOn(){
 /* 電源スイッチ演出 */
 document.getElementById('sw').onclick = function(){
   ensureAudio(); // iOS対策: 必ずユーザー操作(このクリック)起点で生成する
-  playSwitchOn();
+  // iOS/iPadではresumeが非同期のため、完了を待ってから鳴らす(待てない環境でも即時フォールバック)
+  if (AC && AC.state === 'suspended' && AC.resume) {
+    AC.resume().then(playSwitchOn).catch(playSwitchOn);
+  } else {
+    playSwitchOn();
+  }
   this.classList.add('on');
   setTimeout(()=>{
     document.body.classList.add('rumble');
