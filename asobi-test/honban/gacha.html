@@ -81,6 +81,18 @@ h1{font-size:20px;letter-spacing:4px;color:var(--mint);margin:8px 0 4px}
 @keyframes shine{to{transform:translateX(120%)}}
 #msg{min-height:2.4em;text-align:center;font-weight:900;font-size:14px;margin-top:6px;line-height:1.8}
 .reset{margin-top:14px;font-size:12px;color:#8d7f89;cursor:pointer;text-decoration:underline}
+.zukanbtn{margin-top:10px;background:#2a1a33;color:#fff;border:2px solid var(--mint);border-radius:999px;padding:8px 18px;font-weight:900;font-size:13px;cursor:pointer}
+#zukanOv{position:fixed;inset:0;background:rgba(10,5,15,.92);z-index:60;display:none;align-items:center;justify-content:center;padding:20px}
+.zukanPanel{background:#1a1020;border:3px solid var(--mint);border-radius:18px;padding:20px;max-width:420px;width:100%;text-align:center;max-height:80vh;overflow-y:auto}
+.zukanPanel h2{font-size:16px;letter-spacing:2px;color:var(--mint);margin-bottom:4px}
+.zukanNote{font-size:11px;color:#8d7f89;margin-bottom:14px}
+.zgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.zcard{background:#2a1a33;border:2px solid var(--mint);border-radius:12px;padding:8px}
+.zcard img{width:100%;aspect-ratio:1;object-fit:contain}
+.zcard.silhouette img{filter:brightness(0);opacity:.55}
+.zname{font-size:11px;font-weight:900;margin-top:4px}
+.zcard.silhouette .zname{color:#8d7f89}
+.zukanClose{margin-top:14px;background:var(--pink);color:#fff;border:0;border-radius:10px;padding:10px 22px;font-weight:900;cursor:pointer}
 </style>
 </head>
 <body>
@@ -91,7 +103,17 @@ h1{font-size:20px;letter-spacing:4px;color:var(--mint);margin:8px 0 4px}
 <div class="coin">🪙 コイン: <b id="coins">3</b> 枚(のこり<span id="left">3</span>回)</div>
 <button class="pull" id="pull">ガチャをまわす ▶</button>
 <div id="msg">きょうのゲームにかったので、3回まわせます🐰</div>
+<button class="zukanbtn" id="zukanBtn">📖 ずかん</button>
 <div class="reset" onclick="location.reload()">(やりなおす)</div>
+
+<div id="zukanOv">
+  <div class="zukanPanel">
+    <h2>🐰 うさぎカードずかん</h2>
+    <div class="zukanNote">きろくは このスマホの なか(ログインふよう)</div>
+    <div class="zgrid" id="zukanList"></div>
+    <button class="zukanClose" id="zukanClose">とじる</button>
+  </div>
+</div>
 
 <div id="ov">
   <div class="rays" id="rays"></div>
@@ -171,10 +193,37 @@ function sndN(){ tone(523,0,0.12,'square',0.12); tone(1047,0.1,0.3,'sine',0.08) 
 /* ===== 排出テーブル: SSR=1.7%(先行入場券の当たり)。N/Rはうさぎカード ===== */
 const P_SSR = 0.017;
 const CONF = window.SHOP_CONFIG || {sponsor_week:false, door_url:'door.html'};
+const isRenshu = new URLSearchParams(location.search).get('renshu') === '1';
 const RAB = ["cute_01","cute_04","cute_15","edgy_11","street_02","street_05"];
 const NAMES = {cute_01:'ももはね',cute_04:'みんとみみ',cute_15:'そらまめ',edgy_11:'とがりみみ',street_02:'まちかど',street_05:'ふらっと'};
 let coins=3, pulling=false, cur=null;
 const $=id=>document.getElementById(id);
+
+/* ===== ずかん(端末内・ログイン不要): 引いたカードをlocalStorageに記録 ===== */
+function loadZukan(){
+  try{ return JSON.parse(localStorage.getItem('chibi_gacha_zukan')||'{}'); }catch(e){ return {}; }
+}
+function recordZukan(rab){
+  if (isRenshu) return;
+  try{
+    const d = loadZukan();
+    d[rab] = true;
+    localStorage.setItem('chibi_gacha_zukan', JSON.stringify(d));
+  }catch(e){}
+}
+function renderZukan(){
+  const d = loadZukan();
+  const list = $('zukanList');
+  list.innerHTML = RAB.map(rab=>{
+    const got = !!d[rab];
+    return `<div class="zcard${got?'':' silhouette'}">
+      <img src="img/${rab}.png" alt="${got?NAMES[rab]:'???'}">
+      <div class="zname">${got?NAMES[rab]:'？？？'}</div>
+    </div>`;
+  }).join('');
+}
+$('zukanBtn').onclick = () => { renderZukan(); $('zukanOv').style.display='flex'; };
+$('zukanClose').onclick = () => { $('zukanOv').style.display='none'; };
 
 $('pull').onclick = () => {
   if (pulling||coins<=0) return;
@@ -203,6 +252,7 @@ function endPull(skipped){
   if (!cur) return;
   const {rar, rab} = cur;
   const isSSR = rar==='ssr';
+  recordZukan(rab);
   /* 閃光: SSR=金の大明滅 / R=青 / N=やわらか */
   $('flash').className = isSSR ? 'flash gold strobe' : ('flash weak ' + (rar==='r'?'blue':'soft'));
   if (isSSR) $('ov').classList.add('ssrbg');
@@ -226,14 +276,21 @@ function endPull(skipped){
         <img src="img/batsubei600.png">
         <div class="nm">こんかいは かんばい</div>
         <div class="note">このけんは つぎのドロップまで有効です</div>`;
+      $('msg').innerHTML = 'こんかいは かんばい。けんは つぎのドロップまで ゆうこう';
+    } else if (isRenshu){
+      card.innerHTML = `<div class="rar">🌟 S S R 🌟</div>
+        <img src="img/batsubei600.png">
+        <div class="nm">れんしゅうだから けんは でないよ🐰</div>`;
+      $('msg').innerHTML = 'れんしゅうだから けんは でないよ🐰';
     } else {
+      try{ localStorage.setItem('chibi_ticket', CONF.door_url); }catch(e){}
       card.innerHTML = `<div class="rar">🌟 S S R 🌟</div>
         <img src="img/batsubei600.png">
         <div class="nm">ばつべーのしんらい</div>
-        <a class="tobira-btn" href="${CONF.door_url}">とびらのばしょへ ▶</a>
+        <a class="tobira-btn" href="${CONF.door_url}">けんで とびらを ひらく ▶</a>
         <div class="note">ブックマークしてね / つぎのドロップまで有効<br>ひらけないときはBASEで「ちびボード」をけんさく</div>`;
+      $('msg').innerHTML='🎫 ゆうせんにゅうじょうけん ゲット!';
     }
-    $('msg').innerHTML='🌟SSR!! とびらのばしょを おしえてもらえた!';
     $('pull').disabled=true;
   } else {
     /* ハズレもカードの喜びはちゃんと演出(SSRとの差は「規模」で付ける) */

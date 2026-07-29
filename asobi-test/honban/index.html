@@ -138,6 +138,7 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;fon
 </section>
 
 <section id="ticket-sec">
+  <div id="ticketHold"></div>
   <a class="ticketbtn" href="challenge.html">🎫 次回の先行入場券に ちょうせんする</a>
 </section>
 
@@ -316,6 +317,20 @@ document.getElementById('sw').onclick = function(){
     document.getElementById('usagi').classList.add('show');
   }, 1100);
 };
+
+/* 保持中の先行入場券: いまのdoor_urlと一致する場合だけ表示(ドロップ更新で自動失効) */
+(function(){
+  try{
+    const saved = localStorage.getItem('chibi_ticket');
+    if (saved && saved === conf.door_url){
+      document.getElementById('ticketHold').innerHTML = `
+        <div style="background:#241521;border:2px solid var(--mint);border-radius:14px;padding:14px;margin-bottom:16px;font-size:13px">
+          <a href="${saved}" style="color:var(--mint);font-weight:900;text-decoration:none">🎫 けんを もってるよ → とびらへ ▶</a>
+          <div style="font-size:11px;color:#8d7f89;margin-top:6px">けんは つぎのドロップまで ゆうこう。きろくは このスマホに のこるよ</div>
+        </div>`;
+    }
+  }catch(e){}
+})();
 
 /* 隅のしっぽ(壁の向こうにうさぎがいる気配) */
 (function(){

@@ -211,6 +211,7 @@ function sndMiss(){ tone(220,0,0.15,'sine',0.12,180) }
 /* ===== 抽選: 3回合計で約5%(1回1.7%) ===== */
 const P_WIN = 0.017;
 const CONF = window.SHOP_CONFIG || {sponsor_week:false, door_url:'door.html'};
+const isRenshu = new URLSearchParams(location.search).get('renshu') === '1';
 let coins = 3, spinning = false;
 const KANA = ['ち','び','ボ','🐰','⌨','★'];
 const $ = id => document.getElementById(id);
@@ -246,10 +247,14 @@ $('lever').onclick = () => {
       if (CONF.sponsor_week){
         tob.classList.add('kanbai');
         tob.innerHTML = '🌸 こんかいは かんばい<br><div class="note">このけんは つぎのドロップまで有効です</div>';
+      } else if (isRenshu){
+        tob.classList.remove('kanbai');
+        tob.innerHTML = 'れんしゅうだから けんは でないよ🐰';
       } else {
         tob.classList.remove('kanbai');
-        tob.innerHTML = `🎉 とびらのばしょを おしえてもらえた!<br>
-          <a href="${CONF.door_url}">とびらへすすむ ▶</a>
+        try{ localStorage.setItem('chibi_ticket', CONF.door_url); }catch(e){}
+        tob.innerHTML = `🎫 ゆうせんにゅうじょうけん ゲット!<br>
+          <a href="${CONF.door_url}">けんで とびらを ひらく ▶</a>
           <div class="note">このページをブックマークしてね / このけんは つぎのドロップまで有効です<br>うまくひらけないときは BASEで「ちびボード」とけんさく</div>`;
       }
       $('lever').disabled = true;
