@@ -116,7 +116,7 @@ footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
     </div>
 
     <div class="swipe-hint" id="swipeHintUi">
-      コートを した から うえ に むかって ゆびで はじいてね(弱く〜強く)
+      した から うえ に むかって、ねらう むきに ゆびで はじいてね(ななめもOK・弱く〜強く)
     </div>
   </div>
 
@@ -204,6 +204,10 @@ const TUNE = {
 
   // --- 球のブレ(左右のランダムなズレ。難易度調整用) ---
   LATERAL_JITTER_SWIPE: 10,
+
+  // --- 的の左右オフセット(コート幅に対する比率。方向制御対応で2次元ランダムに) ---
+  GOAL_X_RANGE_RATIO: 0.3,
+  GOAL_X_MARGIN: 50, // 的が画面端に寄りすぎないための最小マージン
 };
 
 /* ========================================================================= */
@@ -378,7 +382,9 @@ function newRound(){
   const far = Math.random() < 0.5;
   const base = far ? TUNE.GOAL_Y_FAR : TUNE.GOAL_Y_NEAR;
   game.goalCy = clamp(base + (Math.random()*40 - 20), TUNE.GOAL_Y_MIN, TUNE.GOAL_Y_MAX);
-  game.goalCx = TUNE.COURT_W/2 + (Math.random()*30 - 15);
+  // 左右も毎回ランダムに(コート幅の±30%程度の範囲)
+  const xRange = TUNE.COURT_W * TUNE.GOAL_X_RANGE_RATIO;
+  game.goalCx = clamp(TUNE.COURT_W/2 + (Math.random()*2 - 1) * xRange, TUNE.GOAL_X_MARGIN, TUNE.COURT_W - TUNE.GOAL_X_MARGIN);
   game.ball = null;
   game.throwing = false;
   drawCourt();
@@ -451,10 +457,12 @@ function powerToDistance(power, gamma){
   return TUNE.DIST_MIN + shaped * (TUNE.DIST_MAX - TUNE.DIST_MIN);
 }
 
-function resolveThrow(power, gamma, lateralJitter){
+function resolveThrow(power, gamma, lateralJitter, dirX, dirY){
+  // dirX/dirY: スワイプのベクトルを正規化した進行方向(まっすぐ上=正面、斜め上=斜めに進む)
   const dist = powerToDistance(power, gamma);
-  const landY = clamp(TUNE.PLAYER_Y - dist, -60, TUNE.COURT_H + 40);
-  const landX = TUNE.COURT_W/2 + (Math.random()*2-1) * lateralJitter;
+  const jitter = (Math.random()*2-1) * lateralJitter;
+  const landX = clamp(TUNE.COURT_W/2 + dirX*dist + jitter, -40, TUNE.COURT_W + 40);
+  const landY = clamp(TUNE.PLAYER_Y + dirY*dist, -60, TUNE.COURT_H + 40);
   const dx = landX - game.goalCx;
   const dy = landY - game.goalCy;
   const d = Math.sqrt(dx*dx + dy*dy);
@@ -584,7 +592,8 @@ function handleSwipeEnd(endX, endY){
 
   const velocity = dist / dt; // px/ms
   const power = clamp(velocity / TUNE.SWIPE_MAX_VELOCITY, 0, 1);
-  resolveThrow(power, TUNE.SWIPE_POWER_GAMMA, TUNE.LATERAL_JITTER_SWIPE);
+  const dirX = dx / dist, dirY = dy / dist; // 正規化した進行方向(まっすぐ上=正面、斜め=斜め方向)
+  resolveThrow(power, TUNE.SWIPE_POWER_GAMMA, TUNE.LATERAL_JITTER_SWIPE, dirX, dirY);
 }
 
 /* 初期描画 */
