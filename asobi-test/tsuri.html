@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>うさぎのつり(試作) — ちびボード</title>
+<style>
+:root{
+  --pink:#e84898; --pink-deep:#e0197a; --pink-pale:#ffe3f0;
+  --mint:#5fd6c4; --mint-pale:#d9f4ee; --mint-deep:#1fae99;
+  --ink:#3a2233; --dark:#180a14;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;overflow-x:hidden;overscroll-behavior:none}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--dark);color:#fff;min-height:100vh;user-select:none}
+
+header{text-align:center;padding:14px 10px 8px}
+header h1{font-size:18px;font-weight:900;letter-spacing:1px}
+header .sub{font-size:11px;color:#c9a9bd;margin-top:4px}
+
+.wrap{max-width:520px;margin:0 auto;padding:0 14px 30px}
+
+.panel{background:#241a22;border-radius:16px;padding:18px;margin-top:14px;border:2px solid #3c2233;text-align:center}
+.panel p{font-size:13px;color:#e6d6e0;margin:8px 0;line-height:1.8;text-align:left}
+.gate-icon{font-size:40px;margin-bottom:4px}
+.gate-note{font-size:11px;color:#8d7f89;margin-top:6px}
+
+.warn{background:#3a2418;border:2px solid #b46a2a;color:#ffcf9e;font-size:12.5px;
+  border-radius:12px;padding:10px 12px;margin:10px 0;font-weight:900;text-align:center}
+
+.bigbtn{display:block;width:100%;margin-top:16px;background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;
+  border:0;border-bottom:9px solid var(--pink-deep);border-radius:16px;padding:20px;font-weight:900;font-size:19px;cursor:pointer;
+  box-shadow:0 0 0 4px #fff2,0 0 26px 4px rgba(232,72,152,.5)}
+.bigbtn:active{border-bottom-width:3px;transform:translateY(6px)}
+.bigbtn:disabled{opacity:.5;cursor:not-allowed}
+
+.smallbtn{display:inline-block;background:#fff;border:3px solid var(--ink);border-bottom-width:7px;border-radius:10px;
+  padding:10px 16px;font-weight:900;font-size:13px;color:var(--ink);cursor:pointer;margin-top:10px;margin-left:6px;margin-right:6px}
+.smallbtn:active{border-bottom-width:2px;transform:translateY(5px)}
+.smallbtn.mint{background:var(--mint);border-color:var(--mint-deep)}
+
+/* ---------- ゲーム画面 ---------- */
+#gameScreen{display:none}
+#gameScreen.show{display:block}
+
+.hud{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:#c9a9bd}
+.hud .catches{font-weight:900;color:var(--mint)}
+
+.pond-wrap{position:relative;margin-top:10px;border-radius:16px;overflow:hidden;border:3px solid var(--mint-deep);
+  background:linear-gradient(#3a2b52 0%,#3a2b52 30%,#123a5f 30%,#0d5a68 62%,#083c48 100%)}
+#field{display:block;width:100%;height:auto;touch-action:none}
+.ready-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  font-size:clamp(28px,10vw,56px);font-weight:900;color:#fff;text-shadow:0 0 18px rgba(0,0,0,.85),0 0 4px #000;
+  pointer-events:none;z-index:6;background:rgba(0,0,0,.15)}
+.ready-overlay.show{display:flex}
+
+.swing-hint{text-align:center;font-size:14px;color:#fff;margin-top:10px;line-height:1.6;min-height:20px;font-weight:900}
+.hint-note{text-align:center;font-size:11.5px;color:#c9a9bd;margin-top:2px}
+
+/* ---------- 結果 ---------- */
+#resultOverlay{position:fixed;inset:0;background:rgba(10,5,8,.85);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+#resultOverlay.show{display:flex;animation:appear .3s}
+@keyframes appear{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.resultCard{background:linear-gradient(135deg,var(--pink-pale),#fff);color:var(--ink);border-radius:22px;padding:28px 24px;
+  text-align:center;max-width:360px;width:100%;border:4px solid var(--pink-deep);box-shadow:0 0 40px 8px rgba(232,72,152,.5)}
+.resultCard .rank{font-size:56px;font-weight:900;line-height:1;margin-bottom:6px}
+.resultCard .rankS{color:#ffb400;text-shadow:0 0 18px rgba(255,180,0,.7)}
+.resultCard .rankA{color:var(--pink-deep)}
+.resultCard .rankB{color:var(--mint-deep)}
+.resultCard .rankC{color:#8d7f89}
+.resultCard .fishname{font-size:19px;font-weight:900;margin-bottom:6px}
+.resultCard .msg{font-size:15px;font-weight:900;margin-bottom:4px}
+.resultCard .dist{font-size:13px;color:#7a5c6d;margin-bottom:2px;font-weight:900}
+.resultCard .newbadge{display:inline-block;background:var(--pink);color:#fff;font-size:11px;font-weight:900;
+  padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.resultCard .emoji{font-size:52px;margin-bottom:6px}
+
+/* ---------- ずかん ---------- */
+#zukanOverlay{position:fixed;inset:0;background:rgba(10,5,8,.9);z-index:90;display:none;align-items:center;justify-content:center;padding:16px}
+#zukanOverlay.show{display:flex}
+.zukanCard{background:linear-gradient(135deg,var(--mint-pale),#fff);color:var(--ink);border-radius:22px;padding:20px 16px;
+  max-width:420px;width:100%;max-height:86vh;overflow-y:auto;border:4px solid var(--mint-deep);box-shadow:0 0 40px 8px rgba(31,174,153,.5)}
+.zukanCard h2{text-align:center;font-size:18px;margin-bottom:4px}
+.zukanCard .zsub{text-align:center;font-size:12.5px;color:#5c7a72;margin-bottom:12px;font-weight:900}
+.zgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.zcell{background:#fff;border:2px solid var(--ink);border-radius:12px;padding:10px;text-align:center}
+.zcell.locked{opacity:.55}
+.zcell .zemoji{font-size:32px}
+.zcell .zname{font-size:11.5px;font-weight:900;margin-top:4px;min-height:28px}
+.zcell .zrange{font-size:10px;color:#7a5c6d}
+.zukanCard .zclose{display:block;width:100%;margin-top:14px}
+
+footer{text-align:center;padding:20px;font-size:11px;color:#7a5c6d}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🐰🎣 うさぎのつり(試作)</h1>
+  <div class="sub">ちびボード あそび場 — 家族テスト用</div>
+</header>
+
+<div class="wrap">
+
+  <div class="panel" id="gate">
+    <div class="gate-icon">📱🎣</div>
+    <h2 style="margin-bottom:6px;font-size:17px">はじめる前に</h2>
+    <p>スマホを実際に「なげる腕のふり」でセンサーを使って遊ぶゲームです。水面にゆらゆら見える魚のかげをよく見て、そこをねらってキャストしてね。「かまえて…3,2,1,なげて!」の合図のあとに、腕をふってね。</p>
+    <div class="warn">⚠️ スマホは しっかり にぎってね!(すっぽ抜け注意)</div>
+    <button class="bigbtn" id="startBtn">🎣 はじめる</button>
+    <button class="smallbtn mint" id="zukanBtnGate">📖 ずかん</button>
+    <p class="gate-note">iPhoneはSafariで、https:// のページを開いてください</p>
+  </div>
+
+  <div class="panel" id="unsupported" style="display:none">
+    <div class="gate-icon">😢</div>
+    <h2 style="margin-bottom:6px;font-size:17px">スマホせんようだよ</h2>
+    <p id="unsupportedMsg" style="text-align:center">このゲームはスマホの動きセンサーを使うよ。iPhoneやAndroidのブラウザで開いてね。</p>
+    <button class="smallbtn mint" id="retryBtn">🔄 もう一度試す</button>
+  </div>
+
+  <div class="panel" id="gameScreen">
+    <div class="hud">
+      <div class="turn">🐰 つりチャレンジ</div>
+      <div class="catches" id="catchLabel">つかまえた: 0ひき</div>
+    </div>
+
+    <div class="pond-wrap">
+      <canvas id="field" width="360" height="220"></canvas>
+      <div class="ready-overlay" id="readyOverlay"></div>
+    </div>
+
+    <div class="swing-hint" id="swingHint">かまえて…</div>
+    <div class="hint-note">みずめん の かげ を よく みて、きょりを よそく してね</div>
+
+    <div style="text-align:center">
+      <button class="smallbtn mint" id="zukanBtn">📖 ずかん</button>
+      <button class="smallbtn" id="resetBtn">🔄 さいしょから</button>
+    </div>
+  </div>
+
+  <footer>試作版・家族テスト用 / noindex</footer>
+</div>
+
+<div id="resultOverlay">
+  <div class="resultCard">
+    <div class="emoji" id="resultEmoji">🎉</div>
+    <div class="rank" id="resultRank">S</div>
+    <div class="fishname" id="resultFishName"></div>
+    <div id="newBadgeWrap"><span class="newbadge" id="newBadge" style="display:none">はじめて!ずかんに とうろく</span></div>
+    <div class="msg" id="resultMsg">かんぺき!</div>
+    <div class="dist" id="resultDist"></div>
+    <button class="smallbtn" id="nextBtn">つぎへ ▶</button>
+  </div>
+</div>
+
+<div id="zukanOverlay">
+  <div class="zukanCard">
+    <h2>📖 うさぎつり ずかん</h2>
+    <div class="zsub" id="zukanSub">あと8しゅるい</div>
+    <div class="zgrid" id="zukanGrid"></div>
+    <button class="smallbtn mint zclose" id="zukanCloseBtn">とじる</button>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   チューニング定数(ここを調整すればゲームの手ざわりが変わる)
+   ========================================================================= */
+const TUNE = {
+  // --- 出題: 魚影の距離(m)の範囲 ---
+  FISH_MIN_M: 5,
+  FISH_MAX_M: 40,
+
+  // --- コート(横から見た側面ビュー。canvas座標) ---
+  COURT_W: 360,
+  COURT_H: 220,
+  WATER_Y: 66,          // 水面のY座標(池を横から見た図。ここより下が水中)
+  THROW_X: 26,           // うさぎの位置(左端寄り、岸)
+  RANGE_MAX_M: 46,        // canvas全幅が表す距離(m)
+
+  // --- かまえ合図: 「はじめる」後、合図が終わりセンサーを受け付けるまでの時間 ---
+  READY_COUNTDOWN_MS: 1700,
+
+  // --- スイング検出(devicemotionの加速度を「スイング区間」だけ積分してpowerを算出) ---
+  SWING_THRESHOLD: 13,       // これを超える加速度でスイング開始とみなす
+  SWING_MICRO_THRESHOLD: 6,  // これを超えるが弱い動きは「もっとおもいきって」を促すだけ
+  SWING_MIN_WORK: 1.0,       // スイング区間の積分がこれ未満なら不発(本気の一振りとみなさない)
+  SWING_MIN_MS: 120,         // スイングとみなす最短時間
+  SWING_MAX_MS: 1500,        // これを超えたら強制的にスイング終了
+  SWING_END_QUIET_MS: 180,   // 加速度が閾値を下回ってからこの時間静かならスイング終了
+  POWER_SCALE: 0.05,         // 積分値(Σ|a|*dt) → power(0〜1)への係数
+  POWER_GAMMA: 0.55,         // べき乗補正の指数(gamma<1で弱い投げの分解能を確保)
+
+  // --- power(0〜1) → キャスト距離(m)への変換 ---
+  DIST_MIN_M: 2,
+  DIST_MAX_M: 46,
+
+  // --- 判定: 魚影との差(m)でランク分け ---
+  RANK_S_M: 1.0,
+  RANK_A_M: 3,
+  RANK_B_M: 7,     // これを超えたらC(にげられる)
+
+  // --- レア魚(きんのにんじんダイ)の抽選: Sランク時にこの確率で出現 ---
+  RARE_CHANCE_ON_S: 0.35,
+
+  // --- 着水アニメの時間(ms) ---
+  CAST_ANIM_MS: 850,
+  BITE_ANIM_MS: 700,     // 食いつき演出の時間
+
+  // --- 球のブレ(見た目のジッター。難易度には影響しない演出用) ---
+  ARC_HEIGHT_JITTER: 0.15,
+
+  // --- 魚影のゆらゆらアニメ ---
+  SHADOW_SWAY_PX: 5,
+  SHADOW_SWAY_MS: 2200,
+};
+
+/* ========================================================================= */
+
+const $ = (id)=>document.getElementById(id);
+const clamp = (v,a,b)=> Math.max(a, Math.min(b, v));
+const LS_KEY = 'tsuri_zukan_v1';
+
+/* =========================================================================
+   魚図鑑データ(距離帯ごとに出現。レアは超ピタリ限定)
+   ========================================================================= */
+const FISH = [
+  { id:'ninjin_buna',  name:'にんじんブナ',     emoji:'🐟', min:5,  max:14, rare:false },
+  { id:'pink_dojou',   name:'ピンクドジョウ',   emoji:'🐠', min:5,  max:16, rare:false },
+  { id:'mint_yamame',  name:'ミントやまめ',     emoji:'🐡', min:12, max:24, rare:false },
+  { id:'hoppe_zuwai',  name:'ほっぺずわい',     emoji:'🦀', min:12, max:26, rare:false },
+  { id:'usamimi_ayu',  name:'うさみみアユ',     emoji:'🐙', min:18, max:30, rare:false },
+  { id:'shippo_namazu',name:'しっぽナマズ',     emoji:'🐋', min:22, max:36, rare:false },
+  { id:'nushigoi',     name:'ぬしごい',         emoji:'🐉', min:30, max:40, rare:false },
+  { id:'kin_ninjindai',name:'きんのにんじんダイ', emoji:'✨🐠', min:5, max:40, rare:true },
+];
+
+function loadZukan(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(err){ return {}; }
+}
+function saveZukan(z){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(z)); }catch(err){}
+}
+let zukan = loadZukan();
+
+function catchCount(){
+  return Object.keys(zukan).filter(k=>zukan[k]).length;
+}
+
+function updateCatchLabel(){
+  $('catchLabel').textContent = 'つかまえた: ' + catchCount() + 'ひき';
+}
+
+function pickFishFor(distM, rank){
+  // Sランクは一定確率でレア(きんのにんじんダイ)。それ以外は距離帯に合う魚からランダム。
+  if (rank === 'S' && Math.random() < TUNE.RARE_CHANCE_ON_S){
+    return FISH.find(f=>f.rare);
+  }
+  const candidates = FISH.filter(f=>!f.rare && distM >= f.min && distM <= f.max);
+  const pool = candidates.length ? candidates : FISH.filter(f=>!f.rare);
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+/* ---------- ずかんUI ---------- */
+function renderZukan(){
+  const grid = $('zukanGrid');
+  grid.innerHTML = '';
+  FISH.forEach(f=>{
+    const got = !!zukan[f.id];
+    const cell = document.createElement('div');
+    cell.className = 'zcell' + (got ? '' : ' locked');
+    const rangeTxt = f.rare ? 'ちょうピタリ限定' : (f.min + '〜' + f.max + 'm');
+    cell.innerHTML = '<div class="zemoji">' + (got ? f.emoji : '❓') + '</div>' +
+      '<div class="zname">' + (got ? f.name : '？？？') + '</div>' +
+      '<div class="zrange">' + rangeTxt + '</div>';
+    grid.appendChild(cell);
+  });
+  const remain = FISH.length - catchCount();
+  $('zukanSub').textContent = remain > 0 ? ('あと' + remain + 'しゅるい') : 'コンプリート!やったね🎉';
+}
+
+function openZukan(){
+  renderZukan();
+  $('zukanOverlay').classList.add('show');
+}
+$('zukanBtn').onclick = openZukan;
+$('zukanBtnGate').onclick = openZukan;
+$('zukanCloseBtn').onclick = ()=> $('zukanOverlay').classList.remove('show');
+
+/* =========================================================================
+   ゲート(センサー権限・iOS対応)
+   ========================================================================= */
+let sensorsDetected = false;
+
+function requestPermissions(){
+  const tasks = [];
+  if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'){
+    tasks.push(DeviceOrientationEvent.requestPermission());
+  } else {
+    tasks.push(Promise.resolve('granted'));
+  }
+  if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function'){
+    tasks.push(DeviceMotionEvent.requestPermission());
+  } else {
+    tasks.push(Promise.resolve('granted'));
+  }
+  return Promise.all(tasks);
+}
+
+function showUnsupported(kind){
+  $('gate').style.display = 'none';
+  $('gameScreen').classList.remove('show');
+  $('unsupported').style.display = 'block';
+  const msgs = {
+    denied: '権限が許可されませんでした。iPhoneの「設定 > Safari > モーションと方向」を確認して許可し、もう一度お試しください。',
+    'no-sensor': 'このゲームはスマホの動きセンサーを使うよ。パソコンのブラウザでは遊べません。iPhoneはSafariで、Androidはブラウザで、https:// のページを開いて試してね。',
+    error: 'センサーの利用でエラーが発生しました。iPhoneはSafariで、HTTPSのページを開いて試してください。',
+  };
+  $('unsupportedMsg').textContent = msgs[kind] || msgs['no-sensor'];
+}
+
+$('retryBtn').onclick = function(){
+  $('unsupported').style.display = 'none';
+  $('gate').style.display = 'block';
+};
+
+$('startBtn').onclick = function(){
+  ensureAudio(); // iOS対策: 必ずユーザー操作(このクリック)起点で生成する
+  $('startBtn').disabled = true;
+  $('startBtn').textContent = '確認中…';
+  requestPermissions().then(function(results){
+    if (results.indexOf('denied') !== -1){
+      showUnsupported('denied');
+      $('startBtn').disabled = false; $('startBtn').textContent = '🎣 はじめる';
+      return;
+    }
+    sensorsDetected = false;
+    bindMotion();
+    setTimeout(function(){
+      $('startBtn').disabled = false; $('startBtn').textContent = '🎣 はじめる';
+      if (sensorsDetected){
+        $('gate').style.display = 'none';
+        beginGame();
+      } else {
+        showUnsupported('no-sensor');
+      }
+    }, 1200);
+  }).catch(function(){
+    showUnsupported('error');
+    $('startBtn').disabled = false; $('startBtn').textContent = '🎣 はじめる';
+  });
+};
+
+/* =========================================================================
+   ゲーム状態
+   ========================================================================= */
+let game = {
+  fishM: 20,
+  casting: false,
+};
+
+function beginGame(){
+  updateCatchLabel();
+  $('gameScreen').classList.add('show');
+  window.scrollTo({top: $('gameScreen').offsetTop - 10, behavior:'smooth'});
+  newRound();
+  startReadyCountdown();
+}
+
+function pickFishDistance(){
+  return TUNE.FISH_MIN_M + Math.random() * (TUNE.FISH_MAX_M - TUNE.FISH_MIN_M);
+}
+
+function newRound(){
+  game.fishM = pickFishDistance();
+  game.casting = false;
+  updateCatchLabel();
+  drawField();
+  $('swingHint').textContent = 'かまえて…';
+}
+
+/* ---------- 開始・各キャスト前の「かまえて…3,2,1,なげて!」合図 ---------- */
+let inputReady = false;
+
+function startReadyCountdown(){
+  inputReady = false;
+  swingState = 'idle';
+  swingIntegral = 0;
+  lastT = 0;
+  quietSinceT = 0;
+  const el = $('readyOverlay');
+  el.classList.add('show');
+  el.textContent = 'かまえて…';
+  $('swingHint').textContent = 'かまえて…';
+  const seg = TUNE.READY_COUNTDOWN_MS / 4.25;
+  setTimeout(()=>{ el.textContent = '3'; }, seg*1.25);
+  setTimeout(()=>{ el.textContent = '2'; }, seg*2.25);
+  setTimeout(()=>{ el.textContent = '1'; }, seg*3.25);
+  setTimeout(()=>{
+    el.textContent = 'なげて!';
+    inputReady = true;
+    $('swingHint').textContent = 'いま なげて!';
+  }, TUNE.READY_COUNTDOWN_MS);
+  setTimeout(()=>{ el.classList.remove('show'); }, TUNE.READY_COUNTDOWN_MS + 450);
+}
+
+$('resetBtn').onclick = function(){
+  $('gameScreen').classList.remove('show');
+  inputReady = false;
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+
+/* =========================================================================
+   サウンド(Web Audio APIで自作。音源ファイルは使わない)
+   ========================================================================= */
+let AC = null;
+function ensureAudio(){
+  try{
+    if (!AC) AC = new (window.AudioContext||window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+  }catch(err){ /* Audio非対応環境では無視 */ }
+}
+
+function playCastSwoosh(){ // キャスト: ヒュッ(上昇グライド)
+  if (!AC) return;
+  const t = AC.currentTime;
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(500, t);
+  o.frequency.exponentialRampToValueAtTime(1100, t+0.12);
+  g.gain.setValueAtTime(0.22, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.14);
+  o.connect(g); g.connect(AC.destination);
+  o.start(t); o.stop(t+0.15);
+}
+
+function playSplash(){ // 着水: ポチャン
+  if (!AC) return;
+  const t = AC.currentTime;
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(260, t);
+  o.frequency.exponentialRampToValueAtTime(90, t+0.18);
+  g.gain.setValueAtTime(0.3, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.22);
+  o.connect(g); g.connect(AC.destination);
+  o.start(t); o.stop(t+0.23);
+
+  // 水しぶきノイズ
+  const len = Math.floor(AC.sampleRate*0.18);
+  const buf = AC.createBuffer(1, len, AC.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i=0;i<len;i++) data[i] = (Math.random()*2-1) * (1 - i/len);
+  const src = AC.createBufferSource();
+  src.buffer = buf;
+  const filter = AC.createBiquadFilter();
+  filter.type = 'highpass'; filter.frequency.value = 1200;
+  const gain = AC.createGain();
+  gain.gain.value = 0.18;
+  src.connect(filter); filter.connect(gain); gain.connect(AC.destination);
+  src.start(t);
+}
+
+function playBite(){ // 食いつき: ビビビ!
+  if (!AC) return;
+  const t = AC.currentTime;
+  for (let i=0;i<5;i++){
+    const st = t + i*0.09;
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = 'square';
+    o.frequency.setValueAtTime(220 + (i%2)*60, st);
+    g.gain.setValueAtTime(0.0001, st);
+    g.gain.exponentialRampToValueAtTime(0.15, st+0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, st+0.07);
+    o.connect(g); g.connect(AC.destination);
+    o.start(st); o.stop(st+0.08);
+  }
+}
+
+function playCatchFanfare(){ // 釣り上げ: ジャーン
+  if (!AC) return;
+  const t = AC.currentTime;
+  [523, 659, 784, 1047].forEach(function(freq, i){
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    const st = t + i*0.03;
+    g.gain.setValueAtTime(0.0001, st);
+    g.gain.exponentialRampToValueAtTime(0.26, st+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, st+0.65);
+    o.connect(g); g.connect(AC.destination);
+    o.start(st); o.stop(st+0.7);
+  });
+}
+
+function playEscape(){ // にげられた: しゅるん(下降)
+  if (!AC) return;
+  const t = AC.currentTime;
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(500, t);
+  o.frequency.exponentialRampToValueAtTime(140, t+0.35);
+  g.gain.setValueAtTime(0.2, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.4);
+  o.connect(g); g.connect(AC.destination);
+  o.start(t); o.stop(t+0.42);
+}
+
+/* ---------- 池(側面ビュー)描画 ---------- */
+const canvas = $('field');
+const ctx = canvas.getContext('2d');
+const pxPerM = () => (TUNE.COURT_W - TUNE.THROW_X - 14) / TUNE.RANGE_MAX_M;
+function mToX(m){ return TUNE.THROW_X + m * pxPerM(); }
+
+let shadowPhase = 0;
+
+function drawField(bobberPos, heightFactor, opts){
+  opts = opts || {};
+  heightFactor = heightFactor || 0;
+  ctx.clearRect(0,0,TUNE.COURT_W,TUNE.COURT_H);
+
+  // 空(岸)
+  ctx.fillStyle = '#3a2b52';
+  ctx.fillRect(0,0,TUNE.COURT_W,TUNE.WATER_Y);
+  // 水面〜水中(グラデーション)
+  const grad = ctx.createLinearGradient(0,TUNE.WATER_Y,0,TUNE.COURT_H);
+  grad.addColorStop(0,'#123a5f');
+  grad.addColorStop(0.5,'#0d5a68');
+  grad.addColorStop(1,'#083c48');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,TUNE.WATER_Y,TUNE.COURT_W,TUNE.COURT_H-TUNE.WATER_Y);
+
+  // 水面ライン(キラキラ)
+  ctx.strokeStyle = 'rgba(255,255,255,.35)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0,TUNE.WATER_Y);
+  ctx.lineTo(TUNE.COURT_W,TUNE.WATER_Y);
+  ctx.stroke();
+
+  // 距離目盛り(10m刻み、水面のすぐ下に小さく)
+  ctx.fillStyle = 'rgba(255,255,255,.35)';
+  ctx.font = '9px sans-serif';
+  ctx.textAlign = 'center';
+  for (let m=0; m<=TUNE.RANGE_MAX_M; m+=10){
+    const x = mToX(m);
+    ctx.fillText(m+'m', x, TUNE.WATER_Y+13);
+  }
+
+  // 魚影(距離game.fishMの位置に、ゆらゆら揺れるシルエット)。ヒントは「位置」のみ、数値は出さない。
+  if (opts.showShadow !== false){
+    const fx = mToX(game.fishM) + Math.sin(shadowPhase) * TUNE.SHADOW_SWAY_PX;
+    const fy = TUNE.WATER_Y + 28 + Math.sin(shadowPhase*0.7) * 4;
+    ctx.save();
+    ctx.globalAlpha = 0.55;
+    ctx.fillStyle = '#000';
+    ctx.beginPath();
+    ctx.ellipse(fx, fy, 16, 6, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // 岸のうさぎ
+  ctx.font = '26px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('🐰', TUNE.THROW_X, TUNE.WATER_Y+4);
+  // 釣り竿(簡易)
+  ctx.strokeStyle = '#c9a9bd';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(TUNE.THROW_X+8, TUNE.WATER_Y-14);
+  ctx.lineTo(TUNE.THROW_X+30, TUNE.WATER_Y-30);
+  ctx.stroke();
+
+  // ウキ(投げ中 or 静止)
+  if (bobberPos){
+    ctx.beginPath();
+    ctx.fillStyle = '#ffe3f0';
+    ctx.strokeStyle = '#e0197a';
+    ctx.lineWidth = 2.5;
+    ctx.ellipse(bobberPos.x, bobberPos.y, 7, 7, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+  }
+}
+
+function animateShadowSway(){
+  shadowPhase += (Math.PI*2) / (TUNE.SHADOW_SWAY_MS/16);
+  if (!game.casting && $('gameScreen').classList.contains('show')){
+    drawField();
+  }
+  requestAnimationFrame(animateShadowSway);
+}
+requestAnimationFrame(animateShadowSway);
+
+/* ---------- パワー→距離の共通変換(べき乗補正込み) ---------- */
+function powerToDistanceM(power, gamma){
+  const p = clamp(power, 0, 1);
+  const shaped = Math.pow(p, gamma);
+  return TUNE.DIST_MIN_M + shaped * (TUNE.DIST_MAX_M - TUNE.DIST_MIN_M);
+}
+
+function resolveCast(power, gamma){
+  if (game.casting || !inputReady) return;
+  inputReady = false;
+  const distM = powerToDistanceM(power, gamma);
+  animateCast(distM);
+}
+
+// 放物線の時間カーブ(ボールなげと同じ手ざわり)
+function arcProgress(t){
+  if (t < 0.5){
+    const local = t/0.5;
+    const eased = 1 - Math.pow(1-local, 3);
+    return eased * 0.5;
+  } else {
+    const local = (t-0.5)/0.5;
+    const eased = Math.pow(local, 3);
+    return 0.5 + eased * 0.5;
+  }
+}
+
+function animateCast(distM){
+  game.casting = true;
+  $('swingHint').textContent = 'とんでる…!';
+  playCastSwoosh();
+  const startX = TUNE.THROW_X;
+  const startY = TUNE.WATER_Y - 28;
+  const landX = mToX(distM);
+  const landY = TUNE.WATER_Y + 2;
+  const peakHeight = 34 + Math.min(1, distM/TUNE.DIST_MAX_M) * 22;
+  const t0 = performance.now();
+  const DUR = TUNE.CAST_ANIM_MS;
+  function step(now){
+    const t = Math.min(1, (now - t0)/DUR);
+    const progress = arcProgress(t);
+    const x = startX + (landX - startX) * progress;
+    const heightFactor = Math.sin(t * Math.PI);
+    const y = startY - heightFactor * peakHeight - (startY-landY)*Math.min(0,0) + (landY-startY)*progress;
+    drawField({x:x, y: Math.min(y, landY)}, heightFactor);
+    if (t < 1){
+      requestAnimationFrame(step);
+    } else {
+      playSplash();
+      drawField({x:landX, y:landY});
+      setTimeout(()=> judgeCast(distM), 250);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+function rankOf(diffM){
+  if (diffM <= TUNE.RANK_S_M) return 'S';
+  if (diffM <= TUNE.RANK_A_M) return 'A';
+  if (diffM <= TUNE.RANK_B_M) return 'B';
+  return 'C';
+}
+
+function judgeCast(distM){
+  const diff = Math.abs(distM - game.fishM);
+  const rank = rankOf(diff);
+  const landX = mToX(distM);
+  const landY = TUNE.WATER_Y + 2;
+
+  if (rank === 'C'){
+    // にげられる: 魚影がスッと消える演出
+    playEscape();
+    let fade = 1;
+    function fadeStep(){
+      fade -= 0.05;
+      drawField({x:landX, y:landY}, 0, {showShadow: fade>0});
+      if (fade > 0) requestAnimationFrame(fadeStep);
+      else showResult(distM, diff, rank, null, false);
+    }
+    fadeStep();
+    return;
+  }
+
+  // 食いつき演出(ビビビ!)
+  playBite();
+  let t0 = performance.now();
+  function biteStep(now){
+    const t = now - t0;
+    const jitter = Math.sin(t*0.06) * 3;
+    drawField({x:landX + jitter, y:landY}, 0);
+    if (t < TUNE.BITE_ANIM_MS){
+      requestAnimationFrame(biteStep);
+    } else {
+      const fish = pickFishFor(game.fishM, rank);
+      const isNew = !zukan[fish.id];
+      zukan[fish.id] = true;
+      saveZukan(zukan);
+      playCatchFanfare();
+      showResult(distM, diff, rank, fish, isNew);
+      updateCatchLabel();
+    }
+  }
+  requestAnimationFrame(biteStep);
+}
+
+function showResult(distM, diff, rank, fish, isNew){
+  const rankCfg = {
+    S: {cls:'rankS'},
+    A: {cls:'rankA'},
+    B: {cls:'rankB'},
+    C: {cls:'rankC'},
+  }[rank];
+  $('resultRank').textContent = rank;
+  $('resultRank').className = 'rank ' + rankCfg.cls;
+
+  if (fish){
+    $('resultEmoji').textContent = fish.emoji;
+    $('resultFishName').textContent = fish.name + ' を つかまえた!';
+    const msgs = {
+      S: 'かんぺき!ばっちりのきょり!',
+      A: 'すごい!おしいところで食いついた!',
+      B: 'つれた!いいかんじ!',
+    };
+    $('resultMsg').textContent = msgs[rank] || 'つれた!';
+    $('newBadge').style.display = isNew ? 'inline-block' : 'none';
+  } else {
+    $('resultEmoji').textContent = '💨';
+    $('resultFishName').textContent = 'にげられた…';
+    $('resultMsg').textContent = 'きょりが とおすぎたみたい。つぎ がんばろう!';
+    $('newBadge').style.display = 'none';
+  }
+  $('resultDist').textContent = 'きょり ' + distM.toFixed(1) + 'm(魚影との差 ' + diff.toFixed(1) + 'm)';
+  $('resultOverlay').classList.add('show');
+}
+
+$('nextBtn').onclick = function(){
+  $('resultOverlay').classList.remove('show');
+  newRound();
+  startReadyCountdown();
+};
+
+/* =========================================================================
+   センサー入力: DeviceMotion の加速度を「スイング区間」だけ積分してpowerを算出
+   プレイ中(振ってる間)は数値を一切表示しない。
+   ========================================================================= */
+let motionBound = false;
+let swingState = 'idle'; // idle | swinging
+let swingStartT = 0;
+let swingIntegral = 0;
+let lastT = 0;
+let quietSinceT = 0;
+
+function bindMotion(){
+  if (motionBound) return;
+  motionBound = true;
+  window.addEventListener('devicemotion', onMotion, true);
+}
+
+function onMotion(e){
+  sensorsDetected = true;
+  if (!$('gameScreen').classList.contains('show')) return;
+  if (game.casting) return;
+  if (!inputReady) return; // 合図(かまえて…3,2,1,なげて!)が終わるまでは完全無視(誤発射防止)
+
+  let acc = e.acceleration;
+  if (!acc || acc.x == null) acc = e.accelerationIncludingGravity || {x:0,y:0,z:0};
+  const mag = Math.sqrt((acc.x||0)**2 + (acc.y||0)**2 + (acc.z||0)**2);
+  const now = performance.now();
+  const dt = lastT ? Math.min(0.05, (now-lastT)/1000) : 0.016;
+  lastT = now;
+
+  if (swingState === 'idle'){
+    if (mag > TUNE.SWING_THRESHOLD){
+      swingState = 'swinging';
+      swingStartT = now;
+      swingIntegral = 0;
+      quietSinceT = 0;
+    } else if (mag > TUNE.SWING_MICRO_THRESHOLD){
+      $('swingHint').textContent = 'もっと おもいきって!';
+    }
+    return;
+  }
+
+  swingIntegral += mag * dt;
+  const elapsed = now - swingStartT;
+  $('swingHint').textContent = 'ふってる…!';
+
+  if (mag < TUNE.SWING_THRESHOLD){
+    if (!quietSinceT) quietSinceT = now;
+  } else {
+    quietSinceT = 0;
+  }
+
+  const quietEnough = quietSinceT && (now - quietSinceT > TUNE.SWING_END_QUIET_MS);
+  const tooLong = elapsed > TUNE.SWING_MAX_MS;
+  if ((quietEnough && elapsed > TUNE.SWING_MIN_MS) || tooLong){
+    swingState = 'idle';
+    if (swingIntegral < TUNE.SWING_MIN_WORK){
+      $('swingHint').textContent = 'もっと おもいきって!';
+      swingIntegral = 0;
+      return;
+    }
+    const finalPower = clamp(swingIntegral * TUNE.POWER_SCALE, 0, 1);
+    resolveCast(finalPower, TUNE.POWER_GAMMA);
+  }
+}
+
+/* 初期描画(ゲート表示中もプレビューとして) */
+drawField();
+</script>
+</body>
+</html>
