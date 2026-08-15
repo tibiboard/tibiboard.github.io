@@ -131,7 +131,7 @@ section{max-width:980px;margin:0 auto;padding:46px 18px}
 #shelf-sec{max-width:none;padding:46px clamp(18px,3vw,60px)}
 
 /* おしらせ板(木の立て看板風。2026-08-15新設。やりすぎ歓迎の合言葉どおり派手に) */
-#oshirase-sec{max-width:760px;padding:10px 18px 0}
+#oshirase-sec{max-width:760px;padding:30px 18px 10px;margin:0 auto}
 .oshirase-board{position:relative;background:linear-gradient(180deg,#e8c99a,#d8ae76);border:6px solid #a87643;border-radius:14px;padding:22px 24px 18px;
   box-shadow:0 8px 0 #8a5f33,0 8px 18px rgba(0,0,0,.18);transform:rotate(-.6deg)}
 .oshirase-board::before{content:"📌";position:absolute;top:-16px;left:22px;font-size:26px;transform:rotate(-18deg)}
@@ -205,6 +205,15 @@ h2{font-size:24px;font-weight:900;display:inline-block;background:var(--pink-dee
 .item .kind.kit{background:#ff8c1a;box-shadow:0 0 18px rgba(255,140,26,.55)}
 .item.yokoku .ph{filter:none;opacity:.95}
 .item.yokoku .st{color:#ff8c1a}
+/* じゅんびちゅうカード: ばつべーが箱を抱えて待機(2026-08-15作り直し) */
+.item.junbi .ph{background:linear-gradient(160deg,#fff3d8,#ffe0b0)}
+.junbi-box{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.junbi-usagi{width:78%;height:78%;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(0,0,0,.35));animation:junbiBounce 1.6s ease-in-out infinite}
+@keyframes junbiBounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.item.junbi .st{background:#ff8c1a;color:#fff;font-size:26px;font-weight:900;letter-spacing:1px;
+  padding:10px 24px;border-radius:999px;border:5px solid #fff;transform:rotate(-4deg);
+  box-shadow:0 6px 0 rgba(0,0,0,.3);text-shadow:0 2px 0 rgba(0,0,0,.2);display:inline-block;margin-top:6px}
+@media (max-width:640px){.item.junbi .st{font-size:20px;padding:8px 18px}}
 .item .stamp{position:absolute;top:18px;right:-46px;transform:rotate(35deg);background:var(--mint-deep);color:#fff;font-size:15px;font-weight:900;padding:5px 52px;z-index:5}
 .item.tenji{outline:3px dashed var(--pink)}
 
@@ -214,6 +223,14 @@ h2{font-size:24px;font-weight:900;display:inline-block;background:var(--pink-dee
 .door.mintdoor{background:linear-gradient(#fff,var(--mint-pale));border-color:var(--mint-deep);box-shadow:0 6px 0 rgba(18,122,117,.25)}
 .door:hover{transform:translateY(-6px) rotate(-1deg)}
 .door img{width:250px;max-width:80%}
+/* 扉2つのうさぎサイズ統一(2026-08-15): 元画像の余白量が違うため、見た目の実サイズを揃えるよう個別調整 */
+.door img.door-icon{width:auto;height:190px;max-width:82%;object-fit:contain;display:block;margin:0 auto}
+.door img.icon-batsu{height:250px}
+.door img.icon-usagi{height:190px}
+@media (max-width:640px){
+  .door img.icon-batsu{height:190px}
+  .door img.icon-usagi{height:145px}
+}
 .door .dl{font-weight:900;font-size:32px;margin-top:14px;letter-spacing:2px}
 
 footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;font-size:13.5px;letter-spacing:1px;line-height:2;position:relative}
@@ -376,15 +393,6 @@ body{background:var(--mint-pale)}
     </div>
   </section>
 
-  <!-- おしらせ板(公式ニュース枠。棚を見る前に自然に目に入る位置。2026-08-15新設) -->
-  <section id="oshirase-sec">
-    <div class="oshirase-board">
-      <div class="oshirase-ttl"><span class="ic">🪧</span>おしらせ</div>
-      <ul class="oshirase-list" id="oshiraseList"></ul>
-      <button class="oshirase-more" id="oshiraseMore" hidden>もっとみる ▾</button>
-    </div>
-  </section>
-
   <!-- みんなの棚(全個体がここに整列。いる子は光る) -->
   <section id="shelf-sec">
     
@@ -395,11 +403,11 @@ body{background:var(--mint-pale)}
   <section id="doors-sec">
     <div class="doors">
       <a class="door" href="紹介.html">
-        <img src="../img/バツベイ_アイコン800.png" alt="" onerror="this.remove()">
+        <img class="door-icon icon-batsu" src="../img/バツベイ_アイコン800.png" alt="" onerror="this.remove()">
         <div class="dl">❓ ちびボードって?</div>
       </a>
       <a class="door mintdoor" href="うさぎのへや.html">
-        <img src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">
+        <img class="door-icon icon-usagi" src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">
         <div class="dl">📖 うさぎずかん</div>
       </a>
     </div>
@@ -420,6 +428,15 @@ body{background:var(--mint-pale)}
     <div class="chalcall">
       <div class="chalarrows"><span><svg viewBox="0 0 60 74" width="210" height="259"><path d="M30 7 Q34 7 37 11 L51 29 Q57 37 48 37 L41 37 L41 57 Q41 68 30 68 Q19 68 19 57 L19 37 L12 37 Q3 37 9 29 L23 11 Q26 7 30 7 Z" fill="#b79ce0" stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg></span><span><svg viewBox="0 0 60 74" width="210" height="259"><path d="M30 7 Q34 7 37 11 L51 29 Q57 37 48 37 L41 37 L41 57 Q41 68 30 68 Q19 68 19 57 L19 37 L12 37 Q3 37 9 29 L23 11 Q26 7 30 7 Z" fill="#ee85b5" stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg></span></div>
       <div class="chaltext">🪙をつかって 🎁たからばこ!<br>📱<b>隠しコマンド</b>を ゲット!</div>
+    </div>
+  </section>
+
+  <!-- おしらせ板(公式ニュース枠。棚が増えても押されないよう最下部固定。2026-08-15移設) -->
+  <section id="oshirase-sec">
+    <div class="oshirase-board">
+      <div class="oshirase-ttl"><span class="ic">🪧</span>おしらせ</div>
+      <ul class="oshirase-list" id="oshiraseList"></ul>
+      <button class="oshirase-more" id="oshiraseMore" hidden>もっとみる ▾</button>
     </div>
   </section>
 
@@ -562,11 +579,11 @@ const val = v => (!v || v==='__要記入__' || /^__要記入__/.test(v)) ? TODO 
 /* 棚の描画。旅立ちが12台を超えたら月別アルバム式(◀▶でめくる)に自動で切り替わる(2026-08-14たけろう) */
 const cardOf = i => {
   const card = `
-  <div class="item ${i.state==='いる'?'alive':'sold'} ${(i.state==='予告'||i.state==='準備中')?'yokoku':''} ${i.state==='展示'?'tenji':''}">
+  <div class="item ${i.state==='いる'?'alive':'sold'} ${(i.state==='予告'||i.state==='準備中')?'yokoku':''} ${i.state==='展示'?'tenji':''} ${i.state==='準備中'?'junbi':''}">
     ${i.state==='旅立ち'?`<div class="stamp">${i.date.replaceAll('-','.')}</div>`:''}
-    <div class="ph">${i.state==='準備中'?'<div style="aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-size:64px">🎁</div>':slot(i.base?i.base+'_1.jpg':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}</div>
+    <div class="ph">${i.state==='準備中'?'<div class="junbi-box"><img class="junbi-usagi" src="../img/バツベイ_アイコン800.png" alt="じゅんびちゅうのばつべー"></div>':slot(i.base?i.base+'_1.jpg':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}</div>
     <div class="nm">${i.state==='準備中'?'':i.name}</div>
-    <div class="st">${i.state==='いる'?'':(i.state==='予告'?'9月から':(i.state==='展示'?'てんじ(非売)':(i.state==='準備中'?'じゅんびちゅう🐰':'SOLD OUT')))}</div>
+    <div class="st">${i.state==='いる'?'':(i.state==='予告'?'9月から':(i.state==='展示'?'てんじ(非売)':(i.state==='準備中'?'じゅんびちゅう':'SOLD OUT')))}</div>
   </div>`;
   return i.state==='いる' ? `<a class="itemlink" href="商品.html?id=${encodeURIComponent(i.name)}">${card}</a>` : card;
 };
