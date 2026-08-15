@@ -75,7 +75,7 @@ h1{font-size:20px;letter-spacing:3px;color:var(--mint-deep);margin:4px 0 6px}
 <div id="field"></div>
 <div id="msg">うさぎをタップしてね!</div>
 <div class="links">
-  <a class="btn" href="本実装_作業場/index.html?in=1">◀ お店にもどる</a>
+  <a class="btn" href="shop/index.html?in=1">◀ お店にもどる</a>
 </div>
 
 <div id="ov">
@@ -83,7 +83,7 @@ h1{font-size:20px;letter-spacing:3px;color:var(--mint-deep);margin:4px 0 6px}
   <div class="big">🎯 みつけた!!</div>
   <div class="sub" id="ovsub"></div>
   <button class="btn" id="next">つぎのレベルへ ▶</button>
-  <br><a class="btn" id="ovback" style="background:#8fb3b0;border-bottom-color:#5f8a87;font-size:14px;padding:11px 20px" href="本実装_作業場/index.html?in=1">◀ お店にもどる</a>
+  <br><a class="btn" id="ovback" style="background:#8fb3b0;border-bottom-color:#5f8a87;font-size:14px;padding:11px 20px" href="shop/index.html?in=1">◀ お店にもどる</a>
 </div>
 
 <script>
@@ -247,7 +247,7 @@ function tap(el,id){
 $('next').onclick=()=>{
   $('ov').style.display='none';
   if($('next').dataset.retry){ showGate(); }   /* 時間切れ: スタート待ちに戻る(勝手に始めない) */
-  else { location.href='本実装_作業場/index.html?in=1'; }
+  else { location.href='shop/index.html?in=1'; }
 };
 
 function flyCoin(el){

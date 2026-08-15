@@ -125,7 +125,7 @@ h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
   <div class="body2"><div class="hnd" id="hnd">まわす!</div><div class="slotmouth"></div></div>
 </div>
 <div id="msg"></div>
-<div class="links"><a href="本実装_作業場/index.html?in=1">お店にもどる</a> / <a href="本実装_作業場/うさぎのへや.html">うさぎ図鑑</a></div>
+<div class="links"><a href="shop/index.html?in=1">お店にもどる</a> / <a href="shop/うさぎのへや.html">うさぎ図鑑</a></div>
 
 <div id="reveal"><div class="inner" id="rin"></div></div>
 <div id="fxov"><div class="fxbox">
@@ -208,7 +208,7 @@ function refresh(){
   $('status').textContent='🪙 × '+C.getCoins(); $('status').classList.toggle('empty', C.getCoins()<1);
   const dead = spinning || C.getCoins()<1;
   $('hnd').classList.toggle('disabled', dead);
-  if(!spinning && C.getCoins()<1) $('msg').innerHTML='<a href="本実装_作業場/index.html?in=1" style="color:#5fd6c4">お店のばつべー</a>と あそんで 🪙をゲット';
+  if(!spinning && C.getCoins()<1) $('msg').innerHTML='<a href="shop/index.html?in=1" style="color:#5fd6c4">お店のばつべー</a>と あそんで 🪙をゲット';
   else if(!spinning) $('msg').textContent='';
 }
 refresh();

@@ -68,7 +68,7 @@ h1{font-size:clamp(32px,5.5vw,54px);letter-spacing:3px;color:var(--mint-deep);ma
 </div>
 <div id="msg">じゅんびは いい?</div>
 <div class="links">
-  <a class="btn" href="本実装_作業場/index.html?in=1">◀ お店にもどる</a>
+  <a class="btn" href="shop/index.html?in=1">◀ お店にもどる</a>
 </div>
 
 <div id="ov">
@@ -76,7 +76,7 @@ h1{font-size:clamp(32px,5.5vw,54px);letter-spacing:3px;color:var(--mint-deep);ma
   <div class="big"></div>
   <div class="sub" id="ovsub"></div>
   <button class="btn" id="next"></button>
-  <br><a class="btn" id="ovback" style="background:#8fb3b0;border-bottom-color:#5f8a87;font-size:20px;padding:16px 28px" href="本実装_作業場/index.html?in=1">◀ お店にもどる</a>
+  <br><a class="btn" id="ovback" style="background:#8fb3b0;border-bottom-color:#5f8a87;font-size:20px;padding:16px 28px" href="shop/index.html?in=1">◀ お店にもどる</a>
 </div>
 
 <script>
@@ -221,7 +221,7 @@ $('next').onclick=()=>{
     $('timer').textContent=LIMIT.toFixed(1); $('timerpill').classList.remove('warn');
     $('msg').textContent='じゅんびは いい?';
   }
-  else { location.href='本実装_作業場/index.html?in=1'; }
+  else { location.href='shop/index.html?in=1'; }
 };
 
 function flyCoin(el){
