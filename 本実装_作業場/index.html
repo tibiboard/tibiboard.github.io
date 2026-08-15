@@ -661,7 +661,7 @@ const zukanRows = window.USAGI_DATA.split('\n').map(l=>l.trim())
    正式58匹(CHIBI.ALL=実在確認済み)からランダム10匹に変更 */
 const runImgs = (window.CHIBI ? CHIBI.ALL.slice().sort(()=>Math.random()-.5).slice(0,10) : zukanRows.map(c=>c[1].replace(/\.png$/,''))).map(n=>`../img/usagi/${n}.png`);
 const mojiSec = document.getElementById('moji-sec');
-const batsuSnd = new Audio('photos/batsu_click.wav');
+const batsuSnd = new Audio('photos/batsu_click.wav'); batsuSnd.volume = 0.7; /* 2026-08-15たけろう: 音量7割に */
 document.getElementById('batsu').addEventListener('click', ()=>{
   const b=document.getElementById('batsuSay'); if(b) b.remove();
   try{ batsuSnd.currentTime=0; batsuSnd.play(); }catch(e){}
