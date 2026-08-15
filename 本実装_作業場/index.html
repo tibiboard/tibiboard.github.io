@@ -226,11 +226,13 @@ h2{font-size:24px;font-weight:900;display:inline-block;background:var(--pink-dee
 /* 扉2つのうさぎサイズ統一(2026-08-15): 元画像の余白量が違うため、見た目の実サイズを揃えるよう個別調整。
    さらに枠の総高さを250px(スマホ190px)に統一=文字の高さとうさぎの足元が2枚の扉で揃う */
 .door img.door-icon{width:auto;max-width:82%;object-fit:contain;display:block;margin:0 auto}
-.door img.icon-batsu{height:250px}
-.door img.icon-usagi{height:190px;margin-top:60px}
+/* 画像の透明余白を実測(batsu=下13.5%が余白/usagi=余白ほぼ0)して、
+   見えている身長190px・足元の線・文字の高さが一致するよう計算した値 */
+.door img.icon-batsu{height:260px}
+.door img.icon-usagi{height:193px;margin-top:34px;margin-bottom:33px}
 @media (max-width:640px){
-  .door img.icon-batsu{height:190px}
-  .door img.icon-usagi{height:145px;margin-top:45px}
+  .door img.icon-batsu{height:195px}
+  .door img.icon-usagi{height:145px;margin-top:25px;margin-bottom:25px}
 }
 .door .dl{font-weight:900;font-size:32px;margin-top:14px;letter-spacing:2px}
 
