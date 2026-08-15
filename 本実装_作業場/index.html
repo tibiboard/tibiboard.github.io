@@ -651,7 +651,10 @@ const zukanRows = window.USAGI_DATA.split('\n').map(l=>l.trim())
 })();
 
 /* ---- ばつべークリック → 大行進 → 幕開き(もじばしら洪水が現れる) ---- */
-const runImgs = zukanRows.slice(0,10).map(c=>`../img/usagi/${c[1]}`);
+/* 2026-08-15修正: 旧うさぎ図鑑.jsの10匹リストに存在しないファイル(street_12/street_20)が
+   混ざっていて、大行進で2匹透明+扉絵柄に当たると絵が出なかった。
+   正式58匹(CHIBI.ALL=実在確認済み)からランダム10匹に変更 */
+const runImgs = (window.CHIBI ? CHIBI.ALL.slice().sort(()=>Math.random()-.5).slice(0,10) : zukanRows.map(c=>c[1].replace(/\.png$/,''))).map(n=>`../img/usagi/${n}.png`);
 const mojiSec = document.getElementById('moji-sec');
 const batsuSnd = new Audio('photos/batsu_click.wav');
 document.getElementById('batsu').addEventListener('click', ()=>{
