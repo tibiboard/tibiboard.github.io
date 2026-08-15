@@ -105,6 +105,39 @@ h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
 
 /* 👉指差しをマミ色に(2026-08-15) */
 .lever-rail::before, .body2::before{filter:sepia(1) saturate(2.2) hue-rotate(295deg) brightness(1.08) drop-shadow(0 3px 5px rgba(0,0,0,.4)) !important}
+
+/* ===== 左端クリップ対策+スマホ縮小(2026-08-15)。
+   原因: .machine(460px)/.dome(420px)/.body2(350px)が固定pxで375px幅を超え、
+   body{align-items:center}の中央寄せではみ出た左側がscrollLeftで届かず切れて見えていた。
+   抽選ロジックは無関係、サイズをvw基準に変えるだけ ===== */
+html,body{overflow-x:hidden}
+@media (max-width:640px){
+  body{padding:10px}
+  h1{font-size:26px;letter-spacing:3px;margin:2px 0 2px;white-space:nowrap}
+  .fuda{padding:8px 12px;font-size:13px;line-height:1.6;margin:6px 0;border-radius:12px}
+  .fuda b{font-size:15px}
+  .coin{font-size:26px;padding:6px 18px;margin:4px 0}
+  #fxbtn{padding:7px 18px;font-size:14px}
+  .machine{width:92vw;max-width:340px;margin:6px 0}
+  .dome{width:84vw;height:84vw;max-width:300px;max-height:300px;border-width:6px}
+  .dome .mini{width:19%;height:19%}
+  .body2{width:74vw;height:42vw;max-width:260px;max-height:150px;margin:-8px auto 0;border-width:5px;border-radius:12px}
+  .hnd{width:26vw;height:26vw;max-width:92px;max-height:92px;top:22px;font-size:16px;border-width:5px}
+  .hnd::before{width:9px;height:60px}
+  .body2::before{font-size:32px;left:-38px;top:34px}
+  .slotmouth{width:34%;height:24px;bottom:8px}
+  #msg{font-size:14px;min-height:2em;margin-top:8px}
+  .links{margin-top:8px;font-size:10px}
+  .fxbox{padding:20px 16px}
+  .fxbox h3{font-size:20px;margin-bottom:8px}
+  .fxbox .row{font-size:14px;padding:9px 2px}
+  .fxbox .foot{font-size:12px;margin-top:6px}
+  .prize img.pz{width:60vw;max-width:220px}
+  .prize .name{font-size:24px}
+  .prize .keybox2{font-size:18px}
+  .prize .note2{font-size:13px}
+  .prize .go-btn{font-size:18px;padding:10px 20px}
+}
 </style>
 </head>
 <body>

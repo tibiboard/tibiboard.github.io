@@ -116,6 +116,41 @@ h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
 
 /* 👉指差しをマミ色に(2026-08-15) */
 .lever-rail::before, .body2::before{filter:sepia(1) saturate(2.2) hue-rotate(295deg) brightness(1.08) drop-shadow(0 3px 5px rgba(0,0,0,.4)) !important}
+
+/* ===== スマホ縮小(2026-08-15)。640px以下で全体を1画面に収める。抽選ロジックは無関係 ===== */
+@media (max-width:640px){
+  html,body{overflow-x:hidden}
+  body{padding:10px}
+  h1{font-size:26px;letter-spacing:3px;margin:2px 0 2px;white-space:nowrap}
+  .fuda{padding:8px 12px;font-size:14px;line-height:1.6;margin:6px 0;border-radius:12px}
+  .fuda b{font-size:17px}
+  .fuda img{width:22px!important}
+  .coin{font-size:26px;padding:6px 18px;margin:4px 0}
+  #fxbtn{padding:7px 18px;font-size:14px}
+  .machine{max-width:92vw;padding:10px 10px 12px;border-width:4px;border-radius:16px;margin:6px 0}
+  .marquee{gap:4px;margin-bottom:6px}
+  .bulb{width:10px;height:10px}
+  .title-plate{font-size:13px;letter-spacing:4px;margin-bottom:6px}
+  .window{padding:6px;gap:5px;border-width:3px;border-radius:10px}
+  .reel{width:27vw;max-width:110px;height:34vw;max-height:135px;border-width:2px}
+  .strip img{width:70%;height:auto;margin:18px auto}
+  @keyframes roll{from{transform:translateY(0)}to{transform:translateY(-135px)}}
+  .body-row{gap:4px}
+  .lever-rail{width:56px}
+  .lever{width:20px;height:110px;border-radius:8px}
+  .lever .ball{top:-30px;width:60px;height:60px;font-size:14px}
+  .lever-rail::before{font-size:32px;left:-38px;top:0}
+  .lever-rail .base{width:48px;height:20px;margin-top:3px}
+  #msg{font-size:14px;min-height:2.4em;margin-top:8px}
+  #msg .big{font-size:22px}
+  #tobira{padding:8px 12px;max-width:90vw}
+  #tobira button{font-size:15px!important;padding:8px 18px!important}
+  .links{margin-top:8px;font-size:10px}
+  .fxbox{padding:20px 16px}
+  .fxbox h3{font-size:20px;margin-bottom:10px}
+  .fxbox .row{font-size:15px;padding:9px 2px}
+  .fxbox .foot{font-size:12px;margin-top:8px}
+}
 </style>
 </head>
 <body>
