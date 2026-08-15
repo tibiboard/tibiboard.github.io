@@ -559,6 +559,11 @@ const {conf, items} = parseShop(window.SHOP_DATA);
     .filter(r=>r.date && r.text)
     .sort((a,b)=> b.date.localeCompare(a.date)); // 新しい順
   const SHOWN = 5;
+  /* 最終更新日をタイトル横に自動表示(おしらせ.jsの一番新しい日付から拾う=手間ゼロ) */
+  if(rows.length){
+    const ttl = document.querySelector('.oshirase-ttl');
+    if(ttl){ const s=document.createElement('span'); s.style.cssText='font-size:14px;font-weight:700;opacity:.75;margin-left:12px'; s.textContent=`(さいしゅうこうしん: ${rows[0].date})`; ttl.appendChild(s); }
+  }
   list.innerHTML = rows.map((r,i)=>
     `<li${i>=SHOWN?' class="hidden-more"':''}><span class="od">${r.date}</span><span class="ot">${r.text}</span></li>`
   ).join('');
