@@ -6,6 +6,10 @@
 <title>はしれ!ばつべー</title>
 <script src="asobi_common.js"></script>
 <style>
+/* 2026-08-15 スマホ対策: 下引っ張り更新リセット+画像ドラッグ防止 */
+html,body{overscroll-behavior-y:contain}
+img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+
 :root{--pink:#e84898;--pink-deep:#e0197a;--mint:#3ec9c2;--mint-deep:#1f8f8a;--ink:#33474f}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:#f2fbfa;color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:14px 10px 30px;user-select:none;-webkit-user-select:none;overflow-x:hidden}
