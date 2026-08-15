@@ -274,7 +274,9 @@ function confetti(){
 saveCoins();
 /* あそぶのは無制限。コインだけ1日1回(tap内で判定) */
 showGate();
-addEventListener('resize',()=>{ if(!locked) newRound(); });
+/* 2026-08-15修正: スマホはスクロールでアドレスバーが伸縮=縦だけのresizeが頻発し、そのたび盤面とお題が変わっていた。横幅が実際に変わった時だけ作り直す */
+let _lastW=innerWidth;
+addEventListener('resize',()=>{ if(innerWidth!==_lastW){ _lastW=innerWidth; if(!locked) newRound(); } });
 </script>
 <script>
 /* 2026-08-15 iOS対策: overscroll-behaviorが効かないiPhone Safariで、下引っ張り更新(=ゲームリセット)を止める */
