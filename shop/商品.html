@@ -126,7 +126,7 @@ if(it && it.state==='いる'){
         <div class="story">${val(it.story)}</div>
         <div class="price">${yen(it.price)} <small>(税・送料込)</small></div>
         <div class="ship">🚚 発送: ${it.ship||TODO}</div>
-        <div style="font-size:13px;font-weight:700;color:#6b6672;margin-top:6px">🎨 底プレートの色は 基本ケースと同じ色。せいさくしゃの きぶんで 変わることがあるよ(一点物の おたのしみ)</div>
+        <div style="font-size:13px;font-weight:700;color:#6b6672;margin-top:6px">🎨 底プレートと 右手側のプレートの色は 基本ケースと同じ色。せいさくしゃの きぶんで 変わることがあるよ(一点物の おたのしみ)</div>
         ${it.url && it.url!=='__要記入__'
           ? `<a class="keybtn big" href="${it.url}" target="_blank" rel="noopener">この子を むかえにいく ▶</a>`
           : `<div class="keybtn big" style="background:#8b8792;border-bottom-color:#5f5b66;cursor:not-allowed">購入リンク ${TODO}</div>`}
