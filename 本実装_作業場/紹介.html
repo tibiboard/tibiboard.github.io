@@ -539,23 +539,31 @@ window.addEventListener('resize', checkPC);
     let idx = 0;
     let timer = null;
 
-    function goTo(i){
+    function goTo(i, instant){
       idx = (i + slides.length) % slides.length;
-      track.scrollTo({left: track.clientWidth * idx, behavior:'smooth'});
+      track.scrollTo({left: track.clientWidth * idx, behavior: instant ? 'auto' : 'smooth'});
       dots.forEach((d,j)=>d.classList.toggle('active', j===idx));
     }
+    /* 2026-08-15修正: スマホで縦スクロール中にページが「ぴょん」と飛ぶ問題。
+       原因①自動送りのscrollToが画面外でも4秒ごとに発火して縦スクロールに割り込む
+       原因②スマホのアドレスバー伸縮のたびにresize→scrollTo(smooth)が発火
+       対策: スライダーが見えている時だけ自動送り+resizeは瞬間合わせ(smooth禁止) */
+    let visible = false;
     function startAuto(){
       clearInterval(timer);
-      timer = setInterval(()=>goTo(idx+1), 4000);
+      if(visible) timer = setInterval(()=>goTo(idx+1), 4000);
     }
+    new IntersectionObserver(es=>{
+      visible = es[0].isIntersecting;
+      if(visible){ startAuto(); } else { clearInterval(timer); }
+    }, {threshold:.25}).observe(track);
     document.getElementById('gachaPrev').addEventListener('click', ()=>{ goTo(idx-1); startAuto(); });
     document.getElementById('gachaNext').addEventListener('click', ()=>{ goTo(idx+1); startAuto(); });
     track.addEventListener('scroll', ()=>{
       const i = Math.round(track.scrollLeft / track.clientWidth);
       if(i!==idx){ idx=i; dots.forEach((d,j)=>d.classList.toggle('active', j===idx)); }
     }, {passive:true});
-    window.addEventListener('resize', ()=>goTo(idx));
-    startAuto();
+    window.addEventListener('resize', ()=>goTo(idx, true));
   }
 
 })();
