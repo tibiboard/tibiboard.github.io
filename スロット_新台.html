@@ -434,5 +434,16 @@ function confetti(){ const cols=['#e84898','#5fd6c4','#ffd54f','#fff'];
     c.style.left=Math.random()*100+'vw'; c.style.background=cols[i%4]; c.style.animationDelay=(Math.random()*0.7)+'s';
     document.body.appendChild(c); setTimeout(()=>c.remove(),3600); } }
 </script>
+<script>
+/* 2026-08-15 iOS対策: overscroll-behaviorが効かないiPhone Safariで、下引っ張り更新(=ゲームリセット)を止める */
+(function(){
+  var sy=0;
+  document.addEventListener('touchstart',function(e){ sy=e.touches[0].clientY; },{passive:true});
+  document.addEventListener('touchmove',function(e){
+    var se=document.scrollingElement||document.documentElement;
+    if(se.scrollTop<=0 && e.touches[0].clientY>sy){ e.preventDefault(); }
+  },{passive:false});
+})();
+</script>
 </body>
 </html>
