@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ちびガチャ — まわして ばつべー!</title>
+<script src="asobi_common.js"></script>
+<style>
+:root{--pink:#e84898;--pink-deep:#e0197a;--mint:#5fd6c4;--gold:#ffd54f;--gold-deep:#c99a1e;--ink:#3a2233}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Hiragino Maru Gothic ProN",Meiryo,sans-serif;background:#180a14;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px;user-select:none}
+h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
+.fuda{background:#fff;color:var(--ink);border-radius:18px;padding:14px 30px;font-size:24px;font-weight:900;line-height:2.1;margin:10px 0;border-left:6px solid var(--mint);text-align:center}
+.fuda b{color:var(--pink-deep);font-size:30px}
+.coin{font-size:48px;font-weight:900;margin:8px 0;background:#3a2233;border-radius:999px;padding:10px 34px;color:var(--gold);letter-spacing:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.6)}
+#fxbtn{background:#3a2233;color:#ffd54f;border:3px solid #5a4030;border-radius:999px;padding:12px 32px;font-weight:900;font-size:22px;cursor:pointer;font-family:inherit;margin-top:4px}
+
+/* ===== ガチャマシン(大型) ===== */
+.machine{width:460px;text-align:center;user-select:none;margin:10px 0;position:relative}
+.dome{width:420px;height:420px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 32% 30%, #ffffffcc, #ffffff22 55%), #ffe3f0;border:10px solid var(--pink);position:relative;overflow:hidden;box-shadow:0 0 30px rgba(232,72,152,.25)}
+.dome .mini{position:absolute;width:88px;height:88px;border-radius:50%;box-shadow:inset -6px -8px 12px rgba(0,0,0,.18), inset 5px 6px 10px rgba(255,255,255,.7)}
+.machine.excited .dome{box-shadow:0 0 46px 10px rgba(255,213,79,.55)}
+.body2{width:350px;height:200px;margin:-10px auto 0;background:var(--pink);border-radius:16px;position:relative;border:8px solid var(--pink-deep);border-top:none;box-shadow:0 8px 0 rgba(0,0,0,.4)}
+.hnd{position:absolute;left:50%;top:40px;transform:translateX(-50%);width:120px;height:120px;border-radius:50%;background:#fff;border:8px solid var(--pink-deep);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:26px;color:var(--pink-deep);cursor:pointer;transition:transform .9s cubic-bezier(.5,0,.4,1);animation:hndinvite 1.8s ease-in-out infinite}
+@keyframes hndinvite{0%,100%{transform:translateX(-50%) rotate(0)}50%{transform:translateX(-50%) rotate(14deg)}}
+.hnd::before{content:"";position:absolute;width:14px;height:95px;background:var(--pink-deep);border-radius:5px;opacity:.25}
+.hnd span{position:relative;z-index:2}
+/* 👉で視線誘導(回せる時だけ) */
+.body2::before{content:"👉";position:absolute;left:-92px;top:52px;font-size:64px;z-index:5;animation:pointat2 .9s ease-in-out infinite;filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))}
+@keyframes pointat2{0%,100%{transform:translateX(0)}50%{transform:translateX(14px)}}
+.body2:has(.hnd.disabled)::before,.body2:has(.hnd.spin)::before{display:none}
+.hnd.spin{animation:none;transform:translateX(-50%) rotate(540deg)}
+.hnd.disabled{filter:grayscale(1);opacity:.5;cursor:not-allowed;animation:none}
+.slotmouth{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);width:130px;height:46px;background:#3a1128;border-radius:10px;box-shadow:inset 0 4px 8px #000}
+.machine.shake{animation:shake .5s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px) rotate(-1deg)}40%{transform:translateX(6px) rotate(1deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+/* ===== 演出オーバーレイ(カプセル落下→開封) ===== */
+#reveal{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;background:rgba(40,16,32,.94);overflow:hidden}
+#reveal .inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.capsule2{position:absolute;left:50%;top:-200px;width:190px;height:190px;margin-left:-95px;z-index:3}
+.capsule2 .top{position:absolute;inset:0 0 50% 0;border-radius:130px 130px 0 0;transition:transform .45s cubic-bezier(.6,-.3,.7,1)}
+.capsule2 .btm{position:absolute;inset:50% 0 0 0;background:#fff;border-radius:0 0 130px 130px;transition:transform .45s cubic-bezier(.6,-.3,.7,1)}
+.capsule2.c-normal .top{background:var(--pink)}
+.capsule2.c-gold .top{background:linear-gradient(160deg,#fff2b8,var(--gold) 45%,var(--gold-deep));box-shadow:0 0 40px 8px rgba(255,213,79,.8)}
+.capsule2.c-gold .btm{background:#fff8dd}
+.capsule2.c-rainbow .top{background:linear-gradient(90deg,#ff5f8f,#ffb347,#ffe95f,#7ee787,#5fd6ff,#b18bff);background-size:600% 100%;animation:rbw 1.2s linear infinite;box-shadow:0 0 55px 14px rgba(255,255,255,.75)}
+.capsule2.c-rainbow .btm{background:#fff}
+@keyframes rbw{to{background-position:600% 0}}
+.capsule2.drop{animation:fall .9s cubic-bezier(.3,0,.6,1) forwards}
+@keyframes fall{0%{top:-200px}55%{top:calc(50% - 95px)}70%{top:calc(50% - 190px)}85%{top:calc(50% - 95px)}94%{top:calc(50% - 128px)}100%{top:calc(50% - 95px)}}
+.capsule2.wobble{animation:wob .5s .1s 2}
+@keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-9deg)}75%{transform:rotate(9deg)}}
+.capsule2.revive{animation:revive .8s ease-in-out 2}
+@keyframes revive{0%,100%{transform:translateY(0) rotate(0)}20%{transform:translateY(-14px) rotate(-10deg)}50%{transform:translateY(0) rotate(8deg)}70%{transform:translateY(-20px) rotate(-6deg)}}
+.capsule2.open .top{transform:translateY(-220px) rotate(-24deg)}
+.capsule2.open .btm{transform:translateY(220px) rotate(18deg)}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:5}
+.flash.go{animation:fl .5s}
+@keyframes fl{10%{opacity:1}100%{opacity:0}}
+.rays{position:absolute;left:50%;top:50%;width:1400px;height:1400px;margin:-700px 0 0 -700px;opacity:0;background:repeating-conic-gradient(var(--pink) 0 9deg, transparent 9deg 18deg);border-radius:50%}
+.rays.go{opacity:.35;animation:rot 14s linear infinite}
+.rays.goldrays{background:repeating-conic-gradient(var(--gold) 0 9deg, transparent 9deg 18deg)}
+@keyframes rot{to{transform:rotate(360deg)}}
+.prize{position:relative;text-align:center;opacity:0;transform:scale(.3);transition:all .5s cubic-bezier(.2,1.5,.4,1);z-index:6}
+.prize.go{opacity:1;transform:scale(1)}
+.prize img.pz{width:280px;filter:drop-shadow(0 10px 0 rgba(0,0,0,.35))}
+.prize .name{font-size:36px;font-weight:900;color:#fff;letter-spacing:2px;margin-top:6px}
+.prize .keybox2{font-size:26px;letter-spacing:4px;background:#10302e;color:var(--gold);border-radius:10px;padding:7px 14px;margin:8px auto 0;width:fit-content;font-weight:900}
+.prize .note2{font-size:17px;color:#ffe;margin-top:10px;line-height:1.9;font-weight:700}
+.prize .go-btn{display:inline-block;margin-top:20px;background:var(--pink);color:#fff;font-weight:900;font-size:26px;border-radius:12px;padding:13px 30px;cursor:pointer;border:0;border-bottom:6px solid var(--pink-deep);font-family:inherit}
+.confetti{position:fixed;width:10px;height:14px;top:-20px;z-index:130;animation:conf 2.6s linear forwards;pointer-events:none}
+@keyframes conf{to{transform:translateY(105vh) rotate(720deg)}}
+#flashfx{position:fixed;inset:0;background:#fff;z-index:140;pointer-events:none;opacity:0;animation:ffx 1.3s}
+@keyframes ffx{6%{opacity:1}14%{opacity:0}22%{opacity:.9}32%{opacity:0}42%{opacity:.7}60%{opacity:0}}
+#msg{min-height:2.4em;text-align:center;font-weight:900;font-size:23px;margin-top:12px}
+#msg.nudge{animation:msgnudge .8s ease-in-out 3}
+@keyframes msgnudge{0%,100%{transform:scale(1)}50%{transform:scale(1.18);color:var(--gold)}}
+.links{margin-top:14px;font-size:12px;color:#8d7f89}
+.links a{color:#8d7f89}
+/* 演出のひみつ */
+#fxov{position:fixed;inset:0;background:rgba(13,6,11,.85);z-index:150;display:none;align-items:center;justify-content:center;padding:16px}
+#fxov.show{display:flex}
+.fxbox{background:#fff;color:var(--ink);border:6px solid var(--gold);border-radius:28px;padding:34px 40px;max-width:720px;width:100%;font-weight:900}
+.fxbox h3{color:#8a6a10;letter-spacing:4px;font-size:32px;text-align:center;margin-bottom:12px}
+.fxbox .row{display:flex;justify-content:space-between;border-bottom:3px solid #f0e8d0;padding:15px 4px;font-size:25px}
+.fxbox .row b{color:var(--pink-deep)}
+.fxbox .foot{font-size:19px;margin-top:10px;color:#5a4a30;text-align:center;font-weight:700}
+
+/* 🪙0枚の絵で伝える(文字なし) */
+.coin.empty{filter:grayscale(1);opacity:.75;position:relative}
+.coin.empty::after{content:"✖";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ff3b5c;font-size:64px;text-shadow:0 0 10px rgba(0,0,0,.6);pointer-events:none}
+#nocoin{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;pointer-events:none}
+#nocoin.go{display:flex}
+#nocoin .stamp{position:relative;font-size:190px;line-height:1;animation:ncpop .9s cubic-bezier(.2,1.6,.4,1)}
+#nocoin .stamp .c{filter:grayscale(1)}
+#nocoin .stamp::after{content:"✖";position:absolute;inset:-30px;display:flex;align-items:center;justify-content:center;color:#ff3b5c;font-size:250px;font-weight:900;text-shadow:0 0 24px rgba(0,0,0,.8)}
+@keyframes ncpop{0%{transform:scale(.2);opacity:0}30%{transform:scale(1.25);opacity:1}45%{transform:scale(1)}60%{transform:translateX(-14px)}70%{transform:translateX(12px)}80%{transform:translateX(-8px)}90%{transform:translateX(6px)}100%{transform:translateX(0)}}
+
+/* ===== クリィミーマミ差し色(2026-08-15)。舞台の闇はそのまま、差し色だけパステルに。旧値: pink#e84898/deep#e0197a/mint#5fd6c4/gold#ffd54f ===== */
+:root{
+  --pink:#f096bd; --pink-deep:#d873a5;
+  --mint:#a8e0cc; --gold:#f2d98a; --gold-deep:#d9b95e;
+}
+
+/* 👉指差しをマミ色に(2026-08-15) */
+.lever-rail::before, .body2::before{filter:sepia(1) saturate(2.2) hue-rotate(295deg) brightness(1.08) drop-shadow(0 3px 5px rgba(0,0,0,.4)) !important}
+</style>
+</head>
+<body>
+<div id="nocoin"><div class="stamp"><span class="c">🪙</span></div></div>
+
+<h1>🔮 ちびガチャ</h1>
+<div class="fuda">
+<span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:linear-gradient(160deg,#fff2b8,#ffd54f 45%,#c99a1e);vertical-align:middle"></span> 金カプセル = <b>アツい!</b> /
+<span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:linear-gradient(90deg,#ff5f8f,#ffe95f,#7ee787,#5fd6ff,#b18bff);vertical-align:middle"></span> 虹 = <b>🎁かくてい</b>
+<br><span style="font-size:15px;opacity:.85">🎁たからばこは 1しゅうかんに 1こまで</span>
+</div>
+
+<div class="coin" id="status">🪙</div>
+<button id="fxbtn">❔ 演出のひみつ</button>
+
+<div class="machine" id="machine">
+  <div class="dome" id="dome"></div>
+  <div class="body2"><div class="hnd" id="hnd">まわす!</div><div class="slotmouth"></div></div>
+</div>
+<div id="msg"></div>
+<div class="links"><a href="本実装_作業場/index.html?in=1">お店にもどる</a> / <a href="本実装_作業場/うさぎのへや.html">うさぎ図鑑</a></div>
+
+<div id="reveal"><div class="inner" id="rin"></div></div>
+<div id="fxov"><div class="fxbox">
+  <h3>— 演出のひみつ —</h3>
+  <div class="row"><span>🟡 金カプセル</span><b>🎁 1/5</b></div>
+  <div class="row"><span>🌈 虹カプセル</span><b>🎁 かくてい!</b></div>
+  <div class="row"><span>💫 ハズレが ふるえだしたら…</span><b>ふっかつ!</b></div>
+  <div class="foot">金・虹が出たら <b>大あたり かくてい</b>🐰<br>🎁たからばこは 1しゅうかんに 1こまで</div>
+</div></div>
+
+<script>
+/* ============================================================
+   ちびガチャ新台(2026-08-14: 宝箱3択方式に作り替え)
+   コイン1枚=1回 / 大当たり=1/100(C.P_WIN)→🎁宝箱3択(90%うさぎ・10%ひみつのコマンド券)
+   小当たりは廃止。ずかん入手経路は宝箱だけ。鍵はゲームから出さない(手配りのみ)。
+   カプセル色=大当たりの予告演出(金=1/5・虹=確定・復活あり)。総確率は不変。
+   ⚠当たり判定はいずれCloudflare Workersへ移す(この版は演出確認用モック)
+   ============================================================ */
+const C = window.CHIBI;
+const $ = id => document.getElementById(id);
+
+/* ===== 音(スロットと同系。Web Audio自作) ===== */
+let AC, MASTER;
+function ac(){ if(!AC){ AC=new (window.AudioContext||window.webkitAudioContext)();
+  const comp=AC.createDynamicsCompressor(); comp.threshold.value=-28; comp.knee.value=8; comp.ratio.value=14;
+  comp.attack.value=0.008; comp.release.value=0.18;
+  MASTER=AC.createGain(); MASTER.gain.value=1.6; MASTER.connect(comp); comp.connect(AC.destination);} return AC; }
+function out(){ ac(); return MASTER; }
+function tone(f,t0,dur,type,gain,slide){ const a=ac(),o=a.createOscillator(),g=a.createGain();
+  o.type=type||'sine'; o.frequency.setValueAtTime(f,a.currentTime+t0);
+  if(slide) o.frequency.exponentialRampToValueAtTime(slide,a.currentTime+t0+dur);
+  g.gain.setValueAtTime(gain||0.15,a.currentTime+t0); g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+t0+dur);
+  o.connect(g); g.connect(out()); o.start(a.currentTime+t0); o.stop(a.currentTime+t0+dur+0.05); }
+function knock(t0,dur,freq,gain){ const a=ac(),len=a.sampleRate*dur,buf=a.createBuffer(1,len,a.sampleRate);
+  const d=buf.getChannelData(0); for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+  const s=a.createBufferSource(); s.buffer=buf; const f=a.createBiquadFilter(); f.type='bandpass'; f.frequency.value=freq; f.Q.value=2.5;
+  const g=a.createGain(); g.gain.setValueAtTime(gain,a.currentTime+t0); g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+t0+dur);
+  s.connect(f); f.connect(g); g.connect(out()); s.start(a.currentTime+t0); }
+function bomb(){ const a=ac(); const bg=a.createGain(); bg.gain.value=2.8; bg.connect(a.destination);
+  const len=a.sampleRate*0.06,buf=a.createBuffer(1,len,a.sampleRate); const d=buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,0.5);
+  const s=a.createBufferSource(); s.buffer=buf; const ng=a.createGain(); ng.gain.value=1.6; s.connect(ng); ng.connect(bg); s.start();
+  [26,29,32,35,38,42,46,50,55,60].forEach((f,i)=>{ const o=a.createOscillator(),g=a.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(f*2.2,a.currentTime); o.frequency.exponentialRampToValueAtTime(f,a.currentTime+0.08);
+    g.gain.setValueAtTime(1.0,a.currentTime); g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+1.1-i*0.04);
+    o.connect(g); g.connect(bg); o.start(); o.stop(a.currentTime+1.2); });
+  [70,80,90,100,115,130].forEach(f=>{ const o=a.createOscillator(),g=a.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(f*1.8,a.currentTime); o.frequency.exponentialRampToValueAtTime(f*0.7,a.currentTime+0.25);
+    g.gain.setValueAtTime(0.9,a.currentTime); g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.4);
+    o.connect(g); g.connect(bg); o.start(); o.stop(a.currentTime+0.5); }); }
+function sndHandle(){ knock(0,0.1,500,0.8); tone(180,0.05,0.3,'square',0.12); knock(0.35,0.08,600,0.6); }
+function sndDrop(){ tone(500,0,0.1,'sine',0.2,180); knock(0.42,0.15,350,1.2); }
+function sndWin(){ bomb();
+  [34,37,40,43,46,50,54,58,63,68].forEach((f,i)=>tone(f,0,0.9-i*0.03,'sine',0.55,f*0.82));
+  knock(0,0.25,240,1.4); knock(0,0.22,520,1.4);
+  [1109,1333,1479,1733,1976,2217,2489,2794].forEach((f,i)=>tone(f,0.015,0.8-i*0.05,'triangle',0.22-i*0.015));
+  [4186,4699,5274,5920].forEach((f,i)=>tone(f,0.05+i*0.03,0.5,'sine',0.08)); }
+function sndJackpot(){ sndWin();
+  setTimeout(()=>{ bomb(); [28,31,34,38,42].forEach((f,i)=>tone(f,0,1.4-i*0.05,'sine',0.6,f*0.85)); }, 260);
+  setTimeout(()=>{ knock(0,0.35,300,1.5); [1976,2489,2960].forEach((f,i)=>tone(f,0,1.2,'triangle',0.14-i*0.03)); }, 550); }
+function sndKyuin(){ tone(1500,0,0.22,'square',0.3,4800); tone(2200,0.02,0.16,'sine',0.16,5600); }
+function sndMiss(){ tone(220,0,0.15,'sine',0.12,180) }
+function screenFlash(){ const f=document.createElement('div'); f.id='flashfx'; document.body.appendChild(f); setTimeout(()=>f.remove(),1400); }
+function confetti(){ const cols=['#e84898','#5fd6c4','#ffd54f','#fff'];
+  for(let i=0;i<60;i++){ const c=document.createElement('div'); c.className='confetti';
+    c.style.left=Math.random()*100+'vw'; c.style.background=cols[i%4]; c.style.animationDelay=(Math.random()*0.7)+'s';
+    document.body.appendChild(c); setTimeout(()=>c.remove(),3600); } }
+
+/* ===== ドームの中のカプセル ===== */
+(function(){ const d=$('dome'); const cols=['#e84898','#5fd6c4','#ffd54f','#fff','#e0197a','#b18bff'];
+  for(let i=0;i<14;i++){ const m=document.createElement('div'); m.className='mini';
+    m.style.background='radial-gradient(circle at 32% 28%, #ffffffb0, transparent 55%),'+cols[i%cols.length];
+    m.style.left=(10+Math.random()*310)+'px'; m.style.top=(180+Math.random()*180)+'px'; d.appendChild(m); } })();
+$('fxbtn').onclick=()=>$('fxov').classList.add('show');
+$('fxov').onclick=e=>{ if(e.target.id==='fxov') e.currentTarget.classList.remove('show'); };
+
+let spinning=false;
+function refresh(){
+  if(!C){ $('status').textContent='🪙 —'; return; }
+  $('status').textContent='🪙 × '+C.getCoins(); $('status').classList.toggle('empty', C.getCoins()<1);
+  const dead = spinning || C.getCoins()<1;
+  $('hnd').classList.toggle('disabled', dead);
+  if(!spinning && C.getCoins()<1) $('msg').innerHTML='<a href="本実装_作業場/index.html?in=1" style="color:#5fd6c4">お店のばつべー</a>と あそんで 🪙をゲット';
+  else if(!spinning) $('msg').textContent='';
+}
+refresh();
+
+$('hnd').onclick=()=>{
+  if(spinning) return;
+  if(C && C.getCoins()<1){
+    refresh();
+    const nc=document.getElementById('nocoin'); nc.classList.remove('go'); void nc.offsetWidth; nc.classList.add('go'); setTimeout(()=>nc.classList.remove('go'),1300);
+    return;
+  }
+  spinning=true; if(C) C.spendCoin(); refresh();
+  $('machine').classList.remove('excited');
+  $('hnd').classList.add('spin');
+  $('machine').classList.add('shake');
+  sndHandle();
+
+  /* --- 抽選(モック): 大当たりのみ(1/100)。それ以外はハズレ --- */
+  const big = C ? C.drawPriority() : (Math.random()<0.01);
+  /* カプセル色: 虹=確定 / 金=出たら大当たり確定・1/5 / 復活=通常色→震えて当たり */
+  let color='normal', revive=false;
+  if(big){ const t=Math.random(); if(t<0.2) color='rainbow'; else if(t<0.85) color='gold'; else {color='normal'; revive=true;} }
+
+  setTimeout(()=>{ $('machine').classList.remove('shake'); startReveal(); }, 1200);
+
+  function startReveal(){
+    const reveal=$('reveal'), rin=$('rin');
+    reveal.style.display='flex';
+    rin.innerHTML=`<div class="rays ${color==='gold'||color==='rainbow'?'goldrays':''}" id="rays"></div>
+      <div class="flash" id="flash"></div>
+      <div class="capsule2 c-${color}" id="cap"><div class="top"></div><div class="btm"></div></div>
+      <div class="prize" id="prz"></div>`;
+    const cap=$('cap');
+    sndDrop();
+    requestAnimationFrame(()=>cap.classList.add('drop'));
+    if(color==='gold'){ setTimeout(sndKyuin, 950); }
+    if(color==='rainbow'){ setTimeout(()=>{ sndKyuin(); setTimeout(sndKyuin,220); }, 950); }
+    setTimeout(()=>cap.classList.add('wobble'), 950);
+    const openAt = 2100 + (color!=='normal'? 700:0);   /* 金・虹はなかなか開かない(二段階) */
+    setTimeout(()=>{
+      if(!big){
+        /* ハズレ: 開いて…なにもない */
+        cap.classList.add('open'); sndMiss();
+        $('prz').innerHTML=`<div class="name">…からっぽ!</div><button class="go-btn" onclick="closeReveal()">もういちど ▶</button>`;
+        $('prz').classList.add('go');
+        finish();
+      } else if(revive){
+        /* 復活: 一度「からっぽ」→ カプセルが震えだして当たりへ */
+        cap.classList.add('open'); sndMiss();
+        $('prz').innerHTML=`<div class="name">…からっぽ?</div>`;
+        $('prz').classList.add('go');
+        setTimeout(()=>{
+          $('prz').classList.remove('go');
+          cap.classList.remove('open'); cap.classList.add('revive'); knock(0,0.12,700,0.9); knock(0.5,0.12,700,0.9);
+          setTimeout(()=>{ cap.classList.remove('revive'); openPrize(cap); }, 1700);
+        }, 1200);
+      } else {
+        openPrize(cap);
+      }
+    }, openAt);
+  }
+  function openPrize(cap){
+    cap.classList.add('open');
+    $('flash') && $('flash').classList.add('go');
+    $('rays') && $('rays').classList.add('go');
+    sndJackpot(); screenFlash(); confetti();
+    $('machine').classList.add('excited');
+    /* 2026-08-14〜: 大当たり=🎁宝箱3択へ。鍵の自動発行はしない(鍵は手配りのみ) */
+    $('prz').innerHTML=`<div class="name">🎉 大あたり!!</div>
+      <div style="font-size:15px;font-weight:900;margin-top:6px;color:#fff">たからばこが とどいたよ!</div>
+      <button class="go-btn" onclick="openChest()">たからばこを あける ▶</button>`;
+    $('prz').classList.add('go');
+    finish();
+  }
+  function finish(){ spinning=false; $('hnd').classList.remove('spin'); refresh(); }
+};
+function closeReveal(){ $('reveal').style.display='none'; $('rin').innerHTML=''; refresh(); }
+function openChest(){
+  closeReveal();
+  C.showTreasurePicker({ onPick:()=>sndKyuin(), onReveal:()=>sndWin() });
+}
+</script>
+</body>
+</html>

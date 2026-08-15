@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>この子のページ — ちびボードのお店</title>
+<script src="data/商品リスト.js"></script>
+<style>
+:root{
+  --pink:#e0197a;--pink-deep:#b81163;--pink-pale:#ffe3f0;
+  --mint:#3ec9c2;--mint-pale:#ddf5f2;--mint-deep:#127a75;
+  --ink:#222226;--ink2:#4a4450;--line:#8b8792;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--mint-pale);color:var(--ink);overflow-x:hidden;line-height:1.8}
+img{max-width:100%}
+.band{background:var(--pink-deep);color:#fff;padding:14px 20px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.band .sf{font-size:44px;font-weight:900;background:#fff;color:var(--pink-deep);padding:0 16px;border-radius:8px}
+.band h1{font-size:clamp(32px,5.5vw,42px);font-weight:900;letter-spacing:4px}
+.band a{color:#ffd0e5;font-size:19px;font-weight:900;margin-left:auto;text-decoration:none}
+section{max-width:1680px;margin:0 auto;padding:40px clamp(18px,3vw,60px)}
+.slot{position:relative;background:#e9e7ec;border:3px dashed var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#33303a;padding:16px 12px;gap:4px;overflow:hidden}
+.slot .ic{font-size:clamp(28px,7vw,44px);line-height:1}
+.slot .t{font-size:clamp(13px,2.6vw,16px);font-weight:900;line-height:1.6}
+.slot .s{font-size:12px;font-weight:700;color:#454050;line-height:1.6}
+.slot .fn{position:absolute;left:8px;top:8px;background:#fff;border:2px solid var(--line);border-radius:999px;font-size:11px;font-weight:900;padding:1px 10px;color:#33303a;letter-spacing:.5px}
+.slot>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+.pd{background:#fff;border:4px solid var(--pink);border-radius:20px;padding:22px}
+.pd .top{display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:start}
+@media(max-width:760px){.pd .top{grid-template-columns:1fr}}
+.gal .main{position:relative}
+.gal .thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+@media(max-width:520px){.gal .thumbs{grid-template-columns:repeat(2,1fr)}}
+.gal .thumbs .slot{padding:6px 4px;border-width:2px;border-radius:10px}
+.gal .thumbs .slot .ic{font-size:18px}
+.gal .thumbs .slot .t{font-size:10.5px}
+.gal .thumbs .slot .s{display:none}
+.gal .thumbs .slot .fn{display:none}
+.tag{position:absolute;top:10px;right:10px;background:var(--mint-deep);color:#fff;font-weight:900;font-size:18px;border-radius:999px;padding:8px 20px;z-index:4}
+.pd h3{font-size:38px;font-weight:900;line-height:1.5}
+.pd .col{font-size:19px;color:var(--pink-deep);font-weight:900;margin:6px 0}
+.pd .story{font-size:20px;line-height:2;color:var(--ink);margin:10px 0}
+.pd .price{font-size:48px;font-weight:900;color:var(--pink-deep);margin:10px 0 2px}
+.pd .price small{font-size:17px;color:var(--ink2);font-weight:900}
+.pd .ship{font-size:19px;font-weight:900;color:var(--mint-deep)}
+.pickbox{font-size:18px;background:var(--pink-pale);border-radius:12px;padding:16px;margin:12px 0;font-weight:700}
+.buynote{font-size:16px;color:var(--ink2);margin-top:10px;line-height:1.9;font-weight:700}
+.todo{background:#fff6b8;border:2px solid #b89a00;border-radius:6px;padding:1px 8px;font-weight:900;color:#6b5800;font-size:13px;letter-spacing:1px}
+.keybtn{display:inline-block;background:var(--pink);color:#fff;border:0;border-bottom:7px solid var(--pink-deep);border-radius:14px;padding:16px 34px;font-weight:900;font-size:19px;cursor:pointer;letter-spacing:2px;margin-top:14px;text-decoration:none;font-family:inherit}
+.keybtn.big{font-size:28px;padding:24px 46px;width:100%;max-width:480px;text-align:center}
+footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;font-size:13.5px;letter-spacing:1px;line-height:2}
+
+/* ===== クリィミーマミ配色(2026-08-15全ページ統一)。旧値: pink#e0197a/deep#b81163/mint#3ec9c2/mint-deep#127a75 ===== */
+:root{
+  --pink:#ee85b5; --pink-deep:#c9679c; --pink-pale:#fbe7f1;
+  --mint:#9dd8c8; --mint-pale:#eef8f3; --mint-deep:#6a9fc0;
+  --gold:#f2d98a;
+}
+
+/* 80sマミ強化: 帯を虹パステルグラデに(2026-08-15) */
+.band{background:linear-gradient(90deg,#b79ce0,#ee85b5 45%,#8ec5e8) !important}
+</style>
+</head>
+<body>
+
+<div class="band"><span class="sf">TB</span><h1 id="pgtitle">この子のページ</h1><a href="index.html?in=1">◀ お店にもどる</a></div>
+<section><div id="detail"></div></section>
+<footer>ちびボード — うさぎと、手づくりのキーボード。<br>X <b>@tibiboard</b> / 技適 211-220207 / <a href="詳しく.html" style="color:#ffd0e5">仕様・注意がき</a></footer>
+
+<script>
+/* 商品リストから ?id=〈名前〉 の個体を探して表示する。
+   「いる」以外(旅立ち/展示/不明)は商品ページを見せずにお店へ戻す
+   = データの状態を「旅立ち」に変えるだけで、このページへの道が閉じる */
+function parseShop(txt){
+  const items = [];
+  txt.split('\n').map(l=>l.trim()).filter(l=>l && !l.startsWith('#') && !l.startsWith('//')).forEach(l=>{
+    if(l.includes(':') && !l.includes('|')) return;
+    const c = l.split('|').map(s=>s.trim());
+    if(c.length < 3) return;
+    const st = c[1] || '';
+    items.push({name:c[0], state:st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':'いる')),
+      price:parseInt(c[2])||0, base:(c[3]||'').replace(/\.(jpg|jpeg|png|webp)$/i,''),
+      color:c[4]||'', story:c[5]||'', url:c[6]||'', ship:c[7]||'', kind:(c[8]==='キット')?'キット':'完成'});
+  });
+  return items;
+}
+const items = parseShop(window.SHOP_DATA);
+const id = new URLSearchParams(location.search).get('id');
+const it = items.find(i=>i.name===id);
+if(!it || it.state!=='いる'){ location.replace('index.html?in=1'); }
+
+const yen = n => '¥' + n.toLocaleString();
+const TODO = '<span class="todo">__要記入__</span>';
+const val = v => (!v || v==='__要記入__' || /^__要記入__/.test(v)) ? TODO + (v.replace(/^__要記入__/,'')||'') : v;
+function slot(file, label, size, ratio){
+  return `<div class="slot" style="aspect-ratio:${ratio}">
+    <div class="fn">📷 ${file||'—'}</div>
+    <div class="ic">📷</div>
+    <div class="t">ここに ${label} の写真</div>
+    <div class="s">推奨 ${size}<br>photos/${file||'__要記入__'}</div>
+    ${file?`<img src="photos/${file}" alt="${label}" onerror="this.remove()">`:''}
+  </div>`;
+}
+const CUTS = [
+  {n:1, label:'真正面(全体)',      size:'1200×1200px(正方形)'},
+  {n:2, label:'斜め45°(立体感)',   size:'1200×1200px(正方形)'},
+  {n:3, label:'真横(薄さ)',        size:'1200×1200px(正方形)'},
+  {n:4, label:'うさぎプレート寄り', size:'1200×1200px(正方形)'},
+  {n:5, label:'手を添えたサイズ感', size:'1200×1200px(正方形)'}
+];
+if(it && it.state==='いる'){
+  document.getElementById('pgtitle').textContent = it.name;
+  document.title = `${it.name} — ちびボードのお店`;
+  const main = slot(it.base?it.base+'_1.jpg':'', it.name+' '+CUTS[0].label, CUTS[0].size, '1/1');
+  const th = CUTS.slice(1).map(c=>slot(it.base?`${it.base}_${c.n}.jpg`:'', c.label, c.size, '1/1')).join('');
+  document.getElementById('detail').innerHTML = `
+  <div class="pd">
+    <div class="top">
+      <div class="gal">
+        <div class="main">${main}<div class="tag">🐰 いまここにいます</div></div>
+        <div class="thumbs">${th}</div>
+      </div>
+      <div>
+        <h3>${it.name}</h3>
+        <div class="col">配色: ${val(it.color)}</div>
+        <div class="story">${val(it.story)}</div>
+        <div class="price">${yen(it.price)} <small>(税・送料込)</small></div>
+        <div class="ship">🚚 発送: ${it.ship||TODO}</div>
+        ${it.url && it.url!=='__要記入__'
+          ? `<a class="keybtn big" href="${it.url}" target="_blank" rel="noopener">この子を むかえにいく ▶</a>`
+          : `<div class="keybtn big" style="background:#8b8792;border-bottom-color:#5f5b66;cursor:not-allowed">購入リンク ${TODO}</div>`}
+        <div class="buynote">・送料込みの価格です<br>・1台ずつ最終調整してからお届けします<br>・お問い合わせは購入したお店のメッセージ機能へ</div>
+        <div style="font-size:13px;font-weight:900;margin-top:10px"><a href="詳しく.html" style="color:var(--mint-deep)">📋 くわしい仕様・注意がきを見る ▶</a></div>
+      </div>
+    </div>
+  </div>`;
+}
+</script>
+<div style="position:fixed;left:8px;bottom:8px;z-index:9999;background:#000c;color:#fff;font:700 13px/1.6 sans-serif;padding:4px 12px;border-radius:99px;pointer-events:none" id="verbadge"></div>
+<script>if(['localhost','127.0.0.1'].includes(location.hostname)){document.getElementById('verbadge').textContent='版: '+new Date(document.lastModified).toLocaleString('ja-JP');}else{document.getElementById('verbadge').remove();}</script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ちびボードって? — ちびボードのお店</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#e0197a;--pink-deep:#b81163;--pink-pale:#ffe3f0;--mint:#3ec9c2;--mint-pale:#ddf5f2;--mint-deep:#127a75;--ink:#222226;--ink2:#4a4450;--line:#8b8792}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--mint-pale);color:var(--ink);overflow-x:hidden;line-height:1.6}
+img{max-width:100%}
+.band{background:var(--pink-deep);color:#fff;padding:14px 20px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.band .sf{font-size:44px;font-weight:900;background:#fff;color:var(--pink-deep);padding:0 16px;border-radius:8px}
+.band h1{font-size:clamp(32px,5.5vw,42px);font-weight:900;letter-spacing:4px}
+.band a{color:#ffd0e5;font-size:19px;font-weight:900;margin-left:auto;text-decoration:none}
+
+/* ▼絵本セクション */
+.ehon{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px clamp(16px,4vw,40px);gap:18px}
+.ehon.bg-mint{background:linear-gradient(180deg,#9ccbee,#bda7e2)}
+.ehon.bg-white{background:linear-gradient(180deg,#f9debc,#d4b6e8)}
+.ehon.bg-pink{background:linear-gradient(180deg,#f3accc,#c9ade6)}
+.ehon{position:relative}
+.ehon>*{position:relative;z-index:1}
+.ehon .photo-wrap{width:min(92vw,900px);height:58vh;height:58svh;border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.15);position:relative;background:#e9e7ec;z-index:1}
+.ehon .photo-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.ehon .photo-wrap.slot-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#6b6672;border:3px dashed var(--line)}
+.ehon .photo-wrap.slot-empty .ic{font-size:48px}
+.ehon h2{font-size:clamp(34px,6vw,64px);font-weight:900;letter-spacing:1px;text-wrap:balance;color:var(--mint-deep-txt,#0e3b39)}
+.ehon.bg-mint h2,.ehon.bg-white h2{color:#0e3b39}
+.ehon.bg-pink h2{color:#7a0f45}
+.ehon h2 em{font-style:normal;color:var(--pink)}
+.ehon.bg-pink h2 em{color:var(--mint-deep)}
+.ehon p.sub{font-size:clamp(15px,2.4vw,20px);color:var(--ink2);font-weight:700;max-width:640px}
+
+/* セクション番号キーキャップ */
+.sec-num{position:absolute;left:clamp(10px,3vw,24px);top:14px;width:48px;height:48px;border-radius:20%;
+  background:linear-gradient(180deg,#ffffff,#efeef2);box-shadow:0 6px 0 #d8d3dd,0 10px 18px rgba(0,0,0,.12);
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;color:#0e3b39;z-index:2}
+
+/* キーキャップ共通 */
+.keycap{display:inline-block;background:linear-gradient(180deg,#ffffff,#efeef2);color:#2a2730;
+  border:0;border-radius:20%;padding:14px 30px;font-weight:900;font-size:17px;cursor:pointer;
+  font-family:inherit;text-decoration:none;
+  box-shadow:0 6px 0 #d8d3dd,0 10px 18px rgba(0,0,0,.12);
+  transition:transform .08s ease,box-shadow .08s ease}
+.keycap:active{transform:translateY(4px);box-shadow:0 2px 0 #d8d3dd,0 4px 8px rgba(0,0,0,.10)}
+.keycap.accent{background:linear-gradient(180deg,#ec3d92,var(--pink-deep));color:#fff;box-shadow:0 6px 0 #8a0e49,0 10px 18px rgba(0,0,0,.18)}
+.keycap.accent:active{box-shadow:0 2px 0 #8a0e49,0 4px 8px rgba(0,0,0,.14)}
+
+/* 実寸ギミック */
+.mmbtn{border-radius:18%;padding:12px 26px;font-size:16px;margin-top:4px}
+.overlay{position:fixed;inset:0;background:rgba(20,15,20,.82);z-index:9990;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.overlay-box{background:#fff;border-radius:20px;padding:22px 18px 26px;max-width:480px;width:100%;text-align:center;max-height:92vh;overflow:auto}
+.overlay-box h3{font-size:20px;font-weight:900;color:var(--pink-deep);margin-bottom:4px}
+.overlay-box .note{font-size:13px;color:var(--ink2);margin-bottom:14px}
+.mm-stage{position:relative;margin:0 auto;background:#f4f2f6;border-radius:10px;overflow:visible}
+.mm-hand{background:#e9e7ec;border-radius:6px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.mm-hand img{width:100%;height:100%;object-fit:cover;display:block}
+.mm-card{position:absolute;left:0;top:0;border:2px dashed var(--pink-deep);border-radius:5px;background:rgba(224,25,122,.08);display:none}
+.mm-toggle{margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.mm-toggle button{font-family:inherit;font-size:13px;font-weight:900;border-radius:16%;padding:9px 16px;border:0;
+  background:linear-gradient(180deg,#ffffff,#efeef2);color:var(--mint-deep);cursor:pointer;
+  box-shadow:0 4px 0 #d8d3dd,0 6px 10px rgba(0,0,0,.10);transition:transform .08s ease,box-shadow .08s ease}
+.mm-toggle button:active{transform:translateY(3px);box-shadow:0 1px 0 #d8d3dd}
+.mm-toggle button.active{background:linear-gradient(180deg,#4fd6cf,var(--mint-deep));color:#fff;box-shadow:0 4px 0 #0b5a56,0 6px 10px rgba(0,0,0,.14)}
+.mm-slider-wrap{margin-top:14px;display:none}
+.mm-slider-wrap.show{display:block}
+.mm-slider-wrap input{width:90%}
+.mm-slider-wrap .val{font-size:13px;font-weight:900;color:var(--ink2)}
+.mm-close{margin-top:16px;border-radius:16%;padding:11px 28px;font-size:14px}
+.mm-pc-note{font-size:13px;color:#8a2a56;background:#ffe3f0;border-radius:10px;padding:10px;margin-top:10px;display:none}
+
+.bottombtns{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:8px}
+.keybtn{border-radius:16%;padding:20px 40px;font-size:22px;letter-spacing:2px}
+.backlink{color:var(--pink-deep);font-size:16px;font-weight:900;text-decoration:none}
+footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;font-size:13.5px;letter-spacing:1px;line-height:2}
+footer a{color:#ffd0e5}
+
+/* タップで色が変わる写真 */
+.tap-photo{cursor:pointer}
+.tap-photo img{transition:filter .25s ease}
+.tap-badge{position:absolute;right:16px;bottom:16px;background:linear-gradient(180deg,#ec3d92,var(--pink-deep));color:#fff;font-weight:900;font-size:15px;padding:10px 18px;border-radius:18%;box-shadow:0 5px 0 #8a0e49,0 8px 14px rgba(0,0,0,.2);animation:pulse 1.1s ease-in-out infinite;pointer-events:none;z-index:2}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* Zエディション ホロカード */
+.holo-wrap{width:min(80vw,480px);position:relative}
+.holo-card{position:relative;border-radius:26px;padding:10px;background:linear-gradient(135deg,#f7d774,#caa53a,#f7d774);box-shadow:0 12px 26px rgba(0,0,0,.25);transition:transform .15s ease}
+.holo-card .inner{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:4/3;background:#e9e7ec}
+.holo-card .inner img{width:100%;height:100%;object-fit:cover;display:block}
+.holo-card .shine{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.75) 48%,transparent 66%);background-size:250% 250%;animation:shine 2.5s linear infinite;pointer-events:none}
+@keyframes shine{0%{background-position:120% -20%}100%{background-position:-30% 120%}}
+.holo-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#8a6a1a;background:#fff7e0;height:100%;font-weight:900}
+
+/* おもちゃ箱ガチャガチャ セクション */
+.ehon.gacha-sec{padding:0 0 30px;gap:0;justify-content:flex-start;overflow:hidden}
+.gacha-slider{position:relative;width:100%;height:55vh;height:55svh;background:#111}
+.gacha-track{display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.gacha-track::-webkit-scrollbar{display:none}
+.gacha-track .slide{flex:0 0 100%;width:100%;height:100%;scroll-snap-align:center}
+.gacha-track .slide img{width:100%;height:100%;object-fit:cover;display:block}
+.gacha-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:50px;height:50px;padding:0;font-size:20px;line-height:1}
+.gacha-arrow.prev{left:10px}
+.gacha-arrow.next{right:10px}
+.gacha-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:7px;z-index:3}
+.gacha-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);transition:background .2s ease}
+.gacha-dots span.active{background:#fff}
+
+.gacha-head{padding:26px clamp(16px,4vw,40px) 4px;text-align:center}
+.gacha-credit{background:#000;color:#cfc8cc;text-align:right;font-size:12.5px;font-weight:700;padding:0 22px 8px;letter-spacing:.5px}
+.gacha-credit a{color:#ffd54f;text-decoration:underline}
+
+@media (max-width:640px){
+  .ehon{padding:24px 14px;gap:14px}
+  /* スマホ: 枠を写真と同じ16:10にして左右の見切れを無くす(2026-08-15たけろう指摘) */
+  .ehon .photo-wrap{height:auto;aspect-ratio:16/10;width:94vw;max-height:48svh}
+  .overlay-box{padding:18px 12px 22px}
+  .ehon.gacha-sec{padding:0 0 22px}
+  .gacha-slider{height:42vh;height:42svh}
+  .marquee-row img{height:var(--h,110px)}
+  .marquee-row{gap:10px}
+  .marquee-row.r1,.marquee-row.r2,.marquee-row.r3{margin-top:10px}
+}
+
+/* ===== 映画風スライダー(2026-08-15) ===== */
+.gacha-slider{background:#000 !important;padding:26px 0 !important;height:auto !important}   /* 上下の黒帯。高さは画像比率まかせ(固定55vhを解除=切れ防止) */
+.gacha-track{height:auto !important}
+.gacha-track .slide{aspect-ratio:2.35/1;height:auto !important;position:relative}
+/* フィルムトーン統一(彩度を少し落として温かく=別々の写真を同じ映画に) */
+.gacha-track .slide img{filter:saturate(.90) contrast(1.08) sepia(.10) brightness(1.03)}
+/* ビネット(四隅減光) */
+.gacha-track .slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.07) 0 2px, transparent 2px 6px),   /* VHS走査線(ゆるめ) */
+    radial-gradient(ellipse at center, transparent 55%, rgba(10,5,10,.45) 100%)}
+.gacha-track .slide img{width:100%;height:100%;object-fit:cover;display:block}
+.gacha-track{position:relative}
+/* フィルムグレイン(うっすら) */
+.gacha-slider::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
+  background-image:repeating-conic-gradient(#fff 0 0.0001%, #000 0 0.0002%);background-size:3px 3px}
+.gacha-slider{position:relative}
+/* 予告編ロゴ */
+.gacha-slider::before{content:"CHIBIBOARD";position:absolute;right:22px;bottom:6px;z-index:5;color:#fffc;
+  font-weight:900;letter-spacing:6px;font-size:12px;pointer-events:none}
+
+/* ===== クリィミーマミ配色(2026-08-15全ページ統一)。旧値: pink#e0197a/deep#b81163/mint#3ec9c2/mint-deep#127a75 ===== */
+:root{
+  --pink:#ee85b5; --pink-deep:#c9679c; --pink-pale:#fbe7f1;
+  --mint:#9dd8c8; --mint-pale:#eef8f3; --mint-deep:#6a9fc0;
+  --gold:#f2d98a;
+}
+
+/* 80sマミ強化: 帯を虹パステルグラデに(2026-08-15) */
+.band{background:linear-gradient(90deg,#b79ce0,#ee85b5 45%,#8ec5e8) !important}
+
+/* ページ最外の背景もマミの空に(2026-08-15) */
+body{background:linear-gradient(180deg,#5da6e0,#9573cc 45%,#e96da8) fixed !important}
+</style>
+</head>
+<body>
+<div class="band"><span class="sf">TB</span><h1>ちびボードって?</h1><a href="index.html?in=1">◀ お店にもどる</a></div>
+
+<script>
+/* ============================================
+   ▼たけろうが編集するのはここだけ▼
+   h = 大見出し(<br>で改行できる) / p = 補足1行(空文字なら非表示)
+   写真を差し替えたい時は photos/ehon_◯.jpg を上書き保存するだけ
+   ============================================ */
+const EHON = [
+  {h:'ちいさい。<br>ふたつに わかれてる。', p:'キーピッチ17mm(ふつうは19mm)。無線(Bluetooth)。USBでも つながる'},
+  {h:'かたちは シカクと マル。',           p:'どちらにも Zエディションが あるよ'},
+  {h:'Zは、<em>とくべつ</em>。',          p:'Zが ついたら ザラザラエディションだよ'},
+  {h:'1台ずつ、手づくり。',                p:'ケースは3Dプリント。うさぎのネームプレートつき'},
+  {h:'左手が<br>ぷるっと ふるえる。',       p:'振動の設定も アプリで できる'},
+  {h:'キーの編集が かんたん。',            p:'デスクトップ版と ブラウザ版。Macでも つかえる'},
+  {h:'キースイッチを つけかえられる。',     p:'ホットスワップ対応。おまけキャップつき'},
+  {h:'キット版と 完成版、えらべます。',      p:'じぶんで 組んでみたい人は キット版'},
+  {h:'LEDが でんちの のこりを おしえてくれる。', p:'しんごうと おなじだよ。75%〜=にじいろ / 50%〜=あお / 25%〜=きいろ / それより下=あか'},
+];
+/* ▲編集ここまで▲ */
+</script>
+
+
+<!-- 1 -->
+<section class="ehon bg-mint">
+  <div class="sec-num">01</div>
+  <div class="photo-wrap"><img src="photos/ehon_1.jpg" alt="左右2台のちびボード" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.jpg</div>'"></div>
+  <h2 data-ehon="0"></h2>
+  <p class="sub" data-ehonp="0"></p>
+  <button class="keycap mmbtn" id="openMM">📏 じっすんで みる</button>
+</section>
+
+<!-- 2 (おもちゃ箱ガチャガチャ) -->
+<section class="ehon gacha-sec bg-mint">
+  <div class="sec-num">02</div>
+
+  <div class="gacha-slider" id="gachaSlider">
+    <div class="gacha-track" id="gachaTrack"></div>
+    </div>
+    <button class="keycap gacha-arrow prev" id="gachaPrev" aria-label="まえへ">◀</button>
+    <button class="keycap gacha-arrow next" id="gachaNext" aria-label="つぎへ">▶</button>
+    <div class="gacha-dots" id="gachaDots"></div>
+  </div>
+
+</section>
+
+<!-- 3 -->
+<section class="ehon bg-white">
+  <div class="sec-num">03</div>
+  <div class="photo-wrap"><img src="photos/ehon_2.jpg" alt="キーの形" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_2.jpg</div>'"></div>
+  <h2 data-ehon="1"></h2>
+  <p class="sub" data-ehonp="1"></p>
+</section>
+
+<!-- 4 (Zエディション ホロカード) -->
+<section class="ehon bg-pink">
+  <div class="sec-num">04</div>
+  <div class="photo-wrap"><img src="photos/ehon_z.jpg" alt="Zエディションのざらざら仕上げ"></div>
+  <h2 data-ehon="2"></h2>
+  <p class="sub" data-ehonp="2"></p>
+</section>
+
+<!-- 5 -->
+<section class="ehon bg-mint">
+  <div class="sec-num">05</div>
+  <div class="photo-wrap"><img src="photos/ehon_3.jpg" alt="ネームプレート" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_3.jpg</div>'"></div>
+  <h2 data-ehon="3"></h2>
+  <p class="sub" data-ehonp="3"></p>
+</section>
+
+<!-- 7 -->
+<section class="ehon bg-pink">
+  <div class="sec-num">06</div>
+  <div class="photo-wrap"><video src="photos/shindo_demo.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video></div>
+  <h2 data-ehon="4"></h2>
+  <p class="sub" data-ehonp="4"></p>
+</section>
+
+<!-- 8 -->
+<section class="ehon bg-mint">
+  <div class="sec-num">07</div>
+  <div class="photo-wrap slot-empty" id="slot5"><div class="ic">📱</div><div>アプリ画面(準備中)</div></div>
+  <h2 data-ehon="5"></h2>
+  <p class="sub" data-ehonp="5"></p>
+  <p style="font-size:13px;color:var(--ink2);opacity:.85;max-width:520px">※アプリは これからも こうしんして よくしていくよ。がめんは いまの ものと ちがうことが あるよ</p>
+</section>
+
+<!-- 9 -->
+<section class="ehon bg-white">
+  <div class="sec-num">08</div>
+  <div class="photo-wrap"><img src="photos/ehon_6.jpg" alt="キーキャップ" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_6.jpg</div>'"></div>
+  <h2 data-ehon="6"></h2>
+  <p class="sub" data-ehonp="6"></p>
+</section>
+
+<!-- 10 (LED動画) -->
+<section class="ehon bg-white">
+  <div class="sec-num">09</div>
+  <div class="photo-wrap" style="background:linear-gradient(180deg,var(--mint-pale),var(--pink-pale));display:flex;align-items:stretch;justify-content:center;gap:clamp(10px,2.5vw,22px);padding:clamp(10px,2.5vw,22px)">
+    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;position:relative">
+      <div style="position:absolute;top:-10px;right:-10px;background:var(--pink-deep);color:#fff;font-weight:900;font-size:clamp(11px,1.6vw,14px);padding:8px 14px;border-radius:16%;box-shadow:0 4px 0 #8a3f66;transform:rotate(8deg)">9がつから</div>
+      <svg viewBox="0 0 220 160" style="width:100%;max-width:260px;flex:1" xmlns="http://www.w3.org/2000/svg">
+        <rect x="18" y="86" width="72" height="46" rx="8" fill="var(--mint-pale)" stroke="var(--mint-deep)" stroke-width="3"/>
+        <circle cx="30" cy="98" r="4" fill="var(--mint-deep)"/><circle cx="78" cy="98" r="4" fill="var(--mint-deep)"/>
+        <circle cx="30" cy="120" r="4" fill="var(--mint-deep)"/><circle cx="78" cy="120" r="4" fill="var(--mint-deep)"/>
+        <g transform="translate(96,70) rotate(-12)">
+          <rect x="0" y="0" width="30" height="30" rx="6" fill="var(--gold)" stroke="var(--pink-deep)" stroke-width="2.5"/>
+        </g>
+        <g transform="translate(140,95) rotate(18)">
+          <rect x="0" y="0" width="26" height="26" rx="6" fill="var(--pink)" stroke="var(--pink-deep)" stroke-width="2.5"/>
+        </g>
+        <g transform="translate(160,55) rotate(-25)">
+          <rect x="0" y="0" width="22" height="22" rx="6" fill="var(--mint)" stroke="var(--mint-deep)" stroke-width="2.5"/>
+        </g>
+        <g transform="translate(60,30) rotate(10)">
+          <circle r="8" fill="none" stroke="var(--line)" stroke-width="3"/>
+          <circle r="2.4" fill="var(--line)"/>
+        </g>
+        <g transform="translate(190,120) rotate(-6)">
+          <circle r="7" fill="none" stroke="var(--line)" stroke-width="3"/>
+          <circle r="2.2" fill="var(--line)"/>
+        </g>
+        <ellipse cx="130" cy="140" rx="10" ry="6" fill="#fff" stroke="var(--pink-deep)" stroke-width="2.5"/>
+        <path d="M126 134 Q124 126 128 122" fill="none" stroke="var(--pink-deep)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M134 134 Q138 126 134 122" fill="none" stroke="var(--pink-deep)" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <div style="font-weight:900;color:var(--mint-deep);font-size:clamp(17px,3vw,22px)">キットばん</div>
+      <div style="font-size:clamp(12px,2vw,15px);color:var(--ink2);font-weight:700">じぶんで くみたてる</div>
+    </div>
+    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px">
+      <svg viewBox="0 0 220 160" style="width:100%;max-width:260px;flex:1" xmlns="http://www.w3.org/2000/svg">
+        <rect x="40" y="60" width="140" height="60" rx="14" fill="var(--pink-pale)" stroke="var(--pink-deep)" stroke-width="3.5"/>
+        <g fill="var(--mint-deep)">
+          <rect x="52" y="72" width="14" height="14" rx="4"/><rect x="70" y="72" width="14" height="14" rx="4"/>
+          <rect x="88" y="72" width="14" height="14" rx="4"/><rect x="106" y="72" width="14" height="14" rx="4"/>
+          <rect x="124" y="72" width="14" height="14" rx="4"/><rect x="142" y="72" width="14" height="14" rx="4"/>
+          <rect x="52" y="92" width="14" height="14" rx="4"/><rect x="70" y="92" width="14" height="14" rx="4"/>
+          <rect x="88" y="92" width="14" height="14" rx="4"/><rect x="106" y="92" width="14" height="14" rx="4"/>
+          <rect x="124" y="92" width="32" height="14" rx="4"/>
+        </g>
+        <g transform="translate(60,52)">
+          <path d="M0 14 Q0 0 14 0 Q28 0 28 14" fill="none" stroke="var(--pink-deep)" stroke-width="3.5" stroke-linecap="round"/>
+          <ellipse cx="2" cy="4" rx="6" ry="9" fill="#fff" stroke="var(--pink-deep)" stroke-width="3" transform="rotate(-18 2 4)"/>
+          <ellipse cx="26" cy="4" rx="6" ry="9" fill="#fff" stroke="var(--pink-deep)" stroke-width="3" transform="rotate(18 26 4)"/>
+        </g>
+        <circle cx="196" cy="70" r="10" fill="var(--gold)"/>
+        <path d="M191 70 l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M40 130 q70 14 140 0" fill="none" stroke="var(--mint)" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8"/>
+      </svg>
+      <div style="font-weight:900;color:var(--pink-deep);font-size:clamp(17px,3vw,22px)">かんせいばん</div>
+      <div style="font-size:clamp(12px,2vw,15px);color:var(--ink2);font-weight:700">とどいたら すぐ つかえる</div>
+    </div>
+  </div>
+  <h2 data-ehon="7"></h2>
+  <p class="sub" data-ehonp="7"></p>
+</section>
+
+<section class="ehon bg-pink">
+  <div class="sec-num">10</div>
+  <div class="photo-wrap"><video src="photos/ehon_7_led.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video></div>
+  <h2 data-ehon="8"></h2>
+  <p class="sub" data-ehonp="8"></p>
+  <div class="bottombtns">
+    <a class="keycap keybtn accent" href="詳しく.html">📋 仕様をみる ▶</a>
+    <a class="backlink" href="index.html?in=1">◀ お店にもどる</a>
+  </div>
+</section>
+
+<!-- 実寸オーバーレイ -->
+<div class="overlay" id="mmOverlay">
+  <div class="overlay-box">
+    <h3>じっすんで みる</h3>
+    <div class="note">画面のmm表示は端末によって誤差があります(スマホでも±10%ほど)。カードで合わせると精度アップ。</div>
+
+    <div style="overflow-x:auto;max-width:100%;padding-bottom:4px">
+      <div class="mm-stage" id="mmStage">
+        <div class="mm-hand" id="mmHand"></div>
+        <div class="mm-card" id="mmCard"></div>
+      </div>
+    </div>
+
+    <div class="mm-pc-note" id="pcNote">📱 実寸は スマホで見てね(PCの画面では正確に出せません)</div>
+
+    <div class="mm-toggle">
+      <button id="tabSize" class="active">実寸で見る</button>
+      <button id="tabCard">カードで ぴったり合わせる</button>
+    </div>
+
+    <div class="mm-slider-wrap" id="sliderWrap">
+      <input type="range" id="mmSlider" min="0.7" max="1.3" step="0.01" value="1">
+      <div class="val" id="mmVal">倍率: 1.00倍</div>
+    </div>
+
+    <button class="mm-close" id="closeMM">とじる</button>
+  </div>
+</div>
+
+<footer>ちびボード — うさぎと、手づくりのキーボード。<br>X <b>@tibiboard</b> / 技適 211-220207</footer>
+
+<script>
+/* 編集ブロック(EHON)を各画面に流し込む */
+document.querySelectorAll('[data-ehon]').forEach(el=>{ el.innerHTML = EHON[+el.dataset.ehon].h; });
+document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset.ehonp].p; if(t){el.textContent=t;}else{el.remove();} });
+</script>
+<script>
+/* 実寸ギミック: 片手側 = 横100mm×縦65mm 【要実寸確認】(★これは何か.mdに明記なし。確定値が出たらここを差し替え) */
+const MM_W = 100, MM_H = 65;
+const CARD_W = 85.6, CARD_H = 54; // クレジットカード標準サイズ
+
+const overlay = document.getElementById('mmOverlay');
+const stage = document.getElementById('mmStage');
+const hand = document.getElementById('mmHand');
+const card = document.getElementById('mmCard');
+const slider = document.getElementById('mmSlider');
+const mmVal = document.getElementById('mmVal');
+const sliderWrap = document.getElementById('sliderWrap');
+const tabSize = document.getElementById('tabSize');
+const tabCard = document.getElementById('tabCard');
+const pcNote = document.getElementById('pcNote');
+
+function getScale(){
+  const s = localStorage.getItem('chibi_mm_scale');
+  return s ? parseFloat(s) : 1;
+}
+function setScale(v){
+  localStorage.setItem('chibi_mm_scale', v);
+}
+
+function render(){
+  const scale = getScale();
+  const s = scale; // 1mm = s px (CSSのmm単位をベースに調整)
+  hand.style.width = (MM_W * s) + 'mm';
+  hand.style.height = (MM_H * s) + 'mm';
+  card.style.width = (CARD_W * s) + 'mm';
+  card.style.height = (CARD_H * s) + 'mm';
+  stage.style.width = (MM_W * s) + 'mm';
+  stage.style.height = (MM_H * s) + 'mm';
+}
+
+function setHandImage(){
+  hand.innerHTML = '<img src="photos/ehon_1_left.jpg" alt="片手のじっすん" onerror="this.parentElement.style.background=\'#cfd6d5\';this.remove()">';
+}
+
+document.getElementById('openMM').addEventListener('click', ()=>{
+  overlay.classList.add('open');
+  setHandImage();
+  slider.value = getScale();
+  mmVal.textContent = '倍率: ' + getScale().toFixed(2) + '倍';
+  render();
+  checkPC();
+});
+document.getElementById('closeMM').addEventListener('click', ()=>overlay.classList.remove('open'));
+overlay.addEventListener('click', (e)=>{ if(e.target===overlay) overlay.classList.remove('open'); });
+
+tabSize.addEventListener('click', ()=>{
+  tabSize.classList.add('active'); tabCard.classList.remove('active');
+  card.style.display='none'; sliderWrap.classList.remove('show');
+});
+tabCard.addEventListener('click', ()=>{
+  tabCard.classList.add('active'); tabSize.classList.remove('active');
+  card.style.display='block'; sliderWrap.classList.add('show');
+});
+
+slider.addEventListener('input', ()=>{
+  const v = parseFloat(slider.value);
+  setScale(v);
+  mmVal.textContent = '倍率: ' + v.toFixed(2) + '倍';
+  render();
+});
+
+function checkPC(){
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const wide = window.innerWidth > 1024;
+  pcNote.style.display = (wide && !isTouch) ? 'block' : 'none';
+}
+window.addEventListener('resize', checkPC);
+</script>
+
+<script>
+/* タップで色が変わる写真 */
+(function(){
+  const tapPhoto = document.getElementById('tapPhoto');
+  const tapImg = document.getElementById('tapImg');
+  if(!tapPhoto || !tapImg) return;
+  const HUES = [0,60,120,180,240,300];
+  let idx = 0;
+  tapPhoto.addEventListener('click', ()=>{
+    idx = (idx+1) % HUES.length;
+    tapImg.style.filter = 'hue-rotate(' + HUES[idx] + 'deg) saturate(1.1)';
+  });
+})();
+</script>
+
+<script>
+/* Zエディション ホロカードのちょっと傾き */
+(function(){
+  const card = document.getElementById('holoCard');
+  if(!card) return;
+  function tilt(x,y,rect){
+    const px = (x - rect.left)/rect.width - 0.5;
+    const py = (y - rect.top)/rect.height - 0.5;
+    card.style.transform = 'perspective(600px) rotateY(' + (px*10) + 'deg) rotateX(' + (-py*10) + 'deg)';
+  }
+  card.addEventListener('mousemove', e=>{
+    tilt(e.clientX, e.clientY, card.getBoundingClientRect());
+  });
+  card.addEventListener('mouseleave', ()=>{ card.style.transform = ''; });
+  card.addEventListener('touchstart', e=>{
+    const t = e.touches[0];
+    tilt(t.clientX, t.clientY, card.getBoundingClientRect());
+  }, {passive:true});
+  card.addEventListener('touchend', ()=>{ card.style.transform = ''; });
+})();
+</script>
+
+<script>
+/* おもちゃ箱ガチャガチャ: SNSスライダー + キーボード洪水マーキー */
+(function(){
+  /* --- 上段: 巨大スライダー(scroll-snap + 自動送り) --- */
+  const track = document.getElementById('gachaTrack');
+  if(track){
+    /* SNS投稿の厳選画像66枚をランダム順で流す(毎回違う並び)。
+       メインを固定したい時は SNS_MAIN にファイル名を入れる(1枚目に固定) */
+    const SNS_COUNT = 18;   /* たけろう厳選(cine_◯◯.jpg)。2026-08-15映画風に刷新 */
+    const SNS_MAIN = '';   /* 例: 'cine_03.jpg' を入れると1枚目固定 */
+    let names = Array.from({length:SNS_COUNT}, (_,i)=>`cine_${String(i+1).padStart(2,'0')}.jpg`);
+    for(let i=names.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [names[i],names[j]]=[names[j],names[i]]; }
+    if(SNS_MAIN){ names = [SNS_MAIN, ...names.filter(n=>n!==SNS_MAIN)]; }
+    track.innerHTML = names.map(n=>`<div class="slide"><img src="photos/${n}" alt="ちびボード" loading="lazy"></div>`).join('');
+    /* キーキャップ作家クレジット(常時表示・スライダー直下) */
+    const credit=document.createElement('div');
+    credit.className='gacha-credit';
+    credit.innerHTML='チョコミントキーキャップは クラブクラフト様の作品です → <a href="https://kanicraft.booth.pm" target="_blank" rel="noopener">BOOTH(かにクラフト)</a>';
+    document.getElementById('gachaSlider').after(credit);
+    const slides = Array.from(track.children);
+    const dotsWrap = document.getElementById('gachaDots');
+    slides.forEach((_,i)=>{
+      const d = document.createElement('span');
+      if(i===0) d.classList.add('active');
+      dotsWrap.appendChild(d);
+    });
+    const dots = Array.from(dotsWrap.children);
+    let idx = 0;
+    let timer = null;
+
+    function goTo(i){
+      idx = (i + slides.length) % slides.length;
+      track.scrollTo({left: track.clientWidth * idx, behavior:'smooth'});
+      dots.forEach((d,j)=>d.classList.toggle('active', j===idx));
+    }
+    function startAuto(){
+      clearInterval(timer);
+      timer = setInterval(()=>goTo(idx+1), 4000);
+    }
+    document.getElementById('gachaPrev').addEventListener('click', ()=>{ goTo(idx-1); startAuto(); });
+    document.getElementById('gachaNext').addEventListener('click', ()=>{ goTo(idx+1); startAuto(); });
+    track.addEventListener('scroll', ()=>{
+      const i = Math.round(track.scrollLeft / track.clientWidth);
+      if(i!==idx){ idx=i; dots.forEach((d,j)=>d.classList.toggle('active', j===idx)); }
+    }, {passive:true});
+    window.addEventListener('resize', ()=>goTo(idx));
+    startAuto();
+  }
+
+})();
+</script>
+
+<div style="position:fixed;left:8px;bottom:8px;z-index:9999;background:#000c;color:#fff;font:700 13px/1.6 sans-serif;padding:4px 12px;border-radius:99px;pointer-events:none" id="verbadge"></div>
+<script>if(['localhost','127.0.0.1'].includes(location.hostname)){document.getElementById('verbadge').textContent='版: '+new Date(document.lastModified).toLocaleString('ja-JP');}else{document.getElementById('verbadge').remove();}</script>
+</body>
+</html>

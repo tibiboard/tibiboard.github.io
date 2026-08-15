@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>くわしい仕様と注意がき — ちびボードのお店</title>
+<style>
+:root{
+  --pink:#e0197a;--pink-deep:#b81163;--pink-pale:#ffe3f0;
+  --mint:#3ec9c2;--mint-pale:#ddf5f2;--mint-deep:#127a75;
+  --ink:#222226;--ink2:#4a4450;--line:#8b8792;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--mint-pale);color:var(--ink);overflow-x:hidden;line-height:1.8}
+.band{background:var(--pink-deep);color:#fff;padding:20px 28px;display:flex;align-items:baseline;gap:22px;flex-wrap:wrap}
+.band .sf{font-size:52px;font-weight:900;background:#fff;color:var(--pink-deep);padding:0 18px;border-radius:9px}
+.band h1{font-size:clamp(28px,4.5vw,40px);font-weight:900;letter-spacing:4px}
+.band a{color:#ffd0e5;font-size:18px;font-weight:900;margin-left:auto;text-decoration:none}
+section{max-width:980px;margin:0 auto;padding:56px 22px}
+h2{font-size:clamp(30px,4.2vw,38px);font-weight:900;display:inline-block;background:var(--pink-deep);color:#fff;padding:8px 26px;border-radius:9px;letter-spacing:3px}
+.sub{font-size:19px;margin:14px 0 30px;color:var(--ink2);font-weight:700}
+table.spec{width:100%;border-collapse:collapse;font-size:19px;background:#fff;border-radius:16px;overflow:hidden}
+table.spec th,table.spec td{border:3px solid #d9d3dd;padding:14px 18px;text-align:left;vertical-align:top}
+table.spec th{background:var(--mint-pale);width:34%;font-weight:900;white-space:nowrap}
+@media(max-width:560px){table.spec th{width:40%;white-space:normal;font-size:17px}table.spec td{font-size:17px}}
+.omake{background:#fff;border-left:12px solid var(--mint-deep);border-radius:14px;padding:18px 22px;font-size:18px;font-weight:700;margin-top:20px}
+.notice{background:#fff;border:6px solid var(--pink-deep);border-radius:24px;padding:28px 30px}
+.notice li{font-size:19px;margin:0 0 14px 24px;line-height:1.95}
+.notice li b{color:var(--pink-deep)}
+details{background:#fff;border:4px solid var(--mint);border-radius:18px;padding:20px 24px;margin-bottom:14px}
+details summary{font-size:22px;font-weight:900;cursor:pointer;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"Q ";color:var(--pink-deep);font-weight:900}
+details p{font-size:19px;margin-top:14px;padding-left:1.3em}
+details p::before{content:"A ";color:var(--mint-deep);font-weight:900;margin-left:-1.3em}
+.tokusho{background:#fff;border:4px solid #d9d3dd;border-radius:18px;padding:10px 20px}
+.tokusho table{width:100%;border-collapse:collapse;font-size:18px}
+.tokusho td{border-bottom:3px solid #eae5ee;padding:14px 8px;vertical-align:top}
+.tokusho td:first-child{width:36%;font-weight:900;white-space:nowrap}
+.todo{background:#fff6b8;border:3px solid #b89a00;border-radius:8px;padding:2px 12px;font-weight:900;color:#6b5800;font-size:18px;letter-spacing:1px}
+.keybtn{display:inline-block;background:var(--pink);color:#fff;border:0;border-bottom:10px solid var(--pink-deep);border-radius:20px;padding:22px 44px;font-weight:900;font-size:26px;cursor:pointer;letter-spacing:2px;margin-top:20px;text-decoration:none;font-family:inherit}
+footer{background:var(--pink-deep);color:#fff;text-align:center;padding:36px;font-size:18px;letter-spacing:1px;line-height:2}
+
+/* ===== クリィミーマミ配色(2026-08-15全ページ統一)。旧値: pink#e0197a/deep#b81163/mint#3ec9c2/mint-deep#127a75 ===== */
+:root{
+  --pink:#ee85b5; --pink-deep:#c9679c; --pink-pale:#fbe7f1;
+  --mint:#9dd8c8; --mint-pale:#eef8f3; --mint-deep:#6a9fc0;
+  --gold:#f2d98a;
+}
+
+/* 80sマミ強化: 帯を虹パステルグラデに(2026-08-15) */
+.band{background:linear-gradient(90deg,#b79ce0,#ee85b5 45%,#8ec5e8) !important}
+</style>
+</head>
+<body>
+
+<div class="band"><span class="sf">TB</span><h1>くわしい仕様と注意がき</h1><a href="index.html?in=1">◀ お店にもどる</a></div>
+
+<!-- 仕様 -->
+<section id="spec">
+  <h2>くわしい仕様</h2>
+  <div class="sub">中身は どの子も同じです。ちがうのは 色と かたち(四角/丸)だけ</div>
+  <table class="spec">
+    <tr><th>キー数</th><td>30(左手15・右手15の左右分割)</td></tr>
+    <tr><th>スイッチ</th><td>Kailh Choc V2(ロープロファイル/ホットスワップ対応)</td></tr>
+    <tr><th>キーピッチ</th><td>17mm(一般的なキーボードは19mm)。キーキャップは17mmピッチ用・外形16.5mm以下対応</td></tr>
+    <tr><th>接続</th><td>左手側: USB / Bluetooth、右手側: 左手側と自動で つながります</td></tr>
+    <tr><th>対応OS(打つ)</th><td>Windows / Mac / iPad など(普通のキーボードとして動きます)</td></tr>
+    <tr><th>対応OS(設定アプリ)</th><td>デスクトップ版: Windows 10 / 11 / ブラウザ版: MacなどでもOK(Chrome・Edgeで開くだけ)</td></tr>
+    <tr><th>バッテリー</th><td>充電式(USB Type-Cで充電)。品質を確認したセルのみ使用</td></tr>
+    <tr><th>ファームウェア</th><td>ZMK(オープンソース)ベース</td></tr>
+    <tr><th>技適</th><td>工事設計認証 211-220207</td></tr>
+    <tr><th>ケース</th><td>3Dプリント(1台ずつ製作。積層痕・色味の個体差があります)</td></tr>
+    <tr><th>おまけ機能</th><td>専用アプリ / <b>微振動</b>フィードバック(<b>左手側のみ</b>) / 電池残量LED / 打鍵数カウント</td></tr>
+    <tr><th>セット内容</th><td>本体(左手側・右手側) / キーキャップ / 専用アプリ(購入者ページからダウンロード)<br>※USB-Cケーブルは付属しません</td></tr>
+  </table>
+  <div class="omake">🎁 <b>アプリと微振動は「おまけ」です。</b>主役は、手のひらにおさまるこの子のかわいさと、一台ずつ手作りする丁寧さ。</div>
+</section>
+
+<!-- ご購入前に -->
+<section id="notice">
+  <h2>ご購入前に かならずお読みください</h2>
+  <div class="sub">大事なことなので、買う前にここだけは読んでください</div>
+  <div class="notice">
+    <ul>
+      <li><b>送料込み</b>の価格です。</li>
+      <li>発送は<b>通常1〜2週間</b>です。</li>
+      <li>キースイッチは <b>Kailh Choc V2</b>(ロープロファイル=背の低いスイッチ)です。Cherry MX など通常サイズのスイッチはケースと干渉するため使えません。</li>
+      <li>キーキャップは <b>17mmピッチ用(外形16.5mm以下)</b>に対応。MBKなど18mmピッチ用の一般的なChocキーキャップ(幅17.5mm)は使えません。</li>
+      <li>付属のオリジナルキーキャップは、<b>搭載スイッチに合わせて調整した3Dプリント品</b>です。ほかのスイッチでのはまり具合は保証できません。</li>
+      <li>本製品は<b>技適取得済み</b>です(工事設計認証 <b>211-220207</b>)。</li>
+      <li>設定アプリは<b>デスクトップ版(Windows 10/11)</b>と<b>ブラウザ版</b>の2つ。ブラウザ版はMacなどでも、ChromeかEdgeで開いてUSBをつなぐだけで使えます。</li>
+      <li>アプリのインストール時に青い警告(Windows SmartScreen)が出ることがあります。個人制作のアプリのためで、ウイルスではありません。「詳細情報」→「実行」でインストールできます(手順書つき)。</li>
+      <li>USBケーブルは<b>左手側</b>につないでください。<b>USB-Cケーブルは付属しません。</b></li>
+      <li>ケース・キーキャップは3Dプリント製です。積層痕(細かな横縞)・ごく小さな気泡・色味の個体差があります。不良ではなく、手作り品ならではの個性です。</li>
+      <li>1台ずつ個別に作っているため、色や仕様のご指定・変更はできません。</li>
+      <li><b>初期不良保証:</b> お手元に届いてから <b>14日以内</b>にご連絡いただいた動作不良は、無償で交換・修理いたします。お客様都合による返品・交換はご遠慮ください。</li>
+      <li><b>小さなお子様・ペットのいるご家庭へ:</b> キーキャップ・キースイッチは外れる小さな部品です。誤飲にご注意ください。</li>
+      <li><b>電池について:</b> リチウムポリマー電池を内蔵しています(電池専業メーカー製・保護回路内蔵)。ロット出荷検査報告書を確認のうえ、1個ずつ受け入れ検査をして搭載しています。高温の場所(真夏の車内など)に放置しない・強い衝撃を与えない・膨らみに気づいたら使用を中止してください。廃棄時はお住まいの自治体の小型充電式電池の回収ルールに従ってください。</li>
+      <li><b>📸 写真・動画・SNS投稿は大歓迎です。</b>開封動画・使っている様子・レビュー・アプリの画面など、加工の有無を問わず自由に投稿してください。事前の許可・確認は不要です。ハッシュタグ: <b>#ちびボード</b></li>
+    </ul>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <h2>よくある質問</h2>
+  <div class="sub">気になるところを タップしてひらいてね</div>
+  <details><summary>数字や記号は どうやって打つんですか?</summary>
+    <p>「レイヤー」というしくみで、キーを押しながら別のキーを押すと数字や記号が出ます。ふだんの文字と合わせて、30キーで全部カバーできます。慣れると手をほとんど動かさなくなります。</p></details>
+  <details><summary>設定を変えるのは むずかしくないですか?</summary>
+    <p>専用アプリ(日本語)がついています。デスクトップ版(Windows)とブラウザ版(MacなどでもOK)の2つ。USBケーブルでつなぐだけで自動接続。キーの割り当ては、画面のキーを選んで手元のキーボードを押すだけです。変更はぜんぶ自動保存、「元に戻す」でいつでもやり直せます。</p></details>
+  <details><summary>Mac や iPad でも使えますか?</summary>
+    <p>使えます(普通のBluetoothキーボードとして動きます)。キー割り当ての変更も、<b>ブラウザ版アプリ</b>(Chrome・Edge)ならMacからできます。設定はキーボード本体に保存されるので、どの機器でもそのまま使えます。</p></details>
+  <details><summary>スイッチは交換できますか?</summary>
+    <p>ホットスワップ対応なので交換できます。ただし必ず<b>ロープロファイル(背の低い)スイッチ</b>をお使いください。Cherry MX など通常サイズのスイッチはケースと干渉します。</p></details>
+  <details><summary>微振動って なんですか?</summary>
+    <p>左手側が「ブルッ」と手に返事をする<b>おまけ機能</b>です。Bluetoothの接続先を切り替えたときなど、画面を見なくても「届いた」ことが分かります。アプリでオン/オフを切り替えられます。</p></details>
+  <details><summary>充電ケーブルは付いていますか?</summary>
+    <p>付属しません。USB-Cケーブルはお手元のものをご用意ください。充電するときはUSBケーブルを<b>左手側</b>につないでください。</p></details>
+  <details><summary>こまったときは どこに連絡すればいいですか?</summary>
+    <p>アプリ内の「困ったときは」によくあるトラブルの解決方法をまとめています。それでも解決しないときは、<b>ご購入いただいたBASEショップのメッセージ機能</b>までご連絡ください。</p></details>
+</section>
+
+<!-- 特商法 -->
+<section id="tokusho">
+  <h2>特定商取引法に基づく表記</h2>
+  <div class="sub">販売と決済はBASEショップでおこないます</div>
+  <div class="tokusho" style="padding:24px 26px">
+    <p style="font-size:19px;line-height:2">特定商取引法に基づく表記は、ご購入いただくBASEショップのページに掲載しています。<br>
+    <a href="#" id="tokusho-link" style="font-weight:900">📄 BASEショップの表記を見る ▶</a><span style="font-size:15px;color:#8b8792">(ショップ公開後にリンクが有効になります)</span></p>
+  </div>
+  <div style="text-align:center"><a class="keybtn" href="index.html?in=1">◀ お店にもどる</a></div>
+</section>
+
+<footer>ちびボード — うさぎと、手づくりのキーボード。<br>X <b>@tibiboard</b> / 技適 211-220207</footer>
+<div style="position:fixed;left:8px;bottom:8px;z-index:9999;background:#000c;color:#fff;font:700 13px/1.6 sans-serif;padding:4px 12px;border-radius:99px;pointer-events:none" id="verbadge"></div>
+<script>if(['localhost','127.0.0.1'].includes(location.hostname)){document.getElementById('verbadge').textContent='版: '+new Date(document.lastModified).toLocaleString('ja-JP');}else{document.getElementById('verbadge').remove();}</script>
+</body>
+</html>
