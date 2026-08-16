@@ -64,6 +64,35 @@
     if(mCoin||mKey||/debugreset/.test(q)) C.DEBUG_TOOLS = true;
   })();
 
+  /* ---- 開発パネル(2026-08-16): ?dev=1 で画面右下に小さな操作板。localhostのみ・本番では何も出ない。
+       上のdebug○○のURLを覚えなくていいようにボタン化しただけ(中身は同じ) ---- */
+  (function(){
+    if(!['localhost','127.0.0.1'].includes(location.hostname)) return;
+    if(!/[?&]dev=1/.test(location.search)) return;
+    const go = extra => { const u=new URL(location.href); u.searchParams.set('dev','1');
+      ['debugcoin','debugkey','debugreset','debugwin'].forEach(k=>u.searchParams.delete(k));
+      Object.entries(extra).forEach(([k,v])=>u.searchParams.set(k,v)); location.href=u.toString(); };
+    const btn=(t,f)=>{const b=document.createElement('button'); b.textContent=t; b.onclick=f;
+      b.style.cssText='font:700 12px sans-serif;padding:4px 8px;border:0;border-radius:6px;background:#fff;color:#222;cursor:pointer'; return b;};
+    const mk=()=>{
+      const p=document.createElement('div');
+      p.style.cssText='position:fixed;right:8px;bottom:8px;z-index:99999;background:#222c;color:#fff;padding:8px;border-radius:10px;display:flex;flex-wrap:wrap;gap:6px;max-width:260px;font:700 12px sans-serif;align-items:center';
+      const st=document.createElement('span'); st.style.cssText='width:100%';
+      const zukan=(()=>{try{return JSON.parse(localStorage.getItem('chibi_zukan')||'[]').length}catch(e){return 0}})();
+      st.textContent='🛠dev  🪙'+(localStorage.getItem('chibi_coins')||0)+'  🔑'+(localStorage.getItem('chibi_atari')?'あり':'なし')+'  📖'+zukan+'匹';
+      p.appendChild(st);
+      p.appendChild(btn('🪙+10',()=>go({debugcoin:String((parseInt(localStorage.getItem('chibi_coins')||'0',10)||0)+10)})));
+      p.appendChild(btn('🪙0',()=>go({debugcoin:'0'})));
+      p.appendChild(btn('🔑あり',()=>go({debugkey:'1'})));
+      p.appendChild(btn('🔑なし',()=>go({debugkey:'0'})));
+      p.appendChild(btn('🎁大当たり',()=>go({debugwin:'1'})));
+      p.appendChild(btn('🧹初見さんに戻す',()=>{ if(confirm('コイン・日次・鍵・図鑑を全部消す?')) go({debugreset:'1'}); }));
+      p.appendChild(btn('✕',()=>p.remove()));
+      document.body.appendChild(p);
+    };
+    if(document.body) mk(); else document.addEventListener('DOMContentLoaded',mk);
+  })();
+
   /* ---- 今日の日付 ---- */
   C.today = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 
