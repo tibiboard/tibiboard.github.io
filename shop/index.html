@@ -193,6 +193,7 @@ h2{font-size:24px;font-weight:900;display:inline-block;background:var(--pink-dee
 /* 旅立ちの子もフルカラーのまま(色とりどりの実績棚)。じれったさは「大きく・多角度で見れない」ことで演出(2026-08-14たけろう) */
 .item.sold .ph{filter:none;opacity:1}
 .item .nm{font-weight:900;margin:12px 0 4px;color:#fff;font-size:27px}
+.item .pr{font-size:20px;font-weight:900;color:#fff;opacity:.92;margin-bottom:2px}
 .item .st{font-size:18px;font-weight:900}
 /* SOLD OUT: 任天堂風の丸太スタンプ(フルカラー棚の上でポップに傾く) */
 .item.sold .st{display:inline-block;background:#ff3b5c;color:#fff;font-size:30px;letter-spacing:1px;
@@ -592,6 +593,7 @@ const cardOf = i => {
     ${i.state==='旅立ち'?`<div class="stamp">${i.date.replaceAll('-','.')}</div>`:''}
     <div class="ph">${i.state==='準備中'?'<div class="junbi-box"><img class="junbi-usagi" src="../img/バツベイ_アイコン800.png" alt="じゅんびちゅうのばつべー"></div>':slot(i.base?i.base+'_1.jpg':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}</div>
     <div class="nm">${i.state==='準備中'?'':i.name}</div>
+    ${(i.state==='いる'||i.state==='旅立ち')&&i.price?`<div class="pr">${yen(i.price)}</div>`:''}
     <div class="st">${i.state==='いる'?'':(i.state==='予告'?'9月から':(i.state==='展示'?'てんじ(非売)':(i.state==='準備中'?'じゅんびちゅう':'SOLD OUT')))}</div>
   </div>`;
   return i.state==='いる' ? `<a class="itemlink" href="商品.html?id=${encodeURIComponent(i.name)}">${card}</a>` : card;
