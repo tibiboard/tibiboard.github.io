@@ -141,6 +141,7 @@
      ゲームが増えてコインが増えれば当たりも自然に増える」。COOLDOWN=0で常に抽選可(関数は互換のため残す)。 ---- */
   C.TREASURE_COOLDOWN_MS = 0;
   C.canDrawTreasure = () => {
+    return true; /* 2026-09-13 たけろう決定: 週1回の上限は無し(何回でも)。下の判定は残すが通らない */
     const t = localStorage.getItem('chibi_treasure_last');
     if(!t) return true;
     const last = new Date(t).getTime();

@@ -162,7 +162,7 @@ if(it && it.state==='いる'){
     <div class="top">
       <div class="gal">
         <div class="main">${main}<div class="tag"><img class="bb" src="../img/バツベイ_アイコン800.png" alt="ばつべー"> いまここにいます</div></div>
-        <div class="thumbs">${th}</div>
+        <div class="thumbs" id="galThumbs">${th}</div>
       </div>
       <div>
         <h3>${it.name}</h3>
@@ -183,5 +183,17 @@ if(it && it.state==='いる'){
 }
 </script>
 <!-- 版バッジは asobi_common.js が全ページ共通で出す(2026-08-20) -->
+<script>
+/* 2026-09-13 たけろう指示: 下の4枚は カーソルを当てる(スマホは押す)と 大きい方に入れ替わる */
+(function(){
+  const th=document.getElementById('galThumbs'); if(!th) return;
+  const main=document.querySelector('.gal .main img'); if(!main) return;
+  th.querySelectorAll('img').forEach(im=>{
+    const swap=()=>{ if(im.src && main.src!==im.src){ main.src=im.src; main.alt=im.alt||main.alt; } };
+    im.style.cursor='zoom-in';
+    im.addEventListener('mouseenter', swap); im.addEventListener('click', swap);
+  });
+})();
+</script>
 </body>
 </html>
