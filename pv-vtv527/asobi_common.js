@@ -224,7 +224,7 @@
   C.sndKeyOpen = () => { C._tone(200,0,0.05,'square',0.22); C._tone(140,0.06,0.09,'square',0.25,70); C._tone(700,0.18,0.22,'triangle',0.14,1600); };
   /* 鍵が画面に出て、くるくる回りながら ポケット(コインの札)へ飛び込む演出 */
   C.keyFly = (n, done) => {
-    const target = document.querySelector('.chibiCoinGui .cg-key') || document.querySelector('.chibiCoinGui') || document.body;
+    const target = document.getElementById('keyFloat') || document.querySelector('.chibiCoinGui .cg-key') || document.querySelector('.chibiCoinGui') || document.body;
     const tr = target.getBoundingClientRect();
     const tx = (tr.left + tr.width/2) || window.innerWidth-40, ty = (tr.top + tr.height/2) || 40;
     if(!document.getElementById('chibiKeyFlyCss')){ const st=document.createElement('style'); st.id='chibiKeyFlyCss';

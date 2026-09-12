@@ -531,12 +531,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
     <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="About saved data">?</button>
     <div class="coingames" id="takara">
       <!-- 2026-09-12 たけろう決定: ガチャは廃止(スロット1本)。台の絵とリンクを外した。戻すなら _直前退避\2026-09-12_専用アプリ文とガチャ廃止前 -->
-      <!-- 2026-09-13 たけろう設計: 宝箱(スロットで手に入れた🔑で開ける)。マリオの?ブロック風 -->
-      <button class="takarabox" id="takarabox" type="button" title="宝箱" aria-label="宝箱">
-        <div class="tb-lid"></div>
-        <div class="tb-body"><span class="tb-q">?</span><i class="rv a"></i><i class="rv b"></i><i class="rv c"></i><i class="rv d"></i></div>
-        <div class="tb-msg" id="takaraMsg"></div>
-      </button>
       <a class="minimachine" href="../スロット_新台.html" title="Slots">
         <div class="sbox">
           <div class="sreels"><b></b><b></b><b></b></div>
@@ -934,35 +928,60 @@ try {
 .hero .catch small{color:#fff !important}
 </style>
 
-<!-- 2026-09-13 たけろう設計: 宝箱のスタイルと動き -->
+
+<!-- 2026-09-13 たけろう設計(改): 右下に大きな🔑を浮かせる。持っていると数字。押すと宝箱がポンと出る → 押すとガチャッ → 3択 -->
 <style>
-.takarabox{position:relative;border:0;background:none;padding:0;cursor:pointer;width:200px;height:210px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-family:inherit}
-.takarabox .tb-lid{width:190px;height:34px;background:linear-gradient(#ffe27a,#e0a800);border:6px solid #7a4a00;border-bottom:0;border-radius:18px 18px 4px 4px;box-shadow:inset 0 4px 0 rgba(255,255,255,.5);transform-origin:left bottom;transition:transform .35s}
-.takarabox .tb-body{position:relative;width:190px;height:140px;background:linear-gradient(#ffcf33,#d68f00);border:6px solid #7a4a00;border-radius:4px 4px 18px 18px;box-shadow:0 10px 0 #5a3600,0 16px 24px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center}
-.takarabox .tb-q{font-size:96px;font-weight:900;color:#fff;text-shadow:4px 4px 0 #7a4a00;line-height:1}
-.takarabox .rv{position:absolute;width:12px;height:12px;border-radius:50%;background:#7a4a00}
-.takarabox .rv.a{left:8px;top:8px}.takarabox .rv.b{right:8px;top:8px}.takarabox .rv.c{left:8px;bottom:8px}.takarabox .rv.d{right:8px;bottom:8px}
-.takarabox:hover{transform:scale(1.06)}
-.takarabox.opening .tb-lid{transform:rotate(-70deg)}
-.takarabox.shake{animation:tbshake .5s}
+#mycoin .cg-key{display:none} /* トップでは鍵はコインの下に出さない(右下の🔑に一本化) */
+.key-float{position:fixed;right:18px;bottom:18px;z-index:9000;width:150px;height:150px;border:0;background:none;padding:0;cursor:pointer;font-family:inherit;filter:drop-shadow(0 8px 10px rgba(0,0,0,.35))}
+.key-float .kf-icon{display:block;font-size:120px;line-height:150px;text-align:center;transform:rotate(-30deg);transition:transform .2s}
+.key-float.none .kf-icon{filter:grayscale(1) brightness(.85);opacity:.55;font-size:90px}
+.key-float.has{animation:kfBob 1.6s ease-in-out infinite}
+.key-float:hover .kf-icon{transform:rotate(-30deg) scale(1.08)}
+.key-float .kf-n{position:absolute;right:2px;top:2px;min-width:52px;height:52px;border-radius:999px;background:#e0197a;color:#fff;font-size:30px;font-weight:900;line-height:52px;text-align:center;padding:0 8px;box-shadow:0 3px 0 #8d2f5e;display:none}
+.key-float.has .kf-n{display:block}
+.key-float.has::before,.key-float.has::after{content:'✦';position:absolute;color:#fff;font-size:30px;text-shadow:0 0 8px #ffd54f;animation:kfStar 1.6s linear infinite;pointer-events:none}
+.key-float.has::before{left:6px;top:20px}.key-float.has::after{right:14px;bottom:10px;animation-delay:.8s}
+.key-float.shake{animation:tbshake .5s}
+.key-float .kf-msg{position:absolute;right:0;bottom:152px;white-space:nowrap;font-size:20px;font-weight:900;color:#8d2f5e;background:#fff;border-radius:999px;padding:6px 16px;opacity:0;transition:opacity .2s;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.key-float .kf-msg.on{opacity:1}
+@keyframes kfBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes kfStar{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:1}100%{transform:translateY(-30px) scale(1.3) rotate(40deg);opacity:0}}
 @keyframes tbshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
-.takarabox .tb-msg{position:absolute;left:50%;bottom:-44px;transform:translateX(-50%);white-space:nowrap;font-size:20px;font-weight:900;color:#8d2f5e;background:#fff;border-radius:999px;padding:4px 14px;opacity:0;transition:opacity .2s;pointer-events:none}
-.takarabox .tb-msg.on{opacity:1}
-.coingames{align-items:flex-end}
+/* 宝箱のポップアップ */
+#takaraOv{position:fixed;inset:0;z-index:30000;background:rgba(24,10,20,.72);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px}
+#takaraOv .tk-ttl{color:#fff;font-size:clamp(24px,5vw,34px);font-weight:900;text-shadow:0 3px 0 rgba(0,0,0,.4)}
+.takarabox{position:relative;border:0;background:none;padding:0;cursor:pointer;width:260px;height:270px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-family:inherit;animation:tbPon .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes tbPon{0%{transform:scale(.1);opacity:0}100%{transform:scale(1);opacity:1}}
+.takarabox .tb-lid{width:250px;height:44px;background:linear-gradient(#ffe27a,#e0a800);border:8px solid #7a4a00;border-bottom:0;border-radius:22px 22px 4px 4px;box-shadow:inset 0 4px 0 rgba(255,255,255,.5);transform-origin:left bottom;transition:transform .35s}
+.takarabox .tb-body{position:relative;width:250px;height:180px;background:linear-gradient(#ffcf33,#d68f00);border:8px solid #7a4a00;border-radius:4px 4px 22px 22px;box-shadow:0 12px 0 #5a3600,0 18px 28px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}
+.takarabox .tb-q{font-size:120px;font-weight:900;color:#fff;text-shadow:5px 5px 0 #7a4a00;line-height:1}
+.takarabox .rv{position:absolute;width:14px;height:14px;border-radius:50%;background:#7a4a00}
+.takarabox .rv.a{left:10px;top:10px}.takarabox .rv.b{right:10px;top:10px}.takarabox .rv.c{left:10px;bottom:10px}.takarabox .rv.d{right:10px;bottom:10px}
+.takarabox:hover{transform:scale(1.04)}
+.takarabox.opening .tb-lid{transform:rotate(-75deg)}
+#takaraOv .tk-close{color:#fff;font-size:20px;font-weight:900;background:none;border:2px solid #fff;border-radius:999px;padding:6px 18px;cursor:pointer}
 </style>
+<button class="key-float none" id="keyFloat" type="button" title="かぎ" aria-label="かぎ"><span class="kf-icon">🔑</span><span class="kf-n" id="keyFloatN">0</span><span class="kf-msg" id="keyFloatMsg"></span></button>
 <script>
 (function(){
-  const box=document.getElementById('takarabox'); if(!box) return;
-  const msg=document.getElementById('takaraMsg');
-  const say=t=>{ msg.textContent=t; msg.classList.add('on'); setTimeout(()=>msg.classList.remove('on'),2200); };
-  box.addEventListener('click',()=>{
-    const C=window.CHIBI; if(!C) return;
-    if(box.classList.contains('opening')) return;
-    if(C.getKeys()<1){ box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake'); say('🔑 No key yet... win one at the slots'); return; }
-    C.sndKeyOpen(); box.classList.add('opening');
-    setTimeout(()=>{ C.useKey(); box.classList.remove('opening'); C.showTreasurePicker({ onPick:()=>C.sndKeyOpen(), onReveal:()=>C.sndKeyGet() }); }, 750);
+  const C=window.CHIBI; if(!C) return;
+  C.DIR='../img/usagi/'; /* このページは shop/ の中。宝箱の中のばつべー画像はここから */
+  const kf=document.getElementById('keyFloat'), kn=document.getElementById('keyFloatN'), km=document.getElementById('keyFloatMsg');
+  const refresh=()=>{ const n=C.getKeys(); kn.textContent=String(n); kf.classList.toggle('has',n>0); kf.classList.toggle('none',n<1); };
+  refresh(); setInterval(refresh, 800);
+  const say=t=>{ km.textContent=t; km.classList.add('on'); setTimeout(()=>km.classList.remove('on'),2200); };
+  kf.addEventListener('click',()=>{
+    if(C.getKeys()<1){ kf.classList.remove('shake'); void kf.offsetWidth; kf.classList.add('shake'); say('🔑 No key yet... win one at the slots'); return; }
+    if(document.getElementById('takaraOv')) return;
+    const ov=document.createElement('div'); ov.id='takaraOv';
+    ov.innerHTML='<div class="tk-ttl">'+'🔑 Open with the key'+'</div><button class="takarabox" id="takarabox" type="button"><div class="tb-lid"></div><div class="tb-body"><span class="tb-q">?</span><i class="rv a"></i><i class="rv b"></i><i class="rv c"></i><i class="rv d"></i></div></button><button class="tk-close" type="button">'+'Close'+'</button>';
+    document.body.appendChild(ov);
+    ov.querySelector('.tk-close').onclick=()=>ov.remove();
+    const box=ov.querySelector('#takarabox');
+    box.onclick=()=>{ if(box.classList.contains('opening')) return; C.sndKeyOpen(); box.classList.add('opening');
+      setTimeout(()=>{ C.useKey(); refresh(); ov.remove(); C.showTreasurePicker({ onPick:()=>C.sndKeyOpen(), onReveal:()=>C.sndKeyGet() }); }, 750); };
   });
-  if(location.hash==='#takara'){ setTimeout(()=>{ try{ box.scrollIntoView({block:'center',behavior:'smooth'}); }catch(e){} }, 600); }
+  if(location.hash==='#takara'){ setTimeout(()=>{ try{ kf.click(); }catch(e){} }, 800); }
 })();
 </script>
 </body>
