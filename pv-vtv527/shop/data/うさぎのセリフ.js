@@ -36,7 +36,7 @@ window.USAGI_SERIFU = {
   key_a: { text: '宝箱開けに行こうぜ！', end: true, runaway: true },
 
   /* ===== ガチャ/スロットで外れた直後(5分の1) ===== */
-  miss: { text: '落ち込むなって', choices: [
+  miss: { text: 'また負けた? そういう日もあるさ', choices: [  /* 2026-09-13 たけろう修正(旧「落ち込むなって」8/20) */
     { label: 'ありがと', next: 'miss_a' },
     { label: 'ほっといて', next: 'miss_b' }
   ]},
@@ -108,13 +108,14 @@ window.USAGI_SERIFU = {
     { text: 'きみかわうぃーねー', choices: [ { label: '嬉しい！', next: 'T_KAWAII_A' }, { label: 'あんがと', next: 'T_KAWAII_B' } ] },
     { text: '肉派？魚派？', choices: [ { label: '魚', next: 'T_NIKU_A' }, { label: 'どっちだと思う？', next: 'T_NIKU_B' } ] },
     { text: 'りんごゴリララッパ', choices: [ { label: 'パンツ', next: 'T_RINGO_A' }, { label: 'パソコン', next: 'T_RINGO_B' } ] },
-    { text: '踊ってない夜を？', choices: [ { label: '知らない', next: 'T_OREMO' }, { label: '知ってる', next: 'T_OREMO' } ] },
+    { text: '踊ってない夜を？', choices: [ { label: '知らない', next: 'T_OREMO' }, { label: '知ってる', next: 'T_SOREIJO' } ] },
+    { text: 'ぬるぽ', choices: [ { label: 'ガっ', next: 'T_NURUPO_A' }, { label: 'なに？', next: 'T_NURUPO_B' } ] },  /* 2026-09-13 たけろう */
     { text: 'とつぜんだけど じゃんけん', choices: [
       { label: 'ぐー', next: 'TR_JYANKEN_RANT' }, { label: 'ちょき', next: 'TR_JYANKEN_RANT' },
       { label: 'ぱー', next: 'TR_JYANKEN_RANT' }, { label: 'しない', next: 'TR_JYANKEN_NORI' } ] },
     { text: 'きゅうぎ とくい?', choices: [ { label: 'はい', next: 'TR_KYUGI_HAI' }, { label: 'いいえ', next: 'TR_KYUGI_IIE' } ] },
     { text: 'はなげ でてるよ', choices: [ { label: 'うん', next: 'TR_HANAGE_UN' }, { label: 'うそつき', next: 'TR_HANAGE_URUSO' } ] },
-    { text: 'よじじゅくご', choices: [ { label: '焼肉定食', next: 'TR_YOJI_A' }, { label: '欧陽菲菲', next: 'TR_YOJI_B' } ] },
+    { text: '四字熟語', choices: [ { label: '焼肉定食', next: 'TR_YOJI_A' }, { label: 'オーヤンフィフィ', next: 'TR_YOJI_B' } ] },
     { text: 'くるま くるま くるま!', choices: [ { label: 'とどろき!', next: 'TR_KURUMA_A' }, { label: 'とどろきーー☝️', next: 'TR_KURUMA_B' } ] },
     /* 2026-09-11 たけろう「突然ぱー、きみの頭がね はおかしい」: 正本メモに無い1行(じゃんけんの文脈が無いと意味が通らない)。外した */
   ],
@@ -132,7 +133,7 @@ window.USAGI_SERIFU = {
   T_ME_IRO_A: { text: 'にんきは 来年 べつの色に なる', end: true, runaway: true },
   T_ME_IRO_B: { text: 'すきな色は、10年 きみと いっしょ', end: true, runaway: true },
   T_ME_USAGI_A: { text: 'うん。だから おぼえてもらえる', end: true, runaway: true },
-  T_ME_USAGI_B: { text: 'きみの目、ちゃんと つかってるね', end: true, runaway: true },
+  T_ME_USAGI_B: { text: '(*\'\'▽\'\')', end: true, runaway: true },
   T_ASAKATSU_A: { text: '好きだね君も', end: true, runaway: true },
   T_ASAKATSU_B: { text: '何がって何が？', end: true, runaway: true },
   T_HIRU_A: { text: '退屈な人、でもそれでいい', end: true, runaway: true },
@@ -140,8 +141,8 @@ window.USAGI_SERIFU = {
   T_SAWAGA_A: { text: 'そだねー', end: true, runaway: true },
   T_SAWAGA_B: { text: 'ダネフシッ！', end: true, runaway: true },
   T_HIRUMESHI_A: { text: 'おにぎり食べたい！', end: true, runaway: true },
-  T_HIRUMESHI_B: { text: 'ん〜たべ〜〜〜た！？', end: true, runaway: true },
-  T_HAOU: { text: '覇王翔吼拳！', end: true, runaway: true },
+  T_HIRUMESHI_B: { text: 'いいから焼きそばパン買ってこいよ', end: true, runaway: true },
+  T_HAOU: { text: 'ペガサス流星拳', end: true, runaway: true },
   T_JAOU: { text: '邪王炎殺黒龍波！', end: true, runaway: true },
   T_SHII: { text: 'しー！', end: true, runaway: true },
   T_YOZORA_A: { text: 'ごめん君誰？', end: true, runaway: true },
@@ -153,26 +154,29 @@ window.USAGI_SERIFU = {
   T_NENAI_B: { text: 'おやすみ', end: true, runaway: true },
   T_MAKANKO: { text: '魔貫光殺砲！', end: true, runaway: true },
   T_MURYOU: { text: '無量空処', end: true, runaway: true },
-  T_SUMAHO_A: { text: 'うむ、これからも報告頼む', end: true, runaway: true },
+  T_SUMAHO_A: { text: 'コイン二枚あげよう', coins: 2, end: true, runaway: true },
   T_SUMAHO_B: { text: 'まじか、言っとくわ', end: true, runaway: true },
   T_SUKI_Q: { text: 'どこが すき?', choices: [ { label: 'ぜんぶ', next: 'T_SUKI_ZENBU' }, { label: 'みみ', next: 'T_SUKI_MIMI' } ] },
   T_SUKI_ZENBU: { text: 'ぼくも きみの でんぶが すき', end: true, runaway: true },
   T_SUKI_MIMI: { text: 'みみの あいだに ゆび いれるの やめてもらっていいですか', end: true, runaway: true },
   T_KIRAI: { text: 'わたしの じかん かえしてよ ＞＜', end: true, runaway: true },
   T_KARAAGE_A: { text: '唐揚げ⤴︎🎶', end: true, runaway: true },
-  T_KARAAGE_B: { text: 'ノリ悪✖️10', end: true, runaway: true },
+  T_KARAAGE_B: { text: 'のりわる × 銃なら やってくれる?', end: true, runaway: true },
   T_SUSHI_A: { text: 'てやんでぃ！', end: true, runaway: true },
   T_SUSHI_B: { text: 'さぁ……もん？', end: true, runaway: true },
   T_KOI_A: { text: '恋の奴隷…か', end: true, runaway: true },
   T_KOI_B: { text: 'おれも', end: true, runaway: true },
   T_IKIRU_A: { text: 'どうして？', end: true, runaway: true },
-  T_IKIRU_B: { text: '生きる！', end: true, runaway: true },
+  T_IKIRU_B: { text: '生きねば！', end: true, runaway: true },
   T_KAWAII_A: { text: '小野妹子そっくり', end: true, runaway: true },
   T_KAWAII_B: { text: '亀井静香そっくり', end: true, runaway: true },
   T_NIKU_A: { text: 'そんな顔だわ', end: true, runaway: true },
   T_NIKU_B: { text: '質問に質問で返すってちょっとコミュニケーションとしてどうなんでしょうか？あなたいい大人ですよね？そこまで興味ないですし、というかあなた自分を過大評価なさっているのでは？', end: true, runaway: true },
   T_RINGO_A: { text: 'H', end: true, runaway: true },
   T_RINGO_B: { text: 'ンジャメナ', end: true, runaway: true },
+  T_SOREIJO: { text: 'それ以上はいけない！', end: true, runaway: true },
+  T_NURUPO_A: { text: 'キモ', end: true, runaway: true },
+  T_NURUPO_B: { text: '偽物か', end: true, runaway: true },  /* 2026-09-13 */
   T_OREMO: { text: 'おれも', end: true, runaway: true },
 
   TR_JYANKEN_RANT: {
@@ -188,7 +192,7 @@ window.USAGI_SERIFU = {
     end: true, runaway: true
   },
   TR_YOJI_A: { text: 'ばかなの?', end: true, runaway: true },
-  TR_YOJI_B: { text: 'らゔ いず おーゔぁー', end: true, runaway: true },
+  TR_YOJI_B: { text: 'らゔ いず おーゔぁー♪', end: true, runaway: true },
   TR_KURUMA_A: { text: 'どちら様ですか？', end: true, runaway: true },
   TR_KURUMA_B: { text: 'どんだけーー☝️', end: true, runaway: true }
 };

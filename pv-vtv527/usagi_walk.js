@@ -67,6 +67,8 @@
       } catch (e) {}
     }
     function sndPop() { stone(880, 0, 0.08, 'sine', 0.12, 1320); }
+    /* 2026-09-13 たけろう指示: コインが絡む時は「チャリン」 */
+    function sndCoin() { stone(2093, 0, 0.10, 'triangle', 0.14); stone(2637, 0.07, 0.16, 'triangle', 0.14); stone(3136, 0.15, 0.22, 'sine', 0.10); }
     function sndScurry() {
       [0, 0.09, 0.18].forEach(function (t, i) { stone(1500 - i * 200, t, 0.08, 'triangle', 0.1, 700 - i * 150); });
     }
@@ -702,6 +704,7 @@
     }
     var pendingCoinGive = 0;
     var lastOpening = '';
+    var lastClickCeil = false;
     function pickOpening(data) {
       /* 1) 話しかけた回数のごほうび(5回目2枚・10回目3枚・以降10の倍数3枚・100回目15枚) */
       var give = 0;
@@ -711,24 +714,25 @@
       if (data.EVENTS && data.EVENTS[('0' + (new Date().getMonth() + 1)).slice(-2) + '-' + ('0' + new Date().getDate()).slice(-2)]) {
         var ev = eventLineToday(data); if (ev) { pendingEvent = ev; return '__EVENT__'; }
       }
-      /* 3) ガチャ/スロットで外れた直後(5分の1) */
-      if (recentMiss()) { clearMiss(); if (Math.random() < 0.2 && data.miss) return 'miss'; }
-      /* 4) 状況もの(コイン99・鍵・図鑑)は4回に1回くらい */
-      var pool = [];
-      if (getCoins() === 99 && data.coin99) pool.push('coin99', 'coin99');
-      if (hasKey() && data.key) pool.push('key');
-      if (data.ZUKAN) pool.push('__ZUKAN__');
-      if (pool.length && Math.random() < 0.25) return pool[Math.floor(Math.random() * pool.length)];
-      /* 5) ふだん: 10回に1回「しりたい?」(2026-09-11 たけろう)、それ以外はTRIVIA。「しりたい?」は2回続けて出さない */
-      var op = Math.random() < 0.10 ? 'start' : 'trivia'; /* 2026-09-11 たけろう「しりたい?は1/10でいい」 */
-      if (op === 'start' && lastOpening === 'start') op = 'trivia';
-      lastOpening = op;
-      return op;
+      /* 2026-09-13 たけろう決定: 以下は全部「1つの袋」から均等に引く(pickTriviaKey)。
+         条件もの(外れ直後・鍵・コイン90万・図鑑・しりたい?・逆さま・時間帯・スマホ)は条件を満たす時だけ袋に入る。出やすくはしない */
+      return 'trivia';
     }
     var pendingEvent = null;
 
     function pickTriviaKey(data) {
-      var list = data.TRIVIA || [];
+      /* 2026-09-13: 袋= まめちしき + 隠れ/耳の一言(条件なし) + 逆さまの一言(逆さまの時) + 条件もの(ref) */
+      var list = (data.TRIVIA || []).slice();
+      var plain = function (t) { return { text: t, end: true, runaway: true }; };
+      (data.HIDDEN || []).forEach(function (t) { list.push(plain(t)); });
+      (data.HIDDEN_EARS || []).forEach(function (t) { list.push(plain(t)); });
+      if (lastClickCeil) (data.HIDDEN_CEIL || []).forEach(function (t) { list.push(plain(t)); });
+      lastClickCeil = false;
+      if (recentMiss() && data.miss) list.push({ ref: 'miss' });
+      if (hasKey() && data.key) list.push({ ref: 'key' });
+      if (getCoins() >= 900000 && data.coin99) list.push({ ref: 'coin99' }); /* 2026-09-13: 99枚→90万枚以上 */
+      if (data.ZUKAN) list.push({ ref: '__ZUKAN__' });
+      list.push({ ref: 'start' }); /* しりたい? も袋の1本 */
       var candidates = [];
       for (var i = 0; i < list.length; i++) {
         var item = list[i];
@@ -744,10 +748,12 @@
          2回出る物がほぼ必ず出る)。最近出した物(直近12本)を候補から外して、全部出てから戻すようにする */
       var recent = [];
       try { recent = JSON.parse(sessionStorage.getItem('usagi_recent_trivia') || '[]'); } catch (e) {}
-      var fresh = candidates.filter(function (i) { return recent.indexOf(i) < 0; });
+      /* 2026-09-13: 直近は「文」で覚える(袋の並びが変わっても効く)。直近24本は出さない=同じ物がすぐ出ない */
+      var keyOf = function (i) { var it = list[i]; return typeof it === 'string' ? it : (it.ref || it.text || String(i)); };
+      var fresh = candidates.filter(function (i) { return recent.indexOf(keyOf(i)) < 0; });
       if (fresh.length) candidates = fresh;
       var idx = candidates[Math.floor(Math.random() * candidates.length)];
-      try { recent.push(idx); while (recent.length > 12) recent.shift(); sessionStorage.setItem('usagi_recent_trivia', JSON.stringify(recent)); } catch (e) {}
+      try { recent.push(keyOf(idx)); while (recent.length > 24) recent.shift(); sessionStorage.setItem('usagi_recent_trivia', JSON.stringify(recent)); } catch (e) {}
       return { idx: idx, item: list[idx] };
     }
 
@@ -775,6 +781,7 @@
       if (key === 'trivia') {
         var picked = pickTriviaKey(data);
         var item = picked.item;
+        if (item && item.ref) { if (item.ref === 'miss') clearMiss(); return resolveNode(data, item.ref); } /* 2026-09-13: 条件ものは元の枝へ */
         if (typeof item === 'string') {
           var parts = item.split('|');
           if (parts[1]) {
@@ -800,7 +807,7 @@
         node = resolveNode(data, nodeKey);
       }
       if (!node) { closeBubble(); startRunaway(); return; }
-      if (node.coins) { addCoins(node.coins); try { sndPop(); } catch (e) {} } /* コインの増減はここ1か所 */
+      if (node.coins) { addCoins(node.coins); try { sndCoin(); } catch (e) {} } /* コインの増減はここ1か所。2026-09-13: 音=チャリン */
 
       if (!bubble) {
         back = document.createElement('div');
@@ -979,6 +986,7 @@
            うさぎは75%の確率で隠れているので、クリックの75%が小さな袋から出ていた=同じセリフばかりに見えた正体。
            ポンと出てきたあとは、散歩中と同じ会話(豆知識36本・しりたい?・ごほうび・暦)にする */
         state = 'talk';
+        lastClickCeil = /^ceiling/.test(currentSpotName || ''); /* 2026-09-13: 逆さまの時だけ「さかさまでも いきてる」が候補に入る */
         popOutHidden();
         renderNode(pickOpening(window.USAGI_SERIFU || {}));
         return;
@@ -986,11 +994,8 @@
 
       pauseWalk();
       state = 'talk';
-      if (visits > 1 && clicks === 1) {
-        renderNode('again');
-      } else {
-        renderNode(pickOpening(window.USAGI_SERIFU || {}));
-      }
+      /* 2026-09-13 たけろう指示: 「また きたの?」(日をまたいだ最初)は無し */
+      renderNode(pickOpening(window.USAGI_SERIFU || {}));
     });
 
     function showHiddenLine(text) {
