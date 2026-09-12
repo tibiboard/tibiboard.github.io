@@ -529,8 +529,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
     <!-- コインの使い道: ミニチュアの台そのものを見せる(無料ゲームとは並べない) -->
     <div class="mycoin" id="mycoin"></div>
     <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="About saved data">?</button>
-    <div class="coingames">
+    <div class="coingames" id="takara">
       <!-- 2026-09-12 たけろう決定: ガチャは廃止(スロット1本)。台の絵とリンクを外した。戻すなら _直前退避\2026-09-12_専用アプリ文とガチャ廃止前 -->
+      <!-- 2026-09-13 たけろう設計: 宝箱(スロットで手に入れた🔑で開ける)。マリオの?ブロック風 -->
+      <button class="takarabox" id="takarabox" type="button" title="宝箱" aria-label="宝箱">
+        <div class="tb-lid"></div>
+        <div class="tb-body"><span class="tb-q">?</span><i class="rv a"></i><i class="rv b"></i><i class="rv c"></i><i class="rv d"></i></div>
+        <div class="tb-msg" id="takaraMsg"></div>
+      </button>
       <a class="minimachine" href="../スロット_新台.html" title="Slots">
         <div class="sbox">
           <div class="sreels"><b></b><b></b><b></b></div>
@@ -927,5 +933,37 @@ try {
 .hero .catch,.hero .whisper{background:none !important;padding:0 !important;border-radius:0 !important;color:#fff !important;opacity:1 !important;text-shadow:0 0 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.7),0 2px 2px rgba(0,0,0,.8) !important}
 .hero .catch small{color:#fff !important}
 </style>
+
+<!-- 2026-09-13 たけろう設計: 宝箱のスタイルと動き -->
+<style>
+.takarabox{position:relative;border:0;background:none;padding:0;cursor:pointer;width:200px;height:210px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-family:inherit}
+.takarabox .tb-lid{width:190px;height:34px;background:linear-gradient(#ffe27a,#e0a800);border:6px solid #7a4a00;border-bottom:0;border-radius:18px 18px 4px 4px;box-shadow:inset 0 4px 0 rgba(255,255,255,.5);transform-origin:left bottom;transition:transform .35s}
+.takarabox .tb-body{position:relative;width:190px;height:140px;background:linear-gradient(#ffcf33,#d68f00);border:6px solid #7a4a00;border-radius:4px 4px 18px 18px;box-shadow:0 10px 0 #5a3600,0 16px 24px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center}
+.takarabox .tb-q{font-size:96px;font-weight:900;color:#fff;text-shadow:4px 4px 0 #7a4a00;line-height:1}
+.takarabox .rv{position:absolute;width:12px;height:12px;border-radius:50%;background:#7a4a00}
+.takarabox .rv.a{left:8px;top:8px}.takarabox .rv.b{right:8px;top:8px}.takarabox .rv.c{left:8px;bottom:8px}.takarabox .rv.d{right:8px;bottom:8px}
+.takarabox:hover{transform:scale(1.06)}
+.takarabox.opening .tb-lid{transform:rotate(-70deg)}
+.takarabox.shake{animation:tbshake .5s}
+@keyframes tbshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+.takarabox .tb-msg{position:absolute;left:50%;bottom:-44px;transform:translateX(-50%);white-space:nowrap;font-size:20px;font-weight:900;color:#8d2f5e;background:#fff;border-radius:999px;padding:4px 14px;opacity:0;transition:opacity .2s;pointer-events:none}
+.takarabox .tb-msg.on{opacity:1}
+.coingames{align-items:flex-end}
+</style>
+<script>
+(function(){
+  const box=document.getElementById('takarabox'); if(!box) return;
+  const msg=document.getElementById('takaraMsg');
+  const say=t=>{ msg.textContent=t; msg.classList.add('on'); setTimeout(()=>msg.classList.remove('on'),2200); };
+  box.addEventListener('click',()=>{
+    const C=window.CHIBI; if(!C) return;
+    if(box.classList.contains('opening')) return;
+    if(C.getKeys()<1){ box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake'); say('🔑 No key yet... win one at the slots'); return; }
+    C.sndKeyOpen(); box.classList.add('opening');
+    setTimeout(()=>{ C.useKey(); box.classList.remove('opening'); C.showTreasurePicker({ onPick:()=>C.sndKeyOpen(), onReveal:()=>C.sndKeyGet() }); }, 750);
+  });
+  if(location.hash==='#takara'){ setTimeout(()=>{ try{ box.scrollIntoView({block:'center',behavior:'smooth'}); }catch(e){} }, 600); }
+})();
+</script>
 </body>
 </html>

@@ -204,6 +204,39 @@
   };
   C.getAtari = () => { try{ return JSON.parse(localStorage.getItem('chibi_atari')||'null'); }catch(e){ return null; } };
 
+  /* ---- 🔑 かぎ(2026-09-13 たけろう設計): 当たり=鍵を手に入れる → 鍵は持ち物(chibi_keys) → トップの宝箱で使う ---- */
+  C.getKeys = () => { const n = parseInt(localStorage.getItem('chibi_keys')||'0',10); return isNaN(n)?0:Math.max(0,n); };
+  C.addKeys = n => {
+    localStorage.setItem('chibi_keys', String(Math.max(0, C.getKeys()+n)));
+    if(C.getKeys()>0) localStorage.setItem('chibi_atari', JSON.stringify({code:'KEY', date:C.today()})); /* うさぎの「君…もってるね」用 */
+    else localStorage.removeItem('chibi_atari');
+    try{ C.refreshCoinGui(false); }catch(e){}
+    return C.getKeys();
+  };
+  C.useKey = () => { if(C.getKeys()<1) return false; C.addKeys(-1); return true; };
+  /* 音(合成): 鍵ゲット=きらきら上昇 / 鍵をさす=ガチャッ */
+  C._ac = () => { if(!C._sndAc) C._sndAc = new (window.AudioContext||window.webkitAudioContext)(); return C._sndAc; };
+  C._tone = (f,t0,dur,type,gain,slide) => { try{ const a=C._ac(), o=a.createOscillator(), g=a.createGain(); o.type=type||'sine';
+    o.frequency.setValueAtTime(f,a.currentTime+t0); if(slide) o.frequency.exponentialRampToValueAtTime(slide,a.currentTime+t0+dur);
+    g.gain.setValueAtTime(Math.min(gain||0.1,0.3),a.currentTime+t0); g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+t0+dur);
+    o.connect(g); g.connect(a.destination); o.start(a.currentTime+t0); o.stop(a.currentTime+t0+dur+0.05); }catch(e){} };
+  C.sndKeyGet = () => { [880,1175,1568,2093,2637].forEach((f,i)=>C._tone(f,i*0.07,0.28,'triangle',0.16)); };
+  C.sndKeyOpen = () => { C._tone(200,0,0.05,'square',0.22); C._tone(140,0.06,0.09,'square',0.25,70); C._tone(700,0.18,0.22,'triangle',0.14,1600); };
+  /* 鍵が画面に出て、くるくる回りながら ポケット(コインの札)へ飛び込む演出 */
+  C.keyFly = (n, done) => {
+    const target = document.querySelector('.chibiCoinGui .cg-key') || document.querySelector('.chibiCoinGui') || document.body;
+    const tr = target.getBoundingClientRect();
+    const tx = (tr.left + tr.width/2) || window.innerWidth-40, ty = (tr.top + tr.height/2) || 40;
+    if(!document.getElementById('chibiKeyFlyCss')){ const st=document.createElement('style'); st.id='chibiKeyFlyCss';
+      st.textContent = `.chibiKeyFly{position:fixed;z-index:99999;left:50%;top:45%;font-size:64px;line-height:1;pointer-events:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35));transform:translate(-50%,-50%) scale(.2);animation:chibiKeyFly 1.25s cubic-bezier(.3,.9,.4,1) forwards}
+      @keyframes chibiKeyFly{0%{transform:translate(-50%,-50%) scale(.2) rotate(0);opacity:0}25%{transform:translate(-50%,-50%) scale(1.6) rotate(-20deg);opacity:1}60%{transform:translate(-50%,-50%) scale(1.3) rotate(340deg);opacity:1}100%{transform:translate(calc(var(--tx) - 50%),calc(var(--ty) - 50%)) scale(.35) rotate(720deg);opacity:0}}`;
+      document.head.appendChild(st); }
+    let left = n;
+    for(let i=0;i<n;i++){ setTimeout(()=>{ const k=document.createElement('div'); k.className='chibiKeyFly'; k.textContent='🔑';
+      k.style.setProperty('--tx',(tx-window.innerWidth/2)+'px'); k.style.setProperty('--ty',(ty-window.innerHeight*0.45)+'px');
+      document.body.appendChild(k); setTimeout(()=>{ k.remove(); if(--left===0){ try{ C.refreshCoinGui(false); }catch(e){} if(done) done(); } },1300); }, i*180); }
+  };
+
   /* ---- 共通ヘッダーバー(コイン表示)を差し込むヘルパー
      ⚠2026-08-14: 回数上限は撤廃したので「のこり◯回」表示は出さない ---- */
   C.statusHtml = () =>
@@ -246,6 +279,13 @@
       }
       .chibiCoinGui.empty .cg-disc{ filter:grayscale(1) brightness(.92) }
       .chibiCoinGui.empty .cg-num{ color:#c0304a }
+      .chibiCoinGui .cg-key{position:relative;font-size:28px;font-weight:900;color:#6a5200;background:#fff3c4;border-radius:999px;padding:4px 18px;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+      .chibiCoinGui .cg-key.has{background:#ffd54f;color:#4a3600;animation:cgKeyGlow 1.4s ease-in-out infinite}
+      .chibiCoinGui .cg-key.has::before,.chibiCoinGui .cg-key.has::after{content:'✦';position:absolute;top:-10px;color:#fff;font-size:22px;text-shadow:0 0 6px #ffd54f;animation:cgStar 1.6s linear infinite}
+      .chibiCoinGui .cg-key.has::before{left:-8px}
+      .chibiCoinGui .cg-key.has::after{right:-8px;animation-delay:.8s}
+      @keyframes cgKeyGlow{0%,100%{box-shadow:0 3px 0 rgba(0,0,0,.12),0 0 0 rgba(255,213,79,0)}50%{box-shadow:0 3px 0 rgba(0,0,0,.12),0 0 22px rgba(255,213,79,.9)}}
+      @keyframes cgStar{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:1}100%{transform:translateY(-26px) scale(1.2) rotate(40deg);opacity:0}}
       .chibiCoinGui .cg-note{
         /* 2026-08-20 たけろう「文字が小さすぎる。3倍に。可愛い文字で」→ 11px→約3倍・丸ゴ・太字 */
         font-size:clamp(24px,5.5vw,34px); font-weight:900; color:#ffd54f; text-align:center; letter-spacing:.03em;
@@ -269,6 +309,10 @@
     disc.appendChild(num);
     el.innerHTML = '';
     el.appendChild(disc);
+    /* 2026-09-13: 🔑 かぎの数(持っていると光って星が飛ぶ) */
+    const key = document.createElement('div'); key.className='cg-key'+(C.getKeys()>0?' has':'');
+    key.innerHTML = '🔑 <b>'+C.getKeys()+'</b>';
+    el.appendChild(key);
     if(opts.note !== false){
       const note = document.createElement('div'); note.className='cg-note';
       note.textContent = 'コインは 99まいまで もてるよ';
@@ -288,6 +332,7 @@
       const num = el.querySelector('.cg-num');
       if(!disc || !num) return;
       el.classList.toggle('empty', val<1);
+      const kb = el.querySelector('.cg-key'); if(kb){ const kn=C.getKeys(); kb.innerHTML='🔑 <b>'+kn+'</b>'; kb.classList.toggle('has', kn>0); }
       if(spin && from!==val){
         disc.classList.remove('cg-spin'); void disc.offsetWidth; disc.classList.add('cg-spin');
         const dur=700, t0=performance.now();

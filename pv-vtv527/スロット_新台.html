@@ -234,9 +234,11 @@ h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
 </div>
 
 <div id="msg"></div>
-<div id="tobira">🎉 大あたり!!
-  <div style="font-size:14px;font-weight:900;margin-top:8px">たからばこが とどいたよ!</div>
-  <button id="openchest" style="margin-top:10px;background:#e84898;color:#fff;border:0;border-bottom:6px solid #e0197a;border-radius:12px;padding:12px 26px;font-weight:900;font-size:20px;cursor:pointer;font-family:inherit">🎁 たからばこを あける ▶</button>
+<div id="tobira">🔑 かぎを 手に入れた!
+  <div style="font-size:16px;font-weight:900;margin-top:8px">トップの <b>宝箱</b>で あけよう</div>
+  <a href="shop/index.html?in=1#takara">宝箱へ ▶</a>
+  <!-- 2026-09-13 たけろう設計: その場の3択はやめ、トップの宝箱で開ける。下のボタンは残すが隠す -->
+  <button id="openchest" hidden style="margin-top:10px;background:#e84898;color:#fff;border:0;border-bottom:6px solid #e0197a;border-radius:12px;padding:12px 26px;font-weight:900;font-size:20px;cursor:pointer;font-family:inherit">🎁 たからばこを あける ▶</button>
 </div>
 <div id="dark"></div>
 <div class="links"><a href="shop/index.html?in=1">お店にもどる</a> / <a href="shop/うさぎのへや.html">うさぎ図鑑</a></div>
@@ -642,14 +644,11 @@ function pullLever(opts){
     if(big){
       $('machine').classList.add('excited');
       sndJackpot(); screenFlash(); confetti();
-      if(preview){
-        /* プレビューは実物のたからばこを出さない=C.setAtari等の実キー発行に触れない */
-        $('msg').innerHTML='<span class="big">🎉 大あたり!!(プレビュー・実キーなし)</span>';
-      } else {
-        /* 2026-08-14〜: 大当たり=🎁宝箱3択へ。鍵の自動発行はしない(鍵は手配りのみ) */
-        $('msg').innerHTML='<span class="big">🎉 大あたり!!</span>';
-        $('tobira').style.display='block';
-      }
+      /* 2026-09-13 たけろう設計: 大当たり=🔑鍵を手に入れる(鍵がくるくる回ってポケットへ)。宝箱はトップで開ける。
+         dev板(家のWi-Fi内)でも通しで見られるように、プレビューでも鍵を1本渡す */
+      $('msg').innerHTML='<span class="big">🎉 大あたり!! 🔑 かぎを 手に入れた!</span>';
+      if(C){ C.sndKeyGet(); C.addKeys(1); C.keyFly(3, ()=>{ $('tobira').style.display='block'; }); }
+      else { $('tobira').style.display='block'; }
       if(!preview) refresh();
     } else if(missType==='small'){
       if(!preview && C) C.addCoins(2);
