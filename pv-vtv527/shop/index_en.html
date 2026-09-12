@@ -967,7 +967,7 @@ try {
   const C=window.CHIBI; if(!C) return;
   C.DIR='../img/usagi/'; /* このページは shop/ の中。宝箱の中のばつべー画像はここから */
   const kf=document.getElementById('keyFloat'), kn=document.getElementById('keyFloatN'), km=document.getElementById('keyFloatMsg');
-  const refresh=()=>{ const n=C.getKeys(); kn.textContent=String(n); kf.classList.toggle('has',n>0); kf.classList.toggle('none',n<1); };
+  const refresh=()=>{ const n=C.getKeys(); kn.textContent=String(n); kf.classList.toggle('has',n>0); kf.classList.toggle('none',n<1); kf.style.display=(document.getElementById('chibiTreasureOv')||document.getElementById('takaraOv'))?'none':''; };
   refresh(); setInterval(refresh, 800);
   const say=t=>{ km.textContent=t; km.classList.add('on'); setTimeout(()=>km.classList.remove('on'),2200); };
   kf.addEventListener('click',()=>{
