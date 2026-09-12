@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet"><!-- 2026-09-11: 帯の「ちボ」を index と同じ書体に -->
+<meta charset="utf-8">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Already bought one? This way — tibiboard shop</title>
+<script src="../asobi_common.js"></script>
+<style>
+:root{--pink:#ee85b5;--pink-deep:#c9679c;--pink-pale:#fbe7f1;--mint:#9dd8c8;--mint-pale:#eef8f3;--mint-deep:#6a9fc0;--ink:#222226;--ink2:#4a4450}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'M PLUS Rounded 1c',"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--mint-pale);color:var(--ink);line-height:1.8}
+.band{background:linear-gradient(90deg,#b79ce0,#ee85b5 45%,#8ec5e8);color:#fff;padding:20px 28px;display:flex;align-items:baseline;gap:22px;flex-wrap:wrap}
+.band .sf{font-size:40px;font-weight:900;background:#fff;color:var(--pink-deep);padding:0 14px;border-radius:8px;text-decoration:none} /* 2026-09-11: index と同じ */
+@media(max-width:640px){.band .sf{font-size:26px;padding:0 8px}}
+.band h1{font-size:clamp(24px,4.5vw,36px);font-weight:900;letter-spacing:3px}
+.band a.back{color:#ffd0e5;font-size:18px;font-weight:900;margin-left:auto;text-decoration:none}
+section{max-width:760px;margin:0 auto;padding:44px 20px 60px;text-align:center}
+.lead{font-size:clamp(20px,3.6vw,26px);font-weight:900;color:var(--pink-deep);margin-bottom:26px}
+.two{display:grid;grid-template-columns:1fr;gap:22px}
+@media(min-width:640px){.two{grid-template-columns:1fr 1fr}}
+a.door{display:block;background:#fff;border:7px solid var(--pink);border-radius:30px;padding:34px 18px 28px;text-decoration:none;color:var(--ink);box-shadow:0 9px 0 rgba(184,17,99,.22);transition:transform .15s}
+a.door:hover{transform:translateY(-6px)}
+a.door.mint{border-color:var(--mint-deep);box-shadow:0 9px 0 rgba(106,159,192,.35)}
+a.door .ic{font-size:clamp(64px,14vw,92px);line-height:1}
+a.door .who{font-size:clamp(17px,2.8vw,20px);font-weight:900;color:var(--ink2);margin-top:12px}
+a.door .what{font-size:clamp(24px,4.4vw,32px);font-weight:900;color:var(--pink-deep);margin-top:4px;line-height:1.4}
+a.door.mint .what{color:var(--mint-deep)}
+.help{margin-top:36px;background:#fff;border-radius:20px;padding:18px 20px;font-size:17px;font-weight:700;text-align:left}
+.help b{color:var(--pink-deep)}
+footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;font-size:15px;line-height:2}
+
+/* 背景コンクリート(2026-09-07 たけろう「すべてのページの背景に」: トップと同じ素材・白35%かぶせ。かぶせは z-index:-1 で本文の下) */
+body{background:#d9d6d3 !important}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/wall_cream_renga.jpg')/* クリームレンガ(2026-09-09 お試し) */ center/cover no-repeat}
+/* 2026-09-07 たけろう指示: うさぎは絵文字でなく公式ばつべー原本。文中の小さなばつべー */
+.bb{height:1.25em;width:auto;vertical-align:-.25em;display:inline-block}
+.bb-logo{height:44px;vertical-align:middle}
+</style>
+</head>
+<body>
+<div class="band"><a class="sf" href="index_en.html?in=1" style="background:none;padding:0" title="Back to the shop"><img src="icons/logo_chibo.png" alt="tibiboard" style="height:1.2em;display:block"></a><h1>Already bought one? This way</h1><a class="back" href="購入者.html" style="margin-left:auto;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px">日本語</a><a class="back" href="index_en.html?in=1" style="margin-left:0">◀ Back to the shop</a></div>
+<section>
+  <div class="lead">Which one did you buy?</div>
+  <div class="two">
+    <a class="door" href="../../docs/発売後に公開へ戻す/_ガイド閲覧.html">
+      <div class="ic">🔧</div>
+      <div class="who">I bought the kit</div>
+      <div class="what">Build guide ▶</div>
+    </a>
+    <a class="door mint" href="../../docs/発売後に公開へ戻す/_ガイド閲覧.html">
+      <div class="ic">🖥</div>
+      <div class="who">I bought it assembled</div>
+      <div class="what">Connect &amp; install the app ▶</div>
+    </a>
+  </div>
+  <div class="help"><img class="bb" src="../img/バツベイ_アイコン800.png" alt="ばつべー"> <b>Need help?</b> (a human answers)<br>
+    Email: tibiboard100@gmail.com / X: DM @tibiboard / Bought on BASE: message us from your order history</div>
+</section>
+<footer>tibiboard — a bunny, and handmade keyboards.<br>X <b>@tibiboard</b> / Giteki 211-220207</footer>
+</body>
+</html>
