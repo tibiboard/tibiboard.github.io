@@ -622,7 +622,7 @@ document.getElementById('sw').onclick = function(){
 };
 
 /* ===== 背景の日替わり(水玉/キャンディ縞/市松) ===== */
-document.getElementById('hero').classList.add('bg' + (new Date().getDate() % 3));
+document.getElementById('hero').classList.add('bg0'); /* 2026-09-13 たけろう指示: 日替わり(9/9)をやめ、ガラスタイル1枚に固定(色が変わるとイメージが定着しない) */
 
 /* ===== 部屋の中から戻ってきた人(?in=1)はスイッチを飛ばす ===== */
 if(/[?&]in=1/.test(location.search)){
