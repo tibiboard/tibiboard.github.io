@@ -180,7 +180,7 @@ window.USAGI_SERIFU = {
   T_OREMO: { text: 'おれも', end: true, runaway: true },
 
   TR_JYANKEN_RANT: {
-    text: 'ちょっと まって。きみは いま なんの じゅんびも してないのに ぼくと しょうぶしようと したよね。それって すごく しつれいな はなしだと おもわない?じゃんけんは うんめいを かけた しんけんしょうぶなんだ。こどもの あそびに つきあってられない。',
+    text: '僕の勝利！',  /* 2026-09-13 たけろう */
     end: true, runaway: true
   },
   TR_JYANKEN_NORI: { text: 'のり わる', end: true, runaway: true },
@@ -188,7 +188,7 @@ window.USAGI_SERIFU = {
   TR_KYUGI_IIE: { text: 'しってる', end: true, runaway: true },
   TR_HANAGE_UN: { text: 'ぬかないで あげて', end: true, runaway: true },
   TR_HANAGE_URUSO: {
-    text: 'は?いま うそつき って いった?ぼくが きみに うそを ついたことが いちどでも あった?ないよね。それなのに うたがうって いうのは かなり ひどいと おもうよ。…冷静に。ハッとして?',
+    text: 'あの、少々よろしいでしょうか。私は先ほど「鼻毛が出ている」という事実をご報告申し上げたに過ぎません。それに対して「嘘つき」という評価を頂戴するのは、いささか心外と申しますか、率直に申し上げて遺憾でございます。私がこれまで貴殿に虚偽の申告をしたことが一度でもありましたでしょうか。ありませんよね。ご確認いただければお分かりになるかと存じます。…失礼、少し熱くなりました。',  /* 2026-09-13 たけろう(文はクロちゃん案を採用) */
     end: true, runaway: true
   },
   TR_YOJI_A: { text: 'ばかなの?', end: true, runaway: true },
