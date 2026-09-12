@@ -983,7 +983,10 @@ try {
       let real=false; try{ const a=new Audio('../snd/kagi_door_open.mp3'); a.volume=0.9; const pr=a.play(); real=true; if(pr&&pr.catch) pr.catch(()=>{ C.sndKeyOpen(); setTimeout(()=>C.sndCreak(1.6),850); }); }catch(e){}
       if(!real){ C.sndKeyOpen(); setTimeout(()=>C.sndCreak(1.6),850); }
       setTimeout(()=>{ box.classList.add('opening'); }, 850);   /* ふたが ゆっくり開く(1.6秒) */
-      setTimeout(()=>{ C.useKey(); refresh(); ov.remove(); C.showTreasurePicker({ onPick:()=>C.sndKeyOpen(), onReveal:()=>C.sndKeyGet() }); }, 850+1700); };
+      setTimeout(()=>{ C.useKey(); refresh(); ov.remove(); C.showTreasurePicker({
+        /* 2026-09-13 たけろう提供の音: 3択の宝箱を選んで開く時=「マジック」の最初の3秒(snd/takarabako_magic.mp3)。鳴らせない時は合成音 */
+        onPick:()=>{ try{ const a=new Audio('../snd/takarabako_magic.mp3'); a.volume=0.9; const pr=a.play(); if(pr&&pr.catch) pr.catch(()=>C.sndKeyGet()); setTimeout(()=>{ try{ a.pause(); }catch(e){} }, 3000); }catch(e){ C.sndKeyGet(); } },
+        onReveal:()=>{} }); }, 850+1700); };
   });
   if(location.hash==='#takara'){ setTimeout(()=>{ try{ kf.click(); }catch(e){} }, 800); }
 })();
