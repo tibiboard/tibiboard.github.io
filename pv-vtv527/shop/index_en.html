@@ -952,7 +952,7 @@ try {
 #takaraOv .tk-ttl{color:#fff;font-size:clamp(24px,5vw,34px);font-weight:900;text-shadow:0 3px 0 rgba(0,0,0,.4)}
 .takarabox{position:relative;border:0;background:none;padding:0;cursor:pointer;width:260px;height:270px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-family:inherit;animation:tbPon .45s cubic-bezier(.2,1.4,.4,1)}
 @keyframes tbPon{0%{transform:scale(.1);opacity:0}100%{transform:scale(1);opacity:1}}
-.takarabox .tb-lid{width:250px;height:44px;background:linear-gradient(#ffe27a,#e0a800);border:8px solid #7a4a00;border-bottom:0;border-radius:22px 22px 4px 4px;box-shadow:inset 0 4px 0 rgba(255,255,255,.5);transform-origin:left bottom;transition:transform .35s}
+.takarabox .tb-lid{width:250px;height:44px;background:linear-gradient(#ffe27a,#e0a800);border:8px solid #7a4a00;border-bottom:0;border-radius:22px 22px 4px 4px;box-shadow:inset 0 4px 0 rgba(255,255,255,.5);transform-origin:left bottom;transition:transform 1.6s cubic-bezier(.3,.05,.6,1)} /* 2026-09-13: ゆっくり開く(1.6秒) */
 .takarabox .tb-body{position:relative;width:250px;height:180px;background:linear-gradient(#ffcf33,#d68f00);border:8px solid #7a4a00;border-radius:4px 4px 22px 22px;box-shadow:0 12px 0 #5a3600,0 18px 28px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}
 .takarabox .tb-q{font-size:120px;font-weight:900;color:#fff;text-shadow:5px 5px 0 #7a4a00;line-height:1}
 .takarabox .rv{position:absolute;width:14px;height:14px;border-radius:50%;background:#7a4a00}
@@ -978,8 +978,10 @@ try {
     document.body.appendChild(ov);
     ov.querySelector('.tk-close').onclick=()=>ov.remove();
     const box=ov.querySelector('#takarabox');
-    box.onclick=()=>{ if(box.classList.contains('opening')) return; C.sndKeyOpen(); box.classList.add('opening');
-      setTimeout(()=>{ C.useKey(); refresh(); ov.remove(); C.showTreasurePicker({ onPick:()=>C.sndKeyOpen(), onReveal:()=>C.sndKeyGet() }); }, 750); };
+    box.onclick=()=>{ if(box.classList.contains('opening')) return;
+      C.sndKeyOpen();                                   /* 鍵を差して回す: シャッ・カチカチ・ガチャン(約0.8秒) */
+      setTimeout(()=>{ C.sndCreak(1.6); box.classList.add('opening'); }, 850);   /* ふたが ぎぃぃ…と ゆっくり開く(1.6秒) */
+      setTimeout(()=>{ C.useKey(); refresh(); ov.remove(); C.showTreasurePicker({ onPick:()=>C.sndKeyOpen(), onReveal:()=>C.sndKeyGet() }); }, 850+1700); };
   });
   if(location.hash==='#takara'){ setTimeout(()=>{ try{ kf.click(); }catch(e){} }, 800); }
 })();

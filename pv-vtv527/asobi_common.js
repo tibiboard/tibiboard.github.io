@@ -221,7 +221,24 @@
     g.gain.setValueAtTime(Math.min(gain||0.1,0.3),a.currentTime+t0); g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+t0+dur);
     o.connect(g); g.connect(a.destination); o.start(a.currentTime+t0); o.stop(a.currentTime+t0+dur+0.05); }catch(e){} };
   C.sndKeyGet = () => { [880,1175,1568,2093,2637].forEach((f,i)=>C._tone(f,i*0.07,0.28,'triangle',0.16)); };
-  C.sndKeyOpen = () => { C._tone(200,0,0.05,'square',0.22); C._tone(140,0.06,0.09,'square',0.25,70); C._tone(700,0.18,0.22,'triangle',0.14,1600); };
+  /* 2026-09-13 たけろう指示: 鍵を差して回す音(金属の擦れ→カチッ→ガチャン)と、ふたがゆっくり開く音(ドアのきしみ) */
+  C._noise = (t0,dur,gain,hp) => { try{ const a=C._ac(); const len=Math.floor(a.sampleRate*dur), buf=a.createBuffer(1,len,a.sampleRate), d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len); const src=a.createBufferSource(); src.buffer=buf;
+    const f=a.createBiquadFilter(); f.type='bandpass'; f.frequency.value=hp||3000; f.Q.value=1.2; const g=a.createGain(); g.gain.value=Math.min(gain||0.1,0.3);
+    src.connect(f); f.connect(g); g.connect(a.destination); src.start(a.currentTime+t0); }catch(e){} };
+  C.sndKeyOpen = () => {
+    C._noise(0,0.18,0.12,4200);                       /* 鍵を差す: シャッ(金属の擦れ) */
+    [0.22,0.30,0.38].forEach(t=>C._tone(1800,t,0.03,'square',0.10));  /* 回す: カチカチカチ */
+    C._tone(160,0.46,0.08,'square',0.25,90); C._noise(0.46,0.08,0.18,900);  /* ガチャン */
+    C._tone(90,0.55,0.25,'sine',0.2,50);                                 /* ゴトッ(低い余韻) */
+  };
+  C.sndCreak = (dur) => { dur=dur||1.6; try{ const a=C._ac(), o=a.createOscillator(), g=a.createGain(); o.type='sawtooth';
+    o.frequency.setValueAtTime(220,a.currentTime); o.frequency.linearRampToValueAtTime(340,a.currentTime+dur*0.5); o.frequency.linearRampToValueAtTime(260,a.currentTime+dur);
+    const lfo=a.createOscillator(), lg=a.createGain(); lfo.frequency.value=11; lg.gain.value=28; lfo.connect(lg); lg.connect(o.frequency);
+    const f=a.createBiquadFilter(); f.type='lowpass'; f.frequency.value=1400;
+    g.gain.setValueAtTime(0.0001,a.currentTime); g.gain.exponentialRampToValueAtTime(0.09,a.currentTime+0.15); g.gain.setValueAtTime(0.09,a.currentTime+dur*0.8); g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+dur);
+    o.connect(f); f.connect(g); g.connect(a.destination); o.start(); lfo.start(); o.stop(a.currentTime+dur+0.05); lfo.stop(a.currentTime+dur+0.05); }catch(e){}
+    C._noise(0,dur,0.05,600); };
   /* 鍵が画面に出て、くるくる回りながら ポケット(コインの札)へ飛び込む演出 */
   C.keyFly = (n, done) => {
     const target = document.getElementById('keyFloat') || document.querySelector('.chibiCoinGui .cg-key') || document.querySelector('.chibiCoinGui') || document.body;
