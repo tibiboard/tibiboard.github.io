@@ -587,6 +587,27 @@
       <div class="result" id="chibiTreasureResult"></div>
       </div>`;
     document.body.appendChild(ov);
+    /* 2026-09-13 たけろう決定(見本C): 暗い部屋・上からの光の輪の中に宝箱と、光に集まってきたばつべー。外は真っ暗 */
+    if(!document.getElementById('chibiTreasureDarkCss')){ const st=document.createElement('style'); st.id='chibiTreasureDarkCss'; st.textContent=`
+      #chibiTreasureOv{background:radial-gradient(ellipse at 50% 62%,#3a1a2c 0%,#160810 55%,#0d060b 100%) !important}
+      #chibiTreasureOv::before{background-image:none !important;background:radial-gradient(ellipse at 50% 60%,rgba(0,0,0,0) 28%,rgba(0,0,0,.55) 60%,rgba(0,0,0,.92) 100%) !important;z-index:2}
+      #chibiTreasureOv .tk-cone{position:absolute;left:50%;top:-6vh;width:0;height:0;transform:translateX(-50%);border-left:26vw solid transparent;border-right:26vw solid transparent;border-top:96vh solid rgba(255,236,190,.14);filter:blur(8px);pointer-events:none}
+      #chibiTreasureOv .tk-pool{position:absolute;left:50%;top:50%;width:min(96vw,960px);height:min(52vh,440px);transform:translate(-50%,-38%);border-radius:50%;background:radial-gradient(ellipse at 50% 45%,rgba(255,240,200,.9) 0%,rgba(255,230,180,.55) 42%,rgba(255,220,160,0) 72%);pointer-events:none}
+      #chibiTreasureOv .tk-crowd{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+      #chibiTreasureOv .tk-crowd img{position:absolute;width:var(--w);transform:translate(-50%,-50%) rotate(var(--r));animation:tkBreath 2.4s ease-in-out infinite;animation-delay:var(--d)}
+      @keyframes tkBreath{0%,100%{transform:translate(-50%,-50%) rotate(var(--r)) translateY(0)}50%{transform:translate(-50%,-50%) rotate(var(--r)) translateY(-8px)}}
+      #chibiTreasureOv .wrap{z-index:3}
+      #chibiTreasureOv .ttl{color:#fff !important;text-shadow:0 0 18px rgba(255,220,120,.9),0 5px 0 rgba(0,0,0,.6) !important}
+      #chibiTreasureOv .ttlsub{color:#ffd54f !important;opacity:1 !important}
+      #chibiTreasureOv .chibiChest{filter:drop-shadow(0 0 18px rgba(255,220,120,.55))}
+      @media(max-width:640px){#chibiTreasureOv .tk-crowd img{width:calc(var(--w) * .62)}}`; document.head.appendChild(st); }
+    (function(){ const cone=document.createElement('div'); cone.className='tk-cone'; const pool=document.createElement('div'); pool.className='tk-pool';
+      const crowd=document.createElement('div'); crowd.className='tk-crowd'; const dir=C.DIR||'img/usagi/'; const ids=(C.ALL||[]).slice().sort(()=>Math.random()-.5);
+      const put=(x,y,w,i)=>{ const im=document.createElement('img'); im.src=dir+ids[i%ids.length]+'.png'; im.style.left=x+'%'; im.style.top=y+'%'; im.style.setProperty('--w',w+'px'); im.style.setProperty('--r',(Math.random()*16-8)+'deg'); im.style.setProperty('--d',(-Math.random()*2.4)+'s'); crowd.appendChild(im); };
+      /* 奥の列(光の中・小さめ)と 手前の列(光の輪の手前・大きめ・のぞき込む) */
+      const back=12, front=9; for(let i=0;i<back;i++){ const t=i/(back-1); put(8+84*t, 30+Math.sin(t*Math.PI)*-4, 78+Math.random()*16, i); }
+      for(let i=0;i<front;i++){ const t=i/(front-1); put(6+88*t, 88+Math.sin(t*Math.PI)*-6, 120+Math.random()*24, back+i); }
+      ov.insertBefore(cone, ov.firstChild); ov.insertBefore(pool, ov.firstChild.nextSibling); ov.insertBefore(crowd, ov.querySelector('.wrap')); })();
     const chests = [...ov.querySelectorAll('.chibiChest')];
     let picked=false;
     chests.forEach(ch=>{
