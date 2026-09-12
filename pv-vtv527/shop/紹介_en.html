@@ -243,7 +243,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
    ============================================ */
 const EHON = [
   {h:'Tiny.<br>And split in two.', p:'30 keys in total (left + right). 17 mm key pitch (19 mm is normal). Wireless (Bluetooth). USB works too'},
-  {h:'Two shapes: square and round.',   p:'The case comes in several materials, too'},
+  {h:'Two shapes: square and round.',   p:'The case comes in several materials, too → <a href="素材.html" style="color:var(--pink);text-decoration:underline">details</a>'},
   {h:'Z and S are <em>special</em>.',      p:'Z = textured edition, S = see-through edition'},
   {h:'Made one at a time, by hand.',      p:'3D-printed case. With a bunny name plate'},
   {h:'The left half<br>gives a little buzz.',   p:'There is a vibration motor inside'},  /* 2026-09-12 */
@@ -599,7 +599,7 @@ const EHON = [
 <script>
 /* 編集ブロック(EHON)を各画面に流し込む */
 document.querySelectorAll('[data-ehon]').forEach(el=>{ el.innerHTML = EHON[+el.dataset.ehon].h; });
-document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset.ehonp].p; if(t){el.textContent=t;}else{el.remove();} });
+document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset.ehonp].p; if(t){el.innerHTML=t;}else{el.remove();} /* 2026-09-13: 「くわしく」のリンクを入れるため innerHTML */ });
 </script>
 <script>
 /* じっすん=写真を見せるだけ(2026-08-20)。旧・mm計算ギミックは撤去 */

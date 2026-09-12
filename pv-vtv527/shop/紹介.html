@@ -243,7 +243,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
    ============================================ */
 const EHON = [
   {h:'ちいさい。<br>ふたつに わかれてる。', p:'左右あわせて 30キー。キーピッチ17mm(ふつうは19mm)。無線(Bluetooth)。USBでも つながる'},  /* 2026-09-12 たけろう指示: 30キーを入れる */
-  {h:'かたちは シカクと マル。',           p:'ケースの素材も いろいろあるよ'},  /* 2026-09-12 たけろう指示(2回目)。ここから素材の紹介ページへ飛ばす予定 */
+  {h:'かたちは シカクと マル。',           p:'ケースの素材も いろいろあるよ → <a href="素材.html" style="color:var(--pink);text-decoration:underline">くわしく</a>'},  /* 2026-09-12 たけろう指示(2回目)。ここから素材の紹介ページへ飛ばす予定 */
   {h:'Zと Sは、<em>とくべつ</em>。',      p:'Zが ついたら ザラザラエディション、Sが ついたら スケスケエディションだよ'},
   {h:'1台ずつ、手づくり。',                p:'ケースは3Dプリント。うさぎのネームプレートつき'},
   {h:'左手が<br>ぷるっと ふるえる。',       p:'バイブが 入っています'},  /* 2026-09-12 たけろう指示 */
@@ -599,7 +599,7 @@ const EHON = [
 <script>
 /* 編集ブロック(EHON)を各画面に流し込む */
 document.querySelectorAll('[data-ehon]').forEach(el=>{ el.innerHTML = EHON[+el.dataset.ehon].h; });
-document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset.ehonp].p; if(t){el.textContent=t;}else{el.remove();} });
+document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset.ehonp].p; if(t){el.innerHTML=t;}else{el.remove();} /* 2026-09-13: 「くわしく」のリンクを入れるため innerHTML */ });
 </script>
 <script>
 /* じっすん=写真を見せるだけ(2026-08-20)。旧・mm計算ギミックは撤去 */
