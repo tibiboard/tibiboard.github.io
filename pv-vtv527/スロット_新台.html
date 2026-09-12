@@ -17,7 +17,10 @@ body{font-family:"Hiragino Maru Gothic ProN",Meiryo,sans-serif;background:#180a1
 h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
 .fuda{background:#fff;color:var(--ink);border-radius:18px;padding:14px 30px;font-size:24px;font-weight:900;line-height:2.1;margin:10px 0;border-left:6px solid var(--mint);text-align:center}
 .fuda b{color:var(--pink-deep);font-size:30px}
-.coin{font-size:48px;font-weight:900;margin:8px 0;background:#3a2233;border-radius:999px;padding:10px 34px;color:var(--gold);letter-spacing:2px;box-shadow:inset 0 2px 6px rgba(0,0,0,.6)}
+/* 2026-08-20: 旧.coin(角丸バー)は撤去。コインは丸い金貨GUI(.chibiCoinGui、asobi_common.js)に統一。
+   replayglow(リプレイ確定時の光)は金貨のdiscに掛ける演出として残す */
+#status.replayglow .cg-disc{animation:replayglowpulse .5s ease-in-out infinite}
+@keyframes replayglowpulse{0%,100%{box-shadow:0 .1em 0 0 rgba(0,0,0,.18), 0 .5em .6em 0 rgba(0,0,0,.35)}50%{box-shadow:0 .1em 0 0 rgba(0,0,0,.18), 0 0 22px 10px rgba(255,213,79,.9)}}
 
 /* ===== 台(大型) ===== */
 .machine{position:relative;background:linear-gradient(#4a2438,#2a1322);border:6px solid var(--gold);border-radius:26px;padding:20px 22px 24px;margin:8px 0;box-shadow:0 10px 0 rgba(0,0,0,.5), 0 0 40px rgba(255,213,79,.15), inset 0 2px 8px rgba(255,255,255,.15);max-width:880px;width:100%}
@@ -35,8 +38,12 @@ h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
 .reel::after{bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.45))}
 .strip{position:absolute;left:0;top:0;width:100%}
 .strip img{display:block;width:170px;height:170px;object-fit:contain;margin:40px auto}
+.strip .emojisym{display:block;width:170px;height:170px;margin:40px auto;font-size:120px;line-height:170px;text-align:center}
 .reel.spin .strip{animation:roll .38s linear infinite}
 @keyframes roll{from{transform:translateY(0)}to{transform:translateY(-250px)}}
+/* 🐢レバー無反応の左右リール: 逆回転(2026-08-20) */
+.reel.spin.rev .strip{animation:rollrev .38s linear infinite}
+@keyframes rollrev{from{transform:translateY(-250px)}to{transform:translateY(0)}}
 .reel.stopbounce .strip{animation:bounce .32s ease-out}
 @keyframes bounce{0%{transform:translateY(-18px)}55%{transform:translateY(8px)}100%{transform:translateY(0)}}
 /* 当たりライン */
@@ -75,15 +82,41 @@ h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
 .getcard img{width:90px;display:block;margin:6px auto}
 .links{margin-top:16px;font-size:12px;color:#8d7f89}
 .links a{color:#8d7f89}
+/* お店にもどる: 必ず目に入るボタン(2026-08-17) */
+.backbtn{display:block;width:60%;max-width:420px;margin:10px auto 4px;background:var(--pink);color:#fff;text-decoration:none;text-align:center;font-weight:900;font-size:20px;border-radius:999px;padding:14px 10px;border-bottom:5px solid var(--pink-deep);box-shadow:0 4px 10px rgba(0,0,0,.35)}
 /* 大当たり紙吹雪 */
 .confetti{position:fixed;width:10px;height:14px;top:-20px;z-index:50;animation:conf 2.6s linear forwards;pointer-events:none}
 @keyframes conf{to{transform:translateY(105vh) rotate(720deg)}}
 /* 大当たりの画面全体フラッシュ(3連) */
 #flashfx{position:fixed;inset:0;background:#fff;z-index:80;pointer-events:none;opacity:0;animation:ffx 1.3s}
 @keyframes ffx{6%{opacity:1}14%{opacity:0}22%{opacity:.9}32%{opacity:0}42%{opacity:.7}60%{opacity:0}}
-/* 消灯演出 */
+/* 消灯演出(3段。リールごとに真っ暗にするオーバーレイ) */
 #dark{position:fixed;inset:0;background:#000;z-index:70;opacity:0;pointer-events:none;transition:opacity .12s}
 #dark.on{opacity:1}
+.reeldark{position:absolute;inset:0;background:#000;z-index:5;opacity:0;pointer-events:none}
+.reeldark.on{opacity:1;animation:reelflicker .15s steps(2) 3}
+@keyframes reelflicker{50%{opacity:.72}}
+/* 小当たりコイン落下 */
+.coinfall{position:fixed;font-size:80px;z-index:60;pointer-events:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5));animation:coinfall2 1.05s cubic-bezier(.3,1.6,.4,1) forwards}
+@keyframes coinfall2{
+  0%{transform:translate(0,0) scale(1);opacity:1}
+  55%{transform:translate(calc(var(--dx) * .15),calc(var(--dy) * .55)) scale(1.2);opacity:1}
+  68%{transform:translate(calc(var(--dx) * .1),calc(var(--dy) * .45)) scale(.95);opacity:1}
+  100%{transform:translate(var(--dx),var(--dy)) scale(.3);opacity:0}
+}
+/* リプレイの「もういっかい!」バウンド文字 */
+.replaybounce{display:inline-block;animation:replaybounce .5s ease-in-out infinite}
+@keyframes replaybounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+/* ひみつ演出「ばつべーの声」(2026-08-20)。筐体の上にちょこっと出てすぐ消える */
+.batsuvoice{position:absolute;left:50%;top:-50px;transform:translateX(-50%);z-index:12;pointer-events:none;text-align:center}
+.batsuvoice .bv-img{width:70px;display:block;margin:0 auto 2px;animation:bvbounce .6s ease-out}
+@keyframes bvbounce{0%{transform:scale(1)}40%{transform:scale(1.4)}100%{transform:scale(1)}}
+.batsuvoice .bv-bubble{background:#fff;color:var(--ink);font-weight:900;font-size:14px;border-radius:10px;padding:2px 9px;display:inline-block;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+/* 演出プレビュー(dev専用パネル) */
+#devpanel{position:fixed;right:8px;bottom:8px;z-index:120;background:rgba(20,10,18,.94);border:2px solid var(--gold);border-radius:10px;padding:8px;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;max-width:220px;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+#devpanel .devtitle{grid-column:1/-1;color:var(--gold);font-size:11px;font-weight:900;text-align:center;margin-bottom:2px;letter-spacing:1px}
+#devpanel button{font-size:11px;font-weight:700;padding:6px 4px;border-radius:6px;border:1px solid #5a4030;background:#3a2233;color:#fff;cursor:pointer;font-family:inherit}
+#devpanel button:active{background:var(--pink)}
 /* 魚群演出 */
 .gyogun{position:fixed;inset:0;pointer-events:none;z-index:65;overflow:hidden}
 .gyogun img{position:absolute;animation:gyorun 1.7s linear forwards}
@@ -103,14 +136,10 @@ h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
 .fxbox .row b{color:var(--pink-deep)}
 .fxbox .foot{font-size:19px;margin-top:16px;color:#5a4a30;text-align:center;font-weight:700}
 
-/* 🪙0枚の絵で伝える(文字なし) */
-.coin.empty{filter:grayscale(1);opacity:.75;position:relative}
-.coin.empty::after{content:"✖";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ff3b5c;font-size:64px;text-shadow:0 0 10px rgba(0,0,0,.6);pointer-events:none}
+/* 🪙0枚の絵で伝える(文字なし)。空表示は.chibiCoinGui.emptyが担当(グレー+数字赤)なのでここは重ね無し */
 #nocoin{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;pointer-events:none}
 #nocoin.go{display:flex}
-#nocoin .stamp{position:relative;font-size:190px;line-height:1;animation:ncpop .9s cubic-bezier(.2,1.6,.4,1)}
-#nocoin .stamp .c{filter:grayscale(1)}
-#nocoin .stamp::after{content:"✖";position:absolute;inset:-30px;display:flex;align-items:center;justify-content:center;color:#ff3b5c;font-size:250px;font-weight:900;text-shadow:0 0 24px rgba(0,0,0,.8)}
+#nocoin .stamp{position:relative;font-size:190px;line-height:1;filter:grayscale(1);animation:ncpop .9s cubic-bezier(.2,1.6,.4,1)}
 @keyframes ncpop{0%{transform:scale(.2);opacity:0}30%{transform:scale(1.25);opacity:1}45%{transform:scale(1)}60%{transform:translateX(-14px)}70%{transform:translateX(12px)}80%{transform:translateX(-8px)}90%{transform:translateX(6px)}100%{transform:translateX(0)}}
 
 /* ===== クリィミーマミ差し色(2026-08-15)。舞台の闇はそのまま、差し色だけパステルに。旧値: pink#e84898/deep#e0197a/mint#5fd6c4/gold#ffd54f ===== */
@@ -130,27 +159,30 @@ h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
   .fuda{padding:8px 12px;font-size:14px;line-height:1.6;margin:6px 0;border-radius:12px}
   .fuda b{font-size:17px}
   .fuda img{width:22px!important}
-  .coin{font-size:26px;padding:6px 18px;margin:4px 0}
+  .strip .emojisym{font-size:60px;line-height:100px;margin:13px auto;width:auto}
+  .coinfall{font-size:44px}
   #fxbtn{padding:7px 18px;font-size:14px}
   .machine{max-width:92vw;padding:10px 10px 12px;border-width:4px;border-radius:16px;margin:6px 0}
   .marquee{gap:4px;margin-bottom:6px}
   .bulb{width:10px;height:10px}
   .title-plate{font-size:13px;letter-spacing:4px;margin-bottom:6px}
   .window{padding:6px;gap:5px;border-width:3px;border-radius:10px}
-  .reel{width:27vw;max-width:110px;height:34vw;max-height:135px;border-width:2px}
-  .strip img{width:70%;height:auto;margin:18px auto}
-  @keyframes roll{from{transform:translateY(0)}to{transform:translateY(-135px)}}
-  .body-row{gap:4px}
-  .lever-rail{width:56px}
-  .lever{width:20px;height:110px;border-radius:8px}
-  .lever .ball{top:-30px;width:60px;height:60px;font-size:14px}
-  .lever-rail::before{font-size:32px;left:-38px;top:0}
-  .lever-rail .base{width:48px;height:20px;margin-top:3px}
+  .reel{width:20vw;max-width:80px;height:25vw;max-height:100px;border-width:2px}
+  .strip img{width:70%;height:auto;margin:13px auto}
+  @keyframes roll{from{transform:translateY(0)}to{transform:translateY(-100px)}}
+  @keyframes rollrev{from{transform:translateY(-100px)}to{transform:translateY(0)}}
+  .body-row{gap:2px}
+  .lever-rail{width:42px}
+  .lever{width:15px;height:80px;border-radius:6px}
+  .lever .ball{top:-22px;width:44px;height:44px;font-size:10px}
+  .lever-rail::before{font-size:24px;left:-28px;top:0}
+  .lever-rail .base{width:34px;height:14px;margin-top:2px}
   #msg{font-size:14px;min-height:2.4em;margin-top:8px}
   #msg .big{font-size:22px}
   #tobira{padding:8px 12px;max-width:90vw}
   #tobira button{font-size:15px!important;padding:8px 18px!important}
   .links{margin-top:8px;font-size:10px}
+  .backbtn{width:70%;font-size:16px;padding:11px 8px;margin:6px auto 2px}
   .fxbox{padding:20px 16px}
   .fxbox h3{font-size:20px;margin-bottom:10px}
   .fxbox .row{font-size:15px;padding:9px 2px}
@@ -162,22 +194,24 @@ h1{font-size:40px;letter-spacing:6px;color:var(--mint);margin:6px 0 2px}
 <div id="nocoin"><div class="stamp"><span class="c">🪙</span></div></div>
 
 <h1>🎰 ちびスロット</h1>
-<div class="fuda">
-<img src="img/バツベイ_アイコン800.png" style="width:34px;vertical-align:middle"> ×3 そろえたら <b>大あたり</b> 🎁たからばこ!
-<br><span style="font-size:15px;opacity:.85">🎁たからばこは 1しゅうかんに 1こまで</span>
-</div>
+<a class="backbtn" href="shop/index.html?in=1">お店にもどる</a>
 
-<div class="coin" id="status">🪙</div>
+<div class="coin" id="status"></div>
 <button id="fxbtn">❔ 演出のひみつ</button>
 
 <div id="fxov"><div class="fxbox">
   <h3>— 演出のひみつ —</h3>
-  <div class="row"><span>✨ キュイン!(高い音)</span><b>🎁 1/5</b></div>
-  <div class="row"><span>🐰 ばつべーの大群が よこぎる</span><b>🎁 1/4</b></div>
-  <div class="row"><span>🐢 レバーをひいても うごかない</span><b>🎁 1/3</b></div>
-  <div class="row"><span>💥 ばつべーが ドーンと出る</span><b>🎁 1/2</b></div>
-  <div class="row"><span>⬛ とつぜん まっくら</span><b>🎁 2/3</b></div>
-  <div class="foot">演出が出たら <b>大あたり かくてい</b>🐰<br>演出なしでも そろえば あたり<br>🎁たからばこは 1しゅうかんに 1こまで</div>
+  <div class="row"><span>✨ キュイン!(高い音)</span><b>かくてい!!</b></div>
+  <div class="row"><span>🐢 レバーをひいても うごかない</span><b>かくてい!!</b></div>
+  <div class="row"><span>🐰 ばつべーの大群が よこぎる</span><b>あたり 50%</b></div>
+  <div class="row"><span>💥 ばつべーが ドーンと出る</span><b>あたり 50%</b></div>
+  <div class="row"><span>⬛ 消灯1(リール1つ くらく)</span><b>あたり 5%</b></div>
+  <div class="row"><span>⬛⬛ 消灯2(リール2つ くらく)</span><b>あたり 20%</b></div>
+  <div class="row"><span>⬛⬛⬛ 消灯3(ぜんぶ まっくら)</span><b>かくてい!!</b></div>
+  <div class="row"><span>🪙🪙🪙 こあたり</span><b>🪙+2</b></div>
+  <div class="row"><span>🔁🔁🔁 リプレイ</span><b>つぎ むりょう</b></div>
+  <div class="row"><span>❓ かくし演出</span><b>ひみつ</b></div>
+  <div class="foot">演出が出たら <b>大あたり かくてい</b>🐰<br>演出なしでも そろえば あたり<br><span style="font-size:12px;opacity:.7">スロット 新台 v2.3 (2026-08-20)</span></div>
 </div></div>
 
 <div class="machine" id="machine">
@@ -224,7 +258,13 @@ const VARIANTS = [
   {id:'street_15', src:'img/usagi/street_15.png'}
 ];
 const ALL = [STD, ...VARIANTS];
-/* 小当たりは廃止(2026-08-14〜)。ずかん入手経路は🎁宝箱だけ */
+/* ずかん入手経路は🎁宝箱だけ(変更なし) */
+/* 2026-08-19: 🪙こあたり・🔁リプレイ シンボルを追加。
+   これらは通常の絵柄抽選(ALL)には絶対に混ぜない=偶然の3つ揃いが起きないようにする。
+   狙って揃える時だけ finals に直接セットする。回転中の帯(ALL_STRIP)にだけ彩り程度に混ぜる。 */
+const COIN = {id:'coin', emoji:'🪙'};
+const REPLAY = {id:'replay', emoji:'🔁'};
+const ALL_STRIP = [...ALL, COIN, REPLAY];
 
 /* ===== 音(体験版から移植。全部Web Audio自作=著作権クリーン) ===== */
 let AC, MASTER;
@@ -255,8 +295,28 @@ function bomb(){ const a=ac(); const bg=a.createGain(); bg.gain.value=2.8; bg.co
     o.type='sine'; o.frequency.setValueAtTime(f*1.8,a.currentTime); o.frequency.exponentialRampToValueAtTime(f*0.7,a.currentTime+0.25);
     g.gain.setValueAtTime(0.9,a.currentTime); g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.4);
     o.connect(g); g.connect(bg); o.start(); o.stop(a.currentTime+0.5); }); }
-function sndLever(){ tone(180,0,0.08,'square',0.2); tone(90,0,0.1,'sawtooth',0.15) }
+/* レバーON: 優しい「ふわっ」(正弦の短い上がり+空気感のノイズ) */
+function sndLever(){
+  tone(330,0,0.18,'sine',0.16,520); tone(660,0.02,0.16,'sine',0.07,880);
+  knock(0,0.12,1800,0.25);
+}
+/* キュイン!: 受け渡しの録音(4〜6秒)を少し加工した snd/kyuin.mp3 を再生。読めない時は合成音に退避 */
+let KYUIN_BUF=null, KYUIN_AB=null;
+fetch('snd/kyuin.mp3?v=5').then(r=>r.arrayBuffer()).then(b=>{KYUIN_AB=b; warmKyuin();}).catch(()=>{});
+/* 読み込み直後にデコード(AudioContextは操作前でも作れる=休止状態。最初の1発目から録音で鳴らすため) */
+function warmKyuin(){ if(KYUIN_AB && !KYUIN_BUF){ const b=KYUIN_AB; KYUIN_AB=null; try{ ac().decodeAudioData(b).then(d=>{KYUIN_BUF=d;}).catch(()=>{}); }catch(e){ KYUIN_AB=b; } } }
+function sndKyuinSample(){
+  if(!KYUIN_BUF){ sndKyuin(); return; }
+  /* ランプの「キュイーン」だけ(1200Hz以下を落として高音だけ残した録音)。同じ音を2本重ねて強くするだけ。混ぜ物なし */
+  const a=ac();
+  [[0,1.4]].forEach(([dt,vol])=>{
+    const s=a.createBufferSource(); s.buffer=KYUIN_BUF;
+    const g=a.createGain(); g.gain.value=vol; s.connect(g); g.connect(out()); s.start(a.currentTime+dt);
+  });
+}
 function sndStop(){ tone(320,0,0.06,'square',0.18); knock(0,0.08,300,0.6) }
+/* 逆回転リールの停止音: ふつうより少し低いピッチ(2026-08-20) */
+function sndStopRev(){ tone(220,0,0.07,'square',0.16); knock(0,0.09,200,0.55) }
 function sndBig(){ bomb();
   [34,37,40,43,46,50,54,58,63,68].forEach((f,i)=>tone(f,0,0.9-i*0.03,'sine',0.55,f*0.82));
   knock(0,0.25,240,1.4); knock(0,0.22,520,1.4);
@@ -276,8 +336,23 @@ function sndKyuin(){
   tone(1500,0,0.22,'square',0.3,4800);
   tone(2200,0.02,0.16,'sine',0.16,5600);
 }
-/* 消灯からの復帰「ドンッ」 */
-function sndRelight(){ knock(0,0.2,300,1.2); [60,80,110].forEach(f=>tone(f,0,0.3,'sine',0.5,45)); }
+/* 消灯からの復帰「ドンッ」: level 1=消灯1(低め・小さめ) 2=消灯2(中) 3=消灯3(フル) */
+function sndRelight(level){
+  const lv = level||3, sc = lv===1?0.6:lv===2?0.8:1, vol = 0.5+lv*0.25;
+  knock(0,0.2,300*sc,0.7+lv*0.3); [60,80,110].forEach(f=>tone(f*sc,0,0.3,'sine',vol,45*sc));
+}
+/* 🪙こあたり: 明るいチャリン2連 */
+function sndCoinGet(){
+  tone(1568,0,0.18,'sine',0.25,2400);
+  tone(2093,0.12,0.22,'sine',0.22,3000);
+  tone(2637,0.14,0.15,'triangle',0.12);
+}
+/* 🔁リプレイ: コイン投入口のカチッ+上昇2音 */
+function sndReplay(){
+  knock(0,0.05,900,0.8);
+  tone(880,0.08,0.15,'square',0.18,1100);
+  tone(1318,0.2,0.2,'square',0.18,1600);
+}
 /* 魚群のヒュオオオ(ノイズの下降スイープ) */
 function sndGyogun(){
   const a=ac(),len=a.sampleRate*1.2,buf=a.createBuffer(1,len,a.sampleRate);
@@ -289,6 +364,26 @@ function sndGyogun(){
 }
 /* カットインのドーン */
 function sndCutin(){ knock(0,0.25,260,1.5); [70,90,120].forEach(f=>tone(f,0,0.35,'sine',0.6,48)); tone(1976,0.05,0.7,'triangle',0.12); }
+/* ひみつ「ばつべーの声」: 900Hz→250Hzの下降+12Hzビブラート(深さは減衰)+頭にやわらかいノック(2026-08-20) */
+function sndBatsubeiVoice(){
+  const a=ac();
+  const o=a.createOscillator(); o.type='sine';
+  const g=a.createGain();
+  o.frequency.setValueAtTime(900,a.currentTime);
+  o.frequency.exponentialRampToValueAtTime(250,a.currentTime+0.7);
+  g.gain.setValueAtTime(0.001,a.currentTime);
+  g.gain.linearRampToValueAtTime(0.28,a.currentTime+0.04);
+  g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.75);
+  o.connect(g); g.connect(out());
+  const lfo=a.createOscillator(); lfo.type='sine'; lfo.frequency.value=12;
+  const lfoGain=a.createGain();
+  lfoGain.gain.setValueAtTime(60,a.currentTime);
+  lfoGain.gain.exponentialRampToValueAtTime(2,a.currentTime+0.7);
+  lfo.connect(lfoGain); lfoGain.connect(o.frequency);
+  lfo.start(a.currentTime); lfo.stop(a.currentTime+0.75);
+  o.start(a.currentTime); o.stop(a.currentTime+0.8);
+  knock(0,0.05,700,0.3);
+}
 /* 魚群: ばつべーの大群が横断 */
 function runGyogun(){
   sndGyogun();
@@ -311,6 +406,16 @@ function runCutin(){
   document.body.appendChild(img);
   setTimeout(()=>img.remove(), 1100);
 }
+/* ひみつ「ばつべーの声」: 筐体の上でぴょんと跳ねて「…!?」の吹き出し(2026-08-20) */
+function runBatsubeiVoice(){
+  sndBatsubeiVoice();
+  const wrap=document.createElement('div'); wrap.className='batsuvoice';
+  const img=document.createElement('img'); img.className='bv-img'; img.src=STD.src;
+  const bub=document.createElement('div'); bub.className='bv-bubble'; bub.textContent='…!?';
+  wrap.appendChild(img); wrap.appendChild(bub);
+  $('machine').appendChild(wrap);
+  setTimeout(()=>wrap.remove(), 900);
+}
 /* 大当たりの画面全体フラッシュ */
 function screenFlash(){
   const f=document.createElement('div'); f.id='flashfx'; document.body.appendChild(f);
@@ -328,52 +433,147 @@ document.getElementById('fxov').onclick=e=>{ if(e.target.id==='fxov') e.currentT
 for(let i=0;i<9;i++){ const b=document.createElement('div'); b.className='bulb'; $('marquee').appendChild(b); }
 setInterval(()=>{ const bs=[...document.querySelectorAll('.bulb')];
   bs.forEach((b,i)=>b.classList.toggle('on', (i+Math.floor(Date.now()/400))%3===0)); },400);
-/* リール帯: 全絵柄を縦に並べたループ帯 */
-function buildStrip(el){ el.innerHTML=''; const seq=[...ALL,...ALL].sort(()=>Math.random()-.5);
-  seq.concat(seq.slice(0,2)).forEach(sym=>{ const img=document.createElement('img'); img.src=sym.src; img.dataset.id=sym.id; el.appendChild(img); }); }
+/* 絵柄1個ぶんのDOM要素を作る(img絵柄/emoji絵柄どちらにも対応) */
+function makeSymEl(sym){
+  if(sym.src){ const img=document.createElement('img'); img.src=sym.src; img.dataset.id=sym.id; return img; }
+  const d=document.createElement('div'); d.className='emojisym'; d.dataset.id=sym.id; d.textContent=sym.emoji; return d;
+}
+/* リール帯: 全絵柄を縦に並べたループ帯(🪙🔁は彩りとして帯にだけ混ぜる。最終結果には使わない) */
+function buildStrip(el){ el.innerHTML=''; const seq=[...ALL_STRIP,...ALL_STRIP].sort(()=>Math.random()-.5);
+  seq.concat(seq.slice(0,2)).forEach(sym=>{ el.appendChild(makeSymEl(sym)); }); }
 ['r0','r1','r2'].forEach(id=>buildStrip($(id).querySelector('.strip')));
 function showSymbol(reelId, sym){ const strip=$(reelId).querySelector('.strip');
-  strip.innerHTML=''; const img=document.createElement('img'); img.src=sym.src; strip.appendChild(img); strip.style.transform='translateY(0)'; }
+  strip.innerHTML=''; strip.appendChild(makeSymEl(sym)); strip.style.transform='translateY(0)'; }
+/* リールを個別に真っ暗にする(消灯1/2用)。r0/r1/r2に重ねる */
+function reelDark(ids, on){
+  ids.forEach(id=>{
+    let ov = document.getElementById('rdark_'+id);
+    if(!ov){ ov=document.createElement('div'); ov.id='rdark_'+id; ov.className='reeldark'; $(id).appendChild(ov); }
+    ov.classList.toggle('on', on);
+  });
+}
 
 let spinning=false;
-function refresh(){
+let replayPending=false; /* 🔁が揃った直後に立てる。次の1回だけコインを消費しない */
+/* 2026-08-20: コイン表示は丸い金貨GUI(asobi_common.js)に統一。スピン+数字ロールも向こうが持つ */
+if(C){ C.mountCoinGui($('status'), {size:220, note:true}); }
+function refresh(spin){
   if(!C){ $('status').textContent='🪙 —'; return; }
-  $('status').textContent = '🪙 × ' + C.getCoins(); $('status').classList.toggle('empty', C.getCoins()<1);
-  const dead = spinning || C.getCoins()<1;
+  C.refreshCoinGui(!!spin);
+  const dead = spinning || (C.getCoins()<1 && !replayPending);
   $('lever').classList.toggle('disabled', dead);
-  if(!spinning && C.getCoins()<1) $('msg').innerHTML='<a href="うさぎ探し体験版.html">🔍うさぎ探し</a> か <a href="はしればつべー.html">🏃はしれ!ばつべー</a> で 🪙をゲット';
+  if(!spinning && C.getCoins()<1 && !replayPending) $('msg').innerHTML='<a href="うさぎ探し体験版.html">🔍うさぎ探し</a> か <a href="はしればつべー.html">🏃はしれ!ばつべー</a> で 🪙をゲット';
 }
 refresh();
+/* 小当たり: 大きなコインが天井から落ちてカウンターに飛び込む */
+function runCoinFall(){
+  const m=$('machine').getBoundingClientRect(), st=$('status').getBoundingClientRect();
+  for(let i=0;i<2;i++){
+    const s=document.createElement('div'); s.className='coinfall'; s.textContent='🪙';
+    const startX=m.left+m.width*(0.35+i*0.3)+(Math.random()*20-10), startY=m.top-10;
+    const endX=st.left+st.width/2, endY=st.top+st.height/2;
+    s.style.left=startX+'px'; s.style.top=startY+'px';
+    s.style.setProperty('--dx',(endX-startX)+'px'); s.style.setProperty('--dy',(endY-startY)+'px');
+    s.style.animationDelay=(i*0.18)+'s';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),1500);
+  }
+}
 
-$('lever').onclick = ()=>{
+/* ============================================================
+   演出の期待度 改定(2026-08-20 v2.2・オーナー指示)。大当たり=1/100は変更しない(C.drawPriority)。
+   「大当たりの時に出る演出」の重みFX.wは大当たりが出た瞬間にのみ選ぶ内訳(旧仕様と同じ仕組み)。
+   v2.1: kyuin.29 / gyogun.21 / delay.17 / cutin.10 / 消灯1.08(a1) / 消灯2.08(a2) / 消灯3.07 = 合計1.0
+   v2.2: ひみつ「ばつべーの声」を追加(w=.06)。既存7項目からその分を均等に間引いて正規化(旧値×0.94):
+     kyuin .273 / gyogun .197 / delay .160 / cutin .094 / 消灯1 .075(a1) / 消灯2 .075(a2) / 消灯3 .066 / 声 .06 = 合計1.0
+   キュイン・レバー無反応・ばつべーの声は「大当たりの時にしか出さない」ので期待度100%(かくてい)。ばつべーの声は❔表では
+   あえて「ひみつ」とだけ表示し、確定であることは明かさない。
+   魚群・カットイン・消灯1・2は今回からハズレでもガセとして出す。期待度を指定どおりにする式:
+     a*P(big) / (a*P(big) + b*P(miss)) = 期待度   ( P(big)=0.01, P(miss)=0.99 )
+     → b = a * [0.01*(1-期待度)] / [期待度*0.99]
+     魚群(期待度50%):  比率 ≒0.0101 → b_gyogun = a(.197)*0.0101 ≒ 0.00199
+     カットイン(期待度50%): 比率 ≒0.0101 → b_cutin  = a(.094)*0.0101 ≒ 0.00095
+     消灯1(期待度5%):  比率 ≒0.192  → b1 = a1(.075)*0.192 ≒ 0.0144
+     消灯2(期待度20%): 比率 ≒0.0404 → b2 = a2(.075)*0.0404 ≒ 0.0030
+   消灯3・ばつべーの声は大当たり確定演出なので、ハズレ側には出さない(b=0)。
+   小当たり(🪙🪙🪙 +2枚)はハズレの中で約1/12(≒.0833)、リプレイ(🔁🔁🔁)は約1/10(.10)。
+   魚群/カットインがガセで出た時は、はずれ目でも「標準・標準・×」のリーチ目にして刺す(ただの一様ハズレにしない)。
+   ============================================================ */
+const FX=[
+  {id:'kyuin',    w:.273},
+  {id:'gyogun',   w:.197},
+  {id:'delay',    w:.160},
+  {id:'cutin',    w:.094},
+  {id:'blackout1',w:.075},
+  {id:'blackout2',w:.075},
+  {id:'blackout3',w:.066},
+  {id:'voice',    w:.06}
+];
+const MISS_SMALLWIN_P = 1/12;
+const MISS_REPLAY_P   = 1/10;
+const MISS_BLACK1_P   = 0.0144;
+const MISS_BLACK2_P   = 0.0030;
+const MISS_GYOGUN_P   = 0.00199;
+const MISS_CUTIN_P    = 0.00095;
+
+/* opts:{preview,forceBig,forceMissType,forceFx} … devパネルからの強制プレビュー用。
+   通常のレバー操作は引数なし(=opts={})で今まで通り動く。 */
+function pullLever(opts){
+  opts = opts || {};
+  const preview = !!opts.preview;
   if(spinning) return;
-  if(C && C.getCoins()<1){
+  const usingReplay = replayPending && !preview;
+  if(!preview && !usingReplay && C && C.getCoins()<1){
     refresh();
     const nc=document.getElementById('nocoin'); nc.classList.remove('go'); void nc.offsetWidth; nc.classList.add('go'); setTimeout(()=>nc.classList.remove('go'),1300);
     return;
   }
   spinning=true;
-  if(C){ C.spendCoin(); }
+  if(preview){ /* プレビューはコインを使わない */ }
+  else if(usingReplay){ replayPending=false; $('status').classList.remove('replayglow'); }
+  else if(C){ C.spendCoin(); }
   $('machine').classList.remove('excited');
   $('tobira').style.display='none';
   $('lever').classList.add('pulled'); setTimeout(()=>$('lever').classList.remove('pulled'),300);
-  sndLever();
+  warmKyuin();   /* レバー音は予告が決まってから鳴らす(キュインの時はレバー音なし) */
+  if(!preview) refresh(true);
 
   /* --- 抽選(モック。本番はWorkersの結果を受け取るだけにする): 大当たり(1/100)のみ。それ以外はハズレ --- */
-  const big = C ? C.drawPriority() : (Math.random()<0.01);
+  const big = preview ? !!opts.forceBig : (C ? C.drawPriority() : (Math.random()<0.01));
 
-  /* --- 予告演出: 出たら大当たり確定。🎁率は演出ごとに違う(❔ボタンの表と一致させること) --- */
-  const FX=[
-    {id:'kyuin',   w:.35, r:1/5},   /* ✨ 短い高音 */
-    {id:'gyogun',  w:.25, r:1/4},   /* 🐰 ばつべーの大群が横断(魚群) */
-    {id:'delay',   w:.20, r:1/3},   /* 🐢 レバー無反応 */
-    {id:'cutin',   w:.12, r:1/2},   /* 💥 ばつべーがドーンとカットイン */
-    {id:'blackout',w:.08, r:2/3}    /* ⬛ 消灯 */
-  ];
+  /* --- ハズレの中の細目抽選: 小当たり/リプレイ/消灯ガセ/魚群ガセ/カットインガセ/ふつうのハズレ --- */
+  let missType='normal';
+  if(preview){
+    if(!big && opts.forceMissType) missType = opts.forceMissType;
+  } else if(!big){
+    let t=Math.random();
+    if((t-=MISS_SMALLWIN_P)<0) missType='small';
+    else if((t-=MISS_REPLAY_P)<0) missType='replay';
+    else if((t-=MISS_BLACK1_P)<0) missType='blackout1';
+    else if((t-=MISS_BLACK2_P)<0) missType='blackout2';
+    else if((t-=MISS_GYOGUN_P)<0) missType='gyogun';
+    else if((t-=MISS_CUTIN_P)<0) missType='cutin';
+  }
+
+  /* --- 予告演出: キュイン/レバー無反応は大当たり確定。魚群/カットイン/消灯1・2はガセあり。🎁率は❔ボタンの表と一致させること --- */
   let fx=null;
-  if(big){ let t=Math.random(); for(const e of FX){ if((t-=e.w)<0){ fx=e; break; } } fx=fx||FX[0]; }
+  if(preview && opts.forceFx){ fx={id:opts.forceFx}; }
+  else if(big){ let t=Math.random(); for(const e of FX){ if((t-=e.w)<0){ fx=e; break; } } fx=fx||FX[FX.length-1]; }
+  else if(missType==='blackout1'){ fx={id:'blackout1'}; }
+  else if(missType==='blackout2'){ fx={id:'blackout2'}; }
+  else if(missType==='gyogun'){ fx={id:'gyogun'}; }
+  else if(missType==='cutin'){ fx={id:'cutin'}; }
+  /* レバーを引いた瞬間の音: キュイン当たり=録音の「キュイン」だけ(通常のレバー音なし) / それ以外=ふわっ */
+  if(fx && fx.id==='kyuin'){ sndKyuinSample(); } else { sndLever(); }
+
   let finals;
   if(big) finals=[STD,STD,STD];
+  else if(missType==='small') finals=[COIN,COIN,COIN];
+  else if(missType==='replay') finals=[REPLAY,REPLAY,REPLAY];
+  else if(missType==='gyogun' || missType==='cutin'){
+    /* 魚群/カットインのガセは、ただのハズレにせず「標準・標準・×」のリーチ目で刺す */
+    finals=[STD,STD,VARIANTS[Math.floor(Math.random()*VARIANTS.length)]];
+  }
   else {
     /* はずれ目: 3つ揃いに絶対ならない組み合わせ。2割で「標準・標準・×」のリーチ */
     if(Math.random()<0.2){ finals=[STD,STD,VARIANTS[Math.floor(Math.random()*VARIANTS.length)]]; }
@@ -384,29 +584,55 @@ $('lever').onclick = ()=>{
   const reels=['r0','r1','r2'];
   /* レバー遅延演出: 引いてもリールがしばらく動かない(無音の間=違和感がアツい) */
   const delay0 = (fx && fx.id==='delay') ? 1400 : 0;
-  setTimeout(()=>{
-    reels.forEach(id=>{ buildStrip($(id).querySelector('.strip')); $(id).classList.add('spin'); });
-    if(delay0) sndLever();
-  }, delay0);
+  if(fx && fx.id==='delay'){
+    /* 2026-08-20: 無反応の後、中→右→左の順にバラバラに動き出す。左右は逆回転(見た目の違和感を強める) */
+    const staggered=[{id:'r1',off:0,rev:false},{id:'r2',off:250,rev:true},{id:'r0',off:500,rev:true}];
+    staggered.forEach(o=>{
+      setTimeout(()=>{
+        buildStrip($(o.id).querySelector('.strip'));
+        $(o.id).classList.add('spin'); if(o.rev) $(o.id).classList.add('rev');
+        sndLever();
+      }, delay0+o.off);
+    });
+  } else {
+    setTimeout(()=>{
+      reels.forEach(id=>{ buildStrip($(id).querySelector('.strip')); $(id).classList.add('spin'); });
+    }, delay0);
+  }
   /* キュイン演出: 回転が始まって少ししてから短く鋭く */
-  if(fx && fx.id==='kyuin'){ setTimeout(()=>{ sndKyuin(); $('machine').classList.add('excited'); }, delay0+600); }
+  /* キュイン: レバーを引いた瞬間に鳴らす(録音サンプル) */
+  if(fx && fx.id==='kyuin'){ $('machine').classList.add('excited'); }
   /* 魚群演出: ばつべーの大群が画面を横断 */
   if(fx && fx.id==='gyogun'){ setTimeout(()=>{ runGyogun(); }, delay0+1500); }
   /* カットイン演出: ばつべーがドーンと画面に出る */
   if(fx && fx.id==='cutin'){ setTimeout(()=>{ runCutin(); }, delay0+1800); }
-  /* 消灯演出: 回転中にとつぜん真っ暗→ドンッと復帰 */
-  if(fx && fx.id==='blackout'){
-    setTimeout(()=>{ document.getElementById('dark').classList.add('on'); }, delay0+2000);
-    setTimeout(()=>{ document.getElementById('dark').classList.remove('on'); sndRelight(); $('machine').classList.add('excited'); }, delay0+2900);
+  /* ひみつ「ばつべーの声」: 回転中にちょこっと跳ねる(大当たり確定・表では明かさない) */
+  if(fx && fx.id==='voice'){ setTimeout(()=>{ runBatsubeiVoice(); $('machine').classList.add('excited'); }, delay0+650); }
+  /* 消灯1: 第1リールだけ真っ暗→ドンッと復帰(期待度5%) */
+  if(fx && fx.id==='blackout1'){
+    setTimeout(()=>{ reelDark(['r0'],true); }, delay0+2000);
+    setTimeout(()=>{ reelDark(['r0'],false); sndRelight(1); }, delay0+2900);
   }
-  /* リールはたっぷり回す(レバー→全停止で約5秒。リーチはさらに引っぱる) */
+  /* 消灯2: 第1+第2リールが真っ暗→ドンッと復帰(期待度20%) */
+  if(fx && fx.id==='blackout2'){
+    setTimeout(()=>{ reelDark(['r0','r1'],true); }, delay0+2000);
+    setTimeout(()=>{ reelDark(['r0','r1'],false); sndRelight(2); $('machine').classList.add('excited'); }, delay0+2900);
+  }
+  /* 消灯3: 画面ぜんぶ+全リール真っ暗。3秒間まったくの無音→ドンッと復帰+筐体が光る(大当たり確定) */
+  if(fx && fx.id==='blackout3'){
+    /* 消灯3=リール3つだけ消す(画面全体は暗くしない。たけろう指示 8/19) */
+    setTimeout(()=>{ reelDark(['r0','r1','r2'],true); }, delay0+2000);
+    setTimeout(()=>{ reelDark(['r0','r1','r2'],false); sndRelight(3); $('machine').classList.add('excited'); }, delay0+5000);
+  }
+  /* リールはたっぷり回す(レバー→全停止で約5秒。リーチはさらに引っぱる。消灯3は3秒静止ぶん最長のリーチ幅を使う) */
   const reach = finals[0].id===finals[1].id;
   const times = [2200, 3500, reach? 6200 : 4800].map(t=>t+delay0);
   times.forEach((t,i)=>setTimeout(()=>{
-    const r=$(reels[i]); r.classList.remove('spin');
+    const r=$(reels[i]); const wasRev=r.classList.contains('rev');
+    r.classList.remove('spin'); r.classList.remove('rev');
     showSymbol(reels[i], finals[i]);
     r.classList.add('stopbounce'); setTimeout(()=>r.classList.remove('stopbounce'),350);
-    sndStop();
+    if(wasRev) sndStopRev(); else sndStop();
     if(reach && i===1){ $('machine').classList.add('excited'); }
     if(i===2) setTimeout(judge, 300);
   }, t));
@@ -416,16 +642,34 @@ $('lever').onclick = ()=>{
     if(big){
       $('machine').classList.add('excited');
       sndJackpot(); screenFlash(); confetti();
-      /* 2026-08-14〜: 大当たり=🎁宝箱3択へ。鍵の自動発行はしない(鍵は手配りのみ) */
-      $('msg').innerHTML='<span class="big">🎉 大あたり!!</span>';
-      $('tobira').style.display='block';
+      if(preview){
+        /* プレビューは実物のたからばこを出さない=C.setAtari等の実キー発行に触れない */
+        $('msg').innerHTML='<span class="big">🎉 大あたり!!(プレビュー・実キーなし)</span>';
+      } else {
+        /* 2026-08-14〜: 大当たり=🎁宝箱3択へ。鍵の自動発行はしない(鍵は手配りのみ) */
+        $('msg').innerHTML='<span class="big">🎉 大あたり!!</span>';
+        $('tobira').style.display='block';
+      }
+      if(!preview) refresh();
+    } else if(missType==='small'){
+      if(!preview && C) C.addCoins(2);
+      sndCoinGet(); runCoinFall();
+      $('msg').innerHTML='<span class="big">🪙 こあたり! +2</span>'+(preview?'(プレビュー)':'');
+      if(!preview) refresh(true);
+    } else if(missType==='replay'){
+      if(!preview){ replayPending=true; $('status').classList.add('replayglow'); }
+      sndReplay();
+      $('msg').innerHTML='<span class="big replaybounce">🔁 もういっかい!</span>'+(preview?'(プレビュー)':'');
+      if(!preview){ refresh(); setTimeout(()=>{ if(!spinning) pullLever(); }, 1200); }
     } else {
       sndMiss();
+      if(!preview){ try{ localStorage.setItem('usagi_lastmiss', String(Date.now())); }catch(e){} } /* 2026-09-02: 外れ直後の散歩うさぎ用 */
       $('msg').innerHTML='ざんねん…!';
+      if(!preview) refresh();
     }
-    refresh();
   }
-};
+}
+$('lever').onclick = pullLever;
 document.getElementById('openchest').onclick = ()=>{
   $('tobira').style.display='none';
   C.showTreasurePicker({ onPick:()=>sndKyuin(), onReveal:()=>sndBig() });
@@ -434,6 +678,55 @@ function confetti(){ const cols=['#e84898','#5fd6c4','#ffd54f','#fff'];
   for(let i=0;i<60;i++){ const c=document.createElement('div'); c.className='confetti';
     c.style.left=Math.random()*100+'vw'; c.style.background=cols[i%4]; c.style.animationDelay=(Math.random()*0.7)+'s';
     document.body.appendChild(c); setTimeout(()=>c.remove(),3600); } }
+
+/* ============================================================
+   演出プレビュー パネル(2026-08-20 v2.2・dev専用)
+   ?dev=1 かつ localhost/127.0.0.1/192.168.x.xのときだけ右下に出す(既存の店パネルと同じ条件)。
+   本番(公開サイト)では何も出ない。コインは使わず・鍵(C.setAtari)も呼ばない=pullLever(preview:true)。
+   「確定」演出(キュイン/レバー/消灯3/ばつべーの声)は常に当たり側、
+   ガセ実装した演出(魚群/カットイン/消灯1/消灯2)はボタン1回ごとにコイントスで当たり/ハズレを選ぶ。
+   ============================================================ */
+/* 家のWi-Fi内(localhost / 192.168.x.x)だけ。本番(tibiboard.github.io)では出ない */
+const DEV_PREVIEW_ENABLED = (['localhost','127.0.0.1'].includes(location.hostname) || /^192\.168\./.test(location.hostname)) && /[?&]dev=1/.test(location.search);
+if(DEV_PREVIEW_ENABLED){
+  const DEV_BTNS=[
+    {k:'kyuin',    label:'✨キュイン'},
+    {k:'gyogun',   label:'🐰魚群'},
+    {k:'lever',    label:'🐢レバー'},
+    {k:'cutin',    label:'💥カットイン'},
+    {k:'blackout1',label:'⬛消灯1'},
+    {k:'blackout2',label:'⬛⬛消灯2'},
+    {k:'blackout3',label:'⬛⬛⬛消灯3'},
+    {k:'voice',    label:'❓かくし'},
+    {k:'small',    label:'🪙小当たり'},
+    {k:'replay',   label:'🔁リプレイ'},
+    {k:'big',      label:'🎉大当たり'},
+    {k:'miss',     label:'❌はずれ'}
+  ];
+  const panel=document.createElement('div'); panel.id='devpanel';
+  panel.innerHTML='<div class="devtitle">🛠 dev v2.2</div>'+DEV_BTNS.map(b=>'<button data-k="'+b.k+'">'+b.label+'</button>').join('');
+  document.body.appendChild(panel);
+  function devForce(kind){
+    if(spinning) return;
+    const opts={preview:true};
+    switch(kind){
+      case 'kyuin':     opts.forceBig=true;  opts.forceFx='kyuin'; break;
+      case 'lever':     opts.forceBig=true;  opts.forceFx='delay'; break;
+      case 'blackout3': opts.forceBig=true;  opts.forceFx='blackout3'; break;
+      case 'voice':     opts.forceBig=true;  opts.forceFx='voice'; break;
+      case 'gyogun':    { const win=Math.random()<0.5; opts.forceBig=win; if(win) opts.forceFx='gyogun'; else opts.forceMissType='gyogun'; break; }
+      case 'cutin':     { const win=Math.random()<0.5; opts.forceBig=win; if(win) opts.forceFx='cutin'; else opts.forceMissType='cutin'; break; }
+      case 'blackout1': { const win=Math.random()<0.5; opts.forceBig=win; if(win) opts.forceFx='blackout1'; else opts.forceMissType='blackout1'; break; }
+      case 'blackout2': { const win=Math.random()<0.5; opts.forceBig=win; if(win) opts.forceFx='blackout2'; else opts.forceMissType='blackout2'; break; }
+      case 'small':     opts.forceBig=false; opts.forceMissType='small'; break;
+      case 'replay':    opts.forceBig=false; opts.forceMissType='replay'; break;
+      case 'big':       opts.forceBig=true; break; /* 演出はランダム抽選のまま(ふつうの大当たり体験) */
+      case 'miss':      opts.forceBig=false; opts.forceMissType='normal'; break;
+    }
+    pullLever(opts);
+  }
+  panel.addEventListener('click', e=>{ const b=e.target.closest('button[data-k]'); if(b) devForce(b.dataset.k); });
+}
 </script>
 <script>
 /* 2026-08-15 iOS対策: overscroll-behaviorが効かないiPhone Safariで、下引っ張り更新(=ゲームリセット)を止める */
@@ -444,6 +737,14 @@ function confetti(){ const cols=['#e84898','#5fd6c4','#ffd54f','#fff'];
     var se=document.scrollingElement||document.documentElement;
     if(se.scrollTop<=0 && e.touches[0].clientY>sy){ e.preventDefault(); }
   },{passive:false});
+})();
+</script>
+<script>
+/* 2026-09-13 たけろう報告「スマホで台が大きすぎてレバーが1/3しか見えない」: 台を画面の幅に合わせて縮める(zoom=レイアウトごと縮む) */
+(function(){
+  const m=document.getElementById('machine'); if(!m) return;
+  function fit(){ m.style.zoom=''; const w=m.getBoundingClientRect().width; const avail=window.innerWidth-24; const z=Math.min(1, avail/w); m.style.zoom=z<1?z:''; }
+  fit(); window.addEventListener('resize', fit); window.addEventListener('orientationchange', ()=>setTimeout(fit,100));
 })();
 </script>
 </body>

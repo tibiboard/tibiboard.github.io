@@ -42,6 +42,7 @@ h1{font-size:clamp(32px,5.5vw,54px);letter-spacing:3px;color:var(--mint-deep);ma
 @keyframes bounce{0%{transform:scale(.3)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
 #ov .big{font-size:clamp(36px,6vw,48px);font-weight:900;color:var(--pink-deep);letter-spacing:3px;margin:8px 0}
 #ov .sub{font-size:20px;font-weight:900;color:var(--mint-deep);margin-bottom:14px;line-height:1.8}
+.ovfooter{position:absolute;bottom:6px;right:10px;font-size:11px;color:#999;opacity:.7}
 .btn{display:inline-block;padding:20px 38px;border-radius:20px;border:0;border-bottom:9px solid var(--mint-deep);background:var(--mint);color:#fff;font-weight:900;font-size:26px;cursor:pointer;letter-spacing:2px;font-family:inherit;text-decoration:none;margin:4px}
 .btn:active{border-bottom-width:3px;transform:translateY(6px)}
 .btn.pink{background:var(--pink);border-bottom-color:var(--pink-deep)}
@@ -80,8 +81,10 @@ h1{font-size:clamp(32px,5.5vw,54px);letter-spacing:3px;color:var(--mint-deep);ma
   <img id="ovimg" src="">
   <div class="big"></div>
   <div class="sub" id="ovsub"></div>
+  <div id="ovcoin"></div>
   <button class="btn" id="next"></button>
   <br><a class="btn" id="ovback" style="background:#8fb3b0;border-bottom-color:#5f8a87;font-size:20px;padding:16px 28px" href="shop/index.html?in=1">◀ お店にもどる</a>
+  <div class="ovfooter">v2 (2026-08-19)</div>
 </div>
 
 <script>
@@ -105,7 +108,19 @@ function sndPinpon(){ tone(880,0,0.18,'sine',0.2); tone(1319,0.16,0.5,'sine',0.2
 function sndCoin(){ tone(1568,0,0.08,'square',0.1); tone(2093,0.07,0.25,'square',0.1); }
 function sndNo(){ tone(392,0,0.25,'triangle',0.12,300); tone(311,0.25,0.4,'triangle',0.12,250); }
 function sndBonus(){ [1047,1319,1568,2093].forEach((f,i)=>tone(f,i*0.08,0.3,'square',0.1)); }
-function sndDash(){ tone(600,0,0.12,'sawtooth',0.06,1400); }
+function sndDash(){ tone(660,0,0.05,'sine',0.08); } /* 2026-08-21たけろう指示: キュイーン(こすれ音)をやめてシンプルな「ポッ」に */
+
+/* ===== 結果画面のコイン所持数(金貨GUI。増えた時はスピン+ロールアップ+チャリン) ===== */
+let _coinGuiMounted=false;
+function showCoinTotal(oldVal,newVal){
+  if(!_coinGuiMounted){ window.CHIBI.mountCoinGui($('ovcoin'),{size:200,note:false}); _coinGuiMounted=true; }
+  if(newVal>oldVal){
+    window.CHIBI.refreshCoinGui(true);
+    sndCoin();
+  } else {
+    window.CHIBI.refreshCoinGui(false);
+  }
+}
 $('mute').onclick=()=>{ muted=!muted; $('mute').textContent=muted?'🔇':'🔊'; };
 
 /* ===== コイン表示 ===== */
@@ -132,7 +147,7 @@ function loop(now){
   if(now>=nextChange){
     if(Math.random()<0.45){ turn=0; }                                  /* 直線 */
     else { turn=(Math.random()<0.5?-1:1)*(8+Math.random()*10); }       /* 急カーブ(rad/s) */
-    if(Math.random()<0.25){ ang+=Math.PI*(0.5+Math.random()); sndDash(); } /* たまに瞬間ターン */
+    if(Math.random()<0.25){ ang+=Math.PI*(0.5+Math.random()); } /* たまに瞬間ターン(2026-08-21: 走行中の音は全部なしに) */
     nextChange=now+120+Math.random()*380;
   }
   ang+=turn*dt;
@@ -188,6 +203,7 @@ $('field').addEventListener('pointerdown',e=>{
 
 function catchRab(){
   stopAll();
+  const prevCoins=C.getCoins();
   /* 回数制限なし: 成功のたびに毎回🪙+1(2026-08-14たけろう指示) */
   C.markGameDone('run');           /* パーフェクトボーナス判定用の日次記録だけは残す */
   C.addCoins(1); showCoins(); sndPinpon(); sndCoin();
@@ -200,12 +216,12 @@ function catchRab(){
     $('ovimg').src=C.DIR+rabId+'.png';
     document.querySelector('#ov .big').textContent='🎯 つかまえた!!';
     $('ovsub').innerHTML='🪙 +1コイン'
-        +(perfect?'<br><span style="color:#e0197a">🎉 きょうのパーフェクト!+1🪙</span>':'')
-        +'<br>ごうけい '+C.getCoins()+' コイン';
+        +(perfect?'<br><span style="color:#e0197a">🎉 きょうのパーフェクト!+1🪙</span>':'');
     $('next').textContent='もういちど あそぶ ▶';
     $('next').dataset.retry='1';
     $('ovback').style.display='inline-block';
     $('ov').style.display='flex';
+    showCoinTotal(prevCoins,C.getCoins());
   },600);
 }
 function timeUp(){
@@ -216,6 +232,7 @@ function timeUp(){
   $('next').textContent='もういちど ちょうせん ▶';
   $('next').dataset.retry='1';
   $('ovback').style.display='inline-block';
+  showCoinTotal(C.getCoins(),C.getCoins());
   $('ov').style.display='flex';
 }
 $('next').onclick=()=>{
