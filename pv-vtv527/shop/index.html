@@ -869,7 +869,12 @@ document.getElementById('batsu').onclick = ()=>{
   document.getElementById('pg2').src = pick[1];
   if(window.CHIBI) window.CHIBI.refreshCoinGui(false);
   /* 行進が去るタイミングでheroを消し、幕を開ける */
-  setTimeout(()=>{
+  /* 2026-09-13 たけろう報告「スマホの初回は流れるキーボードが空」: 写真48×3列がまだ届いていないのに流し始めていた。
+     行進(1.4秒)の間に写真が揃うのを待つ。揃わなければ最長4秒で開ける(2回目以降はキャッシュで即) */
+  const floodImgs = Array.from(document.querySelectorAll('.moji-row img'));
+  const floodReady = Promise.all(floodImgs.map(im => (im.complete ? Promise.resolve() : new Promise(r => { im.addEventListener('load', r, {once:true}); im.addEventListener('error', r, {once:true}); }))));
+  const minWait = new Promise(r => setTimeout(r, 1400));
+  Promise.race([Promise.all([floodReady, minWait]), new Promise(r => setTimeout(r, 4000))]).then(()=>{
     st.style.display='none';
     hero.classList.add('fadeout');
     setTimeout(()=>{
@@ -881,7 +886,7 @@ document.getElementById('batsu').onclick = ()=>{
         catch(_){ window.scrollTo(0, y); }
       }, 120);
     }, 700);
-  }, 1400);
+  });
 };
 
 /* ---- かくれうさぎ → 隠し入口(見つけた人だけのお楽しみ) ---- */

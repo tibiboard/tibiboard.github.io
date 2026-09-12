@@ -678,6 +678,8 @@
       } catch (e) { return false; }
     }
     function clearMiss() { try { localStorage.removeItem('usagi_lastmiss'); } catch (e) {} }
+    function iranaiCount() { try { return parseInt(sessionStorage.getItem('usagi_iranai') || '0', 10) || 0; } catch (e) { return 0; } }
+    function setIranai(n) { try { sessionStorage.setItem('usagi_iranai', String(n)); } catch (e) {} }
     function oshieteCount() { try { return parseInt(localStorage.getItem('usagi_oshiete') || '0', 10) || 0; } catch (e) { return 0; } }
     function setOshiete(n) { try { localStorage.setItem('usagi_oshiete', String(n)); } catch (e) {} }
     function zukanNode(data) {
@@ -730,7 +732,7 @@
       lastClickCeil = false;
       if (recentMiss() && data.miss) list.push({ ref: 'miss' });
       if (hasKey() && data.key) list.push({ ref: 'key' });
-      if (getCoins() >= 900000 && data.coin99) list.push({ ref: 'coin99' }); /* 2026-09-13: 99枚→90万枚以上 */
+      if (getCoins() >= 90 && data.coin99) list.push({ ref: 'coin99' }); /* 2026-09-13: 90枚以上 */
       if (data.ZUKAN) list.push({ ref: '__ZUKAN__' });
       list.push({ ref: 'start' }); /* しりたい? も袋の1本 */
       var candidates = [];
@@ -761,17 +763,19 @@
     function resolveNode(data, key) {
       /* 「しりたい?」の枝: 回数で文が変わる。[おしえて]は2回「おしえない」、3回目でひみつへ。[いい]は無言で逃げる */
       if (key === 'start') {
-        var n = oshieteCount();
-        var ui = data.UI || {}; /* 英語版などは data.UI で差し替え。無ければ日本語(2026-09-09) */
-        var t = n >= 2 ? (ui.hontoni2 || 'ほんとに ほんとに?') : (n === 1 ? (ui.hontoni || 'ほんとに?') : (ui.shiritai || 'しりたい?'));
-        return { text: t, choices: [ { label: ui.oshiete || 'おしえて', next: '__OSHIETE__' }, { label: ui.ii || 'いい', next: '__II__' } ] };
+        /* 2026-09-13 たけろう(メモ 8/20 のとおり): 【おしえて】には いつも「おしえない」。【いらない】を3回言った人にだけ ひみつ。
+           1回目「しりたい?」2回目「しりたくないの?」3回目「ほんとに しりたくないの?」 */
+        var n = iranaiCount();
+        var ui = data.UI || {};
+        var t = n >= 2 ? (ui.hontoni2 || 'ほんとに しりたくないの?') : (n === 1 ? (ui.hontoni || 'しりたくないの?') : (ui.shiritai || 'しりたい?'));
+        return { text: t, choices: [ { label: ui.oshiete || 'おしえて', next: '__OSHIETE__' }, { label: ui.ii || 'いらない', next: '__II__' } ] };
       }
-      if (key === '__OSHIETE__') {
-        var n2 = oshieteCount();
-        if (n2 >= 2) { setOshiete(0); return data.secret; }
-        setOshiete(n2 + 1); return data.yes1;
+      if (key === '__OSHIETE__') { setIranai(0); return data.yes1; }
+      if (key === '__II__') {
+        var n3 = iranaiCount() + 1;
+        if (n3 >= 3) { setIranai(0); return data.secret; }
+        setIranai(n3); return resolveNode(data, 'start');
       }
-      if (key === '__II__') return null;
       if (key === '__COIN_GIVE__') {
         var lines = data.COIN_GIVE || ['はいこれ'];
         return { text: lines[Math.floor(Math.random() * lines.length)], coins: pendingCoinGive, end: true, runaway: true };

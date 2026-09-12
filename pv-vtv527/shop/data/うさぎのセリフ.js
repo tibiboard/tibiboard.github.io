@@ -12,7 +12,7 @@ window.USAGI_SERIFU = {
 
   yes1: { text: 'おしえない', end: true, runaway: true },
   secret: { text: 'しかたない。おしえてやるか…', choices: [ { label: '…', next: 'secret2' } ] },
-  secret2: { text: '(ここは まだ ひみつ)', choices: [ { label: 'とじる', next: 'bye' } ] },
+  secret2: { text: '宝箱で ひみつの番号が 手に入る。その番号は、アプリの金庫を あける', choices: [ { label: 'とじる', next: 'bye' } ] },  /* 2026-09-13 たけろう */
   bye: { text: 'じゃあね', end: true, runaway: true },
 
   trivia: { random: 'TRIVIA' },
@@ -142,7 +142,7 @@ window.USAGI_SERIFU = {
   T_SAWAGA_B: { text: 'ダネフシッ！', end: true, runaway: true },
   T_HIRUMESHI_A: { text: 'おにぎり食べたい！', end: true, runaway: true },
   T_HIRUMESHI_B: { text: 'いいから焼きそばパン買ってこいよ', end: true, runaway: true },
-  T_HAOU: { text: 'ペガサス流星拳', end: true, runaway: true },
+  T_HAOU: { text: 'ペガサス流星拳！', end: true, runaway: true },
   T_JAOU: { text: '邪王炎殺黒龍波！', end: true, runaway: true },
   T_SHII: { text: 'しー！', end: true, runaway: true },
   T_YOZORA_A: { text: 'ごめん君誰？', end: true, runaway: true },
