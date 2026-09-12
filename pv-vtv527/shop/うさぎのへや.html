@@ -97,7 +97,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
    もっていない子はシルエット。プールの正本は asobi_common.js の CHIBI.ALL */
 const C = window.CHIBI;
 const owned = new Set(C.getZukan());
-document.getElementById('zkcount').textContent = `みつけた コーデ: ${[...owned].filter(id=>C.ALL.includes(id)).length} / ${C.ALL.length}`;
+document.getElementById('zkcount').textContent = `あつめた うさぎ: ${[...owned].filter(id=>C.ALL.includes(id)).length} / ${C.ALL.length}`;
 /* あご基準レイアウト: 顔の下端(あご)を全カード同じ高さに固定。
    同一素体なので耳も自動で揃う。枠は最大にはみ出す子(帽子の上・長いネックレス)が入るよう自動計算 */
 const K = (window.USAGI_FIT && USAGI_FIT._K) || 1.768;

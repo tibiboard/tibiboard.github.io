@@ -11,6 +11,11 @@
 (function(){
   const C = window.CHIBI = {};
 
+  /* ---- asobi_common.js自身の場所を特定(このファイルはBASEデザイン案直下に実在)。
+     ページごとに参照パスの深さが違っても、ここからの相対で音ファイルへ辿り着ける ---- */
+  const SELF_SRC = (document.currentScript && document.currentScript.src) || '';
+  const SELF_BASE = SELF_SRC ? SELF_SRC.replace(/asobi_common\.js.*$/, '') : '';
+
   /* ---- うさぎ69種(透過フォルダの実ファイルに一致) ---- */
   C.DIR = 'img/usagi/';   // ページ位置により C.DIR を上書き可
   C.SERIES = {
@@ -37,7 +42,7 @@
   C.DEBUG = /[?&]debug=1/.test(location.search);
 
   /* ---- デバッグ: ?debugwin=1 で大当たり(宝箱)確定。localhostのみ有効(2026-08-14新設) ---- */
-  C.DEBUG_WIN = ['localhost','127.0.0.1'].includes(location.hostname) && /[?&]debugwin=1/.test(location.search);
+  C.DEBUG_WIN = (['localhost','127.0.0.1'].includes(location.hostname)||/^192\.168\./.test(location.hostname)) && /[?&]debugwin=1/.test(location.search);
 
   /* ---- デバッグ2(2026-08-12): 表示確認用。本番の人はURLを知らないので影響なし
        ?debugcoin=25 … コインを25枚にセット
@@ -46,7 +51,7 @@
        ?debugreset=1 … コイン・日次・鍵・図鑑を全部消して初見さん状態に ---- */
   (function(){
     const q = location.search;
-    if(!['localhost','127.0.0.1'].includes(location.hostname)) return; // デバッグ機能は公開サイトでは無効(2026-08-13)
+    if(!(['localhost','127.0.0.1'].includes(location.hostname)||/^192\.168\./.test(location.hostname))) return; // デバッグ機能は公開サイトでは無効(2026-08-13)
     const mCoin = q.match(/[?&]debugcoin=(\d+)/);
     if(mCoin) localStorage.setItem('chibi_coins', String(Math.max(0,parseInt(mCoin[1],10))));
     const mKey = q.match(/[?&]debugkey=([01])/);
@@ -67,7 +72,7 @@
   /* ---- 開発パネル(2026-08-16): ?dev=1 で画面右下に小さな操作板。localhostのみ・本番では何も出ない。
        上のdebug○○のURLを覚えなくていいようにボタン化しただけ(中身は同じ) ---- */
   (function(){
-    if(!['localhost','127.0.0.1'].includes(location.hostname)) return;
+    if(!(['localhost','127.0.0.1'].includes(location.hostname)||/^192\.168\./.test(location.hostname))) return;
     if(!/[?&]dev=1/.test(location.search)) return;
     const go = extra => { const u=new URL(location.href); u.searchParams.set('dev','1');
       ['debugcoin','debugkey','debugreset','debugwin'].forEach(k=>u.searchParams.delete(k));
@@ -76,7 +81,8 @@
       b.style.cssText='font:700 12px sans-serif;padding:4px 8px;border:0;border-radius:6px;background:#fff;color:#222;cursor:pointer'; return b;};
     const mk=()=>{
       const p=document.createElement('div');
-      p.style.cssText='position:fixed;right:8px;bottom:8px;z-index:99999;background:#222c;color:#fff;padding:8px;border-radius:10px;display:flex;flex-wrap:wrap;gap:6px;max-width:260px;font:700 12px sans-serif;align-items:center';
+      /* 2026-08-20: スロットの演出ボタン板(右下)と被って押せなかったので左上へ */
+      p.style.cssText='position:fixed;left:8px;top:8px;z-index:99999;background:#222c;color:#fff;padding:8px;border-radius:10px;display:flex;flex-wrap:wrap;gap:6px;max-width:260px;font:700 14px sans-serif;align-items:center';
       const st=document.createElement('span'); st.style.cssText='width:100%';
       const zukan=(()=>{try{return JSON.parse(localStorage.getItem('chibi_zukan')||'[]').length}catch(e){return 0}})();
       st.textContent='🛠dev  🪙'+(localStorage.getItem('chibi_coins')||0)+'  🔑'+(localStorage.getItem('chibi_atari')?'あり':'なし')+'  📖'+zukan+'匹';
@@ -97,8 +103,10 @@
   C.today = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 
   /* ---- コイン ---- */
+  /* 2026-08-20 コインGUI大改装(たけろう指示): 持てる上限は99まい。それ以上は増えない(減らない側の下限は0のまま) */
+  C.COIN_MAX = 99;
   C.getCoins = () => parseInt(localStorage.getItem('chibi_coins')||'0',10)||0;
-  C.setCoins = n => localStorage.setItem('chibi_coins', String(Math.max(0,n)));
+  C.setCoins = n => localStorage.setItem('chibi_coins', String(Math.max(0,Math.min(C.COIN_MAX,n))));
   C.addCoins = n => { C.setCoins(C.getCoins()+n); return C.getCoins(); };
   C.spendCoin = () => { if(C.getCoins()<1) return false; C.setCoins(C.getCoins()-1); return true; };
 
@@ -129,9 +137,9 @@
   C.chalLeft  = () => Infinity;
   C.useChal   = () => {};
 
-  /* ---- 宝箱は週1回まで(2026-08-14たけろう決定): 獲得したら7日間は大当たり抽選そのものをスキップ(ハズレ扱い)。
-     ゲームを遊ぶこと自体・コイン獲得は無制限。ガチャ・スロット共通でここに1本化する。 ---- */
-  C.TREASURE_COOLDOWN_MS = 7*24*60*60*1000;
+  /* ---- 宝箱の週1回制限は撤廃(2026-08-18たけろう決定): 「回数は制限しない。当たりにくさは1/100と宝箱の中身5%だけで制御。
+     ゲームが増えてコインが増えれば当たりも自然に増える」。COOLDOWN=0で常に抽選可(関数は互換のため残す)。 ---- */
+  C.TREASURE_COOLDOWN_MS = 0;
   C.canDrawTreasure = () => {
     const t = localStorage.getItem('chibi_treasure_last');
     if(!t) return true;
@@ -199,6 +207,101 @@
      ⚠2026-08-14: 回数上限は撤廃したので「のこり◯回」表示は出さない ---- */
   C.statusHtml = () =>
     `🪙 <b>${C.getCoins()}</b> コイン` + (C.DEBUG?' <span style="color:#e0197a">[DEBUG]</span>':'');
+
+  /* =====================================================================
+     🪙 コインGUI 大改装(2026-08-20 たけろう指示): 任天堂ふうの丸い金貨。
+     ×(かけざん記号)はどこにも出さない。金貨の上に数字がのるだけ。
+     使い方: C.mountCoinGui(el, {size:220}) で描画→ C.refreshCoinGui(true/false) で更新+スピン。
+     複数の金貨が同時にページ内にあってよい(スロット/ガチャ/index等、mountした全部をrefreshで一斉更新)。
+     ===================================================================== */
+  if(!document.getElementById('chibiCoinGuiCss')){
+    const st = document.createElement('style'); st.id = 'chibiCoinGuiCss';
+    st.textContent = `
+      .chibiCoinGui{display:inline-flex;flex-direction:column;align-items:center;gap:6px;user-select:none}
+      .chibiCoinGui .cg-disc{
+        /* 大きさは font-size 1つで決める(width=1em)。中の縁・数字・影は全部 em なので、どのサイズでも同じ比率で描ける */
+        position:relative; font-size:min(220px,70vw); width:1em; height:1em; border-radius:50%;
+        background:radial-gradient(circle at 34% 28%, #fff7d6 0%, #ffd54f 42%, #f5b300 78%, #e0a010 100%);
+        border:.06em solid #c99a1e; box-shadow:0 .045em 0 0 #a67c12, 0 .09em .14em 0 rgba(0,0,0,.45);
+        display:flex; align-items:center; justify-content:center;
+        transform-style:preserve-3d; transition:filter .2s;
+      }
+      .chibiCoinGui.small .cg-disc{font-size:120px}
+      .chibiCoinGui .cg-disc::before{
+        content:""; position:absolute; inset:.07em; border-radius:50%;
+        border:.035em solid rgba(255,255,255,.55);
+        box-shadow:inset 0 -.06em .12em rgba(0,0,0,.22), inset 0 .04em .08em rgba(255,255,255,.65);
+      }
+      .chibiCoinGui .cg-num{
+        position:relative; z-index:2; font-weight:900; color:#5a3a1a;
+        font-size:.42em; line-height:1; letter-spacing:.02em;
+        text-shadow:0 .05em 0 rgba(255,255,255,.5);
+        font-family:"Hiragino Maru Gothic ProN",Meiryo,sans-serif;
+      }
+      .chibiCoinGui .cg-spin{ animation: chibiCoinSpin .7s ease-out; }
+      @keyframes chibiCoinSpin{
+        0%{transform:rotateY(0)}
+        100%{transform:rotateY(720deg)}
+      }
+      .chibiCoinGui.empty .cg-disc{ filter:grayscale(1) brightness(.92) }
+      .chibiCoinGui.empty .cg-num{ color:#c0304a }
+      .chibiCoinGui .cg-note{
+        /* 2026-08-20 たけろう「文字が小さすぎる。3倍に。可愛い文字で」→ 11px→約3倍・丸ゴ・太字 */
+        font-size:clamp(24px,5.5vw,34px); font-weight:900; color:#ffd54f; text-align:center; letter-spacing:.03em;
+        font-family:"Hiragino Maru Gothic ProN","Rounded Mplus 1c","M PLUS Rounded 1c",Meiryo,sans-serif;
+        text-shadow:0 2px 0 rgba(0,0,0,.35); margin-top:4px;
+      }
+    `;
+    document.head.appendChild(st);
+  }
+  const CG_REGISTRY = [];
+  /* opts: {size:220(px, 数字指定時のみ上書き), note:true/false(下に「99まいまで」注記)} */
+  C.mountCoinGui = (el, opts) => {
+    if(!el) return;
+    opts = opts || {};
+    el.classList.add('chibiCoinGui');
+    if(opts.size) el.style.setProperty('--cg-size', opts.size+'px');
+    const disc = document.createElement('div'); disc.className='cg-disc';
+    if(opts.size){ disc.style.fontSize = 'min('+opts.size+'px,70vw)'; }
+    const num = document.createElement('div'); num.className='cg-num';
+    num.textContent = String(Math.min(C.COIN_MAX, C.getCoins()));
+    disc.appendChild(num);
+    el.innerHTML = '';
+    el.appendChild(disc);
+    if(opts.note !== false){
+      const note = document.createElement('div'); note.className='cg-note';
+      note.textContent = 'コインは 99まいまで もてるよ';
+      el.appendChild(note);
+    }
+    el.classList.toggle('empty', C.getCoins()<1);
+    if(!CG_REGISTRY.includes(el)) CG_REGISTRY.push(el);
+  };
+  let _cgLast = null;
+  /* spin=true でコイン枚数変化時にY軸スピン+数字ロール、false なら即時表示のみ */
+  C.refreshCoinGui = (spin) => {
+    const val = Math.min(C.COIN_MAX, C.getCoins());
+    const from = _cgLast===null ? val : _cgLast;
+    CG_REGISTRY.forEach(el=>{
+      if(!el.isConnected){ return; }
+      const disc = el.querySelector('.cg-disc');
+      const num = el.querySelector('.cg-num');
+      if(!disc || !num) return;
+      el.classList.toggle('empty', val<1);
+      if(spin && from!==val){
+        disc.classList.remove('cg-spin'); void disc.offsetWidth; disc.classList.add('cg-spin');
+        const dur=700, t0=performance.now();
+        (function step(now){
+          const p=Math.min(1,(now-t0)/dur);
+          const cur=Math.round(from+(val-from)*p);
+          num.textContent=String(cur);
+          if(p<1) requestAnimationFrame(step); else num.textContent=String(val);
+        })(t0);
+      } else {
+        num.textContent = String(val);
+      }
+    });
+    _cgLast = val;
+  };
 
   /* ---- うさぎの名前(シリーズ名+No.) ---- */
   C.nameOf = id => { const [s,n]=(id||'').split('_'); return (s && C.seriesJa[s]) ? (C.seriesJa[s]+' No.'+n) : 'ばつべー'; };
@@ -465,4 +568,77 @@
       };
     });
   };
+
+  /* ===================================================================
+     🔘 押した感の統一(S5, 2026-08-17): 全ボタン共通の「沈む」演出+音+振動。
+     お店本体・遊びの主要ボタン(.keybtn/.lever/#startbtn/.btn)に自動で効く
+     (このファイルを読み込んでいるページなら各ページ側の追加コードは不要)。
+     音は既存の photos/batsu_click.wav を、このファイル自身の場所からの相対で再生する。
+     =================================================================== */
+  let _pressSnd = null;
+  function ensurePressCss(){
+    if(document.getElementById('chibiPressCss')) return;
+    const st = document.createElement('style'); st.id = 'chibiPressCss';
+    st.textContent = '.chibi-pressing{transition:transform .08s ease !important;transform:scale(.93) translateY(3px) !important}';
+    document.head.appendChild(st);
+  }
+  C.press = function(el){
+    if(!el || !el.classList) return;
+    ensurePressCss();
+    el.classList.add('chibi-pressing');
+    setTimeout(()=>el.classList.remove('chibi-pressing'), 90);
+    /* 2026-08-21たけろう(2回目の指摘): ボタンの音は「ばつべーの声」でなく普通のポッ音に。
+       声の録音(batsu_click.wav)は使わず、WebAudioの短い澄んだ音1つだけ */
+    try{
+      if(!C._pressAc){ C._pressAc = new (window.AudioContext || window.webkitAudioContext)(); }
+      const a = C._pressAc, o = a.createOscillator(), g = a.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(660, a.currentTime);
+      g.gain.setValueAtTime(0.09, a.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + 0.06);
+      o.connect(g); g.connect(a.destination);
+      o.start(); o.stop(a.currentTime + 0.1);
+    }catch(e){}
+    if(navigator.vibrate){ try{ navigator.vibrate(30); }catch(e){} }
+  };
+  /* 主要ボタンへ自動で配線(各ページはこのファイルを読み込むだけでよい) */
+  document.addEventListener('click', function(e){
+    const el = e.target.closest && e.target.closest('.keybtn,.lever,#startbtn,.btn');
+    if(el) C.press(el);
+  }, true);
+
+  /* =====================================================================
+     版バッジ(2026-08-20 たけろう「私が見ている物と君が作った物が同じか、数字で確認できる物が要る。どの仕事にも言える」)
+     このファイルを読む全ページの左下に「版 2026-08-20 02:15 ローカル」を自動で出す(手書き禁止。ファイルの更新時刻を機械で読む)。
+     ローカル(8917)も本番(tibiboard.github.io)も同じ見た目。ページ自身の更新時刻なので、開いている物の版がそのまま分かる。
+     ===================================================================== */
+  function verBadge(){
+    if(document.getElementById('verbadge')) return;   /* ページが自前で持っていればそちらを尊重 */
+    const d = new Date(document.lastModified);
+    const z = n => String(n).padStart(2,'0');
+    const stamp = isNaN(d) ? '?' : d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+' '+z(d.getHours())+':'+z(d.getMinutes());
+    const where = (location.hostname==='localhost'||location.hostname==='127.0.0.1') ? 'ローカル' : (/^192\.168\./.test(location.hostname) ? '家Wi-Fi' : '本番');
+    const b = document.createElement('div'); b.id='verbadge';
+    b.textContent = '版 '+stamp+' '+where;
+    b.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:9999;background:#000c;color:#fff;font:700 12px/1.6 sans-serif;padding:3px 10px;border-radius:99px;pointer-events:none;letter-spacing:.5px';
+    document.body.appendChild(b);
+    /* 2026-08-22たけろう「変更した時間が出ないと最新版か分からない」:
+       HTML自身だけでなく、読み込んでいる部品(JS)も含めて一番新しい更新時刻を出す。
+       (共通部品だけ直した時にバッジが動かない穴をふさぐ) */
+    try{
+      let newest = isNaN(d) ? 0 : d.getTime();
+      const urls = [].map.call(document.querySelectorAll('script[src]'), s=>s.src)
+        .filter(u => u && u.indexOf(location.origin)===0);
+      Promise.all(urls.map(u => fetch(u, {method:'HEAD', cache:'no-store'})
+        .then(r => new Date(r.headers.get('Last-Modified')||0).getTime()||0)
+        .catch(()=>0)))
+      .then(times => {
+        const mx = Math.max.apply(null, [newest].concat(times));
+        if(mx > newest){
+          const m = new Date(mx);
+          b.textContent = '版 '+m.getFullYear()+'-'+z(m.getMonth()+1)+'-'+z(m.getDate())+' '+z(m.getHours())+':'+z(m.getMinutes())+' '+where;
+        }
+      }).catch(()=>{});
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', verBadge); else verBadge();
 })();
