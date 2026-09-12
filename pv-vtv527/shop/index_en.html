@@ -979,8 +979,10 @@ try {
     ov.querySelector('.tk-close').onclick=()=>ov.remove();
     const box=ov.querySelector('#takarabox');
     box.onclick=()=>{ if(box.classList.contains('opening')) return;
-      C.sndKeyOpen();                                   /* 鍵を差して回す: シャッ・カチカチ・ガチャン(約0.8秒) */
-      setTimeout(()=>{ C.sndCreak(1.6); box.classList.add('opening'); }, 850);   /* ふたが ぎぃぃ…と ゆっくり開く(1.6秒) */
+      /* 2026-09-13 たけろう提供の音(受け渡し→snd/kagi_door_open.mp3): 鍵を差して回してドアが開く。鳴らせない時は合成音 */
+      let real=false; try{ const a=new Audio('../snd/kagi_door_open.mp3'); a.volume=0.9; const pr=a.play(); real=true; if(pr&&pr.catch) pr.catch(()=>{ C.sndKeyOpen(); setTimeout(()=>C.sndCreak(1.6),850); }); }catch(e){}
+      if(!real){ C.sndKeyOpen(); setTimeout(()=>C.sndCreak(1.6),850); }
+      setTimeout(()=>{ box.classList.add('opening'); }, 850);   /* ふたが ゆっくり開く(1.6秒) */
       setTimeout(()=>{ C.useKey(); refresh(); ov.remove(); C.showTreasurePicker({ onPick:()=>C.sndKeyOpen(), onReveal:()=>C.sndKeyGet() }); }, 850+1700); };
   });
   if(location.hash==='#takara'){ setTimeout(()=>{ try{ kf.click(); }catch(e){} }, 800); }
