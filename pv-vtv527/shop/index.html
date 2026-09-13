@@ -960,6 +960,14 @@ try {
 .takarabox:hover{transform:scale(1.04)}
 .takarabox.opening .tb-lid{transform:rotate(-75deg)}
 #takaraOv .tk-close{color:#fff;font-size:20px;font-weight:900;background:none;border:2px solid #fff;border-radius:999px;padding:6px 18px;cursor:pointer}
+
+/* 2026-09-14 たけろう指示: 🔑は浮かせない。ページの一番下に大きめに置く(鍵なし=半透明 / あり=きらきら+数字)。この指定は必ず CSS の末尾 */
+.key-float{position:relative;right:auto;bottom:auto;display:block;margin:34px auto 48px;width:220px;height:220px;z-index:1}
+.key-float .kf-icon{font-size:170px;line-height:220px}
+.key-float.none .kf-icon{font-size:150px;opacity:.35}
+.key-float .kf-n{min-width:64px;height:64px;font-size:38px;line-height:64px;right:6px;top:6px}
+.key-float .kf-msg{left:50%;right:auto;transform:translateX(-50%);bottom:214px}
+.key-float.has::before{left:0;top:26px}.key-float.has::after{right:8px;bottom:18px}
 </style>
 <button class="key-float none" id="keyFloat" type="button" title="かぎ" aria-label="かぎ"><span class="kf-icon">🔑</span><span class="kf-n" id="keyFloatN">0</span><span class="kf-msg" id="keyFloatMsg"></span></button>
 <script>
