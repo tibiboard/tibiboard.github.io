@@ -693,7 +693,7 @@ function tagsHtml(it){
   const shapeText = {sq:'四角', ci:'丸', za:'Z'}[sk] || '';
   /* 2026-09-11 たけろう指示: ガラスはガラスと書く。S は透明フィラメント(スケスケ)の時だけ。36 も出すので「ちびボード30」を書く */
   const clear = /透明|スケスケ|クリア|clear/i.test(it.mat||'');
-  return `<div class="tags inline"><span class="tg model">ちびボード30</span>${sk?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨ガラス</span>`:''}${clear?`<span class="tg mat" title="透明フィラメント(スケスケ)">S</span>`:''}</div>`;
+  return `<div class="tags inline"><span class="tg model">ちびボード30</span>${sk?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨ガラス</span>`:''}${clear?`<span class="tg mat">クリア</span>`:''}</div>`;
 }
 const {conf, items} = parseShop(window.SHOP_DATA);
 

@@ -244,7 +244,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 const EHON = [
   {h:'Tiny.<br>And split in two.', p:'30 keys in total (left + right). 17 mm key pitch (19 mm is normal). Wireless (Bluetooth). USB works too'},
   {h:'Two shapes: square and round.',   p:'The case comes in several materials, too → <a href="素材.html" style="color:var(--pink);text-decoration:underline">details</a>'},
-  {h:'Z and S are <em>special</em>.',      p:'Z = textured edition, S = see-through edition'},
+  {h:'Z is <em>special</em>.',      p:'Z = textured edition'},
   {h:'Made one at a time, by hand.',      p:'3D-printed case. With a bunny name plate'},
   {h:'The left half<br>gives a little buzz.',   p:'There is a vibration motor inside'},  /* 2026-09-12 */
   {h:'<em>Comes with its own app.</em><br>Remapping keys is easy.', p:'Desktop app and browser app. Works on Mac too'},  /* 2026-09-12 */
@@ -262,7 +262,7 @@ const EHON = [
   <style>#sec01 .photo-wrap{width:100vw !important;max-width:none !important;height:min(86svh,1100px) !important;max-height:none !important;aspect-ratio:auto !important;border-radius:0 !important;margin-left:calc(50% - 50vw)}#sec01 .photo-wrap img{object-position:center 62%}#sec01{padding-top:0 !important}
   /* 2026-09-11 たけろう指示「スマホで1枚目の透明ケースの写真が両端見切れる」: 4:3 の写真を 86svh の縦長の枠に cover で入れていたため。スマホは写真の比率のままにする */
   @media(max-width:640px){#sec01 .photo-wrap{height:auto !important;aspect-ratio:4/3 !important}}</style>
-  <div class="photo-wrap"><img src="photos/ehon_s_1.jpg" alt="see-through tibiboard (S), lit from below" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.jpg</div>'"></div>
+  <div class="photo-wrap"><img src="photos/ehon_s_1.jpg" alt="clear tibiboard, lit from below" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.jpg</div>'"></div>
   <h2 data-ehon="0"></h2>
   <p class="sub" data-ehonp="0"></p>
   <button class="keycap mmbtn" id="openMM">📏 See the real size</button>
@@ -297,9 +297,9 @@ const EHON = [
     <img src="photos/ehon_z.jpg" alt="round Z (textured finish)" class="on">
     <img src="photos/ehon_z_2.jpg" alt="square Z (textured finish, left and right)" loading="lazy">
     <img src="photos/ehon_z_3.jpg" alt="black Z (textured finish)" loading="lazy">
-    <img src="photos/ehon_s_1.jpg" alt="S (see-through, lit from below)" loading="lazy">
-    <img src="photos/ehon_s_2.jpg" alt="S (see-through, on a desk)" loading="lazy">
-    <div class="zmarks"><button type="button" class="zm ci on" aria-label="round"><i></i></button><button type="button" class="zm sq" aria-label="square"><i></i></button><button type="button" class="zm bk" aria-label="black"><i></i></button><button type="button" class="zm s1" aria-label="S see-through"><i></i></button><button type="button" class="zm s2" aria-label="S see-through, desk"><i></i></button></div>
+    <img src="photos/ehon_s_1.jpg" alt="Clear (lit from below)" loading="lazy">
+    <img src="photos/ehon_s_2.jpg" alt="Clear (on a desk)" loading="lazy">
+    <div class="zmarks"><button type="button" class="zm ci on" aria-label="round"><i></i></button><button type="button" class="zm sq" aria-label="square"><i></i></button><button type="button" class="zm bk" aria-label="black"><i></i></button><button type="button" class="zm s1" aria-label="Clear"><i></i></button><button type="button" class="zm s2" aria-label="Clear, desk"><i></i></button></div>
   </div>
   <h2 data-ehon="2"></h2>
   <p class="sub" data-ehonp="2"></p>

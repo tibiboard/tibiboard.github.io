@@ -244,7 +244,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 const EHON = [
   {h:'ちいさい。<br>ふたつに わかれてる。', p:'左右あわせて 30キー。キーピッチ17mm(ふつうは19mm)。無線(Bluetooth)。USBでも つながる'},  /* 2026-09-12 たけろう指示: 30キーを入れる */
   {h:'かたちは シカクと マル。',           p:'ケースの素材も いろいろあるよ → <a href="素材.html" style="color:var(--pink);text-decoration:underline">くわしく</a>'},  /* 2026-09-12 たけろう指示(2回目)。ここから素材の紹介ページへ飛ばす予定 */
-  {h:'Zと Sは、<em>とくべつ</em>。',      p:'Zが ついたら ザラザラエディション、Sが ついたら スケスケエディションだよ'},
+  {h:'Zは、<em>とくべつ</em>。',      p:'Zが ついたら ザラザラエディションだよ'},
   {h:'1台ずつ、手づくり。',                p:'ケースは3Dプリント。うさぎのネームプレートつき'},
   {h:'左手が<br>ぷるっと ふるえる。',       p:'バイブが 入っています'},  /* 2026-09-12 たけろう指示 */
   {h:'<em>専用アプリ</em>つき。<br>キーの編集が かんたん。', p:'デスクトップ版と ブラウザ版。Macでも つかえる'},  /* 2026-09-12 たけろう指示: 専用アプリが付いてくると大きく */
@@ -262,7 +262,7 @@ const EHON = [
   <style>#sec01 .photo-wrap{width:100vw !important;max-width:none !important;height:min(86svh,1100px) !important;max-height:none !important;aspect-ratio:auto !important;border-radius:0 !important;margin-left:calc(50% - 50vw)}#sec01 .photo-wrap img{object-position:center 62%}#sec01{padding-top:0 !important}
   /* 2026-09-11 たけろう指示「スマホで1枚目の透明ケースの写真が両端見切れる」: 4:3 の写真を 86svh の縦長の枠に cover で入れていたため。スマホは写真の比率のままにする */
   @media(max-width:640px){#sec01 .photo-wrap{height:auto !important;aspect-ratio:4/3 !important}}</style>
-  <div class="photo-wrap"><img src="photos/ehon_s_1.jpg" alt="下から光るスケスケのちびボード(S)" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.jpg</div>'"></div>
+  <div class="photo-wrap"><img src="photos/ehon_s_1.jpg" alt="下から光るクリアのちびボード" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.jpg</div>'"></div>
   <h2 data-ehon="0"></h2>
   <p class="sub" data-ehonp="0"></p>
   <button class="keycap mmbtn" id="openMM">📏 じっすんで みる</button>
@@ -297,9 +297,9 @@ const EHON = [
     <img src="photos/ehon_z.jpg" alt="まるZ(ざらざら仕上げ)" class="on">
     <img src="photos/ehon_z_2.jpg" alt="しかくZ(ざらざら仕上げ・左手用と右手用)" loading="lazy">
     <img src="photos/ehon_z_3.jpg" alt="くろZ(ざらざら仕上げ・黒)" loading="lazy">
-    <img src="photos/ehon_s_1.jpg" alt="S(すけすけ仕上げ・下から光)" loading="lazy">
-    <img src="photos/ehon_s_2.jpg" alt="S(すけすけ仕上げ・机の上)" loading="lazy">
-    <div class="zmarks"><button type="button" class="zm ci on" aria-label="まる"><i></i></button><button type="button" class="zm sq" aria-label="しかく"><i></i></button><button type="button" class="zm bk" aria-label="くろ"><i></i></button><button type="button" class="zm s1" aria-label="S すけすけ"><i></i></button><button type="button" class="zm s2" aria-label="S すけすけ 机"><i></i></button></div>
+    <img src="photos/ehon_s_1.jpg" alt="クリア(下から光)" loading="lazy">
+    <img src="photos/ehon_s_2.jpg" alt="クリア(机の上)" loading="lazy">
+    <div class="zmarks"><button type="button" class="zm ci on" aria-label="まる"><i></i></button><button type="button" class="zm sq" aria-label="しかく"><i></i></button><button type="button" class="zm bk" aria-label="くろ"><i></i></button><button type="button" class="zm s1" aria-label="クリア"><i></i></button><button type="button" class="zm s2" aria-label="クリア 机"><i></i></button></div>
   </div>
   <h2 data-ehon="2"></h2>
   <p class="sub" data-ehonp="2"></p>
