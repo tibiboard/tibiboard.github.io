@@ -691,10 +691,10 @@ function tagsHtml(it){
   if(!sk && !glass && !clear0(it) && it.kind!=='キット' && !it.set) return '';
   const names = {sq:'しかく', ci:'まる', za:'ざらざら'};
   /* 2026-09-11 たけろう指示: 形は文字で(四角/丸/Z)、透明フィラメント=S。写真に重ねず名前の横に(inline) */
-  const shapeText = {sq:'四角', ci:'丸', za:'Z'}[sk] || '';
+  const shapeText = {sq:'シカク', ci:'マル', za:'Z'}[sk] || ''; /* 2026-09-14 たけろう指示: カタカナ */
   /* 2026-09-11 たけろう指示: ガラスはガラスと書く。S は透明フィラメント(スケスケ)の時だけ。36 も出すので「ちびボード30」を書く */
   const clear = /透明|スケスケ|クリア|clear/i.test(it.mat||'');
-  return `<div class="tags inline"><span class="tg model">ちびボード30</span>${sk?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨ガラス</span>`:''}${clear?`<span class="tg mat">クリア</span>`:''}${it.kind==='キット'?`<span class="tg kit">キット</span>`:''}${it.set?`<span class="tg set">+セット</span>`:''}</div>`;
+  return `<div class="tags inline"><span class="tg model">ちびボード30</span>${sk?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨ガラス</span>`:''}${clear?`<span class="tg mat">クリア</span>`:''}${it.kind==='キット'?`<span class="tg kit">キット</span>`:(it.state==='旅立ち'?`<span class="tg full">完成版</span>`:'')}${it.set?`<span class="tg set">+セット</span>`:''}</div>`;
 }
 const {conf, items} = parseShop(window.SHOP_DATA);
 
@@ -970,7 +970,7 @@ try {
 .key-float .kf-msg{left:50%;right:auto;transform:translateX(-50%);bottom:214px}
 .key-float.has::before{left:0;top:26px}.key-float.has::after{right:8px;bottom:18px}
 /* 2026-09-14 たけろう指示: 売れた個体のタグ(キット=オレンジ / +セット=ピンク)。商品リストの種別欄から */
-.tg.kit{background:#ff8c1a;color:#fff}.tg.set{background:var(--pink);color:#fff}
+.tg.kit{background:#ff8c1a;color:#fff}.tg.set{background:var(--pink);color:#fff}.tg.full{background:var(--mint-deep);color:#fff} /* 旅立ちの完成版 */
 </style>
 <button class="key-float none" id="keyFloat" type="button" title="かぎ" aria-label="かぎ"><span class="kf-icon">🔑</span><span class="kf-n" id="keyFloatN">0</span><span class="kf-msg" id="keyFloatMsg"></span></button>
 <script>
