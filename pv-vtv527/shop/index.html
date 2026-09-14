@@ -688,13 +688,13 @@ function shapeKey(v){ v=(v||'').trim(); if(/しかく|四角|□|sq/i.test(v)) r
 const clear0 = it => /透明|スケスケ|クリア|clear/i.test(it.mat||'');
 function tagsHtml(it){
   const sk = shapeKey(it.shape); const glass = /ガラス|glass|gf/i.test(it.mat||'');
-  if(!sk && !glass && !clear0(it) && it.kind!=='キット' && !it.set) return '';
+  if(!glass && !clear0(it)) return `<div class="tags inline"><span class="tg model">${sk==='za'?'tibiboard30Z':'tibiboard30'}</span></div>`;
   const names = {sq:'しかく', ci:'まる', za:'ざらざら'};
   /* 2026-09-11 たけろう指示: 形は文字で(四角/丸/Z)、透明フィラメント=S。写真に重ねず名前の横に(inline) */
   const shapeText = {sq:'シカク', ci:'マル', za:'Z'}[sk] || ''; /* 2026-09-14 たけろう指示: カタカナ */
   /* 2026-09-11 たけろう指示: ガラスはガラスと書く。S は透明フィラメント(スケスケ)の時だけ。36 も出すので「ちびボード30」を書く */
   const clear = /透明|スケスケ|クリア|clear/i.test(it.mat||'');
-  return `<div class="tags inline"><span class="tg model">${sk==='za'?'tibiboard30Z':'tibiboard30'}</span>${sk&&sk!=='za'?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨ガラス</span>`:''}${clear?`<span class="tg mat">クリア</span>`:''}${it.kind==='キット'?`<span class="tg kit">キット</span>`:(it.state==='旅立ち'?`<span class="tg full">完成版</span>`:'')}${it.set?`<span class="tg set">+セット</span>`:''}</div>`;
+  return `<div class="tags inline"><span class="tg model">${sk==='za'?'tibiboard30Z':'tibiboard30'}</span>${false&&sk&&sk!=='za'?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨ガラス</span>`:''}${clear?`<span class="tg mat">クリア</span>`:''}</div>`;
 }
 const {conf, items} = parseShop(window.SHOP_DATA);
 
