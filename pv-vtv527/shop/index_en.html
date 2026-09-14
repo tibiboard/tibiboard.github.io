@@ -805,10 +805,11 @@ renderShelf();
 const zukanRows = window.USAGI_DATA.split('\n').map(l=>l.trim())
  .filter(l=>l && !l.startsWith('//')).map(l=>l.split('|').map(s=>s.trim())).filter(c=>c.length>=4);
 
-/* ---- キーボード洪水(cut_01〜48.png)をもじばしらの奥へ流す ---- */
-(function(){
+/* ---- キーボード洪水(cut_01〜48)をもじばしらの奥へ流す ---- */
+/* 2026-09-14: 初回の表示を止めないよう、ページが出てから裏で組み立てる(load 後 1.5秒。ばつべーを押したら即) */
+window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__riverBuilt = true; (function(){
   const CUT_COUNT = 48;
-  const cutFiles = Array.from({length:CUT_COUNT}, (_,i)=>`photos/cut_${String(i+1).padStart(2,'0')}.webp`); /* 2026-09-14: png(1枚1MB・48枚で44MB)→ webp(透明のまま・同じ大きさ)。初回の読み込みが重い原因だった */
+  const cutFiles = Array.from({length:CUT_COUNT}, (_,i)=>`photos/cut_${String(i+1).padStart(2,'0')}_s.webp`); /* 2026-09-14: 表示は高さ最大180px なので 600px 幅の小版(1枚 約50KB) */ /* 2026-09-14: png(1枚1MB・48枚で44MB)→ webp(透明のまま・同じ大きさ)。初回の読み込みが重い原因だった */
   const rows = [document.getElementById('mojiRow1'), document.getElementById('mojiRow2'), document.getElementById('mojiRow3')];
   if(!rows[0]) return;
   /* 全列に48台全員を流す(列ごとに並びだけ変える)。どの列でも全員に会える */
@@ -833,7 +834,8 @@ const zukanRows = window.USAGI_DATA.split('\n').map(l=>l.trim())
       });
     }
   });
-})();
+})(); };
+window.addEventListener('load', ()=>setTimeout(window.__buildRiver, 1500));
 
 /* ---- ばつべークリック → 大行進 → 幕開き(もじばしら洪水が現れる) ---- */
 /* 2026-08-15修正: 旧うさぎ図鑑.jsの10匹リストに存在しないファイル(street_12/street_20)が
@@ -854,6 +856,7 @@ document.getElementById('batsu').addEventListener('click', ()=>{
   }catch(e){}
 });
 document.getElementById('batsu').onclick = ()=>{
+  if(window.__buildRiver) window.__buildRiver();
   const hero = document.getElementById('hero');
   const st = document.getElementById('stampede');
   st.style.display='block'; st.innerHTML='';
