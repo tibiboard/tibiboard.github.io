@@ -115,7 +115,7 @@ window.USAGI_SERIFU = {
       { label: 'ぱー', next: 'TR_JYANKEN_RANT' }, { label: 'しない', next: 'TR_JYANKEN_NORI' } ] },
     { text: 'きゅうぎ とくい?', choices: [ { label: 'はい', next: 'TR_KYUGI_HAI' }, { label: 'いいえ', next: 'TR_KYUGI_IIE' } ] },
     { text: 'はなげ でてるよ', choices: [ { label: 'うん', next: 'TR_HANAGE_UN' }, { label: 'うそつき', next: 'TR_HANAGE_URUSO' } ] },
-    { text: '四字熟語', choices: [ { label: '焼肉定食', next: 'TR_YOJI_A' }, { label: 'オーヤンフィフィ', next: 'TR_YOJI_B' } ] },
+    { text: '四字熟語', choices: [ { label: '焼肉定食', next: 'TR_YOJI_A' }, { label: '欧陽菲菲', next: 'TR_YOJI_B' } ] },
     { text: 'くるま くるま くるま!', choices: [ { label: 'とどろき!', next: 'TR_KURUMA_A' }, { label: 'とどろきーー☝️', next: 'TR_KURUMA_B' } ] },
     /* 2026-09-11 たけろう「突然ぱー、きみの頭がね はおかしい」: 正本メモに無い1行(じゃんけんの文脈が無いと意味が通らない)。外した */
   ],

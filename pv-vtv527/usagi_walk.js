@@ -68,7 +68,7 @@
     }
     function sndPop() { stone(880, 0, 0.08, 'sine', 0.12, 1320); }
     /* 2026-09-13 たけろう指示: コインが絡む時は「チャリン」 */
-    function sndCoin() { stone(2093, 0, 0.10, 'triangle', 0.14); stone(2637, 0.07, 0.16, 'triangle', 0.14); stone(3136, 0.15, 0.22, 'sine', 0.10); }
+    function sndCoin() { stone(2093, 0, 0.20, 'triangle', 0.16); stone(2637, 0.14, 0.32, 'triangle', 0.16); stone(3136, 0.30, 0.44, 'sine', 0.12); } /* 2026-09-15 たけろう「気づきにくい」: 2倍の長さ・少し大きく */
     function sndScurry() {
       [0, 0.09, 0.18].forEach(function (t, i) { stone(1500 - i * 200, t, 0.08, 'triangle', 0.1, 700 - i * 150); });
     }
@@ -137,6 +137,7 @@
       '#usagiBubble{position:fixed;z-index:' + (Z + 2) + ';max-width:min(88vw,380px);background:#fff;' +
         'border-radius:26px;padding:20px 22px;box-shadow:0 8px 0 rgba(0,0,0,.18),0 10px 30px rgba(0,0,0,.2);' +
         'font-weight:900;text-align:center;}' +
+      '#usagiBubble{max-height:calc(100vh - 16px);overflow:auto;}' + /* 2026-09-15: 長い文でも画面からはみ出さない */
       '#usagiBubble .ub-txt{font-size:26px;line-height:1.5;color:#3a2a20;margin-bottom:14px;white-space:pre-wrap;}' +
       '#usagiBubble .ub-choices{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}' +
       '#usagiBubble .ub-btn{font-size:20px;font-weight:900;border:0;border-radius:999px;padding:12px 22px;' +
@@ -850,7 +851,7 @@
         setTimeout(function () {
           closeBubble();
           if (node.runaway) startRunaway(); else resumeWalk();
-        }, node.choices && node.choices.length ? 0 : 1600);
+        }, node.choices && node.choices.length ? 0 : Math.max(4800, txt.length * 110)); /* 2026-09-15 たけろう「早く消えすぎて読めない」: 3倍+文字数ぶん */
       }
     }
 
@@ -869,8 +870,11 @@
         var bh = bubble.offsetHeight || 120;
         var left = Math.max(MARGIN, Math.min(window.innerWidth - MARGIN - bw, rabbitCX - bw / 2));
         bubble.style.left = left + 'px';
-        if (above) bubble.style.top = (r.top - bh - 16) + 'px';
-        else bubble.style.top = (r.bottom + 16) + 'px';
+        /* 2026-09-15 たけろう報告「長い文が上に出て一部見えない」: 上に入り切らない時は下へ、下も無理なら画面の中に収める */
+        var topPx = above ? (r.top - bh - 16) : (r.bottom + 16);
+        if (above && topPx < MARGIN) topPx = r.bottom + 16;
+        if (topPx + bh > vh - MARGIN) topPx = Math.max(MARGIN, vh - MARGIN - bh);
+        bubble.style.top = topPx + 'px';
         var tail = bubble.querySelector('.ub-tail');
         if (tail) {
           var tailX = Math.max(18, Math.min(bw - 18, rabbitCX - left));
