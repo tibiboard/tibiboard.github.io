@@ -817,7 +817,9 @@ window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__river
   /* 2026-09-11 たけろう報告「スマホで1列しか流れない/全く出ない時がある」: 288枚を loading=lazy で動く列に入れていた。
      動いている要素の遅延読み込みは環境(iOS Safari 等)で発火しないことがあるので、遅延をやめ、スマホは枚数を 48→16/列 に絞る */
   const MOBILE = matchMedia('(max-width:640px)').matches;
-  const bucket = [shuffled(), shuffled(), shuffled()].map(a => MOBILE ? a.slice(0,16) : a);
+  /* 2026-09-14: iPad(〜1100px)は 24枚/列(Safari が 288枚を描き切れず空白になる) */
+  const TABLET = !MOBILE && matchMedia('(max-width:1100px)').matches;
+  const bucket = [shuffled(), shuffled(), shuffled()].map(a => MOBILE ? a.slice(0,16) : (TABLET ? a.slice(0,24) : a));
   const heights = [120,150,180,135,165,120,150];
   const rots = [-8,5,-4,7,-6,3,-8,6];
   rows.forEach((row, ri)=>{
@@ -827,7 +829,8 @@ window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__river
       list.forEach((f,i)=>{
         const img=document.createElement('img');
         img.src=f; img.alt='tibiboard'; img.loading='eager'; img.decoding='async';
-        img.style.setProperty('--h', heights[i%heights.length]+'px');
+        const hh = heights[i%heights.length]; img.style.setProperty('--h', hh+'px');
+        img.width = Math.round(hh*600/395); img.height = hh; /* 2026-09-14: 600×395 の小版。読み込み前に幅を確保 */
         img.style.transform='rotate('+rots[(i+ri*3)%rots.length]+'deg)';
         img.onerror=()=>img.remove();
         row.appendChild(img);
