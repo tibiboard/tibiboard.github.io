@@ -678,22 +678,23 @@ function parseShop(txt){
       /* 2026-08-17: 「準備中 2026-09-14」のように日付つきでも準備中判定されるようstartsWithに変更(S1) */
       date:(st.match(/\d{4}-\d{2}-\d{2}/)||[''])[0], price:parseInt(c[2])||0,
       base:(c[3]||'').replace(/\.(jpg|jpeg|png|webp)$/i,''), color:c[4]||'', story:c[5]||'',
-      url:c[6]||'', ship:c[7]||'', kind:(c[8]==='キット')?'キット':'完成', shape:c[9]||'', mat:c[10]||''});
+      url:c[6]||'', ship:c[7]||'', kind:/キット/.test(c[8]||'')?'キット':'完成', set:/セット/.test(c[8]||''), shape:c[9]||'', mat:c[10]||''});
   });
   return {conf, items};
 }
 
 /* ---- かわいいタグ(形・素材)2026-08-23 たけろう指示: 販売中もSOLD OUTも両方に出す ---- */
 function shapeKey(v){ v=(v||'').trim(); if(/しかく|四角|□|sq/i.test(v)) return 'sq'; if(/まる|丸|〇|○|ci/i.test(v)) return 'ci'; if(/ざらざら|ザラザラ|zara/i.test(v)) return 'za'; return ''; }
+const clear0 = it => /透明|スケスケ|クリア|clear/i.test(it.mat||'');
 function tagsHtml(it){
   const sk = shapeKey(it.shape); const glass = /ガラス|glass|gf/i.test(it.mat||'');
-  if(!sk && !glass) return '';
+  if(!sk && !glass && !clear0(it) && it.kind!=='キット' && !it.set) return '';
   const names = {sq:'square', ci:'round', za:'textured'};
   /* 2026-09-11 たけろう指示: 形は文字で(四角/丸/Z)、透明フィラメント=S。写真に重ねず名前の横に(inline) */
   const shapeText = {sq:'Square', ci:'Round', za:'Z'}[sk] || '';
   /* 2026-09-11 たけろう指示: ガラスはガラスと書く。S は透明フィラメント(スケスケ)の時だけ。36 も出すので「ちびボード30」を書く */
   const clear = /透明|スケスケ|クリア|clear/i.test(it.mat||'');
-  return `<div class="tags inline"><span class="tg model">tibiboard30</span>${sk?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨Glass</span>`:''}${clear?`<span class="tg mat">Clear</span>`:''}</div>`;
+  return `<div class="tags inline"><span class="tg model">tibiboard30</span>${sk?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨Glass</span>`:''}${clear?`<span class="tg mat">Clear</span>`:''}${it.kind==='キット'?`<span class="tg kit">Kit</span>`:''}${it.set?`<span class="tg set">+Set</span>`:''}</div>`;
 }
 const {conf, items} = parseShop(window.SHOP_DATA);
 
@@ -968,6 +969,8 @@ try {
 .key-float .kf-n{min-width:64px;height:64px;font-size:38px;line-height:64px;right:6px;top:6px}
 .key-float .kf-msg{left:50%;right:auto;transform:translateX(-50%);bottom:214px}
 .key-float.has::before{left:0;top:26px}.key-float.has::after{right:8px;bottom:18px}
+/* 2026-09-14 たけろう指示: 売れた個体のタグ(キット=オレンジ / +セット=ピンク)。商品リストの種別欄から */
+.tg.kit{background:#ff8c1a;color:#fff}.tg.set{background:var(--pink);color:#fff}
 </style>
 <button class="key-float none" id="keyFloat" type="button" title="かぎ" aria-label="かぎ"><span class="kf-icon">🔑</span><span class="kf-n" id="keyFloatN">0</span><span class="kf-msg" id="keyFloatMsg"></span></button>
 <script>

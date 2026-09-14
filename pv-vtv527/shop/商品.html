@@ -115,7 +115,7 @@ function parseShop(txt){
     const st = c[1] || '';
     items.push({name:c[0], state:st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':'いる')),
       price:parseInt(c[2])||0, base:(c[3]||'').replace(/\.(jpg|jpeg|png|webp)$/i,''),
-      color:c[4]||'', story:c[5]||'', url:c[6]||'', ship:c[7]||'', kind:(c[8]==='キット')?'キット':'完成', shape:c[9]||'', mat:c[10]||''});
+      color:c[4]||'', story:c[5]||'', url:c[6]||'', ship:c[7]||'', kind:/キット/.test(c[8]||'')?'キット':'完成', set:/セット/.test(c[8]||''), shape:c[9]||'', mat:c[10]||''});
   });
   return items;
 }
