@@ -108,8 +108,8 @@ window.USAGI_SERIFU = {
     { text: 'Ringo-gorilla-rappa (apple-gorilla-trumpet… word chain!)', choices: [ { label: 'Pantsu', next: 'T_RINGO_A' }, { label: 'Pasokon', next: 'T_RINGO_B' } ] },
     { text: 'A night without dancing?', choices: [ { label: 'Never heard of it', next: 'T_OREMO' }, { label: 'I know it', next: 'T_OREMO' } ] },
     { text: 'Out of nowhere: rock, paper, scissors.', choices: [
-      { label: 'Rock', next: 'TR_JYANKEN_RANT' }, { label: 'Scissors', next: 'TR_JYANKEN_RANT' },
-      { label: 'Paper', next: 'TR_JYANKEN_RANT' }, { label: 'Pass', next: 'TR_JYANKEN_NORI' } ] },
+      { label: 'Rock', next: 'TR_JYANKEN_GU' }, { label: 'Scissors', next: 'TR_JYANKEN_CHOKI' },
+      { label: 'Paper', next: 'TR_JYANKEN_PA' }, { label: 'Pass', next: 'TR_JYANKEN_NORI' } ] },
     { text: 'Good at ball games?', choices: [ { label: 'Yes', next: 'TR_KYUGI_HAI' }, { label: 'No', next: 'TR_KYUGI_IIE' } ] },
     { text: 'You\'ve got a nose hair showing.', choices: [ { label: 'Yeah', next: 'TR_HANAGE_UN' }, { label: 'Liar', next: 'TR_HANAGE_URUSO' } ] },
     { text: 'Four-character idiom. Go.', choices: [ { label: 'Yakiniku teishoku', next: 'TR_YOJI_A' }, { label: 'Ouyang Feifei', next: 'TR_YOJI_B' } ] },
@@ -176,10 +176,9 @@ window.USAGI_SERIFU = {
   T_RINGO_B: { text: 'N\'Djamena', end: true, runaway: true },
   T_OREMO: { text: 'Me too.', end: true, runaway: true },
 
-  TR_JYANKEN_RANT: {
-    text: 'Hold on. You just tried to take me on with zero preparation. Don\'t you think that\'s incredibly rude? Rock-paper-scissors is a serious match with fate on the line. I can\'t play along with kids\' games.',
-    end: true, runaway: true
-  },
+  TR_JYANKEN_GU: { text: 'I had scissors... you win! Here, one coin.', coins: 1, end: true, runaway: true },
+  TR_JYANKEN_CHOKI: { text: 'Scissors too. A tie!', end: true, runaway: true },
+  TR_JYANKEN_PA: { text: 'I had scissors. I win!', end: true, runaway: true },
   TR_JYANKEN_NORI: { text: 'Killjoy.', end: true, runaway: true },
   TR_KYUGI_HAI: { text: 'Don\'t get cocky.', end: true, runaway: true },
   TR_KYUGI_IIE: { text: 'I know.', end: true, runaway: true },

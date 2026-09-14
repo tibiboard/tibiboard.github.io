@@ -111,8 +111,9 @@ window.USAGI_SERIFU = {
     { text: '踊ってない夜を？', choices: [ { label: '知らない', next: 'T_OREMO' }, { label: '知ってる', next: 'T_SOREIJO' } ] },
     { text: 'ぬるぽ', choices: [ { label: 'ガっ', next: 'T_NURUPO_A' }, { label: 'なに？', next: 'T_NURUPO_B' } ] },  /* 2026-09-13 たけろう */
     { text: 'とつぜんだけど じゃんけん', choices: [
-      { label: 'ぐー', next: 'TR_JYANKEN_RANT' }, { label: 'ちょき', next: 'TR_JYANKEN_RANT' },
-      { label: 'ぱー', next: 'TR_JYANKEN_RANT' }, { label: 'しない', next: 'TR_JYANKEN_NORI' } ] },
+      { label: 'ぐー', next: 'TR_JYANKEN_GU' }, { label: 'ちょき', next: 'TR_JYANKEN_CHOKI' },
+      { label: 'ぱー', next: 'TR_JYANKEN_PA' }, { label: 'しない', next: 'TR_JYANKEN_NORI' } ] },
+    /* 2026-09-15 たけろう指示: うさぎは いつも ちょき。ぐー=きみの勝ち(コイン1枚)/ちょき=あいこ/ぱー=うさぎの勝ち */
     { text: 'きゅうぎ とくい?', choices: [ { label: 'はい', next: 'TR_KYUGI_HAI' }, { label: 'いいえ', next: 'TR_KYUGI_IIE' } ] },
     { text: 'はなげ でてるよ', choices: [ { label: 'うん', next: 'TR_HANAGE_UN' }, { label: 'うそつき', next: 'TR_HANAGE_URUSO' } ] },
     { text: '四字熟語', choices: [ { label: '焼肉定食', next: 'TR_YOJI_A' }, { label: '欧陽菲菲', next: 'TR_YOJI_B' } ] },
@@ -179,10 +180,9 @@ window.USAGI_SERIFU = {
   T_NURUPO_B: { text: '偽物か', end: true, runaway: true },  /* 2026-09-13 */
   T_OREMO: { text: 'おれも', end: true, runaway: true },
 
-  TR_JYANKEN_RANT: {
-    text: '僕の勝利！',  /* 2026-09-13 たけろう */
-    end: true, runaway: true
-  },
+  TR_JYANKEN_GU: { text: 'ぼくは ちょき… きみの かち! コイン 1まい あげる', coins: 1, end: true, runaway: true },
+  TR_JYANKEN_CHOKI: { text: 'ぼくも ちょき。あいこ!', end: true, runaway: true },
+  TR_JYANKEN_PA: { text: 'ぼくは ちょき。僕の勝利！', end: true, runaway: true },  /* 2026-09-13 たけろう「僕の勝利！」 */
   TR_JYANKEN_NORI: { text: 'のり わる', end: true, runaway: true },
   TR_KYUGI_HAI: { text: 'ちょーし のんな', end: true, runaway: true },
   TR_KYUGI_IIE: { text: 'しってる', end: true, runaway: true },
