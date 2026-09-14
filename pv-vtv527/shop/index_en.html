@@ -837,8 +837,18 @@ window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__river
       });
     }
   });
-})(); };
+})();
+  /* 2026-09-14 たけろう報告「スマホ/iPad で川が動かず、回転すると動き出す」: iOS Safari は隠れた(max-height:0)列の
+     アニメーションを開始しないことがある。回転=再計算と同じ事を、画像が揃った時と幕が開いた時に自分でやる(アニメーションを一度外して付け直す) */
+  window.__kickRiver = function(){
+    document.querySelectorAll('.moji-row').forEach(r=>{ r.style.animation='none'; void r.offsetWidth; r.style.animation=''; });
+  };
+  const imgs=[...document.querySelectorAll('.moji-row img')];
+  Promise.all(imgs.map(im=>im.complete?Promise.resolve():new Promise(res=>{im.onload=res; im.onerror=res;}))).then(()=>setTimeout(window.__kickRiver,50));
+};
 window.addEventListener('load', ()=>setTimeout(window.__buildRiver, 1500));
+window.addEventListener('pageshow', ()=>{ if(window.__kickRiver) setTimeout(window.__kickRiver,300); });
+window.addEventListener('orientationchange', ()=>{ if(window.__kickRiver) setTimeout(window.__kickRiver,300); });
 
 /* ---- ばつべークリック → 大行進 → 幕開き(もじばしら洪水が現れる) ---- */
 /* 2026-08-15修正: 旧うさぎ図鑑.jsの10匹リストに存在しないファイル(street_12/street_20)が
@@ -886,6 +896,7 @@ document.getElementById('batsu').onclick = ()=>{
     hero.classList.add('fadeout');
     setTimeout(()=>{
       mojiSec.classList.add('open');
+      if(window.__kickRiver){ setTimeout(window.__kickRiver,60); setTimeout(window.__kickRiver,700); } /* 2026-09-14: iOS で止まったままの川を動かす */
       setTimeout(()=>{
         const y = Math.max(0, mojiSec.getBoundingClientRect().top + window.scrollY - 8);
         const soft = !matchMedia('(prefers-reduced-motion: reduce)').matches;
