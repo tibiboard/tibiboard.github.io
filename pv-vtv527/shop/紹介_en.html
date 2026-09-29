@@ -687,8 +687,9 @@ document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset
     /* 2026-09-07 たけろう指示: 透明ケースは1枚だけ(cine_19)。20〜22 は外した(メイン写真がSなので) */
     /* 2026-09-09 たけろう指示: cine_19 は 01 の写真(ehon_s_1)と同じ物なので 02 からは外した(01 で使う) */
     /* 2026-09-07 たけろう指示: kazycap様(@kazu_dob)のキーキャップ写真 cine_23 を追加。表示中だけクレジットを切替 */
+    /* 2026-09-29 たけろう指示: 扇形の写真(cine_07)と kazycap様のキーキャップ写真(cine_23)を新しい2枚(cine_24 ピンクとオレンジ / cine_25 ラベンダー)に入れ替え。元の写真は photos に残してある */
     const SNS_MAIN = '';   /* 例: 'cine_03.jpg' を入れると1枚目固定 */
-    let names = ['cine_01.jpg','cine_02.jpg','cine_03.jpg','cine_04.jpg','cine_05.jpg','cine_06.jpg','cine_07.jpg','cine_08.jpg','cine_09.jpg','cine_10.jpg','cine_11.jpg','cine_12.jpg','cine_13.jpg','cine_14.jpg','cine_15.jpg','cine_16.jpg','cine_17.jpg','cine_18.jpg','cine_23.jpg'];
+    let names = ['cine_01.jpg','cine_02.jpg','cine_03.jpg','cine_04.jpg','cine_05.jpg','cine_06.jpg','cine_24.jpg','cine_08.jpg','cine_09.jpg','cine_10.jpg','cine_11.jpg','cine_12.jpg','cine_13.jpg','cine_14.jpg','cine_15.jpg','cine_16.jpg','cine_17.jpg','cine_18.jpg','cine_25.jpg'];
     for(let i=names.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [names[i],names[j]]=[names[j],names[i]]; }
     if(SNS_MAIN){ names = [SNS_MAIN, ...names.filter(n=>n!==SNS_MAIN)]; }
     track.innerHTML = names.map(n=>`<div class="slide"><img src="photos/${n}" alt="tibiboard" loading="lazy"></div>`).join('');

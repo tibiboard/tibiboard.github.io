@@ -38,11 +38,12 @@
   /* ばつべーは世界に1匹だけ(キティ方式)。集めているのは「コーデ(着こなし)」なので個体名は使わない(2026-08-14たけろう) */
   C.seriesJa = {cute:'キュートコーデ', edgy:'エッジコーデ', street:'ストリートコーデ'};
 
-  /* ---- デバッグ: ?debug=1 で優先権当選確率100% ---- */
-  C.DEBUG = /[?&]debug=1/.test(location.search);
+  /* ---- デバッグ: ?debug=1 で優先権当選確率100%。ローカル環境だけで有効 ---- */
+  const LOCAL_DEBUG_HOST = ['localhost','127.0.0.1'].includes(location.hostname)||/^192\.168\./.test(location.hostname);
+  C.DEBUG = LOCAL_DEBUG_HOST && /[?&]debug=1/.test(location.search);
 
   /* ---- デバッグ: ?debugwin=1 で大当たり(宝箱)確定。localhostのみ有効(2026-08-14新設) ---- */
-  C.DEBUG_WIN = (['localhost','127.0.0.1'].includes(location.hostname)||/^192\.168\./.test(location.hostname)) && /[?&]debugwin=1/.test(location.search);
+  C.DEBUG_WIN = LOCAL_DEBUG_HOST && /[?&]debugwin=1/.test(location.search);
 
   /* ---- デバッグ2(2026-08-12): 表示確認用。本番の人はURLを知らないので影響なし
        ?debugcoin=25 … コインを25枚にセット
