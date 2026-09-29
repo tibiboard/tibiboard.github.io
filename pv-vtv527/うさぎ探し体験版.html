@@ -107,8 +107,9 @@ const seriesOf=id=>id.split('_')[0];
 
 /* ===== コイン保存(共通キー chibi_coins) ===== */
 const KEY='chibi_coins';
-let coins=parseInt(localStorage.getItem(KEY)||'0',10)||0;
-function saveCoins(){ localStorage.setItem(KEY,String(coins)); var e=$('coins'); if(e) e.textContent=coins; }
+const LS=window.CHIBI_LS||{getItem(){return null},setItem(){}}; /* 2026-09-30: 保存の入口(asobi_common.js) */
+let coins=parseInt(LS.getItem(KEY)||'0',10)||0;
+function saveCoins(){ LS.setItem(KEY,String(coins)); var e=$('coins'); if(e) e.textContent=coins; }
 
 /* ===== 音(WebAudio自作・ミュート付き) ===== */
 let AC=null, muted=false;

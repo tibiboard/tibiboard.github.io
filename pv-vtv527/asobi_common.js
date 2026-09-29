@@ -10,6 +10,19 @@
    =================================================================== */
 (function(){
   const C = window.CHIBI = {};
+  /* ---- 2026-09-30: 保存の入口(ここ1か所だけ)。ブラウザが保存を禁止していても
+     ページは止めない(その場合は開いている間だけ覚えて、閉じたら消える)。
+     ほかのページ(うさぎ探し など)も window.CHIBI_LS を使う ---- */
+  const LS = window.CHIBI_LS = (function(){
+    const mem = {};
+    let on = false;
+    try { const t = '__chibi_t'; localStorage.setItem(t, '1'); localStorage.removeItem(t); on = true; } catch(e){}
+    return {
+      getItem(k){ if(on){ try{ return localStorage.getItem(k); }catch(e){} } return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; },
+      setItem(k, v){ mem[k] = String(v); if(on){ try{ localStorage.setItem(k, String(v)); }catch(e){} } },
+      removeItem(k){ delete mem[k]; if(on){ try{ localStorage.removeItem(k); }catch(e){} } }
+    };
+  })();
 
   /* ---- asobi_common.js自身の場所を特定(このファイルはBASEデザイン案直下に実在)。
      ページごとに参照パスの深さが違っても、ここからの相対で音ファイルへ辿り着ける ---- */
@@ -54,18 +67,18 @@
     const q = location.search;
     if(!(['localhost','127.0.0.1'].includes(location.hostname)||/^192\.168\./.test(location.hostname))) return; // デバッグ機能は公開サイトでは無効(2026-08-13)
     const mCoin = q.match(/[?&]debugcoin=(\d+)/);
-    if(mCoin) localStorage.setItem('chibi_coins', String(Math.max(0,parseInt(mCoin[1],10))));
+    if(mCoin) LS.setItem('chibi_coins', String(Math.max(0,parseInt(mCoin[1],10))));
     const mKey = q.match(/[?&]debugkey=([01])/);
     if(mKey){
       if(mKey[1]==='1'){
-        if(!localStorage.getItem('chibi_atari')){
+        if(!LS.getItem('chibi_atari')){
           const d=new Date(), t=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-          localStorage.setItem('chibi_atari', JSON.stringify({code:'DEBUGKEY', date:t}));
+          LS.setItem('chibi_atari', JSON.stringify({code:'DEBUGKEY', date:t}));
         }
-      } else localStorage.removeItem('chibi_atari');
+      } else LS.removeItem('chibi_atari');
     }
     if(/[?&]debugreset=1/.test(q)){
-      ['chibi_coins','chibi_daily','chibi_zukan','chibi_atari'].forEach(k=>localStorage.removeItem(k));
+      ['chibi_coins','chibi_daily','chibi_zukan','chibi_atari'].forEach(k=>LS.removeItem(k));
     }
     if(mCoin||mKey||/debugreset/.test(q)) C.DEBUG_TOOLS = true;
   })();
@@ -85,10 +98,10 @@
       /* 2026-08-20: スロットの演出ボタン板(右下)と被って押せなかったので左上へ */
       p.style.cssText='position:fixed;left:8px;top:8px;z-index:99999;background:#222c;color:#fff;padding:8px;border-radius:10px;display:flex;flex-wrap:wrap;gap:6px;max-width:260px;font:700 14px sans-serif;align-items:center';
       const st=document.createElement('span'); st.style.cssText='width:100%';
-      const zukan=(()=>{try{return JSON.parse(localStorage.getItem('chibi_zukan')||'[]').length}catch(e){return 0}})();
-      st.textContent='🛠dev  🪙'+(localStorage.getItem('chibi_coins')||0)+'  🔑'+(localStorage.getItem('chibi_atari')?'あり':'なし')+'  📖'+zukan+'匹';
+      const zukan=(()=>{try{return JSON.parse(LS.getItem('chibi_zukan')||'[]').length}catch(e){return 0}})();
+      st.textContent='🛠dev  🪙'+(LS.getItem('chibi_coins')||0)+'  🔑'+(LS.getItem('chibi_atari')?'あり':'なし')+'  📖'+zukan+'匹';
       p.appendChild(st);
-      p.appendChild(btn('🪙+10',()=>go({debugcoin:String((parseInt(localStorage.getItem('chibi_coins')||'0',10)||0)+10)})));
+      p.appendChild(btn('🪙+10',()=>go({debugcoin:String((parseInt(LS.getItem('chibi_coins')||'0',10)||0)+10)})));
       p.appendChild(btn('🪙0',()=>go({debugcoin:'0'})));
       p.appendChild(btn('🔑あり',()=>go({debugkey:'1'})));
       p.appendChild(btn('🔑なし',()=>go({debugkey:'0'})));
@@ -106,19 +119,19 @@
   /* ---- コイン ---- */
   /* 2026-08-20 コインGUI大改装(たけろう指示): 持てる上限は99まい。それ以上は増えない(減らない側の下限は0のまま) */
   C.COIN_MAX = 99;
-  C.getCoins = () => parseInt(localStorage.getItem('chibi_coins')||'0',10)||0;
-  C.setCoins = n => localStorage.setItem('chibi_coins', String(Math.max(0,Math.min(C.COIN_MAX,n))));
+  C.getCoins = () => parseInt(LS.getItem('chibi_coins')||'0',10)||0;
+  C.setCoins = n => LS.setItem('chibi_coins', String(Math.max(0,Math.min(C.COIN_MAX,n))));
   C.addCoins = n => { C.setCoins(C.getCoins()+n); return C.getCoins(); };
   C.spendCoin = () => { if(C.getCoins()<1) return false; C.setCoins(C.getCoins()-1); return true; };
 
   /* ---- 日次カウンタ(日付が変わったら自動リセット) ---- */
   C.daily = () => {
     let d = {};
-    try{ d = JSON.parse(localStorage.getItem('chibi_daily')||'{}'); }catch(e){}
+    try{ d = JSON.parse(LS.getItem('chibi_daily')||'{}'); }catch(e){}
     if(d.date !== C.today()) d = {date:C.today(), usagi:0, run:0, perfect:0, chal:0};
     return d;
   };
-  C.saveDaily = d => localStorage.setItem('chibi_daily', JSON.stringify(d));
+  C.saveDaily = d => LS.setItem('chibi_daily', JSON.stringify(d));
 
   /* ---- ミニゲーム日次記録(game = 'usagi' | 'run') ---- */
   C.gameDone = g => !!C.daily()[g];
@@ -143,12 +156,12 @@
   C.TREASURE_COOLDOWN_MS = 0;
   C.canDrawTreasure = () => {
     return true; /* 2026-09-13 たけろう決定: 週1回の上限は無し(何回でも)。下の判定は残すが通らない */
-    const t = localStorage.getItem('chibi_treasure_last');
+    const t = LS.getItem('chibi_treasure_last');
     if(!t) return true;
     const last = new Date(t).getTime();
     return isNaN(last) ? true : (Date.now() - last) >= C.TREASURE_COOLDOWN_MS;
   };
-  C.markTreasureWin = () => localStorage.setItem('chibi_treasure_last', new Date().toISOString());
+  C.markTreasureWin = () => LS.setItem('chibi_treasure_last', new Date().toISOString());
 
   /* ---- 大当たり(→宝箱3択へ)の抽選: 1/100(2026-08-14たけろう指示。ガチャ・スロット共通)
      ?debug=1 / ?debugwin=1(localhostのみ) で必ず当たり(週1回制限もバイパス、確認用)
@@ -177,12 +190,12 @@
 
   /* ---- 図鑑コレクション ---- */
   C.getZukan = () => {
-    try{ const a=JSON.parse(localStorage.getItem('chibi_zukan')||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; }
+    try{ const a=JSON.parse(LS.getItem('chibi_zukan')||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; }
   };
   C.addZukan = id => {
     const a = C.getZukan();
     const isNew = !a.includes(id);
-    if(isNew){ a.push(id); localStorage.setItem('chibi_zukan', JSON.stringify(a)); }
+    if(isNew){ a.push(id); LS.setItem('chibi_zukan', JSON.stringify(a)); }
     return isNew;
   };
   C.zukanComplete = () => C.getZukan().length >= C.ALL.length;
@@ -200,17 +213,17 @@
   };
   C.setAtari = () => {
     const code = C.makeCode();
-    localStorage.setItem('chibi_atari', JSON.stringify({code, date:C.today()}));
+    LS.setItem('chibi_atari', JSON.stringify({code, date:C.today()}));
     return code;
   };
-  C.getAtari = () => { try{ return JSON.parse(localStorage.getItem('chibi_atari')||'null'); }catch(e){ return null; } };
+  C.getAtari = () => { try{ return JSON.parse(LS.getItem('chibi_atari')||'null'); }catch(e){ return null; } };
 
   /* ---- 🔑 かぎ(2026-09-13 たけろう設計): 当たり=鍵を手に入れる → 鍵は持ち物(chibi_keys) → トップの宝箱で使う ---- */
-  C.getKeys = () => { const n = parseInt(localStorage.getItem('chibi_keys')||'0',10); return isNaN(n)?0:Math.max(0,n); };
+  C.getKeys = () => { const n = parseInt(LS.getItem('chibi_keys')||'0',10); return isNaN(n)?0:Math.max(0,n); };
   C.addKeys = n => {
-    localStorage.setItem('chibi_keys', String(Math.max(0, C.getKeys()+n)));
-    if(C.getKeys()>0) localStorage.setItem('chibi_atari', JSON.stringify({code:'KEY', date:C.today()})); /* うさぎの「君…もってるね」用 */
-    else localStorage.removeItem('chibi_atari');
+    LS.setItem('chibi_keys', String(Math.max(0, C.getKeys()+n)));
+    if(C.getKeys()>0) LS.setItem('chibi_atari', JSON.stringify({code:'KEY', date:C.today()})); /* うさぎの「君…もってるね」用 */
+    else LS.removeItem('chibi_atari');
     try{ C.refreshCoinGui(false); }catch(e){}
     return C.getKeys();
   };
