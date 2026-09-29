@@ -690,8 +690,9 @@ document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset
     /* 2026-09-07 たけろう指示: kazycap様(@kazu_dob)のキーキャップ写真 cine_23 を追加。表示中だけクレジットを切替 */
     /* 2026-09-29 たけろう指示: 扇形の写真(cine_07)と kazycap様のキーキャップ写真(cine_23)を新しい2枚(cine_24 ピンクとオレンジ / cine_25 ラベンダー)に入れ替え。元の写真は photos に残してある */
     /* 2026-09-30 たけろう指示: cine_03・cine_11 を外し、cine_22・cine_26(about_colors を横長に切り出し)・cine_27(about_texture を横長に切り出し)・cine_23(kazycap様のキーキャップ・クレジットも出る)を追加 */
+    /* 2026-09-30 たけろう指示(2回目): cine_01・cine_26 を外し、cine_28〜31(撮影生データの4枚。縦長と4:3 は左右を黒で切らずに)を追加 */
     const SNS_MAIN = '';   /* 例: 'cine_03.jpg' を入れると1枚目固定 */
-    let names = ['cine_01.jpg','cine_02.jpg','cine_04.jpg','cine_05.jpg','cine_06.jpg','cine_24.jpg','cine_08.jpg','cine_09.jpg','cine_10.jpg','cine_12.jpg','cine_13.jpg','cine_14.jpg','cine_15.jpg','cine_16.jpg','cine_17.jpg','cine_18.jpg','cine_25.jpg','cine_22.jpg','cine_26.jpg','cine_27.jpg','cine_23.jpg'];
+    let names = ['cine_02.jpg','cine_04.jpg','cine_05.jpg','cine_06.jpg','cine_24.jpg','cine_08.jpg','cine_09.jpg','cine_10.jpg','cine_12.jpg','cine_13.jpg','cine_14.jpg','cine_15.jpg','cine_16.jpg','cine_17.jpg','cine_18.jpg','cine_25.jpg','cine_22.jpg','cine_27.jpg','cine_23.jpg','cine_28.jpg','cine_29.jpg','cine_30.jpg','cine_31.jpg'];
     for(let i=names.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [names[i],names[j]]=[names[j],names[i]]; }
     if(SNS_MAIN){ names = [SNS_MAIN, ...names.filter(n=>n!==SNS_MAIN)]; }
     track.innerHTML = names.map(n=>`<div class="slide"><img src="photos/${n}" alt="ちびボード" loading="lazy"></div>`).join('');
@@ -699,9 +700,9 @@ document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset
     const credit=document.createElement('div');
     credit.className='gacha-credit';
     const CREDIT_DEFAULT='チョコミントキーキャップは クラブクラフト様の作品です → <a href="https://kanicraft.booth.pm" target="_blank" rel="noopener">BOOTH(かにクラフト)</a>';
-    const CREDIT_KAZYCAP='黒に金文字のキーキャップは kazycap様の作品です → <a href="https://kz-keyboard-shop.booth.pm/items/8469772" target="_blank" rel="noopener">BOOTH(kz-keyboard-shop)</a>';
+    const CREDIT_KAZYCAP='文字入りのキーキャップは kazycap様の作品です → <a href="https://kz-keyboard-shop.booth.pm/items/8469772" target="_blank" rel="noopener">BOOTH(kz-keyboard-shop)</a>';
     function updateCredit(i){
-      credit.innerHTML = (names[i]==='cine_23.jpg') ? CREDIT_KAZYCAP : CREDIT_DEFAULT;
+      credit.innerHTML = ['cine_23.jpg','cine_27.jpg'].includes(names[i]) ? CREDIT_KAZYCAP : CREDIT_DEFAULT; /* 2026-09-30: 文字入りキーキャップの写真はすべて kazycap様の案内 */
     }
     updateCredit(0);
     document.getElementById('gachaSlider').after(credit);
