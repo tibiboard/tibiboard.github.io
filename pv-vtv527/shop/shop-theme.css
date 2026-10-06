@@ -131,3 +131,19 @@ a.keybtn[href^="購入者"]{background:var(--t-glass) !important;color:var(--t-i
 .playdoor .pt{color:var(--t-ink) !important}
 .pgame{background:var(--t-glass) !important;border:0 !important;color:var(--t-ink) !important;
   -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+
+/* =====================================================================
+   ギャラリー風(2026-10-06 たけろう「ギャラリー風が一番オシャレかも。これで一回ショップを作って」=見本11の C)
+   塗らずに細い線と余白。角はほぼ四角。字の間を広く。ぼかしはごく弱く。
+   すりガラスのカードに戻す時は、このかたまりを消す
+   ===================================================================== */
+:root{--t-glass:rgba(255,255,255,.10);--t-glass-blur:2px;--t-gallery-line:1px solid rgba(90,58,46,.55)}
+.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),
+.playdoor,#playdoor,.playbox,.pgame,
+.item,.item.alive,.item.sold,
+.oshirase-list li,
+a.keybtn[href^="購入者"],
+main > .card{
+  border:var(--t-gallery-line) !important;border-radius:2px !important;letter-spacing:.15em}
+.item .ph,.item .ph .slot,.pgame .pi,main > .card .pics{border-radius:2px !important}
+main > .card{background:var(--t-glass) !important;box-shadow:none !important;-webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}

@@ -721,14 +721,12 @@ function shapeKey(v){ v=(v||'').trim(); if(/しかく|四角|□|sq/i.test(v)) r
 const clear0 = it => /透明|スケスケ|クリア|clear/i.test(it.mat||'');
 /* 2026-10-06 たけろう指示: 棚に「17mmピッチ」のタグ(いまの子は全部17mm。19mmは出さない) */
 function tagsHtml(it){
-  const sk = shapeKey(it.shape); const glass = /ガラス|glass|gf/i.test(it.mat||'');
-  if(!glass && !clear0(it)) return `<div class="tags inline"><span class="tg model">${sk==='za'?'tibiboard30Z':'tibiboard30'}</span><span class="tg pitch">17mm pitch</span></div>`;
-  const names = {sq:'square', ci:'round', za:'textured'};
-  /* 2026-09-11 たけろう指示: 形は文字で(四角/丸/Z)、透明フィラメント=S。写真に重ねず名前の横に(inline) */
-  const shapeText = {sq:'シカク', ci:'マル', za:'Z'}[sk] || ''; /* 2026-09-14 たけろう指示: カタカナ */
-  /* 2026-09-11 たけろう指示: ガラスはガラスと書く。S は透明フィラメント(スケスケ)の時だけ。36 も出すので「ちびボード30」を書く */
-  const clear = /透明|スケスケ|クリア|clear/i.test(it.mat||'');
-  return `<div class="tags inline"><span class="tg model">${sk==='za'?'tibiboard30Z':'tibiboard30'}</span><span class="tg pitch">17mm pitch</span>${false&&sk&&sk!=='za'?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨Glass</span>`:''}${clear?`<span class="tg mat">クリア</span>`:''}</div>`;
+  /* 2026-10-06 たけろう指示: 素材のタグ(PLA / PETG / クリア / ラメ / ガラス)を出せるように。商品リストの「素材」の欄に書いた言葉で出る(発売の時に書く) */
+  const sk = shapeKey(it.shape); const m = it.mat||'';
+  const T = t => `<span class="tg mat">${t}</span>`;
+  const mats = (/ガラス|glass|gf/i.test(m) ? T('✨ガラス') : '') + (/透明|スケスケ|クリア|clear/i.test(m) ? T('クリア') : '')
+    + (/PETG/i.test(m) ? T('PETG') : (/PLA/i.test(m) ? T('PLA') : '')) + (/ラメ|glitter/i.test(m) ? T('ラメ') : '');
+  return `<div class="tags inline"><span class="tg model">${sk==='za'?'tibiboard30Z':'tibiboard30'}</span><span class="tg pitch">17mm pitch</span>${mats}</div>`;
 }
 const {conf, items} = parseShop(window.SHOP_DATA);
 
