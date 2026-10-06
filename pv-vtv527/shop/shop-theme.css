@@ -49,7 +49,7 @@
 
 /* --- 流れるキーボードの見出し・ちびボードの柱の文字 --- */
 .moji-head h2{color:var(--t-ink) !important}
-.moji-pillar b{color:var(--t-ink) !important}
+/* .moji-pillar b の色は下の T4 のかたまり */
 .sparkle{text-shadow:0 0 10px #fff8,0 0 20px #fff !important}
 
 /* --- おしらせ --- */
@@ -133,28 +133,29 @@ a.keybtn[href^="購入者"]{background:var(--t-glass) !important;color:var(--t-i
   -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
 
 /* =====================================================================
-   ギャラリー風(2026-10-06 たけろう「ギャラリー風が一番オシャレかも。これで一回ショップを作って」=見本11の C)
-   塗らずに細い線と余白。角はほぼ四角。字の間を広く。ぼかしはごく弱く。
-   すりガラスのカードに戻す時は、このかたまりを消す
+   ふちなしのすりガラス・角は丸く(2026-10-06 22時 たけろう「もう一回ふちなしのすりガラス全部やってみて」「四角じゃなくて なるべく丸に」)
+   ギャラリー風(細い線・四角)の控え = BASEデザイン案/_直前退避/2026-10-06_2230_ふちなしすりガラスに戻す前/shop-theme.css
+   丸さを変える時は --t-round、ガラスの白さとぼかしは --t-glass と --t-glass-blur
    ===================================================================== */
-:root{--t-glass:rgba(255,255,255,.10);--t-glass-blur:2px;--t-gallery-line:1px solid rgba(90,58,46,.55)}
+:root{--t-glass:rgba(255,255,255,.18);--t-glass-blur:4px;--t-round:28px}
 .door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),
 .playdoor,#playdoor,.playbox,.pgame,
 .item,.item.alive,.item.sold,
 .oshirase-list li,
 a.keybtn[href^="購入者"],
-main > .card{
-  border:var(--t-gallery-line) !important;border-radius:2px !important;letter-spacing:.15em}
-.item .ph,.item .ph .slot,.pgame .pi,main > .card .pics{border-radius:2px !important}
+main > .card{border:0 !important;border-radius:var(--t-round) !important}
+.item .ph,.item .ph .slot,.pgame .pi,main > .card .pics{border-radius:20px !important}
+a.keybtn[href^="購入者"]{border-radius:999px !important}
 main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカードは文が多いので白を強く(たけろう「文字が読みづらい」) */
   box-shadow:none !important;-webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
 
-/* 2026-10-06 たけろう「枠が真四角で、ほかの丸くてかわいいUIと合わない → 丸くするのやってみて」: ギャラリー風の線はそのまま、角だけ丸く */
-:root{--t-gallery-radius:16px}
-.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),
-.playdoor,#playdoor,.playbox,.pgame,
-.item,.item.alive,.item.sold,
-.oshirase-list li,
-a.keybtn[href^="購入者"],
-main > .card{border-radius:var(--t-gallery-radius) !important}
-.item .ph,.item .ph .slot,.pgame .pi,main > .card .pics{border-radius:12px !important}
+/* =====================================================================
+   キーボードの川の上の大きな「ちびボード」= 見本14 の T4(パステルの半透明+同じ色のこいふち)
+   2026-10-06 たけろう「一回 T4 やってみて」
+   ===================================================================== */
+.moji-pillar b{-webkit-text-stroke:4px var(--d) !important;paint-order:stroke fill;filter:none !important;color:var(--c) !important}
+.moji-pillar.c1 b{--c:rgba(255,179,207,.35);--d:#e889ad}
+.moji-pillar.c2 b{--c:rgba(168,230,216,.35);--d:#6fc4b2}
+.moji-pillar.c3 b{--c:rgba(255,224,138,.35);--d:#e6bd4f}
+.moji-pillar.c4 b{--c:rgba(201,184,240,.35);--d:#9f88d6}
+.moji-pillar.c5 b{--c:rgba(255,143,184,.35);--d:#e0628f}
