@@ -25,8 +25,17 @@ a.door[aria-disabled=true]:hover{transform:none}
  table.spec th{width:30%}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+/* 2026-10-07 たけろう報告「iPhone でキーボードの川が流れない・うさぎの大行進が出ない・3列が動かない(iPad は動く)」:
+   上の1行は iPhone の「視差効果を減らす」が ON の人の動きを全部 0.01ms にする=川は止まり、行進のうさぎは一瞬で画面の外へ消えていた。
+   お店の見せ場(ゆっくり流れる川と大行進)だけは、その人にも元の速さで動かす。控え=_直前退避/2026-10-07_*_iPhoneの川を直す前 */
+@media(prefers-reduced-motion:reduce){
+ .moji-row.r1{animation-duration:96s!important;animation-iteration-count:infinite!important}
+ .moji-row.r2{animation-duration:120s!important;animation-iteration-count:infinite!important}
+ .moji-row.r3{animation-duration:78s!important;animation-iteration-count:infinite!important}
+ #stampede img{animation-duration:1.6s!important}
+}
 
 .slot:has(img)>.ic,.slot:has(img)>.t{display:none}
 .purchase-includes{font-size:24px;line-height:1.7;margin:16px 0}
 
-#moji-sec:not(.river-visible) .moji-row{animation-play-state:paused}
+/* 2026-10-07: 「画面の外では川を止める」(10/3)はやめた。止めた川が iOS で動き出さない形を残さないため(9/14 までの、iPhone で流れていた形に戻す) */

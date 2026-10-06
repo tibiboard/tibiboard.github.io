@@ -881,7 +881,7 @@ window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__river
 // Build the decorative river only when its section approaches the viewport.
 window.addEventListener('load', ()=>{
   const section=document.getElementById('moji-sec');
-  if(!section || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(!section) return; /* 2026-10-07: 「動きを減らす」の人にも川を作る(作らないと iPhone で空白だった) */
   if('IntersectionObserver' in window){
     const observer=new IntersectionObserver(entries=>{
       const visible=entries.some(entry=>entry.isIntersecting);
