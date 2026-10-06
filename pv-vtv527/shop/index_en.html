@@ -558,11 +558,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
   <!-- 2026-10-06 たけろう指示: NyattoLand for X(Chrome 拡張)の「ねこが見つけたもの」で紹介された -->
   <section id="found-sec">
-    <!-- 2026-10-06 たけろう指示: NyattoLand の紹介動画(30秒・自分のお店の中に置く。外のSNSは埋め込まない) -->
-    <video class="found-video" src="photos/nyattoland_30s.mp4" poster="photos/nyattoland_30s_poster.jpg" controls muted playsinline preload="none" style="display:block;width:100%;border-radius:18px;margin:0 0 16px;background:#000"></video>
+    <!-- 2026-10-06 たけろう指示: NyattoLand の紹介動画(19時に新しい動画へ差し替え・お店の中に置く。外のSNSは埋め込まない) -->
+    <video class="found-video" src="photos/nyattoland_2.mp4" poster="photos/nyattoland_2_poster.jpg" controls muted playsinline preload="none" style="display:block;width:100%;border-radius:18px;margin:0 0 16px;background:#000"></video>
     <a class="found-card" href="https://nyatto-land-for-x.thekarou.com" target="_blank" rel="noopener">
             <div class="found-name">NyattoLand for X</div>
-      <div class="found-text">A Chrome extension that lets cats play on X (Twitter).<br>tibiboard30 appears in it.</div>
+      <div class="found-text">A Chrome extension that lets cats play on X.<br>tibiboard30 appears in it.</div>
       <div class="found-go">Take a look ▶</div>
     </a>
     <div class="found-by">Made by <a href="https://x.com/karou2rikon" target="_blank" rel="noopener">@karou2rikon</a> on X</div>
@@ -842,7 +842,7 @@ const zukanRows = window.USAGI_DATA.split('\n').map(l=>l.trim())
 /* ---- キーボード洪水(cut_01〜48)をもじばしらの奥へ流す ---- */
 /* 2026-09-14: 初回の表示を止めないよう、ページが出てから裏で組み立てる(load 後 1.5秒。ばつべーを押したら即) */
 window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__riverBuilt = true; (function(){
-  const CUT_COUNT = 55; /* 2026-10-06 たけろう指示: 切り抜きを川に足した(cut_49 透明・50 オレンジ・51 黄・52 黄緑・53 黒・54 ピンク・55 黒い丸) */
+  const CUT_COUNT = 56; /* 2026-10-06 たけろう指示: 切り抜きを川に足した(cut_49 透明・50 オレンジ・51 黄・52 黄緑・53 黒・54 ピンク・55 黒い丸・56 ミント) */
   const cutFiles = Array.from({length:CUT_COUNT}, (_,i)=>`photos/cut_${String(i+1).padStart(2,'0')}_s.webp`); /* 2026-09-14: 表示は高さ最大180px なので 600px 幅の小版(1枚 約50KB) */ /* 2026-09-14: png(1枚1MB・48枚で44MB)→ webp(透明のまま・同じ大きさ)。初回の読み込みが重い原因だった */
   const rows = [document.getElementById('mojiRow1'), document.getElementById('mojiRow2'), document.getElementById('mojiRow3')];
   if(!rows[0]) return;
@@ -901,6 +901,8 @@ window.addEventListener('orientationchange', ()=>{ if(window.__kickRiver) setTim
    混ざっていて、大行進で2匹透明+扉絵柄に当たると絵が出なかった。
    正式58匹(CHIBI.ALL=実在確認済み)からランダム10匹に変更 */
 const runImgs = (window.CHIBI ? CHIBI.ALL.slice().sort(()=>Math.random()-.5).slice(0,10) : zukanRows.map(c=>c[1].replace(/\.png$/,''))).map(n=>`../img/usagi/${n}.png`);
+/* 2026-10-06: あそびばの2つの絵は、ばつべーを押す前から出しておく(先に下までスクロールすると空の枠が見えていた) */
+(function(){ const p=runImgs.slice().sort(()=>Math.random()-.5); const a=document.getElementById('pg1'), b=document.getElementById('pg2'); if(a&&!a.getAttribute('src')) a.src=p[0]; if(b&&!b.getAttribute('src')) b.src=p[1]; })();
 const mojiSec = document.getElementById('moji-sec');
 const batsuSnd = new Audio('photos/batsu_click.wav'); batsuSnd.volume = 0.7; /* 2026-08-15たけろう: 音量7割に */
 /* 2026-08-21たけろう: 声は1日1回だけ(しつこいので)。2回目からは鳴らさない */

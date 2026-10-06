@@ -117,3 +117,17 @@ body .gacha-credit a{color:var(--t-ink) !important}   /* 壁紙の上なので�
 /* 「購入いただいた方は こちらへどうぞ」: 半透明のすりガラス */
 a.keybtn[href^="購入者"]{background:var(--t-glass) !important;color:var(--t-ink) !important;border-bottom:0 !important;box-shadow:none !important;
   -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+
+/* =====================================================================
+   入口(tibiboard30紹介・うさぎずかん・あそびば)= 半透明のすりガラスのカード(枠なし)
+   2026-10-06 19時 たけろう「全部 半透明のすりガラスにして作ってみて」。見本10の A の形(角の丸いカード)
+   ===================================================================== */
+.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3){background:var(--t-glass) !important;border:0 !important;border-radius:26px !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur));transition:transform .15s}
+.door:hover{transform:translateY(-4px)}
+/* あそびば: ピンクの箱と虹のふちをやめ、同じすりガラスに。中のゲームの入口も同じガラス。コイン・スロットは今のまま */
+.playdoor,#playdoor,.playbox{background:var(--t-glass) !important;border:0 !important;border-image:none !important;border-radius:26px !important;box-shadow:none !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+.playdoor .pt{color:var(--t-ink) !important}
+.pgame{background:var(--t-glass) !important;border:0 !important;color:var(--t-ink) !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
