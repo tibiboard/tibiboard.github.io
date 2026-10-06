@@ -449,7 +449,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 #asobi-sec{max-width:none;padding:40px 18px 30px;background:linear-gradient(180deg,#f9debc,#d4b6e8)}
 #asobi-sec .asobi-doors{grid-template-columns:minmax(280px,420px);justify-content:center}
 #asobi-sec .asobi-play{margin-top:36px}
-#asobi-sec #pcoin{display:none} /* すぐ下に同じコインがあるので、あそびばの中のコインは出さない */
+#asobi-sec #pcoin{display:none}
+.shelf-intro{text-align:center;margin:0 auto 30px} /* すぐ下に同じコインがあるので、あそびばの中のコインは出さない */
 #found-sec{max-width:760px;padding:24px 18px 10px;margin:0 auto}
 .found-card{display:block;text-decoration:none;color:#3a2a33;background:#fff;border:5px solid #f3accc;border-radius:22px;padding:22px 24px;text-align:center;box-shadow:0 6px 0 rgba(183,156,224,.35)}
 .found-card:hover{transform:translateY(-3px)}
@@ -523,6 +524,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
   <!-- みんなの棚(全個体がここに整列。いる子は光る) -->
   <section id="shelf-sec">
+    <!-- 2026-10-06 たけろう指示: 棚の上に紹介ページへの入口(魅力を見てもらってから棚へ) -->
+    <div class="shelf-intro"><a class="keybtn big" href="紹介_en.html">❓ What is tibiboard30? See it in photos ▶</a></div>
     
     <div class="shelf" id="shelf"></div>
   </section>
