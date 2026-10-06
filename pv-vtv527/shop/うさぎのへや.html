@@ -76,13 +76,14 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .bb{height:1.25em;width:auto;vertical-align:-.25em;display:inline-block}
 .bb-logo{height:44px;vertical-align:middle}
 </style>
+<link rel="stylesheet" href="shop-theme.css"><!-- 2026-10-06 お店の色(全ページ共通)。この行を消すと元の色 -->
 </head>
 <body>
 <div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0" title="お店にもどる"><img class="bb bb-logo" src="../img/バツベイ_アイコン800.png" alt="ばつべー"></a><h1>うさぎずかん</h1><a href="index.html?in=1">◀ お店にもどる</a></div>
 
 <section>
-  <div style="font-size:26px;font-weight:900;color:#127a75;margin-bottom:2px">ばつべーは おしゃれずき。きょうは どの コーデに あえるかな</div>
-  <div id="zkcount" style="font-size:34px;font-weight:900;color:#e0197a;margin-bottom:10px"></div>
+  <div style="font-size:26px;font-weight:900;color:var(--t-ink,#127a75);margin-bottom:2px">ばつべーは おしゃれずき。きょうは どの コーデに あえるかな</div>
+  <div id="zkcount" style="font-size:34px;font-weight:900;color:var(--t-ink,#e0197a);margin-bottom:10px"></div>
   <div class="zukan" id="zukan"></div>
   <!-- 2026-09-12 たけろう指示: 「スロットで…」の1行は削除 -->
   <div style="font-size:22px;font-weight:900;color:#4a4450;margin-top:16px;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.8"><!-- 2026-09-12 たけろう指示: 白い背景なし -->
