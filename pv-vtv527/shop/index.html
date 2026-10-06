@@ -476,7 +476,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
 <!-- 世界 -->
 <div id="world" class="lit">
-  <div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0" title="お店にもどる">ちボ</a><h1>ちびボード</h1><span class="obi">〈ちいさな分割キーボード〉1台ずつ、手づくり。</span><a class="lang" href="index_en.html?in=1" style="margin-left:auto;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">EN</a></div>
+  <div class="band"><a class="band-logo" href="index.html?in=1" title="お店にもどる"><img src="icons/logo_wabun.png" alt="ちびボード"></a><h1 class="vh">ちびボード</h1><!-- 2026-10-06 たけろう指示: 左上は正式の和文ロゴ(★ロゴ正本/和文ロゴ_ちびボード横組み.png) --><span class="obi">〈ちいさな分割キーボード〉1台ずつ、手づくり。</span><a class="lang" href="index_en.html?in=1" style="margin-left:auto;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">EN</a></div>
 
   <!-- ヒーロー: 主役はばつべー -->
   <div class="hero" id="hero">
@@ -495,10 +495,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
   <!-- もじばしら洪水(ばつべークリック→大行進→幕開きで登場) -->
   <section id="moji-sec">
-    <div class="moji-head">
-      <h2 style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap">ぜんぶ、<em style="color:var(--pink)">ちがう子</em>。<img src="../img/バツベイ_アイコン800.png" alt="ばつべー" style="width:clamp(64px,9vw,140px)"></h2>
-      
-    </div>
+    <!-- 2026-10-06 たけろう指示:「ぜんぶ、ちがう子。」の見出しはやめた -->
     <div class="moji-stage">
       <div class="moji-flood">
         <div class="moji-row r1" id="mojiRow1"></div>
@@ -793,7 +790,8 @@ const cardOf = i => {
   const card = `
   <div class="item ${i.state==='いる'?'alive':'sold'} ${i.state==='予告'?'yokoku':''} ${i.state==='展示'?'tenji':''}">
     ${i.state==='旅立ち'?`<div class="stamp">${i.date.replaceAll('-','.')}</div>`:''}
-    <div class="ph">${slot(i.base?i.base+'_1.jpg':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}${i.state==='旅立ち'?'<div class="tape">SOLD OUT</div>':''}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags in-photo"'):''}${TAGS_IN_PHOTO?`<span class="tg model ph-model">${shapeKey(i.shape)==='za'?'tibiboard30Z':'tibiboard30'}</span>`:''}</div>
+    ${TAGS_IN_PHOTO?`<div class="card-head"><span class="ch-no">${(i.name.match(/^(No\.\s*\d+)/)||[])[1]||''}</span><span class="tg model">${shapeKey(i.shape)==='za'?'tibiboard30Z':'tibiboard30'}</span><span class="tg pitch">17mmピッチ</span></div>`:''}
+    <div class="ph">${slot(i.base?i.base+'_1.jpg':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}${i.state==='旅立ち'?'<div class="tape">SOLD OUT</div>':''}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags in-photo"'):''}</div>
     ${(()=>{ /* 2026-09-11 たけろう指示(スマホの棚を詰める): No.◯◯◯ は左上の細い枠へ、名前は小さく */
       const m = i.name.match(/^(No\.\s*\d+)\s*(.*)$/); const no = m ? m[1] : ''; const nm = m ? (m[2] || i.name) : i.name;
       return `<div class="no">${no}${(no&&!TAGS_IN_PHOTO)?'<br>':''}${TAGS_IN_PHOTO?'':'tibiboard30'}</div><div class="nm">${nm}</div>`; })()}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags inline phone-only"'):tagsHtml(i)}

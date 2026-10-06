@@ -201,3 +201,30 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
 @keyframes t-glowfill{0%,100%{color:var(--c);text-shadow:0 0 0 transparent}50%{color:var(--c85);text-shadow:0 0 18px var(--cs)}}
 .moji-stage:not(.tinted) .moji-pillar b{animation:t-glowfill 4s ease-in-out infinite;animation-delay:calc(var(--i) * .4s)}
 @media(prefers-reduced-motion:reduce){.moji-pillar b{animation:none !important}}
+
+/* 2026-10-06 左上のロゴ=正式の和文ロゴ(ばつべー+ちびボード)。題名の文字(h1)は読み上げ用に残して見た目では隠す */
+.band .band-logo{display:block;line-height:0}
+.band .band-logo img{height:52px;width:auto;display:block}
+@media(max-width:640px){.band .band-logo img{height:38px}}
+.vh{position:absolute !important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 2026-10-06 たけろう「名前のタグと 17mmピッチ を左上に。17mm はもっと小さく。写真の上のすりガラスの所へ出して、写真のじゃまにならないように」:
+   写真の上に1行(名前のタグ+17mmピッチ)。写真の中・名前の下の 17mmピッチ は出さない */
+.item .card-head{display:flex;align-items:center;gap:6px;margin:0 0 8px;min-height:22px}
+.item .card-head .tg{font-size:13px;padding:2px 9px;border-width:1.5px;line-height:1.2}
+.item .card-head .tg.pitch{font-size:11px;padding:1px 7px;opacity:.9}
+.item .card-head .tg.model{background:var(--t-pink) !important;border-color:var(--t-pink) !important;color:#fff !important}
+.item .card-head ~ .ph .tg.pitch,.item .card-head ~ .tags .tg.pitch{display:none !important}
+.item .card-head .ch-no{display:none}
+@media(max-width:640px){
+  /* スマホ: 「No.」を行の頭に入れて名前のタグと重ならないように。右上の日付の帯と重なるので 17mmピッチ は名前の下のタグへ */
+  .item .card-head .ch-no{display:inline;font-size:10px;color:var(--t-ink);opacity:.75;margin-right:2px}
+  .item .card-head ~ .no{display:none !important}
+  .item .card-head .tg.pitch{display:none !important}
+  .item .card-head ~ .tags.phone-only .tg.pitch{display:inline-flex !important}
+  .item .card-head{justify-content:flex-start;gap:3px;margin:0 0 4px;min-height:14px}
+  .item .card-head .tg{font-size:9px;padding:0 5px;border-width:1px}
+  .item .card-head .tg.pitch{font-size:8px;padding:0 4px}
+  .item .card-head + .ph{margin-top:0 !important}
+}
+@media(max-width:640px){.item .stamp{top:12px !important;right:-36px !important;font-size:7px !important;padding:1px 30px !important}}  /* 日付の帯が名前のタグに重ならないよう、スマホは小さく上へ */
