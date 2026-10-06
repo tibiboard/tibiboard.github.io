@@ -171,3 +171,14 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
 .playdoor,#playdoor,.playbox,.pgame{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
 .door .dl,.playdoor .pt,.pgame .pl{display:inline-block;background:var(--t-glass);-webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur));
   border-radius:999px;padding:8px 26px}
+
+/* 2026-10-06 タグを写真の中(下のすきま)へ。index の TAGS_IN_PHOTO を false にすると名前の下に戻る */
+.tags.in-photo{position:absolute;left:10px;right:10px;bottom:10px;display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-start;pointer-events:none;z-index:4}
+.tags.in-photo .tg{font-size:15px;padding:3px 10px;border-width:2px;line-height:1.2}
+/* スマホは写真が小さく、タグが3段に重なって SOLD OUT のテープにもぶつかったので、名前の下のまま(2026-10-06 実測) */
+.tags.inline.phone-only{display:none !important}
+@media(max-width:640px){
+  .tags.in-photo{display:none !important}
+  .tags.inline.phone-only{display:flex !important}
+}
+.tags.in-photo .tg.model{background:var(--t-pink) !important;border-color:var(--t-pink) !important;color:#fff !important}

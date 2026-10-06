@@ -786,15 +786,17 @@ const junbiCardOf = i => {
     </div>
   </div>`;
 };
+/* 2026-10-06 たけろう「タグも全部 写真の中に入れてみよう(戻せるように)」: true=写真の下のすきまにタグ(スマホは写真が小さいので名前の下のまま) / false=どの画面も名前の下 */
+const TAGS_IN_PHOTO = true;
 const cardOf = i => {
   if(i.state==='準備中') return junbiCardOf(i);
   const card = `
   <div class="item ${i.state==='いる'?'alive':'sold'} ${i.state==='予告'?'yokoku':''} ${i.state==='展示'?'tenji':''}">
     ${i.state==='旅立ち'?`<div class="stamp">${i.date.replaceAll('-','.')}</div>`:''}
-    <div class="ph">${slot(i.base?i.base+'_1.jpg':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}${i.state==='旅立ち'?'<div class="tape">SOLD OUT</div>':''}</div>
+    <div class="ph">${slot(i.base?i.base+'_1.jpg':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}${i.state==='旅立ち'?'<div class="tape">SOLD OUT</div>':''}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags in-photo"'):''}</div>
     ${(()=>{ /* 2026-09-11 たけろう指示(スマホの棚を詰める): No.◯◯◯ は左上の細い枠へ、名前は小さく */
       const m = i.name.match(/^(No\.\s*\d+)\s*(.*)$/); const no = m ? m[1] : ''; const nm = m ? (m[2] || i.name) : i.name;
-      return `<div class="no">${no}${no?'<br>':''}tibiboard30</div><div class="nm">${nm}</div>`; })()}${tagsHtml(i)}
+      return `<div class="no">${no}${no?'<br>':''}tibiboard30</div><div class="nm">${nm}</div>`; })()}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags inline phone-only"'):tagsHtml(i)}
     ${(i.state==='いる'||i.state==='旅立ち')&&i.price?`<div class="pr">${yen(i.price)}</div>`:''}
     <div class="st">${i.state==='いる'?'':(i.state==='予告'?'9月から':(i.state==='展示'?'てんじ(非売)':'SOLD OUT'))}</div>
   </div>`;
