@@ -197,10 +197,20 @@
        resolveAnchorsでは「1件でもあるか」だけ確認し、実際にどれを使うかは
        出現のたびにpickDynamicAnchorでランダムに選び直す(2026-08-21修正:
        固定のquerySelectorだと常に先頭の1枚だけになっていた)。 */
+    /* 2026-10-06: 要素が いま見ている画面の中に 見えているか(上下に少し余白を見る) */
+    function inViewEl(el) {
+      try {
+        var r = el.getBoundingClientRect();
+        return r.width > 0 && r.bottom > 60 && r.top < window.innerHeight - 60;
+      } catch (e) { return false; }
+    }
     function pickDynamicAnchor(sel) {
       var list = document.querySelectorAll(sel);
       if (!list.length) return null;
-      return list[Math.floor(Math.random() * list.length)];
+      /* 2026-10-06: 画面の中にある物を先に選ぶ(画面の外のカードに隠れると見つけられない) */
+      var vis = [].filter.call(list, inViewEl);
+      var from = vis.length ? vis : list;
+      return from[Math.floor(Math.random() * from.length)];
     }
     function resolveAnchors() {
       var out = {};
@@ -234,7 +244,36 @@
       });
     }
     var lastSpotName = null;
-    function pickSpotName() {
+    /* 2026-10-06: その隠れ場所に出たら、いま見ている画面の中に入るか */
+    function spotInView(name) {
+      if (name === 'walker') {
+        var fr = footerAnchorRect();
+        var top = fr.top - (window.scrollY || window.pageYOffset || 0);
+        return top > 0 && top < window.innerHeight - 20;
+      }
+      var def = null;
+      for (var i = 0; i < SPOT_DEFS.length; i++) { if (SPOT_DEFS[i].name === name) { def = SPOT_DEFS[i]; break; } }
+      if (!def) return false;
+      if (def.dynamic) return [].some.call(document.querySelectorAll(def.anchorSel), inViewEl);
+      var el = anchors[name];
+      if (!el || el === true) return false;
+      if (def.builder === 'edge') return inViewEl(el);          // はしから覗く=画面に見えている高さに出す(buildEdge)
+      var r = el.getBoundingClientRect();
+      return r.width > 0 && r.top > 40 && r.top < window.innerHeight - 80; // 耳・天井・角は要素の上端に出る
+    }
+    /* 画面のまん中から、その隠れ場所までの縦のきょり(px) */
+    function spotDistance(name) {
+      var mid = window.innerHeight / 2;
+      function d(el) { var r = el.getBoundingClientRect(); return r.width > 0 ? Math.abs(r.top - mid) : Infinity; }
+      if (name === 'walker') { return Math.abs(footerAnchorRect().top - (window.scrollY || window.pageYOffset || 0) - mid); }
+      var def = null;
+      for (var i = 0; i < SPOT_DEFS.length; i++) { if (SPOT_DEFS[i].name === name) { def = SPOT_DEFS[i]; break; } }
+      if (!def) return Infinity;
+      if (def.dynamic) { var m = Infinity; [].forEach.call(document.querySelectorAll(def.anchorSel), function (el) { m = Math.min(m, d(el)); }); return m; }
+      var el = anchors[name];
+      return (el && el !== true) ? d(el) : Infinity;
+    }
+    function pickSpotName(preferView) {
       var pool = availableSpots();
       if (!pool.length) return 'walker';
       /* 確認用: ?usagi=ceiling 等で出る場所を固定(家のWi-Fi/localhostのみ。確認ハブから使う) */
@@ -244,6 +283,18 @@
         if (m && home && pool.some(function (d) { return d.name === m[1]; })) return m[1];
       } catch (e) {}
       var weighted = weightedPool();
+      /* 2026-10-06 たけろう「何回か会話した後 見つけられなくなる」: 逃げた後は、いま見ている画面の中に出る隠れ場所だけから選ぶ。
+         画面の中に1つも無い時は、いままで通りページ全体から選ぶ */
+      if (preferView) {
+        var inView = weighted.filter(function (w) { return spotInView(w.name); });
+        if (inView.length) weighted = inView;
+        else {
+          /* 画面の中に1つも無い時は、画面のまん中にいちばん近い隠れ場所(ページ全体から探すと遠くに行ってしまう) */
+          var best = null, bestD = Infinity;
+          weighted.forEach(function (w) { var dd = spotDistance(w.name); if (dd < bestD) { bestD = dd; best = w; } });
+          if (best) weighted = [best];
+        }
+      }
       function draw() {
         var total = weighted.reduce(function (s, d) { return s + d.weight; }, 0);
         var r = Math.random() * total, acc = 0;
@@ -409,6 +460,12 @@
     function buildEdge(anchorEl, side, rot) {
       var r = pageRect(anchorEl);
       var y = r.top + Math.random() * Math.max(1, r.height - SIZE);
+      /* 2026-10-06: セクションが長いと画面の外の高さに出て見つけられなかった。見えている所があればその中に出す */
+      try {
+        var sy = window.scrollY || window.pageYOffset || 0;
+        var lo = Math.max(r.top, sy + 60), hi = Math.min(r.top + r.height - SIZE, sy + window.innerHeight - 60 - SIZE);
+        if (hi > lo) y = lo + Math.random() * (hi - lo);
+      } catch (e) {}
       var half = Math.round(SIZE / 2);
       var edgeX = side === 'left' ? r.left : (r.right - half);
       edgeX = Math.max(0, Math.min(pageWidth() - half, edgeX));
@@ -925,7 +982,7 @@
     }
 
     function reappearFresh() {
-      var name = pickSpotName();
+      var name = pickSpotName(true);
       currentSpotName = name;
       if (name === 'walker') {
         track = layoutSpot('walker');
