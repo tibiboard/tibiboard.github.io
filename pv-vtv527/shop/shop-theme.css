@@ -1,24 +1,31 @@
 /* =====================================================================
    tibiboard30 お店の色(全ページ共通・各ページの一番最後に読む)
-   2026-10-06 たけろう決定: 帯は案4「きなり」。ピンク×紫のグラデーションはやめて、色に統一感を持たせる。
-   背景はページの壁紙を生かす(面をグラデーションで塗らない)。コイン・スロット・あそびばの見た目はそのまま。
+   2026-10-06 たけろう: ピンク×チョコミント(グラデーションなし)。帯・扉・おしらせは「色なしのすりガラス」
+   (ぼかしはかなり弱め・ふちの線なし・ふちから少しずつガラスになる)。背景はページの壁紙を生かす。
+   コイン・スロット・あそびばの見た目はそのまま。
 
-   ★色を変えたい時は、下の :root の --t- で始まる4行だけ直す(ほかは触らない)。
+   ★色を変えたい時は、下の :root の --t- で始まる行だけ直す(ほかは触らない)。
+     ガラスのぼかしの強さ=--t-blur、ふちが溶ける幅=--t-fade
    ★この一枚を外せば(各ページの <link ... shop-theme.css> の行を消せば)元の色に戻る。
    ===================================================================== */
 :root{
-  --t-paper:#f4efe6;     /* きなり: 帯・札・カードの地 */
-  --t-ink:#3a2f28;       /* すみ茶: 文字・ボタン・枠 */
-  --t-ink-deep:#241c17;  /* ボタンの下の影・暗いカード */
-  --t-line:#cbbca6;      /* うすい枠線 */
+  --t-ink:#5a3a2e;       /* チョコ: 文字・一番下の帯 */
+  --t-ink-deep:#3e271f;  /* 暗いカード・影 */
+  --t-paper:#fff8ee;     /* クリーム: 小さな札の地 */
+  --t-line:rgba(90,58,46,.25);
+  --t-accent:#3aa79a;    /* ミント: 押すボタン */
+  --t-accent-deep:#257a70;
+  --t-pink:#ff8fb8;      /* ピンク: 「ちボ」の札などの差し色 */
+  --t-blur:3px;          /* すりガラスのぼかし(かなり弱め) */
+  --t-fade:18px;         /* ガラスのふちが溶ける幅 */
 
   /* 古い色の名前もここにそろえる(各ページの中の指定はそのまま、色だけ変わる) */
-  --pink:var(--t-ink);
+  --pink:var(--t-pink);
   --pink-deep:var(--t-ink);
   --pink-pale:var(--t-paper);
-  --mint:var(--t-line);
+  --mint:#a8e6d8;
   --mint-pale:var(--t-paper);
-  --mint-deep:var(--t-ink);
+  --mint-deep:var(--t-accent);
 }
 
 /* --- コイン・スロット・あそびば は元の色のまま(たけろう「コインとスロットのUIはそのままでいい」) --- */
@@ -29,19 +36,19 @@
 }
 
 /* --- 一番上の帯 --- */
-.band{background:var(--t-paper) !important;color:var(--t-ink) !important;border-bottom:2px solid var(--t-line)}
-.band .sf{background:var(--t-ink) !important;color:var(--t-paper) !important}
+.band{color:var(--t-ink) !important}
+.band .sf{background:var(--t-pink) !important;color:#fff !important}
 .band a,.band a.back,.band .lang{color:var(--t-ink) !important}
 .band .lang{background:#fff !important;border:2px solid var(--t-line)}
 
 /* --- ボタン --- */
-.keybtn,.keybtn.mint{background:var(--t-ink) !important;color:var(--t-paper) !important;border-bottom-color:var(--t-ink-deep) !important;box-shadow:none !important}
+.keybtn,.keybtn.mint{background:var(--t-accent) !important;color:#fff !important;border-bottom-color:var(--t-accent-deep) !important;box-shadow:none !important}
 
 /* --- 面は塗らず、壁紙を見せる --- */
 #shelf-sec,#doors-sec,#moji-sec,#asobi-sec{background:transparent !important}
 
 /* --- 扉(紹介・うさぎずかん など) --- */
-.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3){background:var(--t-paper) !important;border-color:var(--t-line) !important;box-shadow:0 6px 0 rgba(36,28,23,.18) !important;color:var(--t-ink)}
+.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3){color:var(--t-ink)}
 
 /* --- 流れるキーボードの見出し・ちびボードの柱の文字 --- */
 .moji-head h2{color:var(--t-ink) !important}
@@ -49,11 +56,11 @@
 .sparkle{text-shadow:0 0 10px #fff8,0 0 20px #fff !important}
 
 /* --- おしらせ --- */
-.oshirase-board{background:var(--t-paper) !important;border-color:var(--t-line) !important}
+
 .oshirase-ttl{color:var(--t-ink) !important}
-.oshirase-list li{background:#fff !important;border-color:var(--t-line) !important}
+.oshirase-list li{background:transparent !important;border-color:var(--t-line) !important}
 .oshirase-list li .od{color:var(--t-ink) !important}
-.oshirase-more{background:var(--t-ink) !important;color:var(--t-paper) !important;border-bottom-color:var(--t-ink-deep) !important}
+.oshirase-more{background:var(--t-accent) !important;color:#fff !important;border-bottom-color:var(--t-accent-deep) !important}
 
 /* --- 棚のカード(写真が主役なので暗い地のまま、色味だけそろえる) --- */
 .item{background:var(--t-ink-deep)}
@@ -61,11 +68,11 @@
 .item .stamp{background:var(--t-paper) !important;color:var(--t-ink) !important}
 .tg{border-color:var(--t-line) !important;color:var(--t-ink) !important}
 .tg.mat{background:#fff !important;border-color:var(--t-line) !important;color:var(--t-ink) !important}
-.tags.inline .tg.model{background:var(--t-ink) !important;border-color:var(--t-ink) !important;color:var(--t-paper) !important}
+.tags.inline .tg.model{background:var(--t-pink) !important;border-color:var(--t-pink) !important;color:#fff !important}
 
 /* --- NyattoLand の枠 --- */
-.found-card{background:var(--t-paper) !important;border-color:var(--t-line) !important;box-shadow:0 6px 0 rgba(36,28,23,.18) !important;color:var(--t-ink) !important}
-.found-go{background:var(--t-ink) !important;color:var(--t-paper) !important}
+.found-card{color:var(--t-ink) !important}
+.found-go{background:var(--t-accent) !important;color:#fff !important}
 
 /* --- 一番下 --- */
 footer{background:var(--t-ink) !important;color:var(--t-paper) !important}
@@ -73,8 +80,8 @@ footer a{color:var(--t-paper) !important}
 
 /* --- 紹介ページ(絵本のページの色かぶせ・ボタン類) --- */
 .ehon.bg-mint,.ehon.bg-white,.ehon.bg-pink{--tint:none !important;background:transparent !important}
-.keycap.accent,.tap-badge{background:var(--t-ink) !important;color:var(--t-paper) !important;box-shadow:0 6px 0 var(--t-ink-deep),0 10px 18px rgba(0,0,0,.18) !important}
-.mm-toggle button.active,#soundToggle.on{background:var(--t-ink) !important;color:var(--t-paper) !important;box-shadow:0 4px 0 var(--t-ink-deep) !important}
+.keycap.accent,.tap-badge{background:var(--t-accent) !important;color:#fff !important;box-shadow:0 6px 0 var(--t-accent-deep),0 10px 18px rgba(0,0,0,.18) !important}
+.mm-toggle button.active,#soundToggle.on{background:var(--t-accent) !important;color:#fff !important;box-shadow:0 4px 0 var(--t-accent-deep) !important}
 #soundToggle{background:#fff !important;color:var(--t-ink) !important}
 .photo-wrap{background:transparent !important}
 
@@ -85,3 +92,20 @@ footer a{color:var(--t-paper) !important}
 /* --- 紹介ページの見出し・番号・注意書き(ページの中で色が直に書いてある所) --- */
 .ehon h2,.ehon .sec-num,.ehon p.sub{color:var(--t-ink) !important}
 body .gacha-credit a{color:var(--t-ink) !important}   /* 壁紙の上なので濃い色(ページの中の指定より強く) */
+
+/* =====================================================================
+   すりガラス(色なし): 帯・扉・おしらせ・NyattoLand の枠
+   地の色と枠線は消し、後ろの壁紙を少しだけぼかす。ふちは --t-fade の幅で少しずつガラスになる(線は見えない)。
+   古いブラウザでぼかしが効かない時は、壁紙がそのまま見えるだけ(文字は読める)。
+   ===================================================================== */
+.band,.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),.oshirase-board,.found-card{
+  background:transparent !important;border-color:transparent !important;box-shadow:none !important;
+  -webkit-backdrop-filter:blur(var(--t-blur));backdrop-filter:blur(var(--t-blur));
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 var(--t-fade),#000 calc(100% - var(--t-fade)),transparent),linear-gradient(to bottom,transparent,#000 var(--t-fade),#000 calc(100% - var(--t-fade)),transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,transparent,#000 var(--t-fade),#000 calc(100% - var(--t-fade)),transparent),linear-gradient(to bottom,transparent,#000 var(--t-fade),#000 calc(100% - var(--t-fade)),transparent);
+  mask-composite:intersect}
+/* 帯は画面の上と左右にくっつくので、下のふちだけ溶かす */
+.band{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - var(--t-fade)),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - var(--t-fade)),transparent)}
+/* おしらせの板の画びょう(📌)は板の外にはみ出していて、ガラスのふちで消えるので出さない */
+.oshirase-board::before,.oshirase-board::after{display:none !important}
