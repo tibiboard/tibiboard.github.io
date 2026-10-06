@@ -95,6 +95,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .bb{height:1.25em;width:auto;vertical-align:-.25em;display:inline-block}
 .bb-logo{height:44px;vertical-align:middle}
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
 </head>
 <body>
 
@@ -113,7 +114,7 @@ function parseShop(txt){
     const c = l.split('|').map(s=>s.trim());
     if(c.length < 3) return;
     const st = c[1] || '';
-    items.push({name:c[0], state:st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':'いる')),
+    items.push({name:c[0], state:st==='いる'?'いる':(st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':'準備中'))),
       price:parseInt(c[2])||0, base:(c[3]||'').replace(/\.(jpg|jpeg|png|webp)$/i,''),
       color:c[4]||'', story:c[5]||'', url:c[6]||'', ship:c[7]||'', kind:/キット/.test(c[8]||'')?'キット':'完成', set:/セット/.test(c[8]||''), shape:c[9]||'', mat:c[10]||''});
   });
@@ -130,11 +131,17 @@ function tagsHtml(it){
 }
 const items = parseShop(window.SHOP_DATA);
 const id = new URLSearchParams(location.search).get('id');
+// Keep the selected item when switching languages.
+document.querySelectorAll('a.lang').forEach(link=>{
+  const target = new URL(link.getAttribute('href'), location.href);
+  if(id) target.searchParams.set('id', id);
+  link.href = target.href;
+});
 const it = items.find(i=>i.name===id);
 if(!it || it.state!=='いる'){ location.replace('index.html?in=1'); }
 
 const yen = n => '¥' + n.toLocaleString();
-const TODO = '<span class="todo">__要記入__</span>';
+const TODO = '<span class="todo">準備中</span>';
 // 未記入メモや相対パスを購入先として開かない。購入先は外部のHTTPS URLだけを許可する。
 function validPurchaseUrl(value){
   if(!value || value.includes('__要記入__')) return '';
@@ -143,13 +150,11 @@ function validPurchaseUrl(value){
     return u.protocol === 'https:' ? u.href : '';
   }catch(_e){ return ''; }
 }
-const val = v => (!v || v==='__要記入__' || /^__要記入__/.test(v)) ? TODO + (v.replace(/^__要記入__/,'')||'') : v;
+const val = v => (!v || v==='__要記入__' || /^__要記入__/.test(v)) ? TODO : v;
 function slot(file, label, size, ratio){
   return `<div class="slot" style="aspect-ratio:${ratio}">
-    <div class="fn">📷 ${file||'—'}</div>
     <div class="ic">📷</div>
-    <div class="t">ここに ${label} の写真</div>
-    <div class="s">推奨 ${size}<br>photos/${file||'__要記入__'}</div>
+    <div class="t">写真は準備中です</div>
     ${file?`<img src="photos/${file}" alt="${label}" onerror="this.remove()">`:''}
   </div>`;
 }
@@ -178,11 +183,12 @@ if(it && it.state==='いる'){
         <div class="col">配色: ${val(it.color)}</div>
         <div class="story">${val(it.story)}</div>
         <div class="price">${yen(it.price)} <small>(税・送料込)</small></div>
+        <p class="purchase-includes">表示価格にはキースイッチ・キーキャップを含みません。セットは +5,000円。USB-Cケーブルは付属しません。</p>
         <div class="ship">🚚 発送: ${it.ship||TODO}</div>
         <div style="font-size:13px;font-weight:700;color:#6b6672;margin-top:6px">🎨 ケースの底の色、電源スイッチ、ネームプレートの色・デザイン・素材、おまけのうさぎ彫りキーキャップは、せいさくしゃが そのとき かわいいと思ったもので(一点物の おたのしみ)</div>
         ${validPurchaseUrl(it.url)
           ? `<a class="keybtn big" href="${validPurchaseUrl(it.url)}" target="_blank" rel="noopener noreferrer">この子を むかえにいく ▶</a>`
-          : `<div class="keybtn big" style="background:#8b8792;border-bottom-color:#5f5b66;cursor:not-allowed">購入リンク ${TODO}</div>`}
+          : `<div class="keybtn big" style="background:#8b8792;border-bottom-color:#5f5b66;cursor:not-allowed">販売の準備中です</div>`}
         <div class="buynote">・送料込みの価格です<br>・1台ずつ最終調整してからお届けします<br>・お問い合わせは購入したお店のメッセージ機能へ</div>
         <div style="font-size:13px;font-weight:900;margin-top:10px"><a href="詳しく.html" style="color:var(--mint-deep)">📋 くわしい仕様・注意がきを見る ▶</a></div>
       </div>

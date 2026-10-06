@@ -75,6 +75,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .bb-logo{height:44px;vertical-align:middle}
 .warnbox{background:#fff3f6;border:4px solid #ff3b5c;color:#7a1030;border-radius:18px;padding:16px 20px;font-size:24px;line-height:1.5;margin:26px 0 18px;font-weight:700} /* 2026-09-14 たけろう指示: マル型の USB-C の注意を目立つ色で上の方に */
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
 </head>
 <body>
 
@@ -161,7 +162,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
   <div class="sub">販売と決済はBASEショップでおこないます</div>
   <div class="tokusho" style="padding:24px 26px">
     <p style="font-size:19px;line-height:2">特定商取引法に基づく表記は、ご購入いただくBASEショップのページに掲載しています。<br>
-    <a href="#" id="tokusho-link" style="font-weight:900">📄 BASEショップの表記を見る ▶</a><span style="font-size:15px;color:#8b8792">(ショップ公開後にリンクが有効になります)</span></p>
+    <a aria-disabled="true" id="tokusho-link" style="font-weight:900">📄 BASEショップの表記を見る ▶</a><span style="font-size:15px;color:#8b8792">(ショップ公開後にリンクが有効になります)</span></p>
   </div>
   <div style="text-align:center"><a class="keybtn" href="index.html?in=1">◀ お店にもどる</a></div>
 </section>

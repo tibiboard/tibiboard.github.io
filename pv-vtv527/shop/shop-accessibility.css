@@ -1,0 +1,32 @@
+/* Shop navigation and readable first visit, 2026-10-03. */
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:4px solid #143e62;outline-offset:4px}
+.shop-intro{max-width:1120px;margin:0 auto;padding:32px 24px 40px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;background:#fff;color:#222226;text-align:left}
+.shop-intro img{display:block;width:100%;height:auto;border-radius:16px}
+.shop-intro h2{font-size:clamp(28px,4vw,42px);line-height:1.35;margin:0 0 20px;letter-spacing:0}
+.shop-intro p{font-size:24px;line-height:1.65;margin:0 0 20px}
+.shop-links{display:flex;flex-wrap:wrap;gap:12px}
+.shop-links a{display:block;padding:12px 18px;border:2px solid #704254;border-radius:12px;color:#563040;background:#fff;font-size:24px;font-weight:900;text-decoration:none;line-height:1.5}
+.shop-links a:first-child{background:#704254;color:#fff}
+.shop-links a:hover{text-decoration:underline}
+.guide-pending{font-size:24px;line-height:1.7;margin-bottom:24px}
+a.door[aria-disabled=true]{box-shadow:none;cursor:default;opacity:.8}
+a.door[aria-disabled=true]:hover{transform:none}
+.band a.back{color:#43283c}
+.buynote,.help,.ship{font-size:24px!important;line-height:1.8!important}
+@media(max-width:640px){
+ .shop-intro{grid-template-columns:1fr;gap:20px;padding:20px 16px 28px}
+ .shop-intro img{max-height:260px;object-fit:contain}
+ .shop-intro p{font-size:24px}
+ .shop-links{display:grid;grid-template-columns:1fr;width:100%}
+ .band{padding:14px 16px;gap:14px}
+ .band h1{letter-spacing:0;overflow-wrap:anywhere}
+ .shin-arrow.prev{left:0!important}.shin-arrow.next{right:0!important}
+ table.spec{table-layout:fixed;overflow-wrap:anywhere}
+ table.spec th{width:30%}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+.slot:has(img)>.ic,.slot:has(img)>.t{display:none}
+.purchase-includes{font-size:24px;line-height:1.7;margin:16px 0}
+
+#moji-sec:not(.river-visible) .moji-row{animation-play-state:paused}

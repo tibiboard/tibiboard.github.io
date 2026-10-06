@@ -38,7 +38,7 @@ img{max-width:100%}
 .ehon.bg-pink{background:linear-gradient(180deg,#f3accc,#c9ade6)}
 .ehon{position:relative}
 .ehon>*{position:relative;z-index:1}
-.ehon .photo-wrap{width:min(94vw,1040px);height:66vh;height:66svh;/* 2026-09-12 */border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.15);position:relative;background:#e9e7ec;z-index:1}
+.ehon .photo-wrap{width:min(94vw,1040px);height:66vh;height:66svh;/* 2026-09-12 たけろう指示: 紙芝居を一回り大きく(900→1040・58→66svh) */border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.15);position:relative;background:#e9e7ec;z-index:1}
 .ehon .photo-wrap img{width:100%;height:100%;object-fit:cover;display:block}
 .ehon .photo-wrap.slot-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#6b6672;border:3px dashed var(--line)}
 .ehon .photo-wrap.slot-empty .ic{font-size:48px}
@@ -61,7 +61,7 @@ img{max-width:100%}
 .ehon.bg-pink h2{color:#7a0f45}
 .ehon h2 em{font-style:normal;color:var(--pink)}
 .ehon.bg-pink h2 em{color:var(--mint-deep)}
-.ehon p.sub{font-size:clamp(18px,2.4vw,22px);color:#1b1622;font-weight:700;max-width:680px}/* 2026-09-12 */
+.ehon p.sub{font-size:clamp(18px,2.4vw,22px);color:#1b1622;font-weight:700;max-width:680px}/* 2026-09-12 たけろう指示: 灰色をやめ、どの背景でも読める濃い色。小さい字も18px以上に */
 
 /* セクション番号キーキャップ */
 .sec-num{position:absolute;left:clamp(10px,3vw,24px);top:14px;width:48px;height:48px;border-radius:20%;
@@ -233,9 +233,10 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .std-tag{position:absolute;right:14px;top:-14px;transform:rotate(12deg);background:var(--pink);color:#fff;font-family:"Mochiy Pop One","M PLUS Rounded 1c",sans-serif;font-weight:400;font-size:clamp(18px,3vw,26px);padding:4px 18px;border-radius:999px;box-shadow:0 4px 0 rgba(0,0,0,.18);letter-spacing:2px}
 .opt-plus{flex:0 0 auto;width:auto;align-self:center;font-family:"Mochiy Pop One","M PLUS Rounded 1c",sans-serif;font-size:clamp(34px,6vw,56px);color:var(--pink-deep);line-height:1;margin:0 -4px}
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
 </head>
 <body>
-<div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0;background:none;padding:0" title="Back to the shop"><img src="icons/logo_chibo.png" alt="tibiboard" style="height:1.2em;vertical-align:middle;display:block"></a><h1>What is tibiboard30?</h1><a class="lang" href="紹介_en.html" style="margin-left:0;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">EN</a><a class="lang" href="紹介.html" style="margin-left:0;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px">日本語</a><a href="index.html?in=1">◀ Back to the shop</a></div>
+<div class="band"><a class="sf" href="index_en.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0;background:none;padding:0" title="Back to the shop"><img src="icons/logo_chibo.png" alt="tibiboard" style="height:1.2em;vertical-align:middle;display:block"></a><h1>What is tibiboard30?</h1><a class="lang" href="紹介.html" style="margin-left:0;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">日本語</a><a href="index_en.html?in=1">◀ Back to the shop</a></div>
 
 <script>
 /* ============================================
@@ -244,15 +245,15 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
    写真を差し替えたい時は photos/ehon_◯.jpg を上書き保存するだけ
    ============================================ */
 const EHON = [
-  {h:'Tiny.<br>Cute.<br>And split in two.', p:'30 keys in total (left + right). 17 mm key pitch (19 mm is normal). Wireless (Bluetooth). USB works too'},
-  {h:'Two shapes: square and round.',   p:'The case comes in several materials, too → <a href="素材.html" style="color:var(--pink);text-decoration:underline">details</a>'},
-  {h:'Z is <em>special</em>.',      p:'Z = textured edition'},
+  {h:'ちいさい。<br>かわいい。<br>ふたつに わかれてる。', p:'左右あわせて 30キー。キーピッチ17mm(ふつうは19mm)。無線(Bluetooth)。USBでも つながる'},  /* 2026-09-12 たけろう指示: 30キーを入れる */
+  {h:'かたちは シカクと マル。',           p:'ケースの素材も いろいろあるよ → <a href="素材.html" style="color:var(--pink);text-decoration:underline">くわしく</a>'},  /* 2026-09-12 たけろう指示(2回目)。ここから素材の紹介ページへ飛ばす予定 */
+  {h:'Zは、<em>とくべつ</em>。',      p:'Zが ついたら ザラザラエディションだよ'},
   {h:'Made one at a time, by hand.',      p:'3D-printed case. With a bunny name plate'},
-  {h:'The left half<br>gives a little buzz.',   p:'There is a vibration motor inside'},  /* 2026-09-12 */
-  {h:'<em>Comes with its own app.</em><br>Remapping keys is easy.', p:'Desktop app and browser app. Works on Mac too'},  /* 2026-09-12 */
-  {h:'You can swap the switches.',       p:'Hot-swap. The bunny keycap comes only with the switch + keycap set'},
+  {h:'左手が<br>ぷるっと ふるえる。',       p:'バイブが 入っています'},  /* 2026-09-12 たけろう指示 */
+  {h:'<em>専用アプリ</em>つき。<br>キーの編集が かんたん。', p:'デスクトップ版と ブラウザ版。Macでも つかえる'},  /* 2026-09-12 たけろう指示: 専用アプリが付いてくると大きく */
+  {h:'キースイッチを つけかえられる。',     p:'ホットスワップ対応。うさぎキャップは スイッチ+キーキャップのセットを 買った人だけ'}  /* 2026-09-13 たけろう */,
   {h:'Kit or assembled — your choice.',   p:'Want to build it yourself? Pick the kit'},
-  {h:'An LED shows the battery level.', p:'Like a traffic light. 75%+ = rainbow / 50%+ = blue / 25%+ = yellow / below = red'},
+  {h:'LEDが でんちの のこりを<br>おしえてくれる。',  /* 2026-09-12 たけろう指示: 「のこりを」で改行 */ p:'しんごうと おなじだよ。75%〜=にじいろ / 50%〜=あお / 25%〜=きいろ / それより下=あか'},
 ];
 /* ▲編集ここまで▲ */
 </script>
@@ -264,7 +265,7 @@ const EHON = [
   <style>#sec01 .photo-wrap{width:100vw !important;max-width:none !important;height:min(86svh,1100px) !important;max-height:none !important;aspect-ratio:auto !important;border-radius:0 !important;margin-left:calc(50% - 50vw)}#sec01 .photo-wrap img{object-position:center 62%}#sec01{padding-top:0 !important}
   /* 2026-09-11 たけろう指示「スマホで1枚目の透明ケースの写真が両端見切れる」: 4:3 の写真を 86svh の縦長の枠に cover で入れていたため。スマホは写真の比率のままにする */
   @media(max-width:640px){#sec01 .photo-wrap{height:auto !important;aspect-ratio:4/3 !important}}</style>
-  <div class="photo-wrap"><img src="photos/ehon_s_1.jpg" alt="clear tibiboard, lit from below" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.jpg</div>'"></div>
+  <div class="photo-wrap"><img src="photos/ehon_s_1.jpg" alt="下から光るクリアのちびボード" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.jpg</div>'"></div>
   <h2 data-ehon="0"></h2>
   <p class="sub" data-ehonp="0"></p>
   <button class="keycap mmbtn" id="openMM">📏 See the real size</button>
@@ -299,8 +300,8 @@ const EHON = [
     <img src="photos/ehon_z.jpg" alt="round Z (textured finish)" class="on">
     <img src="photos/ehon_z_2.jpg" alt="square Z (textured finish, left and right)" loading="lazy">
     <img src="photos/ehon_z_3.jpg" alt="black Z (textured finish)" loading="lazy">
-    <img src="photos/ehon_z_4.jpg" alt="Round Z (textured, stacked)" loading="lazy">
-    <img src="photos/ehon_z_5.jpg" alt="Round Z (textured, outdoors)" loading="lazy">
+    <img src="photos/ehon_z_4.jpg" alt="まるZ(ざらざら・積んだところ)" loading="lazy">
+    <img src="photos/ehon_z_5.jpg" alt="まるZ(ざらざら・そとで)" loading="lazy">
     <div class="zmarks"><button type="button" class="zm ci on" aria-label="round"><i></i></button><button type="button" class="zm sq" aria-label="square"><i></i></button><button type="button" class="zm bk" aria-label="black"><i></i></button><button type="button" class="zm ci" aria-label="round"><i></i></button><button type="button" class="zm ci" aria-label="round"><i></i></button></div>
   </div>
   <h2 data-ehon="2"></h2>
@@ -356,7 +357,7 @@ const EHON = [
 <section class="ehon bg-pink shin-sec">
   <div class="sec-num">06b</div>
   <h2>When does it buzz?</h2>
-  <p class="sub">Use ← → to flip</p>
+  <p class="sub">← → で めくってね</p><!-- 2026-09-12 たけろう指示: 「左手側が手に返事をします」は削除 -->
   <div class="shin-slider">
     <div class="shin-track" id="shinTrack"><div class="shin-card"><div class="ic">🔌</div><div class="t">When you turn it on</div><div class="s">The &quot;I am on&quot; signal</div><div class="buzz">buzz</div></div><div class="shin-card"><div class="ic">🔋</div><div class="t">When the battery is low</div><div class="s">Time to charge</div><div class="buzz">buzz</div></div><div class="shin-card"><div class="ic">📶</div><div class="t">When you switch devices</div><div class="s">PC → iPad, etc.</div><div class="buzz">buzz</div></div><div class="shin-card"><div class="ic">✅</div><div class="t">When it connects</div><div class="s">No need to look at the screen</div><div class="buzz">buzz</div></div><div class="shin-card"><div class="ic">🔤</div><div class="t">When the layer changes</div><div class="s">You entered number / symbol mode</div><div class="buzz">buzz</div></div><div class="shin-card"><div class="ic">⏱</div><div class="t">Timer / Pomodoro</div><div class="s">A buzz when time is up</div><div class="buzz">buzz</div></div><div class="shin-card"><div class="ic">⌨</div><div class="t">Bind it to any key</div><div class="s">Just set it in the app</div><div class="buzz">buzz</div></div></div>
     <button type="button" class="shin-arrow prev" id="shinPrev" aria-label="previous">◀</button>
@@ -416,7 +417,7 @@ const EHON = [
     <div style="position:absolute;left:3%;top:5%;pointer-events:none;background:var(--pink-deep);color:#fff;font-weight:900;font-size:clamp(14px,2.4vw,25px);padding:4px 16px;border-radius:999px;letter-spacing:1px;border:3px solid #fff;filter:drop-shadow(0 4px 6px rgba(0,0,0,.28))">His name is batsubei</div>
   </div>
   <h2>One engraved bunny keycap<br>comes as a bonus.</h2>
-  <p class="sub" style="color:var(--pink);font-weight:900">* Only for those who purchase the keycaps + key switches (+5,000 yen)</p>
+  <p class="sub" style="color:var(--pink);font-weight:900">※ キーキャップとキースイッチ(+5,000円)を 購入していただいた方のみ</p><!-- 2026-09-13 たけろう -->
   <p class="sub">The bunny keycap, the bottom color of the case, the power switch, and the color / design / material of the right-hand name plate are whatever the maker found cute that day (the price changes a little with the material).</p>
 </section>
 
@@ -426,7 +427,7 @@ const EHON = [
   <style>@media(max-width:640px){#sec10 .photo-wrap{flex-direction:column !important;align-items:center !important}#sec10 .photo-wrap>div{max-width:100% !important;width:100%}} /* 2026-09-11 たけろう指示: スマホで見切れる→縦並び */
   #sec10 .photo-wrap{height:auto !important;max-height:none !important;aspect-ratio:auto !important}#sec10 .photo-wrap svg{max-height:150px;flex:0 0 auto !important}#sec10 .photo-wrap>div{justify-content:flex-start !important;min-height:0}#sec10 .photo-wrap div[style*='border-radius:999px']{white-space:nowrap;font-size:clamp(18px,3vw,26px) !important}</style>
   <div class="photo-wrap" style="background:linear-gradient(180deg,var(--mint-pale),var(--pink-pale));display:flex;align-items:stretch;justify-content:center;gap:clamp(10px,2.5vw,22px);padding:clamp(10px,2.5vw,22px)">
-    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;position:relative"><div class="std-tag">Standard</div>
+    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;position:relative"><div class="std-tag">標準</div>
       <svg viewBox="0 0 220 180" style="width:100%;max-width:260px;flex:1" xmlns="http://www.w3.org/2000/svg">
         <!-- 完成キーボード本体どーん -->
         <rect x="14" y="44" width="192" height="102" rx="20" fill="var(--pink-pale)" stroke="var(--pink-deep)" stroke-width="5"/>
@@ -565,10 +566,10 @@ const EHON = [
         </g>
         <text x="110" y="32" font-size="24" text-anchor="middle">🔩</text>
       </svg>
-      <div style="font-weight:900;color:var(--pink-deep);font-size:clamp(17px,3vw,25px);text-align:center;line-height:1.3">Keycaps +<br>key switches</div>
+      <div style="font-weight:900;color:var(--pink-deep);font-size:clamp(17px,3vw,25px);text-align:center;line-height:1.3">キーキャップと<br>キースイッチ</div>
       <div style="margin-top:4px;background:var(--mint-pale);color:var(--mint-deep);font-weight:900;font-size:clamp(14px,2.4vw,18px);border-radius:999px;padding:4px 16px;border:3px dashed var(--mint)">✅ You can choose</div>
-      <div style="font-size:clamp(13px,2.2vw,16px);color:var(--ink2);font-weight:700">Kailh Deep Sea Silent Mini Islet + keycaps. Or add your own favorites</div>
-      <div style="margin-top:8px;background:var(--pink);color:#fff;font-weight:900;font-size:clamp(24px,4vw,30px);border-radius:999px;padding:6px 22px;box-shadow:0 4px 0 rgba(0,0,0,.12)">+5,000 yen</div>
+      <div style="font-size:clamp(13px,2.2vw,16px);color:var(--ink2);font-weight:700">Kailh Deep Sea Silent Mini Islet + キャップ。つけないなら すきなのを じぶんで</div>
+      <div style="margin-top:8px;background:var(--pink);color:#fff;font-weight:900;font-size:clamp(24px,4vw,30px);border-radius:999px;padding:6px 22px;box-shadow:0 4px 0 rgba(0,0,0,.12)">+5,000えん</div>
     </div>
   </div>
   <p class="sub" style="text-align:center;margin:10px auto 0">Prices may go up depending on materials and how it is made.</p>
@@ -584,17 +585,17 @@ const EHON = [
   <div class="bottombtns">
     <a class="keycap keybtn accent" href="詳しく_en.html">📋 See the specs ▶</a>
 <a class="keycap keybtn accent" href="購入者_en.html" style="display:block;max-width:560px;margin:22px auto 0;text-align:center;font-size:clamp(20px,3.4vw,28px);line-height:1.4">🛍 Already bought one? This way ▶</a>
-    <a class="backlink" href="index.html?in=1">◀ Back to the shop</a>
+    <a class="backlink" href="index_en.html?in=1">◀ Back to the shop</a>
   </div>
 </section>
 
 <!-- じっすん=Suica写真2枚(2026-08-20 たけろう撮影・決定8/19「実寸ギミック→Suica写真に差し替え」) -->
 <div class="overlay" id="mmOverlay">
   <div class="overlay-box" style="max-width:720px">
-    <h3 style="font-size:clamp(24px,5vw,34px)">About the size of a Suica card (or a credit card)</h3>
+    <h3 style="font-size:clamp(24px,5vw,34px)">Suica(クレカ)と おなじくらい</h3>
     <img src="photos/ehon_suica_1.jpg" alt="tibiboard with a Suica card on it (angled)" style="width:100%;border-radius:18px;display:block;margin:10px 0">
     <img src="photos/ehon_suica_2.jpg" alt="tibiboard with a Suica card on it (top view)" style="width:100%;border-radius:18px;display:block;margin:10px 0">
-    <img src="photos/ehon_card_maru.jpg" alt="tibiboard (round) with a credit card on it" style="width:100%;border-radius:18px;display:block;margin:10px 0">  <!-- 2026-09-30 たけろう: まるにクレカをのせた写真 -->
+    <img src="photos/ehon_card_maru.jpg" alt="クレジットカードをのせたちびボード(まる)" style="width:100%;border-radius:18px;display:block;margin:10px 0">  <!-- 2026-09-30 たけろう: まるにクレカをのせた写真 -->
     <button class="mm-close" id="closeMM" style="font-size:20px;padding:14px 34px">Close</button>
   </div>
 </div>
@@ -700,7 +701,7 @@ document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset
     const credit=document.createElement('div');
     credit.className='gacha-credit';
     const CREDIT_DEFAULT='The chocolate-mint keycaps are by KaniCraft → <a href="https://kanicraft.booth.pm" target="_blank" rel="noopener">BOOTH (KaniCraft)</a>';
-    const CREDIT_KAZYCAP='The keycaps with printed legends are by kazycap → <a href="https://kz-keyboard-shop.booth.pm/items/8469772" target="_blank" rel="noopener">BOOTH (kz-keyboard-shop)</a>';
+    const CREDIT_KAZYCAP='文字入りのキーキャップは kazycap様の作品です → <a href="https://kz-keyboard-shop.booth.pm/items/8469772" target="_blank" rel="noopener">BOOTH(kz-keyboard-shop)</a>';
     function updateCredit(i){
       credit.innerHTML = ['cine_23.jpg','cine_27.jpg'].includes(names[i]) ? CREDIT_KAZYCAP : CREDIT_DEFAULT; /* 2026-09-30: 文字入りキーキャップの写真はすべて kazycap様の案内 */
     }

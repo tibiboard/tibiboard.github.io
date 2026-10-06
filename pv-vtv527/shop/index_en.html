@@ -4,21 +4,21 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
-<meta name="description" content="tibiboard shop. A palm-sized, cute split keyboard: tibiboard30. Play in the shop and collect bunnies while you wait for the next drop ">
+<meta name="description" content="Explore tibiboard30, a handmade 30-key split keyboard with Bluetooth and USB. See real photos, specifications and products.">
 <meta charset="utf-8">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="tibiboard shop">
-<meta property="og:title" content="tibiboard — a tiny split keyboard. Made one at a time, by hand.">
-<meta property="og:description" content="tibiboard30, a palm-sized split keyboard with a bunny name plate. Made one at a time in Japan ">
+<meta property="og:title" content="tibiboard30 — handmade 30-key split keyboard">
+<meta property="og:description" content="Explore tibiboard30, a handmade 30-key split keyboard with Bluetooth and USB. See real photos, specifications and products.">
 <meta property="og:image" content="https://tibiboard.github.io/shop/og.jpg">
-<meta property="og:url" content="https://tibiboard.github.io/">
+<meta property="og:url" content="https://tibiboard.github.io/shop/index_en.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@tibiboard">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>tibiboard shop</title>
+<title>tibiboard30 — handmade 30-key split keyboard</title>
 <script src="data/商品リスト.js"></script>
 <script src="data/おしらせ.js"></script>
 <script src="data/うさぎ図鑑.js"></script>
@@ -443,21 +443,39 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   .item.sold .st{display:none !important}   /* スマホは写真の中のテープ(.tape)で表す(後ろの通常指定に負けないよう !important) */
   .item .ph .tape{display:block;position:absolute;right:-14px;bottom:14px;width:max-content;white-space:nowrap;transform:rotate(-24deg);font-size:10px;font-weight:900;padding:2px 20px;border-radius:2px;background:#ff3b5c;color:#fff;box-shadow:0 3px 6px rgba(0,0,0,.45);letter-spacing:1px;line-height:1.2;z-index:6;font-family:'M PLUS Rounded 1c',sans-serif}
 }
+/* 2026-10-06: 紹介への近道(ばつべーの後)・下に移した あそびば・紹介された枠 */
+.intro-door{max-width:520px;margin:0 auto 10px}
+.intro-door .intro-sub{font-weight:900;font-size:24px;color:var(--pink-deep);margin-top:8px}
+#asobi-sec{max-width:none;padding:40px 18px 30px;background:linear-gradient(180deg,#f9debc,#d4b6e8)}
+#asobi-sec .asobi-doors{grid-template-columns:minmax(280px,420px);justify-content:center}
+#asobi-sec .asobi-play{margin-top:36px}
+#asobi-sec #pcoin{display:none} /* すぐ下に同じコインがあるので、あそびばの中のコインは出さない */
+#found-sec{max-width:760px;padding:24px 18px 10px;margin:0 auto}
+.found-card{display:block;text-decoration:none;color:#3a2a33;background:#fff;border:5px solid #f3accc;border-radius:22px;padding:22px 24px;text-align:center;box-shadow:0 6px 0 rgba(183,156,224,.35)}
+.found-card:hover{transform:translateY(-3px)}
+.found-lead{font-weight:900;font-size:24px;color:var(--pink-deep)}
+.found-name{font-weight:900;font-size:clamp(28px,5vw,40px);margin:6px 0 10px;letter-spacing:1px}
+.found-text{font-size:24px;line-height:1.6}
+.found-go{display:inline-block;margin-top:14px;font-weight:900;font-size:24px;color:#fff;background:linear-gradient(135deg,#ee85b5,#b79ce0);border-radius:999px;padding:8px 26px}
+
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
+<link rel="canonical" href="https://tibiboard.github.io/shop/index_en.html">
 </head>
 <body>
 
 <!-- 開幕: 電源スイッチ -->
 <div id="bootflash"></div>
-<div id="boot">
+<div id="boot" class="off" hidden style="display:none">
   <div class="sw" id="sw"><div class="knob"></div></div>
   <div class="hint">— turn on the power —</div>
 </div>
 
 <!-- 世界 -->
-<div id="world">
-  <div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0;background:none;padding:0" title="Back to the shop"><img src="icons/logo_chibo.png" alt="tibiboard" style="height:1.2em;vertical-align:middle;display:block"></a><h1>tibiboard</h1><span class="obi">a tiny split keyboard, made one at a time by hand.</span><a class="lang" href="index.html?in=1" style="margin-left:auto;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">日本語</a></div>
+<div id="world" class="lit">
+  <div class="band"><a class="sf" href="index_en.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0;background:none;padding:0" title="Back to the shop"><img src="icons/logo_chibo.png" alt="tibiboard" style="height:1.2em;vertical-align:middle;display:block"></a><h1>tibiboard</h1><span class="obi">a tiny split keyboard, made one at a time by hand.</span><a class="lang" href="index.html" style="margin-left:auto;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">日本語</a></div>
 
+<section class="shop-intro" aria-label="ちびボード30の紹介"><img src="photos/ehon_s_1.jpg" width="1200" height="900" alt="クリア素材のちびボード30。左右に分かれたキーボード" fetchpriority="high"><div><h2>A small keyboard,<br>made one at a time.</h2><p>30 keys, split into two halves. Connect by Bluetooth or USB.</p><nav class="shop-links" aria-label="お店の案内"><a href="紹介_en.html">See the keyboard</a><a href="#shelf">See the products</a><a href="詳しく_en.html">Specs &amp; before you buy</a></nav></div></section>
   <!-- ヒーロー: 主役はばつべー -->
   <div class="hero" id="hero">
     <img class="batsu" id="batsu" src="../img/バツベイ_アイコン800.png" alt="batsubei" onerror="this.style.display='none'">
@@ -494,16 +512,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
       </div>
     </div>
     <div class="moji-cta">
-      <div class="playdoor-wrap">
-        <div class="playdoor">
-          <div class="pt">🎮 Playground</div>
-          <div class="pgames">
-            <a class="pgame" href="../うさぎ探し体験版.html"><img class="pi" id="pg1" alt=""><div class="pl">🔍 Find the bunny</div></a>
-            <a class="pgame" href="../はしればつべー.html"><img class="pi" id="pg2" alt=""><div class="pl">🏃 Run, batsubei!</div></a>
-          </div>
-          <div class="pcoin" id="pcoin"></div>
-        </div>
-      </div>
+      <!-- 2026-10-06 たけろう指示: ここは紹介ページへの近道。あそびばは一番下へ -->
+      <a class="door intro-door" href="紹介_en.html">
+        <img class="door-icon icon-batsu" src="../img/バツベイ_アイコン800.png" alt="" onerror="this.remove()">
+        <div class="dl">❓ What is tibiboard30?</div>
+        <div class="intro-sub">See it in photos ▶</div>
+      </a>
     </div>
   </section>
 
@@ -520,29 +534,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
         <img class="door-icon icon-batsu" src="../img/バツベイ_アイコン800.png" alt="" onerror="this.remove()">
         <div class="dl">❓ What is tibiboard30?</div>
       </a>
-      <a class="door mintdoor" href="うさぎのへや.html">
-        <img class="door-icon icon-usagi" src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">
-        <div class="dl">📖 Bunny book</div>
-      </a>
     </div>
     <a class="keybtn big" href="購入者_en.html" style="display:block;margin:26px auto 0;background:var(--mint-deep);border-bottom-color:#4c7a92;font-size:clamp(20px,3.6vw,30px);line-height:1.4;padding:22px 20px;text-align:center;max-width:560px">🛍 Already bought one?<br>This way ▶</a>
     <!-- コインの使い道: ミニチュアの台そのものを見せる(無料ゲームとは並べない) -->
-    <div class="mycoin" id="mycoin"></div>
-    <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="About saved data">?</button>
-    <div class="coingames" id="takara">
-      <!-- 2026-09-12 たけろう決定: ガチャは廃止(スロット1本)。台の絵とリンクを外した。戻すなら _直前退避\2026-09-12_専用アプリ文とガチャ廃止前 -->
-      <a class="minimachine" href="../スロット_新台.html" title="Slots">
-        <div class="sbox">
-          <div class="sreels"><b></b><b></b><b></b></div>
-          <div class="sball"></div>
-        </div>
-      </a>
-    </div>
-    <div class="chalcall">
-      <div class="chalarrows"><span><svg viewBox="0 0 60 74" width="210" height="259"><path d="M30 7 Q34 7 37 11 L51 29 Q57 37 48 37 L41 37 L41 57 Q41 68 30 68 Q19 68 19 57 L19 37 L12 37 Q3 37 9 29 L23 11 Q26 7 30 7 Z" fill="#b79ce0" stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg></span></div><!-- 2026-09-12 たけろう指示: 矢印は1つ(ガチャ廃止でスロットだけ) -->
-      <!-- 2026-08-20 たけろう: 「コインをつかって 鍵をゲット」だけ。隠しコマンドの話はここで言わない(どこかで気づかせる) -->
-      <div class="chaltext"><span class="chibiCoinGui inline" aria-hidden><span class="cg-disc" style="font-size:1.35em"></span></span> → get a<br>🔑<b>key</b>!</div>
-    </div>
   </section>
 
   <!-- おしらせ板(公式ニュース枠。棚が増えても押されないよう最下部固定。2026-08-15移設) -->
@@ -566,6 +560,52 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
         <a class="sub" href="https://www.e-sportsbar-niigata.com/fireworks/" target="_blank" rel="noopener">Team page (official) ▶</a>
       </div>
       <div class="sp-small">We look forward to seeing tibiboard in the players' hands <img class="bb" src="../img/バツベイ_アイコン800.png" alt="batsubei"></div>
+    </div>
+  </section>
+
+  <!-- 2026-10-06 たけろう指示: NyattoLand for X(Chrome 拡張)の「ねこが見つけたもの」で紹介された -->
+  <section id="found-sec">
+    <a class="found-card" href="https://nyatto-land-for-x.thekarou.com" target="_blank" rel="noopener">
+      <div class="found-lead">🐈 We were featured</div>
+      <div class="found-name">NyattoLand for X</div>
+      <div class="found-text">A Chrome extension that lets cats play on X (Twitter).<br>tibiboard was featured in its “Things the cats found”.</div>
+      <div class="found-go">Take a look ▶</div>
+    </a>
+  </section>
+
+  <!-- 2026-10-06 たけろう指示: うさぎずかん・ゲームは本業ではないので一番下 -->
+  <section id="asobi-sec">
+    <div class="doors asobi-doors">
+      <a class="door mintdoor" href="うさぎのへや.html">
+        <img class="door-icon icon-usagi" src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">
+        <div class="dl">📖 Bunny book</div>
+      </a>
+    </div>
+    <div class="playdoor-wrap asobi-play">
+        <div class="playdoor">
+          <div class="pt">🎮 Playground</div>
+          <div class="pgames">
+            <a class="pgame" href="../うさぎ探し体験版.html"><img class="pi" id="pg1" alt=""><div class="pl">🔍 Find the bunny</div></a>
+            <a class="pgame" href="../はしればつべー.html"><img class="pi" id="pg2" alt=""><div class="pl">🏃 Run, batsubei!</div></a>
+          </div>
+          <div class="pcoin" id="pcoin"></div>
+        </div>
+      </div>
+    <div class="mycoin" id="mycoin"></div>
+    <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="About saved data">?</button>
+    <div class="coingames" id="takara">
+      <!-- 2026-09-12 たけろう決定: ガチャは廃止(スロット1本)。台の絵とリンクを外した。戻すなら _直前退避\2026-09-12_専用アプリ文とガチャ廃止前 -->
+      <a class="minimachine" href="../スロット_新台.html" title="Slots">
+        <div class="sbox">
+          <div class="sreels"><b></b><b></b><b></b></div>
+          <div class="sball"></div>
+        </div>
+      </a>
+    </div>
+    <div class="chalcall">
+      <div class="chalarrows"><span><svg viewBox="0 0 60 74" width="210" height="259"><path d="M30 7 Q34 7 37 11 L51 29 Q57 37 48 37 L41 37 L41 57 Q41 68 30 68 Q19 68 19 57 L19 37 L12 37 Q3 37 9 29 L23 11 Q26 7 30 7 Z" fill="#b79ce0" stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg></span></div><!-- 2026-09-12 たけろう指示: 矢印は1つ(ガチャ廃止でスロットだけ) -->
+      <!-- 2026-08-20 たけろう: 「コインをつかって 鍵をゲット」だけ。隠しコマンドの話はここで言わない(どこかで気づかせる) -->
+      <div class="chaltext"><span class="chibiCoinGui inline" aria-hidden><span class="cg-disc" style="font-size:1.35em"></span></span> → get a<br>🔑<b>key</b>!</div>
     </div>
   </section>
 
@@ -640,10 +680,8 @@ if(window.CHIBI){
 /* ===== 写真プレースホルダ ===== */
 function slot(file, label, size, ratio){
   return `<div class="slot" style="aspect-ratio:${ratio}">
-    <div class="fn">📷 ${file||'—'}</div>
     <div class="ic">📷</div>
-    <div class="t">photo: ${label}</div>
-    <div class="s">recommended ${size}<br>photos/${file||'__要記入__'}</div>
+    <div class="t">Photo coming soon</div>
     ${file?`<img src="photos/${file}" alt="${label}" onerror="this.remove()">`:''}
   </div>`;
 }
@@ -674,7 +712,7 @@ function parseShop(txt){
     const c = l.split('|').map(s=>s.trim());
     if(c.length < 3) return;
     const st = c[1] || '';
-    items.push({name:c[0], state:st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':(st.startsWith('準備中')?'準備中':'いる'))),
+    items.push({name:c[0], state:st==='いる'?'いる':(st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':'準備中'))),
       /* 2026-08-17: 「準備中 2026-09-14」のように日付つきでも準備中判定されるようstartsWithに変更(S1) */
       date:(st.match(/\d{4}-\d{2}-\d{2}/)||[''])[0], price:parseInt(c[2])||0,
       base:(c[3]||'').replace(/\.(jpg|jpeg|png|webp)$/i,''), color:c[4]||'', story:c[5]||'',
@@ -691,10 +729,10 @@ function tagsHtml(it){
   if(!glass && !clear0(it)) return `<div class="tags inline"><span class="tg model">${sk==='za'?'tibiboard30Z':'tibiboard30'}</span></div>`;
   const names = {sq:'square', ci:'round', za:'textured'};
   /* 2026-09-11 たけろう指示: 形は文字で(四角/丸/Z)、透明フィラメント=S。写真に重ねず名前の横に(inline) */
-  const shapeText = {sq:'Square', ci:'Round', za:'Z'}[sk] || '';
+  const shapeText = {sq:'シカク', ci:'マル', za:'Z'}[sk] || ''; /* 2026-09-14 たけろう指示: カタカナ */
   /* 2026-09-11 たけろう指示: ガラスはガラスと書く。S は透明フィラメント(スケスケ)の時だけ。36 も出すので「ちびボード30」を書く */
   const clear = /透明|スケスケ|クリア|clear/i.test(it.mat||'');
-  return `<div class="tags inline"><span class="tg model">${sk==='za'?'tibiboard30Z':'tibiboard30'}</span>${false&&sk&&sk!=='za'?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨Glass</span>`:''}${clear?`<span class="tg mat">Clear</span>`:''}</div>`;
+  return `<div class="tags inline"><span class="tg model">${sk==='za'?'tibiboard30Z':'tibiboard30'}</span>${false&&sk&&sk!=='za'?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i>${shapeText}</span>`:''}${glass?`<span class="tg mat">✨Glass</span>`:''}${clear?`<span class="tg mat">クリア</span>`:''}</div>`;
 }
 const {conf, items} = parseShop(window.SHOP_DATA);
 
@@ -817,7 +855,7 @@ window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__river
   /* 2026-09-11 たけろう報告「スマホで1列しか流れない/全く出ない時がある」: 288枚を loading=lazy で動く列に入れていた。
      動いている要素の遅延読み込みは環境(iOS Safari 等)で発火しないことがあるので、遅延をやめ、スマホは枚数を 48→16/列 に絞る */
   const MOBILE = matchMedia('(max-width:640px)').matches;
-  /* 2026-09-14: iPad(〜1100px)は 24枚/列(Safari が 288枚を描き切れず空白になる) */
+  /* 2026-09-14 たけろう報告「iPad で川が流れず空白だらけ・回転すると直る」: iPad は 640px より広く PC 扱い=1列 96枚×3列(影つき)を Safari が描き切れない。タブレット幅(〜1100px)は 24枚/列に */
   const TABLET = !MOBILE && matchMedia('(max-width:1100px)').matches;
   const bucket = [shuffled(), shuffled(), shuffled()].map(a => MOBILE ? a.slice(0,16) : (TABLET ? a.slice(0,24) : a));
   const heights = [120,150,180,135,165,120,150];
@@ -830,7 +868,7 @@ window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__river
         const img=document.createElement('img');
         img.src=f; img.alt='tibiboard'; img.loading='eager'; img.decoding='async';
         const hh = heights[i%heights.length]; img.style.setProperty('--h', hh+'px');
-        img.width = Math.round(hh*600/395); img.height = hh; /* 2026-09-14: 600×395 の小版。読み込み前に幅を確保 */
+        img.width = Math.round(hh*600/395); img.height = hh; /* 2026-09-14: 小版は 600×395。読み込み前に幅を確保して隙間と再配置を防ぐ */
         img.style.transform='rotate('+rots[(i+ri*3)%rots.length]+'deg)';
         img.onerror=()=>img.remove();
         row.appendChild(img);
@@ -846,7 +884,19 @@ window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__river
   const imgs=[...document.querySelectorAll('.moji-row img')];
   Promise.all(imgs.map(im=>im.complete?Promise.resolve():new Promise(res=>{im.onload=res; im.onerror=res;}))).then(()=>setTimeout(window.__kickRiver,50));
 };
-window.addEventListener('load', ()=>setTimeout(window.__buildRiver, 1500));
+// Build the decorative river only when its section approaches the viewport.
+window.addEventListener('load', ()=>{
+  const section=document.getElementById('moji-sec');
+  if(!section || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if('IntersectionObserver' in window){
+    const observer=new IntersectionObserver(entries=>{
+      const visible=entries.some(entry=>entry.isIntersecting);
+      section.classList.toggle('river-visible',visible);
+      if(visible) window.__buildRiver();
+    },{rootMargin:'200px'});
+    observer.observe(section);
+  }else{ section.classList.add('river-visible'); window.__buildRiver(); }
+});
 window.addEventListener('pageshow', ()=>{ if(window.__kickRiver) setTimeout(window.__kickRiver,300); });
 window.addEventListener('orientationchange', ()=>{ if(window.__kickRiver) setTimeout(window.__kickRiver,300); });
 
@@ -925,7 +975,7 @@ try {
         '<div class="datainfo-pop">' +
           '<button class="datainfo-close" type="button" aria-label="close">×</button>' +
           '<h3>💾 About saved data</h3>' +
-          '<p>Coins, keys and the bunny book are saved inside the browser you are using now.</p>' +
+          '<p>コインと 鍵、うさぎ図鑑は、いま つかっている ブラウザの なかに ほぞん されるよ。</p>' +
           '<p>・On another phone or PC, you start from 0</p>' +
           '<p>・Clearing browser data erases them (cannot be undone)</p>' +
           '<p>・iPhone Safari may erase them after 7 days without playing → add the page to your Home Screen to keep them</p>' +
@@ -987,7 +1037,7 @@ try {
 .key-float .kf-msg{left:50%;right:auto;transform:translateX(-50%);bottom:214px}
 .key-float.has::before{left:0;top:26px}.key-float.has::after{right:8px;bottom:18px}
 /* 2026-09-14 たけろう指示: 売れた個体のタグ(キット=オレンジ / +セット=ピンク)。商品リストの種別欄から */
-.tg.kit{background:#ff8c1a;color:#fff}.tg.set{background:var(--pink);color:#fff}.tg.full{background:var(--mint-deep);color:#fff}
+.tg.kit{background:#ff8c1a;color:#fff}.tg.set{background:var(--pink);color:#fff}.tg.full{background:var(--mint-deep);color:#fff} /* 旅立ちの完成版 */
 </style>
 <button class="key-float none" id="keyFloat" type="button" title="かぎ" aria-label="かぎ"><span class="kf-icon">🔑</span><span class="kf-n" id="keyFloatN">0</span><span class="kf-msg" id="keyFloatMsg"></span></button>
 <script>
@@ -999,10 +1049,10 @@ try {
   refresh(); setInterval(refresh, 800);
   const say=t=>{ km.textContent=t; km.classList.add('on'); setTimeout(()=>km.classList.remove('on'),2200); };
   kf.addEventListener('click',()=>{
-    if(C.getKeys()<1){ kf.classList.remove('shake'); void kf.offsetWidth; kf.classList.add('shake'); say('🔑 No key yet... win one at the slots'); return; }
+    if(C.getKeys()<1){ kf.classList.remove('shake'); void kf.offsetWidth; kf.classList.add('shake'); say('🔑 かぎが ない… スロットで 手に入れよう'); return; }
     if(document.getElementById('takaraOv')) return;
     const ov=document.createElement('div'); ov.id='takaraOv';
-    ov.innerHTML='<div class="tk-ttl">'+'🔑 Open with the key'+'</div><button class="takarabox" id="takarabox" type="button"><div class="tb-lid"></div><div class="tb-body"><span class="tb-q">?</span><i class="rv a"></i><i class="rv b"></i><i class="rv c"></i><i class="rv d"></i></div></button><button class="tk-close" type="button">'+'Close'+'</button>';
+    ov.innerHTML='<div class="tk-ttl">'+'🔑 かぎで あける'+'</div><button class="takarabox" id="takarabox" type="button"><div class="tb-lid"></div><div class="tb-body"><span class="tb-q">?</span><i class="rv a"></i><i class="rv b"></i><i class="rv c"></i><i class="rv d"></i></div></button><button class="tk-close" type="button">'+'とじる'+'</button>';
     document.body.appendChild(ov);
     ov.querySelector('.tk-close').onclick=()=>ov.remove();
     const box=ov.querySelector('#takarabox');

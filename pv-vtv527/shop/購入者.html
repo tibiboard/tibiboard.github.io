@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<meta name="robots" content="noindex,nofollow,noarchive">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet"><!-- 2026-09-11: 帯の「ちボ」を index と同じ書体に -->
 <meta charset="utf-8">
@@ -40,18 +41,20 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .bb{height:1.25em;width:auto;vertical-align:-.25em;display:inline-block}
 .bb-logo{height:44px;vertical-align:middle}
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
 </head>
 <body>
-<div class="band"><a class="sf" href="index.html?in=1" title="お店にもどる">ちボ</a><h1>購入いただいた方は こちらへどうぞ</h1><a class="back" href="index.html?in=1">◀ お店にもどる</a></div>
+<div class="band"><a class="sf" href="index.html?in=1" title="お店にもどる">ちボ</a><h1>購入いただいた方は こちらへどうぞ</h1><a class="back" href="購入者_en.html">EN</a><a class="back" href="index.html?in=1">◀ お店にもどる</a></div>
 <section>
   <div class="lead">どちらを 買いましたか?</div>
+  <p class="guide-pending">ガイドは公開準備中です。お困りの方は下のお問い合わせフォームをご利用ください。</p>
   <div class="two">
-    <a class="door" href="../../docs/発売後に公開へ戻す/_ガイド閲覧.html">
+    <a class="door" aria-disabled="true" data-guide-path="../../docs/発売後に公開へ戻す/_ガイド閲覧.html">
       <div class="ic">🔧</div>
       <div class="who">キットを 買った方</div>
       <div class="what">組み立てガイドを 見る ▶</div>
     </a>
-    <a class="door mint" href="../../docs/発売後に公開へ戻す/_ガイド閲覧.html">
+    <a class="door mint" aria-disabled="true" data-guide-path="../../docs/発売後に公開へ戻す/_ガイド閲覧.html">
       <div class="ic">🖥</div>
       <div class="who">完成品を 買った方</div>
       <div class="what">つなぐ・アプリを入れる ▶</div>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="robots" content="noindex,nofollow,noarchive">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet"><!-- 2026-09-11: 帯の「ちボ」を index と同じ書体に -->
 <meta charset="utf-8">
@@ -40,18 +41,20 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .bb{height:1.25em;width:auto;vertical-align:-.25em;display:inline-block}
 .bb-logo{height:44px;vertical-align:middle}
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
 </head>
 <body>
 <div class="band"><a class="sf" href="index_en.html?in=1" style="background:none;padding:0" title="Back to the shop"><img src="icons/logo_chibo.png" alt="tibiboard" style="height:1.2em;display:block"></a><h1>Already bought one? This way</h1><a class="back" href="購入者.html" style="margin-left:auto;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px">日本語</a><a class="back" href="index_en.html?in=1" style="margin-left:0">◀ Back to the shop</a></div>
 <section>
   <div class="lead">Which one did you buy?</div>
+  <p class="guide-pending">Guides are being prepared. Please use the contact form below if you need help.</p>
   <div class="two">
-    <a class="door" href="../../docs/発売後に公開へ戻す/_ガイド閲覧.html">
+    <a class="door" aria-disabled="true" data-guide-path="../../docs/発売後に公開へ戻す/_ガイド閲覧.html">
       <div class="ic">🔧</div>
       <div class="who">I bought the kit</div>
       <div class="what">Build guide ▶</div>
     </a>
-    <a class="door mint" href="../../docs/発売後に公開へ戻す/_ガイド閲覧.html">
+    <a class="door mint" aria-disabled="true" data-guide-path="../../docs/発売後に公開へ戻す/_ガイド閲覧.html">
       <div class="ic">🖥</div>
       <div class="who">I bought it assembled</div>
       <div class="what">Connect &amp; install the app ▶</div>

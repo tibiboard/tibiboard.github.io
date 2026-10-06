@@ -4,21 +4,21 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
-<meta name="description" content="ちびボード(tibiboard)のお店。手のひらサイズのかわいい左右分割キーボード tibiboard30。あそべるお店で、うさぎをあつめながらドロップを待とう">
+<meta name="description" content="左右に分かれた30キーの手づくりキーボード、ちびボード30。Bluetooth・USB接続。実物の写真、仕様、購入前の注意、商品を紹介します。">
 <meta charset="utf-8">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ちびボードのお店">
-<meta property="og:title" content="ちびボード — ちいさな、分割キーボード。1台ずつ、手づくり。">
-<meta property="og:description" content="手のひらサイズのかわいい左右分割キーボード tibiboard30。うさぎのばつべーと、1台ずつ手づくりのお店">
+<meta property="og:title" content="ちびボード30｜手づくりの30キー無線分割キーボード">
+<meta property="og:description" content="左右に分かれた30キーの手づくりキーボード、ちびボード30。Bluetooth・USB接続。実物の写真、仕様、購入前の注意、商品を紹介します。">
 <meta property="og:image" content="https://tibiboard.github.io/shop/og.jpg">
-<meta property="og:url" content="https://tibiboard.github.io/">
+<meta property="og:url" content="https://tibiboard.github.io/shop/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@tibiboard">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ちびボードのお店</title>
+<title>ちびボード30｜手づくりの30キー無線分割キーボード</title>
 <script src="data/商品リスト.js"></script>
 <script src="data/おしらせ.js"></script>
 <script src="data/うさぎ図鑑.js"></script>
@@ -443,21 +443,39 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   .item.sold .st{display:none !important}   /* スマホは写真の中のテープ(.tape)で表す(後ろの通常指定に負けないよう !important) */
   .item .ph .tape{display:block;position:absolute;right:-14px;bottom:14px;width:max-content;white-space:nowrap;transform:rotate(-24deg);font-size:10px;font-weight:900;padding:2px 20px;border-radius:2px;background:#ff3b5c;color:#fff;box-shadow:0 3px 6px rgba(0,0,0,.45);letter-spacing:1px;line-height:1.2;z-index:6;font-family:'M PLUS Rounded 1c',sans-serif}
 }
+/* 2026-10-06: 紹介への近道(ばつべーの後)・下に移した あそびば・紹介された枠 */
+.intro-door{max-width:520px;margin:0 auto 10px}
+.intro-door .intro-sub{font-weight:900;font-size:24px;color:var(--pink-deep);margin-top:8px}
+#asobi-sec{max-width:none;padding:40px 18px 30px;background:linear-gradient(180deg,#f9debc,#d4b6e8)}
+#asobi-sec .asobi-doors{grid-template-columns:minmax(280px,420px);justify-content:center}
+#asobi-sec .asobi-play{margin-top:36px}
+#asobi-sec #pcoin{display:none} /* すぐ下に同じコインがあるので、あそびばの中のコインは出さない */
+#found-sec{max-width:760px;padding:24px 18px 10px;margin:0 auto}
+.found-card{display:block;text-decoration:none;color:#3a2a33;background:#fff;border:5px solid #f3accc;border-radius:22px;padding:22px 24px;text-align:center;box-shadow:0 6px 0 rgba(183,156,224,.35)}
+.found-card:hover{transform:translateY(-3px)}
+.found-lead{font-weight:900;font-size:24px;color:var(--pink-deep)}
+.found-name{font-weight:900;font-size:clamp(28px,5vw,40px);margin:6px 0 10px;letter-spacing:1px}
+.found-text{font-size:24px;line-height:1.6}
+.found-go{display:inline-block;margin-top:14px;font-weight:900;font-size:24px;color:#fff;background:linear-gradient(135deg,#ee85b5,#b79ce0);border-radius:999px;padding:8px 26px}
+
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
+<link rel="canonical" href="https://tibiboard.github.io/shop/">
 </head>
 <body>
 
 <!-- 開幕: 電源スイッチ -->
 <div id="bootflash"></div>
-<div id="boot">
+<div id="boot" class="off" hidden style="display:none">
   <div class="sw" id="sw"><div class="knob"></div></div>
   <div class="hint">— でんげんをいれてください —</div>
 </div>
 
 <!-- 世界 -->
-<div id="world">
+<div id="world" class="lit">
   <div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0" title="お店にもどる">ちボ</a><h1>ちびボード</h1><span class="obi">〈ちいさな分割キーボード〉1台ずつ、手づくり。</span><a class="lang" href="index_en.html?in=1" style="margin-left:auto;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">EN</a></div>
 
+<section class="shop-intro" aria-label="ちびボード30の紹介"><img src="photos/ehon_s_1.jpg" width="1200" height="900" alt="クリア素材のちびボード30。左右に分かれたキーボード" fetchpriority="high"><div><h2>ちいさなキーボードを、<br>1台ずつ手づくり。</h2><p>左右に分かれた30キー。<br>Bluetoothでも、USBでも。</p><nav class="shop-links" aria-label="お店の案内"><a href="紹介.html">写真で特徴を見る</a><a href="#shelf">商品を見る</a><a href="詳しく.html">仕様・購入前の確認</a></nav></div></section>
   <!-- ヒーロー: 主役はばつべー -->
   <div class="hero" id="hero">
     <img class="batsu" id="batsu" src="../img/バツベイ_アイコン800.png" alt="ばつべー" onerror="this.style.display='none'">
@@ -494,16 +512,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
       </div>
     </div>
     <div class="moji-cta">
-      <div class="playdoor-wrap">
-        <div class="playdoor">
-          <div class="pt">🎮 あそびば</div>
-          <div class="pgames">
-            <a class="pgame" href="../うさぎ探し体験版.html"><img class="pi" id="pg1" alt=""><div class="pl">🔍 うさぎ探し</div></a>
-            <a class="pgame" href="../はしればつべー.html"><img class="pi" id="pg2" alt=""><div class="pl">🏃 はしれ!ばつべー</div></a>
-          </div>
-          <div class="pcoin" id="pcoin"></div>
-        </div>
-      </div>
+      <!-- 2026-10-06 たけろう指示: ここは紹介ページへの近道。あそびばは一番下へ -->
+      <a class="door intro-door" href="紹介.html">
+        <img class="door-icon icon-batsu" src="../img/バツベイ_アイコン800.png" alt="" onerror="this.remove()">
+        <div class="dl">❓ ちびボード30って?</div>
+        <div class="intro-sub">写真で 特徴を 見る ▶</div>
+      </a>
     </div>
   </section>
 
@@ -520,29 +534,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
         <img class="door-icon icon-batsu" src="../img/バツベイ_アイコン800.png" alt="" onerror="this.remove()">
         <div class="dl">❓ tibiboard30って?</div>
       </a>
-      <a class="door mintdoor" href="うさぎのへや.html">
-        <img class="door-icon icon-usagi" src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">
-        <div class="dl">📖 うさぎずかん</div>
-      </a>
     </div>
     <a class="keybtn big" href="購入者.html" style="display:block;margin:26px auto 0;background:var(--mint-deep);border-bottom-color:#4c7a92;font-size:clamp(20px,3.6vw,30px);line-height:1.4;padding:22px 20px;text-align:center;max-width:560px">🛍 購入いただいた方は<br>こちらへどうぞ ▶</a>
     <!-- コインの使い道: ミニチュアの台そのものを見せる(無料ゲームとは並べない) -->
-    <div class="mycoin" id="mycoin"></div>
-    <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="データのほぞんについて">?</button>
-    <div class="coingames" id="takara">
-      <!-- 2026-09-12 たけろう決定: ガチャは廃止(スロット1本)。台の絵とリンクを外した。戻すなら _直前退避\2026-09-12_専用アプリ文とガチャ廃止前 -->
-      <a class="minimachine" href="../スロット_新台.html" title="スロット">
-        <div class="sbox">
-          <div class="sreels"><b></b><b></b><b></b></div>
-          <div class="sball"></div>
-        </div>
-      </a>
-    </div>
-    <div class="chalcall">
-      <div class="chalarrows"><span><svg viewBox="0 0 60 74" width="210" height="259"><path d="M30 7 Q34 7 37 11 L51 29 Q57 37 48 37 L41 37 L41 57 Q41 68 30 68 Q19 68 19 57 L19 37 L12 37 Q3 37 9 29 L23 11 Q26 7 30 7 Z" fill="#b79ce0" stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg></span></div><!-- 2026-09-12 たけろう指示: 矢印は1つ(ガチャ廃止でスロットだけ) -->
-      <!-- 2026-08-20 たけろう: 「コインをつかって 鍵をゲット」だけ。隠しコマンドの話はここで言わない(どこかで気づかせる) -->
-      <div class="chaltext"><span class="chibiCoinGui inline" aria-hidden><span class="cg-disc" style="font-size:1.35em"></span></span>をつかって<br>🔑<b>かぎ</b>を ゲット!</div>
-    </div>
   </section>
 
   <!-- おしらせ板(公式ニュース枠。棚が増えても押されないよう最下部固定。2026-08-15移設) -->
@@ -566,6 +560,52 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
         <a class="sub" href="https://www.e-sportsbar-niigata.com/fireworks/" target="_blank" rel="noopener">チーム紹介(公式サイト) ▶</a>
       </div>
       <div class="sp-small">選手のみなさんの手もとで、ちびボードが活躍する日を たのしみにしています<img class="bb" src="../img/バツベイ_アイコン800.png" alt="ばつべー"></div>
+    </div>
+  </section>
+
+  <!-- 2026-10-06 たけろう指示: NyattoLand for X(Chrome 拡張)の「ねこが見つけたもの」で紹介された -->
+  <section id="found-sec">
+    <a class="found-card" href="https://nyatto-land-for-x.thekarou.com" target="_blank" rel="noopener">
+      <div class="found-lead">🐈 しょうかい されました</div>
+      <div class="found-name">NyattoLand for X</div>
+      <div class="found-text">X(ツイッター)に ねこを あそばせる Chrome の拡張機能。<br>その「ねこが 見つけたもの」で、ちびボードを 紹介してもらいました。</div>
+      <div class="found-go">見に行く ▶</div>
+    </a>
+  </section>
+
+  <!-- 2026-10-06 たけろう指示: うさぎずかん・ゲームは本業ではないので一番下 -->
+  <section id="asobi-sec">
+    <div class="doors asobi-doors">
+      <a class="door mintdoor" href="うさぎのへや.html">
+        <img class="door-icon icon-usagi" src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">
+        <div class="dl">📖 うさぎずかん</div>
+      </a>
+    </div>
+    <div class="playdoor-wrap asobi-play">
+        <div class="playdoor">
+          <div class="pt">🎮 あそびば</div>
+          <div class="pgames">
+            <a class="pgame" href="../うさぎ探し体験版.html"><img class="pi" id="pg1" alt=""><div class="pl">🔍 うさぎ探し</div></a>
+            <a class="pgame" href="../はしればつべー.html"><img class="pi" id="pg2" alt=""><div class="pl">🏃 はしれ!ばつべー</div></a>
+          </div>
+          <div class="pcoin" id="pcoin"></div>
+        </div>
+      </div>
+    <div class="mycoin" id="mycoin"></div>
+    <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="データのほぞんについて">?</button>
+    <div class="coingames" id="takara">
+      <!-- 2026-09-12 たけろう決定: ガチャは廃止(スロット1本)。台の絵とリンクを外した。戻すなら _直前退避\2026-09-12_専用アプリ文とガチャ廃止前 -->
+      <a class="minimachine" href="../スロット_新台.html" title="スロット">
+        <div class="sbox">
+          <div class="sreels"><b></b><b></b><b></b></div>
+          <div class="sball"></div>
+        </div>
+      </a>
+    </div>
+    <div class="chalcall">
+      <div class="chalarrows"><span><svg viewBox="0 0 60 74" width="210" height="259"><path d="M30 7 Q34 7 37 11 L51 29 Q57 37 48 37 L41 37 L41 57 Q41 68 30 68 Q19 68 19 57 L19 37 L12 37 Q3 37 9 29 L23 11 Q26 7 30 7 Z" fill="#b79ce0" stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg></span></div><!-- 2026-09-12 たけろう指示: 矢印は1つ(ガチャ廃止でスロットだけ) -->
+      <!-- 2026-08-20 たけろう: 「コインをつかって 鍵をゲット」だけ。隠しコマンドの話はここで言わない(どこかで気づかせる) -->
+      <div class="chaltext"><span class="chibiCoinGui inline" aria-hidden><span class="cg-disc" style="font-size:1.35em"></span></span>をつかって<br>🔑<b>かぎ</b>を ゲット!</div>
     </div>
   </section>
 
@@ -640,10 +680,8 @@ if(window.CHIBI){
 /* ===== 写真プレースホルダ ===== */
 function slot(file, label, size, ratio){
   return `<div class="slot" style="aspect-ratio:${ratio}">
-    <div class="fn">📷 ${file||'—'}</div>
     <div class="ic">📷</div>
-    <div class="t">ここに ${label} の写真</div>
-    <div class="s">推奨 ${size}<br>photos/${file||'__要記入__'}</div>
+    <div class="t">写真は準備中です</div>
     ${file?`<img src="photos/${file}" alt="${label}" onerror="this.remove()">`:''}
   </div>`;
 }
@@ -674,7 +712,7 @@ function parseShop(txt){
     const c = l.split('|').map(s=>s.trim());
     if(c.length < 3) return;
     const st = c[1] || '';
-    items.push({name:c[0], state:st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':(st.startsWith('準備中')?'準備中':'いる'))),
+    items.push({name:c[0], state:st==='いる'?'いる':(st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':'準備中'))),
       /* 2026-08-17: 「準備中 2026-09-14」のように日付つきでも準備中判定されるようstartsWithに変更(S1) */
       date:(st.match(/\d{4}-\d{2}-\d{2}/)||[''])[0], price:parseInt(c[2])||0,
       base:(c[3]||'').replace(/\.(jpg|jpeg|png|webp)$/i,''), color:c[4]||'', story:c[5]||'',
@@ -846,7 +884,19 @@ window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__river
   const imgs=[...document.querySelectorAll('.moji-row img')];
   Promise.all(imgs.map(im=>im.complete?Promise.resolve():new Promise(res=>{im.onload=res; im.onerror=res;}))).then(()=>setTimeout(window.__kickRiver,50));
 };
-window.addEventListener('load', ()=>setTimeout(window.__buildRiver, 1500));
+// Build the decorative river only when its section approaches the viewport.
+window.addEventListener('load', ()=>{
+  const section=document.getElementById('moji-sec');
+  if(!section || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if('IntersectionObserver' in window){
+    const observer=new IntersectionObserver(entries=>{
+      const visible=entries.some(entry=>entry.isIntersecting);
+      section.classList.toggle('river-visible',visible);
+      if(visible) window.__buildRiver();
+    },{rootMargin:'200px'});
+    observer.observe(section);
+  }else{ section.classList.add('river-visible'); window.__buildRiver(); }
+});
 window.addEventListener('pageshow', ()=>{ if(window.__kickRiver) setTimeout(window.__kickRiver,300); });
 window.addEventListener('orientationchange', ()=>{ if(window.__kickRiver) setTimeout(window.__kickRiver,300); });
 
