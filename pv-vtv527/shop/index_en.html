@@ -838,7 +838,7 @@ const zukanRows = window.USAGI_DATA.split('\n').map(l=>l.trim())
 /* ---- キーボード洪水(cut_01〜48)をもじばしらの奥へ流す ---- */
 /* 2026-09-14: 初回の表示を止めないよう、ページが出てから裏で組み立てる(load 後 1.5秒。ばつべーを押したら即) */
 window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__riverBuilt = true; (function(){
-  const CUT_COUNT = 48;
+  const CUT_COUNT = 50; /* 2026-10-06 たけろう指示: 切り抜き2台(cut_49 透明・cut_50 オレンジ)を川に足した */
   const cutFiles = Array.from({length:CUT_COUNT}, (_,i)=>`photos/cut_${String(i+1).padStart(2,'0')}_s.webp`); /* 2026-09-14: 表示は高さ最大180px なので 600px 幅の小版(1枚 約50KB) */ /* 2026-09-14: png(1枚1MB・48枚で44MB)→ webp(透明のまま・同じ大きさ)。初回の読み込みが重い原因だった */
   const rows = [document.getElementById('mojiRow1'), document.getElementById('mojiRow2'), document.getElementById('mojiRow3')];
   if(!rows[0]) return;
