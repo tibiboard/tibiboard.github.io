@@ -684,7 +684,7 @@
       resizeTimer = setTimeout(function () {
         try {
           anchors = resolveAnchors();
-          if (state === 'talk' || state === 'runaway') return; // 会話中/逃走中は動かさない
+          if (state === 'talk' || state === 'leaving' || state === 'runaway') return; // 会話中/帰る前/逃走中は動かさない
           track = layoutSpot(currentSpotName);
         } catch (e) {}
       }, 200);
@@ -704,7 +704,7 @@
           resizeTimer = setTimeout(function () {
             try {
               anchors = resolveAnchors();
-              if (state === 'talk' || state === 'runaway') return; // 会話中/逃走中は動かさない
+              if (state === 'talk' || state === 'leaving' || state === 'runaway') return; // 会話中/帰る前/逃走中は動かさない
               track = layoutSpot(currentSpotName);
             } catch (e) {}
           }, 300);
@@ -714,7 +714,9 @@
 
     /* ---------- ふきだし ---------- */
     var back, bubble, state = 'idle';
+    var endTimer = null;
     function closeBubble() {
+      clearTimeout(endTimer); endTimer = null; /* 2026-10-07: 先に閉じた時、古い「帰る」が 次の会話の途中で動かないように */
       if (back) { back.remove(); back = null; }
       if (bubble) { bubble.remove(); bubble = null; }
       state = 'idle';
@@ -896,7 +898,9 @@
       if (!bubble) {
         back = document.createElement('div');
         back.id = 'usagiBubbleBack';
-        back.onclick = function () { closeBubble(); if (state !== 'runaway') resumeWalk(); };
+        /* 2026-10-07 たけろう「会話の後、うさぎが なかなか帰らない・もう一回クリックしたら また会話できちゃう」:
+           外を押して閉じた時も、うさぎは帰る(前は 歩きに戻って その場に残っていた) */
+        back.onclick = function () { closeBubble(); if (state !== 'runaway') startRunaway(); };
         document.body.appendChild(back);
 
         bubble = document.createElement('div');
@@ -927,10 +931,14 @@
       positionBubble();
 
       if (node.end) {
-        setTimeout(function () {
+        /* 2026-10-07 たけろう「最後の返事まで行ったら 5秒で うさぎが帰る」: 最低5秒(長い文は文字数ぶん長く=9/15「早く消えすぎて読めない」)。
+           この間に うさぎを押しても 新しい会話は始めない(state='leaving') */
+        state = 'leaving';
+        clearTimeout(endTimer);
+        endTimer = setTimeout(function () {
           closeBubble();
           if (node.runaway) startRunaway(); else resumeWalk();
-        }, node.choices && node.choices.length ? 0 : Math.max(4800, txt.length * 110)); /* 2026-09-15 たけろう「早く消えすぎて読めない」: 3倍+文字数ぶん */
+        }, node.choices && node.choices.length ? 0 : Math.max(5000, txt.length * 110));
       }
     }
 
@@ -999,8 +1007,8 @@
     }
 
     function startRunaway() {
-      state = 'runaway';
       closeBubble();
+      state = 'runaway'; /* 2026-10-07: 前は state='runaway' の後に closeBubble() が 'idle' に戻していた=帰る途中に押すと また会話が始まっていた */
 
       // 後ろ姿(シルエット)にする
       var img = hop.querySelector('img');
@@ -1066,6 +1074,8 @@
     ];
     hop.addEventListener('click', function () {
       if (state === 'runaway') return;
+      /* 2026-10-07 たけろう「もう一回クリックしたら また会話ができちゃう」: 会話中・帰るまでの間は 押しても 何もしない */
+      if (state === 'talk' || state === 'leaving' || bubble) return;
       try { clicks++; localStorage.setItem('usagi_clicks', String(clicks)); } catch (e) {}
 
       if (currentSpotName !== 'walker') {

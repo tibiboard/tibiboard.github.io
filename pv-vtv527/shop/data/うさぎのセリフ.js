@@ -12,7 +12,7 @@ window.USAGI_SERIFU = {
 
   yes1: { text: 'おしえない', end: true, runaway: true },
   secret: { text: 'しかたない。おしえてやるか…', choices: [ { label: '…', next: 'secret2' } ] },
-  secret2: { text: '宝箱で ひみつの番号が 手に入る。その番号は、アプリの金庫を あける', choices: [ { label: 'とじる', next: 'bye' } ] },  /* 2026-09-13 たけろう */
+  secret2: { text: 'スロットで 大あたりを 引くと、かくしコマンドが ゲットできるよ', choices: [ { label: 'とじる', next: 'bye' } ] },  /* 2026-10-07 たけろう(旧 9/13「宝箱で ひみつの番号が 手に入る。その番号は、アプリの金庫を あける」) */
   bye: { text: 'じゃあね', end: true, runaway: true },
 
   trivia: { random: 'TRIVIA' },
@@ -72,7 +72,6 @@ window.USAGI_SERIFU = {
     { text: 'その服、だれに 見せたくて 買った?', choices: [ { label: 'じぶん', next: 'T_ME_FUKU_A' }, { label: 'みんな', next: 'T_ME_FUKU_B' } ] },
     { text: '5年まえに はやったもの、まだ つかってる?', choices: [ { label: 'つかってる', next: 'T_ME_RYUKO_A' }, { label: 'すてた', next: 'T_ME_RYUKO_B' } ] },
     { text: 'ともだちに「それ へん」って 言われたら?', choices: [ { label: 'やめる', next: 'T_ME_HEN_A' }, { label: 'きにしない', next: 'T_ME_HEN_B' } ] },
-    { text: 'おしゃれって、だれが きめるの?', choices: [ { label: 'せけん', next: 'T_ME_OSHARE_A' }, { label: 'じぶん', next: 'T_ME_OSHARE_B' } ] },
     { text: 'ここの子は、ここでしか 買えない。1台ずつ 手で つくってる', end: true, runaway: true },
     /* 候補13本のうち たけろう採用=10番・12番(07:5x) */
     { text: 'にんきの色と すきな色、どっちを えらぶ?', choices: [ { label: 'にんき', next: 'T_ME_IRO_A' }, { label: 'すき', next: 'T_ME_IRO_B' } ] },
@@ -129,8 +128,6 @@ window.USAGI_SERIFU = {
   T_ME_RYUKO_B: { text: 'りゅうこうは すてられる。すきは すてられない。どっちを 買う?', end: true, runaway: true },
   T_ME_HEN_A: { text: 'その ともだちの すきで、きみの へやが うまっていくよ', end: true, runaway: true },
   T_ME_HEN_B: { text: 'うん。へんって言われるのは、まだ だれも もってないってこと', end: true, runaway: true },
-  T_ME_OSHARE_A: { text: 'せけんは まいとし きめなおす。ふりまわされるの、つかれない?', end: true, runaway: true },
-  T_ME_OSHARE_B: { text: 'それを 言える人は、あんまり いない', end: true, runaway: true },
   T_ME_IRO_A: { text: 'にんきは 来年 べつの色に なる', end: true, runaway: true },
   T_ME_IRO_B: { text: 'すきな色は、10年 きみと いっしょ', end: true, runaway: true },
   T_ME_USAGI_A: { text: 'うん。だから おぼえてもらえる', end: true, runaway: true },
