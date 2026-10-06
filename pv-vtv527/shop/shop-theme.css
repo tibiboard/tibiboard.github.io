@@ -99,3 +99,21 @@ body .gacha-credit a{color:var(--t-ink) !important}   /* 壁紙の上なので�
   background:transparent !important;border-color:transparent !important;box-shadow:none !important}
 /* おしらせの板の画びょう(📌)は板が見えなくなったので出さない */
 .oshirase-board::before,.oshirase-board::after{display:none !important}
+
+/* =====================================================================
+   すりガラス(色なし・枠なし)= 棚のカード・おしらせ・「購入いただいた方は」のボタン
+   2026-10-06 たけろう: おしらせは見本9の D で決定。棚と購入ボタンもすりガラスで試す。
+   ぼかしの強さは --t-glass-blur、白のうすさは --t-glass で変えられる
+   ===================================================================== */
+:root{--t-glass:rgba(255,255,255,.15);--t-glass-blur:4px}
+/* おしらせ: 1件ずつすりガラス */
+.oshirase-list li{background:var(--t-glass) !important;border:0 !important;border-radius:12px !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+/* 棚のカード: 売っている子も旅立った子もすりガラス。売っている子は白い光で分かる */
+.item,.item.alive,.item.sold{background:var(--t-glass) !important;border:0 !important;color:var(--t-ink) !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+.item .nm,.item .pr,.item.alive .nm,.item .no{color:var(--t-ink) !important}
+.tg.pitch{background:#fff !important;border-color:var(--t-line) !important;color:var(--t-ink) !important}
+/* 「購入いただいた方は こちらへどうぞ」: 半透明のすりガラス */
+a.keybtn[href^="購入者"]{background:var(--t-glass) !important;color:var(--t-ink) !important;border-bottom:0 !important;box-shadow:none !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
