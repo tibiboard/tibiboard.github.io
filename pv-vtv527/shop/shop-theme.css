@@ -1,11 +1,10 @@
 /* =====================================================================
    tibiboard30 お店の色(全ページ共通・各ページの一番最後に読む)
-   2026-10-06 たけろう: ピンク×チョコミント(グラデーションなし)。帯・扉・おしらせは「色なしのすりガラス」
-   (ぼかしはかなり弱め・ふちの線なし・ふちから少しずつガラスになる)。背景はページの壁紙を生かす。
+   2026-10-06 たけろう: ピンク×チョコミント(グラデーションなし)。帯・扉・おしらせは地も枠もなし(壁紙の上にそのまま)。
+   背景はページの壁紙を生かす。
    コイン・スロット・あそびばの見た目はそのまま。
 
    ★色を変えたい時は、下の :root の --t- で始まる行だけ直す(ほかは触らない)。
-     ガラスのぼかしの強さ=--t-blur、ふちが溶ける幅=--t-fade
    ★この一枚を外せば(各ページの <link ... shop-theme.css> の行を消せば)元の色に戻る。
    ===================================================================== */
 :root{
@@ -16,8 +15,6 @@
   --t-accent:#3aa79a;    /* ミント: 押すボタン */
   --t-accent-deep:#257a70;
   --t-pink:#ff8fb8;      /* ピンク: 「ちボ」の札などの差し色 */
-  --t-blur:3px;          /* すりガラスのぼかし(かなり弱め) */
-  --t-fade:18px;         /* ガラスのふちが溶ける幅 */
 
   /* 古い色の名前もここにそろえる(各ページの中の指定はそのまま、色だけ変わる) */
   --pink:var(--t-pink);
@@ -94,18 +91,11 @@ footer a{color:var(--t-paper) !important}
 body .gacha-credit a{color:var(--t-ink) !important}   /* 壁紙の上なので濃い色(ページの中の指定より強く) */
 
 /* =====================================================================
-   すりガラス(色なし): 帯・扉・おしらせ・NyattoLand の枠
-   地の色と枠線は消し、後ろの壁紙を少しだけぼかす。ふちは --t-fade の幅で少しずつガラスになる(線は見えない)。
-   古いブラウザでぼかしが効かない時は、壁紙がそのまま見えるだけ(文字は読める)。
+   帯・扉・おしらせ・NyattoLand の枠: 地の色も枠線もぼかしもなし。壁紙の上にそのまま文字と絵をのせる
+   (2026-10-06 たけろう「ぼかしを取ってみて。その方がシンプルでいいかも」。すりガラスに戻す時は
+    _直前退避/2026-10-06_1710_ぼかしを取る前 の shop-theme.css)
    ===================================================================== */
 .band,.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),.oshirase-board,.found-card{
-  background:transparent !important;border-color:transparent !important;box-shadow:none !important;
-  -webkit-backdrop-filter:blur(var(--t-blur));backdrop-filter:blur(var(--t-blur));
-  -webkit-mask-image:linear-gradient(to right,transparent,#000 var(--t-fade),#000 calc(100% - var(--t-fade)),transparent),linear-gradient(to bottom,transparent,#000 var(--t-fade),#000 calc(100% - var(--t-fade)),transparent);
-  -webkit-mask-composite:source-in;
-  mask-image:linear-gradient(to right,transparent,#000 var(--t-fade),#000 calc(100% - var(--t-fade)),transparent),linear-gradient(to bottom,transparent,#000 var(--t-fade),#000 calc(100% - var(--t-fade)),transparent);
-  mask-composite:intersect}
-/* 帯は画面の上と左右にくっつくので、下のふちだけ溶かす */
-.band{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - var(--t-fade)),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - var(--t-fade)),transparent)}
-/* おしらせの板の画びょう(📌)は板の外にはみ出していて、ガラスのふちで消えるので出さない */
+  background:transparent !important;border-color:transparent !important;box-shadow:none !important}
+/* おしらせの板の画びょう(📌)は板が見えなくなったので出さない */
 .oshirase-board::before,.oshirase-board::after{display:none !important}
