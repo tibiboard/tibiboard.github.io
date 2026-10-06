@@ -1065,5 +1065,60 @@ try {
   if(location.hash==='#takara'){ setTimeout(()=>{ try{ kf.click(); }catch(e){} }, 800); }
 })();
 </script>
+
+<!-- 2026-10-06 たけろう「C1 で行こう」(見本17): 透明な「ちびボード」の文字の後ろをキーボードが通る時、文字の中のキーボードだけが その文字の色にそまる。
+     しくみ: キーボードの川を文字の数だけ写して、文字の形で切り抜き、色を付ける(filter は絵の部分だけ=すき間や壁紙はそまらない)。
+     パソコンだけ(スマホ・タブレットは T4 のまま。写す量が多いので重くしないため)。止める時は、この script のかたまりを消す -->
+<script>
+(function(){
+  try{
+    if(!matchMedia('(min-width:1101px) and (hover:hover) and (pointer:fine)').matches) return;
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var HUE=[300,130,5,215,300];
+    var built=false, tries=0;
+    function ready(flood){ var ims=flood.querySelectorAll('img'); if(!ims.length) return false; for(var i=0;i<ims.length;i++){ if(!ims[i].complete) return false; } return true; }
+    function build(){
+      var stage=document.querySelector('.moji-stage'); var flood=stage&&stage.querySelector('.moji-flood');
+      if(!flood||!ready(flood)) return false;
+      built=true;
+      var letters=[].slice.call(stage.querySelectorAll('.moji-pillar b'));
+      var NS='http://www.w3.org/2000/svg';
+      var svg=document.createElementNS(NS,'svg'); svg.setAttribute('width','0'); svg.setAttribute('height','0'); svg.setAttribute('aria-hidden','true'); svg.style.position='absolute';
+      var defs=document.createElementNS(NS,'defs'); svg.appendChild(defs); stage.appendChild(svg);
+      var pillarsEl=stage.querySelector('.moji-pillars');
+      var layers=letters.map(function(b,i){
+        var box=document.createElement('div'); box.className='moji-tint'; box.setAttribute('aria-hidden','true');
+        var inner=flood.cloneNode(true); inner.removeAttribute('id');
+        [].forEach.call(inner.querySelectorAll('[id]'),function(e){e.removeAttribute('id');});
+        [].forEach.call(inner.querySelectorAll('img'),function(im){im.style.filter='none';});
+        box.appendChild(inner); stage.insertBefore(box,pillarsEl);
+        var cp=document.createElementNS(NS,'clipPath'); cp.setAttribute('id','mojiTint'+i);
+        var t=document.createElementNS(NS,'text'); t.textContent=b.textContent; t.setAttribute('text-anchor','middle'); t.setAttribute('dominant-baseline','central');
+        cp.appendChild(t); defs.appendChild(cp);
+        box.style.clipPath='url(#mojiTint'+i+')'; box.style.webkitClipPath='url(#mojiTint'+i+')';
+        box.style.filter='grayscale(1) sepia(1) saturate(4) hue-rotate('+HUE[i%HUE.length]+'deg) brightness(1.08)';
+        box.style.position='absolute'; box.style.overflow='hidden'; box.style.pointerEvents='none'; box.style.zIndex='5';
+        inner.style.position='absolute';
+        return {b:b,t:t,box:box,inner:inner};
+      });
+      function place(){
+        var sr=stage.getBoundingClientRect(), fr=flood.getBoundingClientRect();
+        layers.forEach(function(L){
+          var r=L.b.getBoundingClientRect(), cs=getComputedStyle(L.b);
+          L.box.style.left=(r.left-sr.left)+'px'; L.box.style.top=(r.top-sr.top)+'px'; L.box.style.width=r.width+'px'; L.box.style.height=r.height+'px';
+          L.inner.style.left=(fr.left-r.left)+'px'; L.inner.style.top=(fr.top-r.top)+'px'; L.inner.style.width=fr.width+'px';
+          L.t.setAttribute('x',r.width/2); L.t.setAttribute('y',r.height/2); L.t.setAttribute('font-size',parseFloat(cs.fontSize));
+          L.t.style.fontFamily=cs.fontFamily; L.t.style.fontWeight=cs.fontWeight;
+        });
+      }
+      place(); stage.classList.add('tinted');
+      if(window.ResizeObserver){ new ResizeObserver(place).observe(stage); } else { window.addEventListener('resize',place); }
+      if(window.__kickRiver) window.__kickRiver(); // 写した川と元の川の動きをそろえる
+      return true;
+    }
+    var timer=setInterval(function(){ tries++; try{ if(build()||tries>240) clearInterval(timer); }catch(e){ clearInterval(timer); } },500);
+  }catch(e){}
+})();
+</script>
 </body>
 </html>

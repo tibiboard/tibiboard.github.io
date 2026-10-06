@@ -159,3 +159,15 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
 .moji-pillar.c3 b{--c:rgba(255,224,138,.35);--d:#e6bd4f}
 .moji-pillar.c4 b{--c:rgba(201,184,240,.35);--d:#9f88d6}
 .moji-pillar.c5 b{--c:rgba(255,143,184,.35);--d:#e0628f}
+
+/* 2026-10-06 C1(パソコンだけ・index の最後の script): 色がつく仕組みが動いている時は、文字の中の うすい色を消して ふちだけにする */
+.moji-stage.tinted .moji-pillar b{color:transparent !important}
+
+/* =====================================================================
+   入口: すりガラスは「文字の後ろだけ」(2026-10-06 たけろう「うさぎの裏は入れないでいい。テキストの裏だけ」=見本10 の B)
+   紹介・うさぎずかんの扉、あそびばの題名と2つのゲームの名前
+   ===================================================================== */
+.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),
+.playdoor,#playdoor,.playbox,.pgame{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
+.door .dl,.playdoor .pt,.pgame .pl{display:inline-block;background:var(--t-glass);-webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur));
+  border-radius:999px;padding:8px 26px}
