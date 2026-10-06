@@ -146,5 +146,15 @@ a.keybtn[href^="購入者"],
 main > .card{
   border:var(--t-gallery-line) !important;border-radius:2px !important;letter-spacing:.15em}
 .item .ph,.item .ph .slot,.pgame .pi,main > .card .pics{border-radius:2px !important}
-main > .card{background:rgba(255,255,255,.78) !important;   /* 素材のカードは文が多いので白を強く(たけろう「文字が読みづらい」) */
+main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカードは文が多いので白を強く(たけろう「文字が読みづらい」) */
   box-shadow:none !important;-webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+
+/* 2026-10-06 たけろう「枠が真四角で、ほかの丸くてかわいいUIと合わない → 丸くするのやってみて」: ギャラリー風の線はそのまま、角だけ丸く */
+:root{--t-gallery-radius:16px}
+.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),
+.playdoor,#playdoor,.playbox,.pgame,
+.item,.item.alive,.item.sold,
+.oshirase-list li,
+a.keybtn[href^="購入者"],
+main > .card{border-radius:var(--t-gallery-radius) !important}
+.item .ph,.item .ph .slot,.pgame .pi,main > .card .pics{border-radius:12px !important}
