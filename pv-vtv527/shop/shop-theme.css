@@ -146,4 +146,5 @@ a.keybtn[href^="購入者"],
 main > .card{
   border:var(--t-gallery-line) !important;border-radius:2px !important;letter-spacing:.15em}
 .item .ph,.item .ph .slot,.pgame .pi,main > .card .pics{border-radius:2px !important}
-main > .card{background:var(--t-glass) !important;box-shadow:none !important;-webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+main > .card{background:rgba(255,255,255,.78) !important;   /* 素材のカードは文が多いので白を強く(たけろう「文字が読みづらい」) */
+  box-shadow:none !important;-webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}

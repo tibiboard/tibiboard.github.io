@@ -818,5 +818,15 @@ body>*{position:relative;z-index:1}
   .ehon,.ehon.gacha-sec{min-height:auto !important;justify-content:flex-start !important;padding-top:76px !important;padding-bottom:40px !important}
 }
 </style>
+
+<!-- 2026-10-06 たけろう指摘「iPhone で 02 の左上のマークとスライドの写真の間・写真とキーキャップの説明の間にすきま」(Safari・Edge とも。iPad は OK):
+     スマホはスライドの枠を画面ほぼいっぱいの高さ(100svh-210px)にしていたが、写真は横長(2.35:1)を切らずに入れるので、上下に約230pxずつ空きが出ていた。
+     スマホだけ、枠を写真と同じ形(2.35:1)にして、上下の余白(26px)も小さくする -->
+<style>
+@media (max-width:640px){
+  .gacha-track .slide{aspect-ratio:2.35/1 !important;height:auto !important}
+  .gacha-slider{padding:6px 0 !important}
+}
+</style>
 </body>
 </html>
