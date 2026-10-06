@@ -633,6 +633,28 @@
       }, 200);
     });
 
+    /* ---------- ページの高さが変わった時も計算し直す(2026-10-06 たけろう「うさぎが行方不明になる」) ----------
+       窓の大きさが変わらなくても、ばつべーを押して川が開く・おしらせの「もっとみる」・棚めくり・
+       写真の遅い読み込みでページの並びが動く。以前はその時に古い座標に置き去りになっていた */
+    try {
+      if (window.ResizeObserver) {
+        var lastDocH = docHeight();
+        new ResizeObserver(function () {
+          var h = docHeight();
+          if (Math.abs(h - lastDocH) < 4) return; // 少しの揺れでは動かさない
+          lastDocH = h;
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function () {
+            try {
+              anchors = resolveAnchors();
+              if (state === 'talk' || state === 'runaway') return; // 会話中/逃走中は動かさない
+              track = layoutSpot(currentSpotName);
+            } catch (e) {}
+          }, 300);
+        }).observe(document.body);
+      }
+    } catch (e) {}
+
     /* ---------- ふきだし ---------- */
     var back, bubble, state = 'idle';
     function closeBubble() {
