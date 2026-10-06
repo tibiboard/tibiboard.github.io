@@ -292,3 +292,13 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
 .ab-zukan{white-space:nowrap}
 /* 2026-10-07 たけろう「あそぶボタンが付いたから分かる。白い背景はなし・半透明はそのまま」: ゲームの白いカードをやめる(ステップの半透明の板は残す) */
 .ab-game{background:transparent;box-shadow:none}
+
+/* 2026-10-07 試し: 値段 = 全部入り(大)+キットなら(小)。商品ページは内訳を全部プラスで */
+.item .pr-tag{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--t-pink);color:#fff;font-size:12px;vertical-align:3px}
+.item .pr-min{font-size:14px;font-weight:900;color:var(--t-ink);opacity:.8;margin-bottom:2px}
+.pd .price-parts{display:inline-block;margin:6px 0 4px;padding:10px 18px;border-radius:16px;background:rgba(255,255,255,.7);font-size:20px;font-weight:900;color:var(--t-ink);line-height:1.6;text-align:left}
+@media(max-width:640px){
+  .item .pr-tag{font-size:8px;padding:0 5px;margin-left:3px;vertical-align:2px}
+  .item .pr-min{font-size:10px}
+}
+.pd .price small{display:block;margin-top:2px}   /* 「全部入り(税・送料込)」が値段の横で折れて読みにくかった */

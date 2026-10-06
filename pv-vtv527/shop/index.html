@@ -760,6 +760,9 @@ const {conf, items} = parseShop(window.SHOP_DATA);
 
 const alive = items.filter(i=>i.state==='いる');
 const yen = n => '¥' + n.toLocaleString();
+/* 2026-10-07 たけろう「全部入りいくら・最安値いくらも表示するの見せて」: 売っている子は 全部入りを大きく・キットの値段を小さく。部品の数字は 商品リスト.js の PRICE_PARTS */
+const PP = window.PRICE_PARTS || {assembly:12000, set:5000};
+const priceAlive = p => `<div class="pr">${yen(p+PP.set)}<span class="pr-tag">全部入り</span></div><div class="pr-min">キットなら ${yen(p-PP.assembly)}〜</div>`;
 const TODO = '<span class="todo">__要記入__</span>';
 const val = v => (!v || v==='__要記入__' || /^__要記入__/.test(v)) ? TODO + (v.replace(/^__要記入__/,'')||'') : v;
 
@@ -799,7 +802,7 @@ const cardOf = i => {
     ${(()=>{ /* 2026-09-11 たけろう指示(スマホの棚を詰める): No.◯◯◯ は左上の細い枠へ、名前は小さく */
       const m = i.name.match(/^(No\.\s*\d+)\s*(.*)$/); const no = m ? m[1] : ''; const nm = m ? (m[2] || i.name) : i.name;
       return `<div class="no">${no}${(no&&!TAGS_IN_PHOTO)?'<br>':''}${TAGS_IN_PHOTO?'':'tibiboard30'}</div><div class="nm">${nm}</div>`; })()}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags inline phone-only"'):tagsHtml(i)}
-    ${(i.state==='いる'||i.state==='旅立ち')&&i.price?`<div class="pr">${yen(i.price)}</div>`:''}
+    ${i.state==='いる'&&i.price?priceAlive(i.price):(i.state==='旅立ち'&&i.price?`<div class="pr">${yen(i.price)}</div>`:'')}
     <div class="st">${i.state==='いる'?'':(i.state==='予告'?'9月から':(i.state==='展示'?'てんじ(非売)':'SOLD OUT'))}</div>
   </div>`;
   return i.state==='いる' ? `<a class="itemlink" href="商品.html?id=${encodeURIComponent(i.name)}">${card}</a>` : card;
