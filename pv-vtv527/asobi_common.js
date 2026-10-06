@@ -596,7 +596,6 @@
     const ov = document.createElement('div'); ov.id='chibiTreasureOv';
     ov.innerHTML = `<div class="wrap">
       <div class="ttl">🎉 たからばこを 1つ えらんでね!</div>
-      <div class="ttlsub">📱 ちびボードアプリの「かくしコマンド」は、9月のアプリ公開で じっそう予定だよ🐰</div>
       <div class="row">${chestHtml(0)}${chestHtml(1)}${chestHtml(2)}</div>
       <div class="result" id="chibiTreasureResult"></div>
       </div>`;

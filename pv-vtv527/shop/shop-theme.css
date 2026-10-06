@@ -238,3 +238,11 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
   .item .card-head .tg.model{order:3;margin:3px 0 -16px 4px}
   .item .card-head ~ .tags.phone-only .tg.pitch{display:none !important}
 }
+
+/* 2026-10-07 たけろう「SOLD OUT の写真は左下にかなりスペースがある。ガラスやラメのタグを縦に入れられる(3つか4つ)」(スマホだけ):
+   素材のタグを写真の左下に縦に並べる。名前の下のタグは出さない。戻す時はこのかたまりを消す */
+@media(max-width:640px){
+  .tags.in-photo{display:flex !important;flex-direction:column;align-items:flex-start;left:6px;right:auto;bottom:6px;gap:3px}
+  .tags.in-photo .tg{font-size:9px;padding:0 5px;border-width:1px;line-height:1.5}
+  .tags.inline.phone-only{display:none !important}
+}
