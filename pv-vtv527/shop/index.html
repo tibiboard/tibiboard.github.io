@@ -761,7 +761,7 @@ const {conf, items} = parseShop(window.SHOP_DATA);
 const alive = items.filter(i=>i.state==='いる');
 const yen = n => '¥' + n.toLocaleString();
 /* 2026-10-07 たけろう「全部入りいくら・最安値いくらも表示するの見せて」: 売っている子は 全部入りを大きく・キットの値段を小さく。部品の数字は 商品リスト.js の PRICE_PARTS */
-const PP = window.PRICE_PARTS || {assembly:12000, set:5000};
+const PP = window.PRICE_PARTS || {assembly:10000, set:8000};
 const priceAlive = p => `<div class="pr">${yen(p+PP.set)}<span class="pr-tag">全部入り</span></div><div class="pr-min">キットなら ${yen(p-PP.assembly)}〜</div>`;
 const TODO = '<span class="todo">__要記入__</span>';
 const val = v => (!v || v==='__要記入__' || /^__要記入__/.test(v)) ? TODO + (v.replace(/^__要記入__/,'')||'') : v;
