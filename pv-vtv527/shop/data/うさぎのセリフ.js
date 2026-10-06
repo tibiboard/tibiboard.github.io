@@ -54,8 +54,6 @@ window.USAGI_SERIFU = {
 
   /* ===== 隠れている うさぎを 見つけて クリックした時 ===== */
   HIDDEN: [
-    'なに',
-    'いないよ',
     'えきなら つきあたり みぎ まっすぐです',
     'H！',
     'みーんみんみん',
@@ -72,13 +70,11 @@ window.USAGI_SERIFU = {
     { text: 'その服、だれに 見せたくて 買った?', choices: [ { label: 'じぶん', next: 'T_ME_FUKU_A' }, { label: 'みんな', next: 'T_ME_FUKU_B' } ] },
     { text: '5年まえに はやったもの、まだ つかってる?', choices: [ { label: 'つかってる', next: 'T_ME_RYUKO_A' }, { label: 'すてた', next: 'T_ME_RYUKO_B' } ] },
     { text: 'ともだちに「それ へん」って 言われたら?', choices: [ { label: 'やめる', next: 'T_ME_HEN_A' }, { label: 'きにしない', next: 'T_ME_HEN_B' } ] },
-    { text: 'ここの子は、ここでしか 買えない。1台ずつ 手で つくってる', end: true, runaway: true },
     /* 候補13本のうち たけろう採用=10番・12番(07:5x) */
     { text: 'にんきの色と すきな色、どっちを えらぶ?', choices: [ { label: 'にんき', next: 'T_ME_IRO_A' }, { label: 'すき', next: 'T_ME_IRO_B' } ] },
     { text: 'ぼくのこと、へんな うさぎだと おもう?', choices: [ { label: 'おもう', next: 'T_ME_USAGI_A' }, { label: 'かわいい', next: 'T_ME_USAGI_B' } ] },
     /* 7本目(逆説「買うかどうかは きみが きめて」)は たけろう「1〜6を入れて」で外した(9/7 07:3x) */
     /* --- 自己肯定(2026-09-07 たけろう: 15本のうち15番だけ採用。他14本は外した 07:5x) --- */
-    { text: 'じぶんらしく、って むずかしく 言わなくて いい。すきな物を そばに おく。それだけ', end: true, runaway: true },
     /* --- 朝 --- */
     { time: 'morning', text: '朝だよ、静かに', end: true, runaway: true },
     { time: 'morning', text: 'ぐもーにん', end: true, runaway: true },
