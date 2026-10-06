@@ -228,3 +228,13 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
   .item .card-head + .ph{margin-top:0 !important}
 }
 @media(max-width:640px){.item .stamp{top:12px !important;right:-36px !important;font-size:7px !important;padding:1px 30px !important}}  /* 日付の帯が名前のタグに重ならないよう、スマホは小さく上へ */
+
+/* 2026-10-07 たけろう「No.001 の隣に 17mmピッチ・その下に tibiboard30。写真に食い込んじゃっていいから」(スマホだけ):
+   1行目 = No.+17mmピッチ / 2行目 = tibiboard30 の札(写真の左上に少し重なる)。名前の下の 17mmピッチ は出さない。
+   戻す時はこのかたまりを消す */
+@media(max-width:640px){
+  .item .card-head{flex-wrap:wrap;position:relative;z-index:6;row-gap:0}
+  .item .card-head .tg.pitch{display:inline-flex !important;order:2}
+  .item .card-head .tg.model{order:3;margin:3px 0 -16px 4px}
+  .item .card-head ~ .tags.phone-only .tg.pitch{display:none !important}
+}
