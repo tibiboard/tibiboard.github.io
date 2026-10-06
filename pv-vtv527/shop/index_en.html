@@ -793,10 +793,10 @@ const cardOf = i => {
   const card = `
   <div class="item ${i.state==='いる'?'alive':'sold'} ${i.state==='予告'?'yokoku':''} ${i.state==='展示'?'tenji':''}">
     ${i.state==='旅立ち'?`<div class="stamp">${i.date.replaceAll('-','.')}</div>`:''}
-    <div class="ph">${slot(i.base?i.base+'_1.jpg':'', i.name+' front', '1200×1200px (square)','1/1')}${i.state==='旅立ち'?'<div class="tape">SOLD OUT</div>':''}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags in-photo"'):''}</div>
+    <div class="ph">${slot(i.base?i.base+'_1.jpg':'', i.name+' front', '1200×1200px (square)','1/1')}${i.state==='旅立ち'?'<div class="tape">SOLD OUT</div>':''}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags in-photo"'):''}${TAGS_IN_PHOTO?`<span class="tg model ph-model">${shapeKey(i.shape)==='za'?'tibiboard30Z':'tibiboard30'}</span>`:''}</div>
     ${(()=>{ /* 2026-09-11 たけろう指示(スマホの棚を詰める): No.◯◯◯ は左上の細い枠へ、名前は小さく */
       const m = i.name.match(/^(No\.\s*\d+)\s*(.*)$/); const no = m ? m[1] : ''; const nm = m ? (m[2] || i.name) : i.name;
-      return `<div class="no">${no}${no?'<br>':''}tibiboard30</div><div class="nm">${nm}</div>`; })()}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags inline phone-only"'):tagsHtml(i)}
+      return `<div class="no">${no}${(no&&!TAGS_IN_PHOTO)?'<br>':''}${TAGS_IN_PHOTO?'':'tibiboard30'}</div><div class="nm">${nm}</div>`; })()}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags inline phone-only"'):tagsHtml(i)}
     ${(i.state==='いる'||i.state==='旅立ち')&&i.price?`<div class="pr">${yen(i.price)}</div>`:''}
     <div class="st">${i.state==='いる'?'':(i.state==='予告'?'from September':(i.state==='展示'?'display only':'SOLD OUT'))}</div>
   </div>`;

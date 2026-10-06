@@ -182,3 +182,22 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
   .tags.inline.phone-only{display:flex !important}
 }
 .tags.in-photo .tg.model{background:var(--t-pink) !important;border-color:var(--t-pink) !important;color:#fff !important}
+
+/* 2026-10-06 たけろう「tibiboard30 の名前のタグだけ写真の一番上に。スマホもタブレットも」: 名前のタグは写真の左上、ほかのタグは写真の下(スマホは名前の下) */
+.item .ph .ph-model{position:absolute;left:10px;top:10px;z-index:5;font-size:15px;padding:3px 10px;border-width:2px;line-height:1.2;pointer-events:none}
+.tags.in-photo .tg.model,.tags.inline.phone-only .tg.model{display:none !important}
+@media(max-width:640px){.item .ph .ph-model{left:6px;top:6px;font-size:11px;padding:1px 7px;border-width:1.5px}}
+.item .ph .ph-model{background:var(--t-pink) !important;border-color:var(--t-pink) !important;color:#fff !important}
+
+/* =====================================================================
+   大きな「ちびボード」の文字: パソコン=C1(index の最後の script・.tinted が付く)/ iPad・スマホ=T4+H8(しずかなグロー)
+   2026-10-06 たけろう「君のアイデア通りに」。H8 は色と光だけの軽い動き。動きを減らす設定の人には動かさない
+   ===================================================================== */
+.moji-pillar.c1 b{--cs:#ffb3cf;--c85:rgba(255,179,207,.85);--i:0}
+.moji-pillar.c2 b{--cs:#a8e6d8;--c85:rgba(168,230,216,.85);--i:1}
+.moji-pillar.c3 b{--cs:#ffe08a;--c85:rgba(255,224,138,.85);--i:2}
+.moji-pillar.c4 b{--cs:#c9b8f0;--c85:rgba(201,184,240,.85);--i:3}
+.moji-pillar.c5 b{--cs:#ff8fb8;--c85:rgba(255,143,184,.85);--i:4}
+@keyframes t-glowfill{0%,100%{color:var(--c);text-shadow:0 0 0 transparent}50%{color:var(--c85);text-shadow:0 0 18px var(--cs)}}
+.moji-stage:not(.tinted) .moji-pillar b{animation:t-glowfill 4s ease-in-out infinite;animation-delay:calc(var(--i) * .4s)}
+@media(prefers-reduced-motion:reduce){.moji-pillar b{animation:none !important}}
