@@ -290,3 +290,5 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
 }
 .ab-game .ab-go{margin-top:auto}   /* 2つのゲームの「あそぶ」を下でそろえる */
 .ab-zukan{white-space:nowrap}
+/* 2026-10-07 たけろう「あそぶボタンが付いたから分かる。白い背景はなし・半透明はそのまま」: ゲームの白いカードをやめる(ステップの半透明の板は残す) */
+.ab-game{background:transparent;box-shadow:none}
