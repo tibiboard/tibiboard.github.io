@@ -567,37 +567,41 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
   <!-- 2026-10-06 たけろう指示: うさぎずかん・ゲームは本業ではないので一番下 -->
   <section id="asobi-sec">
-    <div class="doors asobi-doors">
-      <a class="door mintdoor" href="うさぎのへや.html">
-        <img class="door-icon icon-usagi" src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">
-        <div class="dl">📖 Bunny book</div>
-      </a>
-    </div>
-    <div class="playdoor-wrap asobi-play">
-        <div class="playdoor">
-          <div class="pt">🎮 Playground</div>
-          <div class="pgames">
-            <a class="pgame" href="../うさぎ探し体験版.html"><img class="pi" id="pg1" alt=""><div class="pl">🔍 Find the bunny</div></a>
-            <a class="pgame" href="../はしればつべー.html"><img class="pi" id="pg2" alt=""><div class="pl">🏃 Run, batsubei!</div></a>
-          </div>
-          <div class="pcoin" id="pcoin"></div>
+    <!-- 2026-10-07 たけろう「あそびばは押すとゲームに行く動線が見えない」: ①ゲーム → ②スロット → ③かぎ・宝箱 の1本道。
+         コインは あそびばの右下・うさぎずかんは小さな入口。戻す時は _直前退避/2026-10-07_*_あそびばの前/ の index.html -->
+    <h2 class="ab-title">🎮 Playground</h2>
+    <div class="ab-steps">
+      <div class="ab-step">
+        <div class="ab-head"><span class="ab-no">1</span>Play games to get coins</div>
+        <div class="ab-games">
+          <a class="ab-game" href="../うさぎ探し体験版.html"><img class="pi" id="pg1" alt=""><span class="ab-gname">🔍 Find the bunny</span><span class="ab-go">Play ▶</span></a>
+          <a class="ab-game" href="../はしればつべー.html"><img class="pi" id="pg2" alt=""><span class="ab-gname">🏃 Run, batsubei!</span><span class="ab-go">Play ▶</span></a>
         </div>
       </div>
-    <div class="mycoin" id="mycoin"></div>
-    <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="About saved data">?</button>
-    <div class="coingames" id="takara">
-      <!-- 2026-09-12 たけろう決定: ガチャは廃止(スロット1本)。台の絵とリンクを外した。戻すなら _直前退避\2026-09-12_専用アプリ文とガチャ廃止前 -->
-      <a class="minimachine" href="../スロット_新台.html" title="Slots">
-        <div class="sbox">
-          <div class="sreels"><b></b><b></b><b></b></div>
-          <div class="sball"></div>
+      <div class="ab-arrow" aria-hidden="true">▼</div>
+      <div class="ab-step">
+        <div class="ab-head"><span class="ab-no">2</span>Got coins? Try the slots!</div>
+        <div class="coingames" id="takara">
+        <a class="minimachine" href="../スロット_新台.html" title="Slots">
+          <div class="sbox">
+            <div class="sreels"><b></b><b></b><b></b></div>
+            <div class="sball"></div>
+          </div>
+        </a>
         </div>
-      </a>
+        <a class="ab-go big" href="../スロット_新台.html">Spin the slots ▶</a>
+      </div>
+      <div class="ab-arrow" aria-hidden="true">▼</div>
+      <div class="ab-step">
+        <div class="ab-head"><span class="ab-no">3</span>Jackpot = 🔑 key → open the chest at the bottom</div>
+      </div>
     </div>
-    <div class="chalcall">
-      <div class="chalarrows"><span><svg viewBox="0 0 60 74" width="210" height="259"><path d="M30 7 Q34 7 37 11 L51 29 Q57 37 48 37 L41 37 L41 57 Q41 68 30 68 Q19 68 19 57 L19 37 L12 37 Q3 37 9 29 L23 11 Q26 7 30 7 Z" fill="#b79ce0" stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg></span></div><!-- 2026-09-12 たけろう指示: 矢印は1つ(ガチャ廃止でスロットだけ) -->
-      <!-- 2026-08-20 たけろう: 「コインをつかって 鍵をゲット」だけ。隠しコマンドの話はここで言わない(どこかで気づかせる) -->
-      <div class="chaltext"><span class="chibiCoinGui inline" aria-hidden><span class="cg-disc" style="font-size:1.35em"></span></span> → get a<br>🔑<b>key</b>!</div>
+    <div class="ab-foot">
+      <a class="ab-zukan" href="うさぎのへや.html"><img src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">📖 Bunny book ▶</a>
+      <div class="ab-coin">
+        <div class="mycoin" id="mycoin"></div>
+        <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="About saved data">?</button>
+      </div>
     </div>
   </section>
 
@@ -664,7 +668,7 @@ if(/[?&]in=1/.test(location.search)){
 
 /* ===== 持っているコインを大きく表示(あそび共通基盤から。2026-08-20: 丸い金貨GUIに大改装) ===== */
 if(window.CHIBI){
-  window.CHIBI.mountCoinGui(document.getElementById('mycoin'), {note:true});
+  window.CHIBI.mountCoinGui(document.getElementById('mycoin'), {size:96, note:false}); /* 2026-10-07: あそびばの右下に小さく */
   window.CHIBI.mountCoinGui(document.getElementById('pcoin'), {size:120, note:false});
   window.CHIBI.refreshCoinGui(false);
 }

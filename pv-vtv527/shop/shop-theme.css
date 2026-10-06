@@ -246,3 +246,47 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
   .tags.in-photo .tg{font-size:9px;padding:0 5px;border-width:1px;line-height:1.5}
   .tags.inline.phone-only{display:none !important}
 }
+
+/* =====================================================================
+   あそびば = 1本道(2026-10-07 たけろう「押すとゲームに行く動線が見えない」「UI 実装してみて」)
+   ① ゲームでコイン → ② スロットに挑戦 → ③ かぎで宝箱。コインは右下・うさぎずかんは小さな入口。
+   戻す時は _直前退避/2026-10-07_*_あそびばの前/ の index.html・index_en.html・shop-theme.css
+   ===================================================================== */
+#asobi-sec{text-align:center;padding:44px 16px 34px}
+#asobi-sec .ab-title{display:inline-block;margin:0 0 18px;padding:6px 34px;border-radius:999px;background:var(--t-glass);
+  font-size:clamp(34px,6vw,52px);font-weight:900;color:var(--t-ink);letter-spacing:2px}
+.ab-steps{display:flex;flex-direction:column;align-items:center;gap:4px}
+.ab-step{width:min(100%,720px);background:rgba(255,255,255,.6);border-radius:var(--t-round);padding:20px 16px 22px;box-shadow:0 6px 0 rgba(90,58,46,.12)}
+.ab-head{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 14px;
+  font-size:clamp(22px,3.6vw,30px);font-weight:900;color:var(--t-ink);line-height:1.35;text-align:left}
+.ab-no{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;
+  background:var(--t-pink);color:#fff;font-size:28px;font-weight:900}
+.ab-step:last-child .ab-head{margin:0}
+.ab-games{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ab-game{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px 16px;border-radius:22px;background:#fff;
+  color:var(--t-ink);text-decoration:none;box-shadow:0 5px 0 rgba(90,58,46,.15);transition:transform .12s}
+.ab-game:hover{transform:translateY(-4px)}
+.ab-game .pi{width:min(140px,30vw);aspect-ratio:1;height:auto;object-fit:contain}
+.ab-gname{font-size:clamp(18px,2.8vw,22px);font-weight:900}
+.ab-go{display:inline-block;padding:8px 24px;border-radius:999px;background:var(--t-accent);color:#fff;text-decoration:none;
+  font-size:clamp(18px,2.8vw,22px);font-weight:900;box-shadow:0 4px 0 var(--t-accent-deep)}
+.ab-go.big{margin-top:12px;padding:12px 32px;font-size:clamp(22px,3.6vw,28px)}
+.ab-go:hover{filter:brightness(1.08)}
+.ab-arrow{font-size:34px;line-height:1;color:var(--t-pink);animation:chalhop .55s ease-in-out infinite alternate}
+#asobi-sec .coingames{margin-top:0}
+.ab-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;width:min(100%,720px);margin:22px auto 0}
+.ab-zukan{display:inline-flex;align-items:center;gap:8px;padding:6px 18px 6px 8px;border-radius:999px;background:var(--t-glass);
+  color:var(--t-ink);text-decoration:none;font-size:20px;font-weight:900}
+.ab-zukan img{width:44px;height:44px;object-fit:contain}
+.ab-coin{display:flex;align-items:center;gap:8px}
+#asobi-sec #mycoin.chibiCoinGui{margin:0}
+#asobi-sec .ab-coin .datainfo-btn{margin:0}
+@media(max-width:640px){
+  .ab-step{padding:16px 10px 18px}
+  .ab-head{gap:8px}
+  .ab-no{width:38px;height:38px;font-size:22px}
+  .ab-games{gap:10px}
+  .ab-zukan{font-size:17px}
+}
+.ab-game .ab-go{margin-top:auto}   /* 2つのゲームの「あそぶ」を下でそろえる */
+.ab-zukan{white-space:nowrap}
