@@ -639,7 +639,7 @@
             box.innerHTML = `<div class="icon64">📱</div>
               <div class="name">📱 ちびボードアプリの隠しコマンド ゲット!</div>
               <div class="sub">① この画面を スクショ<br>② X(@tibiboard)の「かくしコマンドうけつけ」の 固定ポストに リプライで おくってね<br>③ お店が きづきしだい、こちらから DMで コマンドを おくるね(1〜2日いない)<br>④ Xを もっていない人は <b>tibiboard100@gmail.com</b> へ おくってもOK</div>
-              <button class="go tweet" style="background:#e0197a;border-bottom-color:#a3105a;border-radius:999px">じまんする</button>
+              <button class="go tweet" style="background:#e0197a;border-bottom-color:#a3105a;border-radius:999px">X で じまんする</button>
               <button class="go">とじる ▶</button>`;
             blobPromise = chibiMakeCardBlob({icon:'📱', caption:'隠しコマンドを\nみつけた!'});
           } else {
@@ -649,7 +649,7 @@
             box.innerHTML = `<div class="card"><img src="${C.DIR}${result.id}.png"></div>
               <div class="name">ばつべーの<br>〈${name}〉を<br>みつけた!</div>
               <div class="sub">${isNew ? '✨NEW! ずかんに はいったよ' : 'この コーデは もう もってた! ざんねん!'}</div>
-              <button class="go tweet" style="background:#e0197a;border-bottom-color:#a3105a;border-radius:999px">じまんする</button>
+              <button class="go tweet" style="background:#e0197a;border-bottom-color:#a3105a;border-radius:999px">X で じまんする</button>
               <button class="go">とじる ▶</button>`;
             blobPromise = chibiMakeCardBlob({imgSrc:`${C.DIR}${result.id}.png`, caption:`ばつべーの\n〈${name}〉を\nみつけた!`});
           }
