@@ -53,6 +53,11 @@ img{max-width:100%}
 .zm.bk i{border-radius:50%;background:#1b1622}
 .zm.s1 i,.zm.s2 i{border-radius:4px;transform:rotate(45deg);width:20px;height:20px;background:linear-gradient(135deg,#bff5c8,#7fe0d0);border:2px solid var(--mint-deep)}
 .zm.s2 i{background:linear-gradient(135deg,#f6f39a,#cfe97a)}
+
+/* 2026-10-08 クリアの段(03b): 印は丸に写真の色・切り抜き写真は切らずに見せる・準備中の札 */
+.zm.cl i{border-radius:50%;background:var(--c);opacity:.8;box-shadow:inset 0 0 0 3px rgba(255,255,255,.75)}
+.ehon .photo-wrap.zsw img.cut{object-fit:contain;background:#eef2f6}
+.ehon .soon{display:inline-block;margin:12px auto 0;padding:6px 22px;border-radius:999px;border:3px solid var(--pink);background:#fff;color:var(--pink);font-weight:900;font-size:24px}
 .zm.on{opacity:1;transform:scale(1.12)}
 .zm:active{transform:scale(.95)}
 
@@ -255,6 +260,7 @@ const EHON = [
   {h:'キースイッチを つけかえられる。',     p:'ホットスワップ対応。うさぎキャップは スイッチ+キーキャップのセットを 買った人だけ'}  /* 2026-09-13 たけろう */,
   {h:'Kit or assembled — your choice.',   p:'Want to build it yourself? Pick the kit'},
   {h:'LEDが でんちの のこりを<br>おしえてくれる。',  /* 2026-09-12 たけろう指示: 「のこりを」で改行 */ p:'しんごうと おなじだよ。75%〜=にじいろ / 50%〜=あお / 25%〜=きいろ / それより下=あか'},
+  {h:'Clear <em>does not pay off</em>.', p:'Each one takes 4 days or more to make. Honestly, it does not pay off at all. I still make them because they come out ridiculously beautiful.'},  /* 2026-10-08: clear section (03b) */
 ];
 /* ▲編集ここまで▲ */
 </script>
@@ -292,6 +298,22 @@ const EHON = [
   <div class="photo-wrap"><img src="photos/ehon_2.jpg" alt="key shape" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_2.jpg</div>'"></div>
   <h2 data-ehon="1"></h2>
   <p class="sub" data-ehonp="1"></p>
+</section>
+
+<!-- 3b クリア(2026-10-08 たけろう指示: Z の1つ上に。形でなく素材と作り方がちがう・手間がいちばんかかる・発売日にはまだ売らない=準備中。写真はクリアだけ) -->
+<section class="ehon bg-mint">
+  <div class="sec-num">03b</div>
+  <div class="photo-wrap zsw" id="csw">
+    <img src="photos/ehon_s_1.jpg" alt="clear, lit from below (green and yellow)" class="on">
+    <img src="photos/cine_24.jpg" alt="clear (pink and orange)" loading="lazy">
+    <img src="photos/ehon_s_2.jpg" alt="clear (light blue)" loading="lazy">
+    <img src="photos/cut_54.webp" alt="clear (pink)" class="cut" loading="lazy">
+    <img src="photos/cut_49.webp" alt="clear (blue)" class="cut" loading="lazy">
+    <div class="zmarks"><button type="button" class="zm cl on" style="--c:#b7e86a" aria-label="clear 1"><i></i></button><button type="button" class="zm cl" style="--c:#ff9a8a" aria-label="clear 2"><i></i></button><button type="button" class="zm cl" style="--c:#6fd6e6" aria-label="clear 3"><i></i></button><button type="button" class="zm cl" style="--c:#f59ac7" aria-label="clear 4"><i></i></button><button type="button" class="zm cl" style="--c:#8fb4ef" aria-label="clear 5"><i></i></button></div>
+  </div>
+  <h2 data-ehon="9"></h2>
+  <p class="sub" data-ehonp="9"></p>
+  <p class="soon">Coming soon</p>
 </section>
 
 <!-- 4 (Zエディション ホロカード) -->
@@ -756,7 +778,8 @@ document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset
 <script>
 /* Z写真の切り替え(2026-08-23) */
 (function(){
-  const box=document.getElementById('zsw'); if(!box) return;
+  /* 2026-10-08: Z(#zsw)とクリア(#csw)の両方で同じ動き */
+  document.querySelectorAll('.photo-wrap.zsw').forEach(box=>{
   const imgs=[...box.querySelectorAll('img')], marks=[...box.querySelectorAll('.zm')];
   let cur=0;
   const show=n=>{cur=(n+imgs.length)%imgs.length; imgs.forEach((im,i)=>im.classList.toggle('on',i===cur)); marks.forEach((m,i)=>m.classList.toggle('on',i===cur));};
@@ -764,6 +787,7 @@ document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset
   let sx=null;
   box.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
   box.addEventListener('touchend',e=>{ if(sx==null) return; const dx=e.changedTouches[0].clientX-sx; sx=null; if(Math.abs(dx)>40) show(cur+(dx<0?1:-1)); },{passive:true});
+  });
 })();
 </script>
 
