@@ -175,16 +175,256 @@
     return win;
   };
 
-  /* ---- 宝箱の中身抽選(2026-08-14新設、確率は同日たけろう改定): 95%=うさぎ(かぶりあり)/5%=かくしコマンド ----
-     戻り値: {type:'usagi', id, isNew} または {type:'secret'} */
+  /* 宝箱: 95%うさぎ / 5%かくしコマンド。番号の正本は ★かくしコマンド台帳.md。
+     取得済みは報酬IDで保存。番号を更新しても同じ報酬を重ねて出さない。 */
   C.TREASURE_SECRET_P = 0.05;
-  /* 2026-08-15たけろう指示: かくしコマンドはアプリ側の機能が未実装のため、排出そのものを停止する(当面100%うさぎ)。
-     9月のアプリ公開でアプリ側が実装できたら、このフラグを true に戻すだけで復活する(確率は上のTREASURE_SECRET_Pのまま5%・値は変更していない)。 */
-  C.HIDDEN_CMD_ENABLED = false;
+  C.HIDDEN_CMD_ENABLED = true;
+  const SECRET_REWARDS = [
+  {
+    "itemId": "vibe_kodou",
+    "code": "J570GFB9"
+  },
+  {
+    "itemId": "vibe_triple",
+    "code": "959AHE90"
+  },
+  {
+    "itemId": "wall:27805449",
+    "code": "11A0C1AG"
+  },
+  {
+    "itemId": "wall:4668291",
+    "code": "H06GC20G"
+  },
+  {
+    "itemId": "wall:27109494",
+    "code": "3771AI9E"
+  },
+  {
+    "itemId": "wall:panel",
+    "code": "J3J37CCD"
+  },
+  {
+    "itemId": "wall:midori_ki",
+    "code": "3A7D2009"
+  },
+  {
+    "itemId": "wall:renga",
+    "code": "JC6F0AB7"
+  },
+  {
+    "itemId": "wall:ao",
+    "code": "AB1D017I"
+  },
+  {
+    "itemId": "wall:shirokabe",
+    "code": "ED66GCFI"
+  },
+  {
+    "itemId": "wall:mizuiro",
+    "code": "597DHEHH"
+  },
+  {
+    "itemId": "wall:shikkui",
+    "code": "1IJ56DJA"
+  },
+  {
+    "itemId": "wall:hikari_con",
+    "code": "D977878B"
+  },
+  {
+    "itemId": "wall:momo_kabe",
+    "code": "GJDI07EF"
+  },
+  {
+    "itemId": "wall:ki_totan",
+    "code": "J3J08C6D"
+  },
+  {
+    "itemId": "wall:ishi_koke",
+    "code": "4DFJ52H0"
+  },
+  {
+    "itemId": "wall:glass_tile",
+    "code": "6HGFI035"
+  },
+  {
+    "itemId": "wall:aka_punch",
+    "code": "76C8HC7B"
+  },
+  {
+    "itemId": "wall:pink_kabe",
+    "code": "CJ28FGG1"
+  },
+  {
+    "itemId": "wall:ao_con",
+    "code": "5GF13391"
+  },
+  {
+    "itemId": "wall:aka_renga",
+    "code": "1EFHFI83"
+  },
+  {
+    "itemId": "wall:kurai_renga",
+    "code": "DGI8DF5G"
+  },
+  {
+    "itemId": "wall:cha_block",
+    "code": "63J39A11"
+  },
+  {
+    "itemId": "wall:ishi_kabe",
+    "code": "BAHG7CA6"
+  },
+  {
+    "itemId": "wall:mizu_con",
+    "code": "FB07J971"
+  },
+  {
+    "itemId": "wall:shiro_renga",
+    "code": "89CHDHFB"
+  },
+  {
+    "itemId": "wall:cha_renga",
+    "code": "71EG2FJJ"
+  },
+  {
+    "itemId": "wall:sabi_kabe",
+    "code": "76AGC485"
+  },
+  {
+    "itemId": "wall:midori_tile",
+    "code": "DGC4BIA3"
+  },
+  {
+    "itemId": "wall:shiro_kami",
+    "code": "64DJ9GI9"
+  },
+  {
+    "itemId": "wall:kuro_tile",
+    "code": "HD97J96I"
+  },
+  {
+    "itemId": "wall:shiro_con",
+    "code": "083AGC7H"
+  },
+  {
+    "itemId": "wall:hagare_kabe",
+    "code": "5C3F75B5"
+  },
+  {
+    "itemId": "wall:cream_renga",
+    "code": "BFI054H8"
+  },
+  {
+    "itemId": "wall:aka_renga2",
+    "code": "203D71E8"
+  },
+  {
+    "itemId": "vibe_neko",
+    "code": "E2J5H413"
+  },
+  {
+    "itemId": "vibe_kaidan",
+    "code": "8982G0AH"
+  },
+  {
+    "itemId": "vibe_nami",
+    "code": "HA36AB37"
+  },
+  {
+    "itemId": "vibe_rocket",
+    "code": "81H6IIFF"
+  },
+  {
+    "itemId": "vibe_warai",
+    "code": "84IGH1C3"
+  },
+  {
+    "itemId": "vibe_taiko",
+    "code": "H28G7JH2"
+  },
+  {
+    "itemId": "vibe_shizuku",
+    "code": "E62I884E"
+  },
+  {
+    "itemId": "vibe_pyon",
+    "code": "B3B1I0BE"
+  },
+  {
+    "itemId": "vibe_kaminari",
+    "code": "FGCIIDAB"
+  },
+  {
+    "itemId": "vibe_yukidoke",
+    "code": "IB6G5GFH"
+  },
+  {
+    "itemId": "vibe_ochiba",
+    "code": "J500HBBC"
+  },
+  {
+    "itemId": "vibe_kodama",
+    "code": "F5666ACE"
+  },
+  {
+    "itemId": "vibe_brake",
+    "code": "4AD90A6I"
+  },
+  {
+    "itemId": "vibe_elevator",
+    "code": "BH57J2HH"
+  },
+  {
+    "itemId": "vibe_kaeru",
+    "code": "259A22H8"
+  },
+  {
+    "itemId": "vibe_hotaru",
+    "code": "24C7CJC1"
+  },
+  {
+    "itemId": "kbskin_set",
+    "code": "DHH15HBF"
+  },
+  {
+    "itemId": "vibe_fuwa",
+    "code": "63BHDA5E"
+  },
+  {
+    "itemId": "vibe_tokotoko",
+    "code": "77IHF9I0"
+  },
+  {
+    "itemId": "vibe_bururun",
+    "code": "0D3G65G7"
+  }
+];
+  const SECRET_HISTORY_KEY = 'chibi_secret_rewards_v1';
+  C.getSecretHistory = () => {
+    try {
+      const rows = JSON.parse(LS.getItem(SECRET_HISTORY_KEY) || '[]');
+      return Array.isArray(rows) ? rows.filter(row => row && typeof row.itemId === 'string' && typeof row.code === 'string') : [];
+    } catch(e) { return []; }
+  };
+  C.issueSecret = () => {
+    const history = C.getSecretHistory();
+    const owned = new Set(history.map(row => row.itemId));
+    const remaining = SECRET_REWARDS.filter(row => !owned.has(row.itemId));
+    if (!remaining.length) return null;
+    const reward = remaining[Math.floor(Math.random() * remaining.length)];
+    LS.setItem(SECRET_HISTORY_KEY, JSON.stringify([...history, reward]));
+    return {type:'secret', ...reward};
+  };
   C.openTreasure = () => {
-    if(C.HIDDEN_CMD_ENABLED && Math.random() < C.TREASURE_SECRET_P) return {type:'secret'};
-    const id = C.drawCard();          // C.ALLから一様ランダム・かぶりあり
-    const isNew = C.addZukan(id);     // 新規ならずかんに追加、かぶりなら変化なし
+    if(C.HIDDEN_CMD_ENABLED && Math.random() < C.TREASURE_SECRET_P) {
+      const secret = C.issueSecret();
+      if(secret) return secret;
+    }
+    // 全番号を取得済みなら、うさぎが出る。空の当たりや重複番号にはしない。
+    const id = C.drawCard();
+    const isNew = C.addZukan(id);
     return {type:'usagi', id, isNew};
   };
 
@@ -638,7 +878,8 @@
             shareText = 'たからばこから ちびボードアプリの隠しコマンドが でたよ🐰 #ちびボード';
             box.innerHTML = `<div class="icon64">📱</div>
               <div class="name">📱 ちびボードアプリの隠しコマンド ゲット!</div>
-              <div class="sub">① この画面を スクショ<br>② X(@tibiboard)の「かくしコマンドうけつけ」の 固定ポストに リプライで おくってね<br>③ お店が きづきしだい、こちらから DMで コマンドを おくるね(1〜2日いない)<br>④ Xを もっていない人は <b>tibiboard100@gmail.com</b> へ おくってもOK</div>
+              <div class="sub" style="font-size:28px">${result.code.slice(0,4)} ${result.code.slice(4)}</div>
+              <div class="sub">この番号を スクショで とってね。<br>ちびボードアプリの「金庫の番号」に 入れると ひらくよ。</div>
               <button class="go tweet" style="background:#e0197a;border-bottom-color:#a3105a;border-radius:999px">X で じまんする</button>
               <button class="go">とじる ▶</button>`;
             blobPromise = chibiMakeCardBlob({icon:'📱', caption:'隠しコマンドを\nみつけた!'});
