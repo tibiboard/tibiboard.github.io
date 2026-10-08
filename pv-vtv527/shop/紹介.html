@@ -260,7 +260,7 @@ const EHON = [
   {h:'キースイッチを つけかえられる。',     p:'ホットスワップ対応。'}  /* 2026-09-13 たけろう / 2026-10-09 たけろう指示: うさぎキャップの話は次の段にあるので外した */,
   {h:'キット版と 完成版、えらべます。',      p:'じぶんで 組んでみたい人は キット版'},
   {h:'LEDが でんちの のこりを<br>おしえてくれる。',  /* 2026-09-12 たけろう指示: 「のこりを」で改行 */ p:'しんごうと おなじだよ。75%〜=にじいろ / 50%〜=あお / 25%〜=きいろ / それより下=あか'},
-  {h:'クリアは、<br>1台つくるのに<br><em>とても 時間が かかる</em>。', p:'1台つくるのに とても 時間が かかりますが、<br>わたし史上 最高に かわいい できなので、いつまで つくれるか わかりませんが がんばります。'},  /* 2026-10-08 たけろう指示: クリアの段(03b)。良い所と悪い所を両方 / 2026-10-09 たけろう指示:「割に合わない」→「1台つくるのに とても時間がかかる」 */
+  {h:'クリアは、<br><em>超かわいい</em>。', p:'1台つくるのに とても 時間が かかりますが、<br>わたし史上 最高に かわいい できなので、いつまで つくれるか わかりませんが がんばります。'},  /* 2026-10-08 たけろう指示: クリアの段(03b)。良い所と悪い所を両方 / 2026-10-09 たけろう指示:「割に合わない」→「1台つくるのに とても時間がかかる」 */
 ];
 /* ▲編集ここまで▲ */
 </script>
@@ -429,35 +429,8 @@ const EHON = [
   <style>@media(max-width:640px){#sec10 .photo-wrap{flex-direction:column !important;align-items:center !important}#sec10 .photo-wrap>div{max-width:100% !important;width:100%}} /* 2026-09-11 たけろう指示: スマホで見切れる→縦並び */
   #sec10 .photo-wrap{height:auto !important;max-height:none !important;aspect-ratio:auto !important}#sec10 .photo-wrap svg{max-height:150px;flex:0 0 auto !important}#sec10 .photo-wrap>div{justify-content:flex-start !important;min-height:0}#sec10 .photo-wrap div[style*='border-radius:999px']{white-space:nowrap;font-size:clamp(18px,3vw,26px) !important}</style>
   <div class="photo-wrap" style="background:linear-gradient(180deg,var(--mint-pale),var(--pink-pale));display:flex;align-items:stretch;justify-content:center;gap:clamp(10px,2.5vw,22px);padding:clamp(10px,2.5vw,22px)">
+    <!-- 2026-10-09 たけろう指示: BASE と同じ足し算の見せ方(キットがもと + 組み立て + キーキャップとキースイッチ)。前は 完成 / キット −10,000 -->
     <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;position:relative"><div class="std-tag">標準</div>
-      <svg viewBox="0 0 220 180" style="width:100%;max-width:260px;flex:1" xmlns="http://www.w3.org/2000/svg">
-        <!-- 完成キーボード本体どーん -->
-        <rect x="14" y="44" width="192" height="102" rx="20" fill="var(--pink-pale)" stroke="var(--pink-deep)" stroke-width="5"/>
-        <!-- つやつやハイライト -->
-        <ellipse cx="66" cy="58" rx="48" ry="9" fill="#ffffff" opacity="0.55" transform="rotate(-8 66 58)"/>
-        <g fill="var(--mint)" stroke="var(--mint-deep)" stroke-width="3">
-          <rect x="30" y="60" width="30" height="24" rx="6"/><rect x="66" y="60" width="30" height="24" rx="6"/><rect x="102" y="60" width="30" height="24" rx="6"/><rect x="138" y="60" width="30" height="24" rx="6"/>
-          <rect x="30" y="90" width="30" height="24" rx="6"/><rect x="66" y="90" width="30" height="24" rx="6"/><rect x="102" y="90" width="30" height="24" rx="6"/><rect x="138" y="90" width="30" height="24" rx="6"/><rect x="174" y="90" width="16" height="24" rx="6"/>
-          <rect x="30" y="120" width="66" height="18" rx="6"/><rect x="102" y="120" width="88" height="18" rx="6"/>
-        </g>
-        <!-- アクセントキー(ピンク) -->
-        <rect x="174" y="60" width="16" height="24" rx="6" fill="var(--pink)" stroke="var(--pink-deep)" stroke-width="3"/>
-        <!-- うさぎ耳ネームプレート(側面) -->
-        <g transform="translate(202,92)">
-          <circle cx="4" cy="-11" r="5.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="3"/>
-          <circle cx="4" cy="11" r="5.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="3"/>
-          <rect x="-3" y="-7" width="15" height="20" rx="7.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="3"/>
-        </g>
-        <text x="110" y="32" font-size="28" text-anchor="middle">✨</text>
-        <text x="22" y="40" font-size="20" text-anchor="middle">✨</text>
-        <text x="200" y="34" font-size="18" text-anchor="middle">✨</text>
-        <text x="26" y="164" font-size="20" text-anchor="middle">✨</text>
-      </svg>
-      <div style="font-size:clamp(30px,5.5vw,42px);line-height:1;margin:2px 0 -2px">📦✨</div>
-      <div style="font-weight:900;color:var(--pink-deep);font-size:clamp(19px,3.4vw,25px)">かんせいばん</div>
-      <div style="font-size:clamp(13px,2.2vw,16px);color:var(--ink2);font-weight:700">とどいたら すぐ つかえる</div>
-    </div>
-    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;position:relative">
       <svg viewBox="0 0 220 180" style="width:100%;max-width:260px;flex:1" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <filter id="kitDS" x="-40%" y="-40%" width="180%" height="180%">
@@ -548,7 +521,36 @@ const EHON = [
       <div style="font-size:clamp(30px,5.5vw,42px);line-height:1;margin:2px 0 -2px">🔧🪛</div>
       <div style="font-weight:900;color:var(--mint-deep);font-size:clamp(19px,3.4vw,25px)">キットばん</div>
       <div style="font-size:clamp(13px,2.2vw,16px);color:var(--ink2);font-weight:700">じぶんで くみたてる</div>
-      <div style="margin-top:8px;background:var(--mint);color:#fff;font-weight:900;font-size:clamp(24px,4vw,30px);border-radius:999px;padding:6px 22px;box-shadow:0 4px 0 rgba(0,0,0,.12)">−10,000えん</div>
+    </div>
+    <div class="opt-plus" aria-hidden="true">+</div>
+    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;position:relative">
+      <svg viewBox="0 0 220 180" style="width:100%;max-width:260px;flex:1" xmlns="http://www.w3.org/2000/svg">
+        <!-- 完成キーボード本体どーん -->
+        <rect x="14" y="44" width="192" height="102" rx="20" fill="var(--pink-pale)" stroke="var(--pink-deep)" stroke-width="5"/>
+        <!-- つやつやハイライト -->
+        <ellipse cx="66" cy="58" rx="48" ry="9" fill="#ffffff" opacity="0.55" transform="rotate(-8 66 58)"/>
+        <g fill="var(--mint)" stroke="var(--mint-deep)" stroke-width="3">
+          <rect x="30" y="60" width="30" height="24" rx="6"/><rect x="66" y="60" width="30" height="24" rx="6"/><rect x="102" y="60" width="30" height="24" rx="6"/><rect x="138" y="60" width="30" height="24" rx="6"/>
+          <rect x="30" y="90" width="30" height="24" rx="6"/><rect x="66" y="90" width="30" height="24" rx="6"/><rect x="102" y="90" width="30" height="24" rx="6"/><rect x="138" y="90" width="30" height="24" rx="6"/><rect x="174" y="90" width="16" height="24" rx="6"/>
+          <rect x="30" y="120" width="66" height="18" rx="6"/><rect x="102" y="120" width="88" height="18" rx="6"/>
+        </g>
+        <!-- アクセントキー(ピンク) -->
+        <rect x="174" y="60" width="16" height="24" rx="6" fill="var(--pink)" stroke="var(--pink-deep)" stroke-width="3"/>
+        <!-- うさぎ耳ネームプレート(側面) -->
+        <g transform="translate(202,92)">
+          <circle cx="4" cy="-11" r="5.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="3"/>
+          <circle cx="4" cy="11" r="5.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="3"/>
+          <rect x="-3" y="-7" width="15" height="20" rx="7.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="3"/>
+        </g>
+        <text x="110" y="32" font-size="28" text-anchor="middle">✨</text>
+        <text x="22" y="40" font-size="20" text-anchor="middle">✨</text>
+        <text x="200" y="34" font-size="18" text-anchor="middle">✨</text>
+        <text x="26" y="164" font-size="20" text-anchor="middle">✨</text>
+      </svg>
+      <div style="font-size:clamp(30px,5.5vw,42px);line-height:1;margin:2px 0 -2px">📦✨</div>
+      <div style="font-weight:900;color:var(--pink-deep);font-size:clamp(19px,3.4vw,25px)">くみたて</div>
+      <div style="font-size:clamp(13px,2.2vw,16px);color:var(--ink2);font-weight:700">かんせいばんで とどく。すぐ つかえる</div>
+      <div style="margin-top:8px;background:var(--mint);color:#fff;font-weight:900;font-size:clamp(24px,4vw,30px);border-radius:999px;padding:6px 22px;box-shadow:0 4px 0 rgba(0,0,0,.12)">+10,000えん</div>
     </div>
     <div class="opt-plus" aria-hidden="true">+</div>
     <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;margin-top:clamp(18px,4vw,40px);border:3px dashed var(--pink)">
