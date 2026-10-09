@@ -183,10 +183,14 @@ if(it && it.state==='いる'){
         ${tagsHtml(it).replace('class="tags"','class="tags inline"')}
         <div class="col">Colors: ${val(it.color)}</div>
         <div class="story">${val(it.story)}</div>
-        <div class="price">${yen(it.price)} <small>(tax and shipping within Japan included)</small></div>
-        <p class="purchase-includes">The displayed price excludes switches and keycaps. Add the switch + keycap set for ¥8,000. A USB-C cable is not included.</p>
-        <div class="ship">🚚 Ships: ${it.ship||TODO}</div>
-        <div style="font-size:13px;font-weight:700;color:#6b6672;margin-top:6px">🎨 The bottom color of the case, the power switch, the right-hand name plate (color / design / material) and the bonus bunny keycap are whatever the maker found cute that day (part of the fun of a one-of-a-kind item)</div>
+        ${it.state==='いる' ? (()=>{ const PP = window.PRICE_PARTS || {assembly:10000, set:8000}; /* 2026-10-09 アストラ指摘: 日本語と同じ出し方(全部入りを大きく・内訳は足し算) */
+          return `<div class="price">${yen(it.price+PP.set)} <small>all included (tax and shipping within Japan included)</small></div>
+        <div class="price-parts"><div>Kit <b>${yen(it.price-PP.assembly)}</b></div><div>+ Assembly <b>${yen(PP.assembly)}</b></div><div>+ Switches &amp; keycaps <b>${yen(PP.set)}</b></div></div>
+        <p class="purchase-includes">A USB-C cable is not included.</p>`; })()
+        : `<div class="price">${yen(it.price)} <small>(tax and shipping within Japan included)</small></div>
+        <p class="purchase-includes">The displayed price excludes switches and keycaps. Add the switch + keycap set for ¥8,000. A USB-C cable is not included.</p>`}
+        <div class="ship">🚚 Ships: ${it.ship ? it.ship.replace(/通常/g, 'Usually ').replace(/[〜～]/g, '–').replace(/週間/g, ' weeks').replace(/日/g, ' days') : TODO}</div>
+        <div style="font-size:13px;font-weight:700;color:#6b6672;margin-top:6px">🎨 The bottom color of the case, the power switch, the right-hand name plate (color / design / material) and the bonus bunny keycap (only with the switch + keycap set) are whatever the maker found cute that day (part of the fun of a one-of-a-kind item)</div>
         ${validPurchaseUrl(it.url)
           ? `<a class="keybtn big" href="${validPurchaseUrl(it.url)}" target="_blank" rel="noopener noreferrer">Take this one home ▶</a>`
           : `<div class="keybtn big" style="background:#8b8792;border-bottom-color:#5f5b66;cursor:not-allowed">Sales are being prepared</div>`}
