@@ -340,3 +340,5 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
 #pv-sec h2.pv-h ~ p{font-size:clamp(22px,3.4vw,34px) !important;line-height:1.4}
 #pv-sec h2.pv-h ~ p + p{font-size:clamp(17px,2.4vw,26px) !important}
 #pv-sec .pv-listen{font-size:clamp(24px,3.8vw,38px);font-weight:900;color:#e2468c;margin:6px 0 0}
+/* 2026-10-12: 壁の絵(body::before・画面に固定)は一番うしろへ。z-index:0 だと、位置指定の無い段(FIREWORKS・NyattoLand の X など)が壁の後ろに隠れていた */
+body::before{z-index:-1 !important}
