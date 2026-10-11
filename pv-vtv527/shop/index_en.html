@@ -525,7 +525,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
   <!-- ばつべーの扉(部屋への入口。文字は最少) -->
   <section id="doors-sec">
-    <a class="keybtn big" href="購入者_en.html" style="display:block;margin:26px auto 0;background:var(--mint-deep);border-bottom-color:#4c7a92;font-size:clamp(20px,3.6vw,30px);line-height:1.4;padding:22px 20px;text-align:center;max-width:560px">🛍 Already bought one?<br>This way ▶</a>
+    <!-- 2026-10-12 発売まで準備中(押せない)。発売の時は控えの <a href> に戻す --><span class="keybtn big" aria-disabled="true" style="opacity:.55;cursor:default;pointer-events:none;display:block;margin:26px auto 0;background:var(--mint-deep);border-bottom-color:#4c7a92;font-size:clamp(20px,3.6vw,30px);line-height:1.4;padding:22px 20px;text-align:center;max-width:560px">🛍 Already bought one?<br>(coming soon)</span>
     <!-- コインの使い道: ミニチュアの台そのものを見せる(無料ゲームとは並べない) -->
   </section>
 
@@ -789,6 +789,8 @@ const junbiCardOf = i => {
 };
 /* 2026-10-06 たけろう「タグも全部 写真の中に入れてみよう(戻せるように)」: true=写真の下のすきまにタグ(スマホは写真が小さいので名前の下のまま) / false=どの画面も名前の下 */
 const TAGS_IN_PHOTO = true;
+/* 2026-10-12 たけろう「発売まで準備中・中を見えなくする」: 発売の時に true へ(棚の子が押せる・購入者ページの入口が開く) */
+const SALE_OPEN = false;
 const cardOf = i => {
   if(i.state==='準備中') return junbiCardOf(i);
   const card = `
@@ -800,9 +802,9 @@ const cardOf = i => {
       const m = i.name.match(/^(No\.\s*\d+)\s*(.*)$/); const no = m ? m[1] : ''; const nm = m ? (m[2] || i.name) : i.name;
       return `<div class="no">${no}${(no&&!TAGS_IN_PHOTO)?'<br>':''}${TAGS_IN_PHOTO?'':'tibiboard30'}</div><div class="nm">${nm}</div>`; })()}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags inline phone-only"'):tagsHtml(i)}
     ${(i.state==='いる'||i.state==='旅立ち')&&i.price?`<div class="pr">${yen(i.price)}</div>`:''}
-    <div class="st">${i.state==='いる'?'':(i.state==='予告'?'from September':(i.state==='展示'?'display only':'SOLD OUT'))}</div>
+    <div class="st">${i.state==='いる'?(SALE_OPEN?'':'Coming soon'):(i.state==='予告'?'from September':(i.state==='展示'?'display only':'SOLD OUT'))}</div>
   </div>`;
-  return i.state==='いる' ? `<a class="itemlink" href="商品_en.html?id=${encodeURIComponent(i.name)}">${card}</a>` : card;
+  return i.state==='いる' && SALE_OPEN ? `<a class="itemlink" href="商品_en.html?id=${encodeURIComponent(i.name)}">${card}</a>` : card;
 };
 const junbiItems = items.filter(i=>i.state==='準備中');
 const soldItems = items.filter(i=>i.state==='旅立ち' && i.date);
