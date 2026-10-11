@@ -311,3 +311,10 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
   -webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
 #pv-sec h2{display:inline-block;background:var(--t-glass2) !important;color:var(--t-ink) !important;text-shadow:none !important;
   padding:8px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.7);-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+/* 2026-10-12 たけろう(続き): 背景の無かった文字もぜんぶ同じすりガラスに=一番上の帯(ちびボード・〈ちいさな分割キーボード〉…)・
+   おしらせの題・NyattoLand for X のカード・あそびば(題と中の段) */
+.band,.oshirase-ttl,.found-card,.ab-title,.ab-step{background:var(--t-glass2) !important;
+  -webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+.oshirase-ttl,.found-card,.ab-title{border-radius:16px}
+.oshirase-ttl,.ab-title{display:inline-block;padding:6px 16px}
+.found-by{display:inline-block;background:var(--t-glass2) !important;padding:4px 12px;border-radius:12px;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
