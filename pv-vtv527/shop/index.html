@@ -2,6 +2,10 @@
 <html lang="ja">
 <head>
 <meta name="robots" content="noindex,nofollow,noarchive">
+<script>/* 2026-10-12 たけろう: トップの背景はピンクのレンガ7枚から毎回ランダム(読むのは選んだ1枚だけ)。?bg=1〜7 で固定して見比べられる。
+   写真は Unsplash / Pexels の無料素材(商用可・表記不要)。元に戻す時はこの script と body::before の var(--wall,…) を消す */
+(function(){ var n=7, m=location.search.match(/[?&]bg=(\d)/), i=m?Math.min(n,Math.max(1,+m[1])):1+Math.floor(Math.random()*n);
+  document.documentElement.style.setProperty('--wall',"url('photos/wall_pink_renga"+i+".jpg')"); })();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
 <meta name="description" content="左右に分かれた30キーの手づくりキーボード、ちびボード30。Bluetooth・USB接続。実物の写真、仕様、購入前の注意、商品を紹介します。">
@@ -417,7 +421,7 @@ body{background:var(--mint-pale)}
 
 /* 背景コンクリート(2026-09-07 たけろう: 試しに入れる。パネル調・白を35%かぶせて可愛さを残す) */
 body{background:#d9d6d3}
-body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/wall_ao_con.jpg')/* あおいコンクリ(2026-09-09 たけろう「メインは未使用のいい背景」) */ center/cover no-repeat}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),var(--wall,url('photos/wall_ao_con.jpg'))/* あおいコンクリ(2026-09-09 たけろう「メインは未使用のいい背景」) */ center/cover no-repeat}
 #world{position:relative;z-index:1}
 #shelf-sec,#doors-sec,#moji-sec{background:transparent !important}
 /* 2026-09-07 たけろう指示: うさぎは絵文字でなく公式ばつべー原本。文中の小さなばつべー */
