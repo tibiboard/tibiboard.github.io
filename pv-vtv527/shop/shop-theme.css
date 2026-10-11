@@ -327,3 +327,11 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
 .oshirase-list li,.oshirase-ttl{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
 /* 見出し(ちびボード × にゃっとランド)は作った人の行と同じ1つのすりガラスの中 */
 #pv-sec h2.pv-h{background:transparent !important;border:0 !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;padding:0 0 4px;margin:0;color:var(--t-ink) !important;text-shadow:none !important}
+
+/* 2026-10-12 たけろう(4): あそびばは題から③まで全部1つのすりガラス(中の段は分けない)・うさぎずかんも同じすりガラス */
+#asobi-sec{background:var(--t-glass2) !important;border-radius:26px;padding:18px 14px !important;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+#asobi-sec .ab-title,#asobi-sec .ab-step,#asobi-sec .playbox{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
+.ab-zukan{background:var(--t-glass2) !important;border-radius:16px;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+/* tibiboard30紹介: チョコミントの緑(すりガラスなし・うさぎなし) */
+.intro-door{background:#9FE2C8 !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;color:#5a3a2e !important;box-shadow:0 4px 0 #5a3a2e !important}
+.intro-door *{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
