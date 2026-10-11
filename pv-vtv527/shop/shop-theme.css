@@ -302,3 +302,12 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
   .item .pr-min{font-size:10px}
 }
 .pd .price small{display:block;margin-top:2px}   /* 「全部入り(税・送料込)」が値段の横で折れて読みにくかった */
+
+/* 2026-10-12 たけろう: おしらせ・入口(tibiboard30紹介・うさぎずかん・あそびば)・あそびば・スポンサーシップの見出しは、
+   スポンサーシップの作った人の行と同じ濃さのすりガラスに(ピンクのレンガの上でも読めるように)。棚のカードと購入ボタンは今のまま(--t-glass)。
+   濃さは --t-glass2、ぼかしは --t-glass2-blur で変えられる */
+:root{--t-glass2:rgba(255,255,255,.55);--t-glass2-blur:10px}
+.oshirase-list li,.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),.playdoor,#playdoor,.playbox{background:var(--t-glass2) !important;
+  -webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+#pv-sec h2{display:inline-block;background:var(--t-glass2) !important;color:var(--t-ink) !important;text-shadow:none !important;
+  padding:8px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.7);-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
