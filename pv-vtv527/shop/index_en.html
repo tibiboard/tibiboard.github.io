@@ -551,16 +551,63 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
     <p class="pv-sub2">tibiboard × <a href="https://x.com/karou2rikon" target="_blank" rel="noopener" style="color:inherit">Karou@NyattoLand for X</a></p>
     <p class="pv-listen">♡ Give it a listen ♡</p>
     </div>
-    <div class="pv-two" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:flex-start"><div style="flex:1 1 360px;max-width:540px">
+    <div class="pv-two" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:flex-start"><div class="x-video-embed" style="flex:1 1 360px;max-width:540px">
       <blockquote class="twitter-tweet" data-lang="en" data-dnt="true"><a href="https://twitter.com/karou2rikon/status/2108281286515367964">Karou's post (cheer song)</a></blockquote>
+      <div class="x-video-fallback" data-video-src="">
+        <button type="button" aria-expanded="false">Can't play it? Watch here ▶</button>
+        <video controls playsinline preload="none" hidden></video>
+      </div>
     </div></div></div>
   </section>
   <script>
-  (function(){ var s=document.getElementById('pv-sec'), s2=document.getElementById('found-sec'); if(!s) return; var done=false;
-    function load(){ if(done) return; done=true; var j=document.createElement('script'); j.async=true; j.src='https://platform.twitter.com/widgets.js'; document.body.appendChild(j); }
-    if(!('IntersectionObserver' in window)) { load(); return; }
-    var io=new IntersectionObserver(function(es){ if(es.some(function(e){return e.isIntersecting;})){ load(); io.disconnect(); } },{rootMargin:'600px 0px'});
-    io.observe(s); if(s2) io.observe(s2); })();
+  (function(){
+    function init(){
+    var s=document.getElementById('pv-sec'), s2=document.getElementById('found-sec'); if(!s) return;
+    var embeds=document.querySelectorAll('.x-video-embed'), done=false;
+    embeds.forEach(function(embed){
+      var fallback=embed.querySelector('.x-video-fallback');
+      if(!fallback || !fallback.dataset.videoSrc) return;
+      var button=fallback.querySelector('button'), video=fallback.querySelector('video');
+      button.addEventListener('click',function(){
+        if(video.hidden){
+          if(!video.src) video.src=fallback.dataset.videoSrc;
+          video.hidden=false; button.setAttribute('aria-expanded','true');
+          var playing=video.play(); if(playing && playing.catch) playing.catch(function(){});
+        }else{
+          video.pause(); video.hidden=true; button.setAttribute('aria-expanded','false');
+        }
+      });
+    });
+    function checkEmbeds(){
+      embeds.forEach(function(embed){
+        var fallback=embed.querySelector('.x-video-fallback');
+        if(fallback && fallback.dataset.videoSrc){
+          fallback.classList.toggle('x-video-fallback--needed',!embed.querySelector('iframe'));
+        }
+      });
+    }
+    var watch=new MutationObserver(function(){
+      embeds.forEach(function(embed){
+        if(embed.querySelector('iframe')){
+          var fallback=embed.querySelector('.x-video-fallback');
+          if(fallback) fallback.classList.remove('x-video-fallback--needed');
+        }
+      });
+    });
+    embeds.forEach(function(embed){watch.observe(embed,{childList:true,subtree:true});});
+    function load(){
+      if(done) return; done=true;
+      var j=document.createElement('script'); j.async=true;
+      j.src='https://platform.twitter.com/widgets.js'; document.body.appendChild(j);
+      setTimeout(checkEmbeds,8000);
+    }
+    if(!('IntersectionObserver' in window)){load(); return;}
+    var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting;})){load();io.disconnect();}},{rootMargin:'600px 0px'});
+    io.observe(s); if(s2) io.observe(s2);
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+    else init();
+  })();
   </script>
 
 
@@ -582,7 +629,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <!-- 2026-10-06 たけろう指示: NyattoLand for X(Chrome 拡張)の「ねこが見つけたもの」で紹介された -->
   <section id="found-sec">
     <!-- 2026-10-12 たけろう: NyattoLand(過労さんのアプリ)と公式ソングは別の話なので段を分ける -->
-    <div class="found-x" style="position:relative;z-index:1;display:flex;justify-content:center;margin:0 0 16px"><div style="width:min(560px,100%)"><blockquote class="twitter-tweet" data-lang="en" data-dnt="true"><a href="https://twitter.com/karou2rikon/status/2104483597793271810">Karou's post (NyattoLand for X)</a></blockquote></div></div>
+    <div class="found-x" style="position:relative;z-index:1;display:flex;justify-content:center;margin:0 0 16px"><div class="x-video-embed" style="width:min(560px,100%)"><blockquote class="twitter-tweet" data-lang="en" data-dnt="true"><a href="https://twitter.com/karou2rikon/status/2104483597793271810">Karou's post (NyattoLand for X)</a></blockquote>
+      <div class="x-video-fallback" data-video-src="photos/nyattoland_2.mp4">
+        <button type="button" aria-expanded="false">Can't play it? Watch here ▶</button>
+        <video controls playsinline preload="none" poster="photos/nyattoland_2_poster.jpg" hidden></video>
+      </div></div></div>
     <!-- 2026-10-12 たけろう: 動画は X の埋め込みに(過労さんのポスト)。前= NyattoLand の紹介動画(19時に新しい動画へ差し替え・お店の中に置く。外のSNSは埋め込まない) -->
     
     <a class="found-card" href="https://nyatto-land-for-x.thekarou.com" target="_blank" rel="noopener">

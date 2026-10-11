@@ -344,3 +344,12 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
 body::before{z-index:-1 !important}
 /* 2026-10-12 たけろう: 1行目=公式ソング(いちばん大きく)・2行目=ちびボード × 過労@にゃっとランドforX(少し小さく) */
 #pv-sec .pv-sub2{font-size:clamp(22px,3.4vw,34px) !important;font-weight:800;line-height:1.4;margin:4px 0;color:var(--t-ink)}
+
+/* X の動画が再生できない時の店内プレーヤー。ソングは許可後に data-video-src を1行設定する。 */
+.x-video-fallback{text-align:center;margin:12px auto 18px;max-width:540px}
+.x-video-fallback[data-video-src=""]{display:none}
+.x-video-fallback button{font:inherit;font-size:24px;font-weight:700;color:var(--t-ink);background:var(--t-glass2);border:1px solid rgba(255,255,255,.7);border-radius:14px;padding:7px 15px;cursor:pointer;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+.x-video-fallback button:hover,.x-video-fallback button:focus-visible{outline:2px solid var(--t-ink);outline-offset:2px}
+.x-video-fallback--needed button{box-shadow:0 0 0 4px rgba(255,255,255,.8),0 5px 16px rgba(35,20,32,.25);font-weight:900}
+.x-video-fallback video{display:block;width:100%;height:auto;margin:12px auto 0;border-radius:14px;background:#000}
+.x-video-fallback video[hidden]{display:none}
