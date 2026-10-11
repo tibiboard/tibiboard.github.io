@@ -318,3 +318,12 @@ main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカード
 .oshirase-ttl,.found-card,.ab-title{border-radius:16px}
 .oshirase-ttl,.ab-title{display:inline-block;padding:6px 16px}
 .found-by{display:inline-block;background:var(--t-glass2) !important;padding:4px 12px;border-radius:12px;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+
+/* 2026-10-12 たけろう(3): tibiboard30紹介の入口は大きな四角とうさぎをやめ、文字だけのすりガラス */
+.intro-door{background:var(--t-glass2) !important;padding:10px 22px !important;min-height:0 !important;width:auto !important;display:inline-flex !important;border-radius:16px !important}
+.intro-door .door-icon{display:none !important}
+/* おしらせは全体を1つのすりガラスで囲み、1件ずつは分けない */
+.oshirase-board{background:var(--t-glass2) !important;border-radius:18px !important;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+.oshirase-list li,.oshirase-ttl{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
+/* 見出し(ちびボード × にゃっとランド)は作った人の行と同じ1つのすりガラスの中 */
+#pv-sec h2.pv-h{background:transparent !important;border:0 !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;padding:0 0 4px;margin:0;color:var(--t-ink) !important;text-shadow:none !important}
