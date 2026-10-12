@@ -57,7 +57,7 @@ window.USAGI_SERIFU = {
     'What.',
     'Nobody here.',
     'The station? End of the hall, turn right, straight ahead.',
-    'H!',
+    /* 2026-10-12 たけろう「H はしりとり(りんごゴリララッパ → パンツ)の後に言うはず」: 隠れうさぎの一言から H を外した */
     'Meeeen-min-min-min (cicada noise)',
     'Personal space. Think about it.',
     'And you are?',
