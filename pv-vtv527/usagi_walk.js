@@ -147,7 +147,15 @@
       '#usagiBubble .ub-tail{position:absolute;left:50%;margin-left:-14px;width:28px;height:28px;background:#fff;' +
         'transform:rotate(45deg);}' +
       '#usagiBubble.ub-above .ub-tail{bottom:-10px;}' +
-      '#usagiBubble.ub-below .ub-tail{top:-10px;}';
+      '#usagiBubble.ub-below .ub-tail{top:-10px;}' +
+      /* 2026-10-12 たけろう「うさぎが歌っている感じ」: 歩いている時の小さな歌のふきだし。押せない(押すとうさぎに届く)。
+         動きは CSS だけ(出る→4秒→消える)。動きを減らす設定の人には動かさない */
+      '.usagi-sing{position:absolute;bottom:' + (SIZE + 6) + 'px;left:0;white-space:nowrap;background:#fff;border-radius:16px;' +
+        'padding:6px 14px;font-weight:900;font-size:20px;line-height:1.4;color:#3a2a20;box-shadow:0 4px 0 rgba(0,0,0,.15);' +
+        'pointer-events:none;animation:usagiSing 4.2s ease forwards;}' +
+      '.usagi-sing b{color:#e0197a;margin-right:4px;}' +
+      '@keyframes usagiSing{0%{opacity:0;transform:translateY(6px)}10%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0}}' +
+      '@media (prefers-reduced-motion:reduce){.usagi-sing{animation:none;}}';
     document.head.appendChild(style);
 
     /* ---------- DOM構築(共通の箱。中身はスポットごとに差し替え) ---------- */
@@ -1007,6 +1015,7 @@
     }
 
     function startRunaway() {
+      singStop();
       closeBubble();
       state = 'runaway'; /* 2026-10-07: 前は state='runaway' の後に closeBubble() が 'idle' に戻していた=帰る途中に押すと また会話が始まっていた */
 
@@ -1069,10 +1078,11 @@
 
     /* ---------- クリック開始 ---------- */
     var HIDDEN_LINES = (window.USAGI_SERIFU && window.USAGI_SERIFU.HIDDEN) || [
-      'なに', 'いないよ', 'えきなら つきあたり みぎ まっすぐです', 'h', 'みーんみんみん',
+      'なに', 'いないよ', 'えきなら つきあたり みぎ まっすぐです', 'みーんみんみん', /* 2026-10-12: h は外した(しりとりの後だけ) */
       'きょりかん かんがえて', 'どちらさまですか', 'りょうみみの すきまに ゆび いれるの やめてもらっていいですか'
     ];
     hop.addEventListener('click', function () {
+      singStop(); /* 2026-10-12: 押したら歌をやめて、いつもの会話へ */
       if (state === 'runaway') return;
       /* 2026-10-07 たけろう「もう一回クリックしたら また会話ができちゃう」: 会話中・帰るまでの間は 押しても 何もしない */
       if (state === 'talk' || state === 'leaving' || bubble) return;
@@ -1116,6 +1126,61 @@
       choicesEl.appendChild(b);
       positionBubble();
     }
+
+    /* ---------- 歌う(2026-10-12 たけろう「5秒か10秒に1回テキストが変わる。押したら会話。重くならないように」) ----------
+       歌詞は data/うさぎのセリフ.js の SONG(無いページでは歌わない)。歩いている時(walker)で、会話していない時だけ。
+       5〜10秒ごとに1つ出して4秒で消える。画面が見えていない時(別のタブ)は何もしない。続けて同じ歌詞は出さない */
+    var SONG = (window.USAGI_SERIFU && window.USAGI_SERIFU.SONG) || [];
+    var singEl = null, singTimer = null, singLast = -1;
+    function singStop() {
+      clearTimeout(singTimer); singTimer = null;
+      if (singEl) { try { singEl.remove(); } catch (e) {} singEl = null; }
+      if (SONG.length) singTimer = setTimeout(singLoop, 6000 + Math.random() * 4000);
+    }
+    function singLoop() {
+      singTimer = null;
+      try {
+        if (singEl) { singEl.remove(); singEl = null; }
+        var walking = currentSpotName === 'walker' && track && track.contains(hop);
+        var r = hop.getBoundingClientRect();
+        var ok = SONG.length && state === 'idle' && !bubble && !document.hidden && wrap.style.visibility !== 'hidden' &&
+          r.width > 0 && r.bottom > 0 && r.top < (window.innerHeight || 0); /* 画面に見えている時だけ */
+        if (ok) {
+          var i = Math.floor(Math.random() * SONG.length);
+          if (SONG.length > 1 && i === singLast) i = (i + 1) % SONG.length;
+          singLast = i;
+          singEl = document.createElement('div');
+          singEl.className = 'usagi-sing';
+          var note = document.createElement('b'); note.textContent = '♪';
+          singEl.appendChild(note);
+          singEl.appendChild(document.createTextNode(SONG[i]));
+          var rightHalf = r.left + r.width / 2 > (window.innerWidth || 0) / 2;
+          if (walking) {
+            /* 歩いている時: うさぎと一緒に動く入れ物の中に置く。右半分にいる時は左へのばす(画面の外にはみ出さない) */
+            track.appendChild(singEl);
+            var ww = singEl.offsetWidth;
+            var wx = rightHalf ? (r.right - ww) : r.left;
+            wx = Math.max(8, Math.min((window.innerWidth || 0) - ww - 8, wx));
+            singEl.style.left = (wx - r.left) + 'px'; /* うさぎの左はしからのずれ(入れ物はうさぎと一緒に動く) */
+          } else {
+            /* 隠れている時: 顔を出している所の上に置く(うさぎはその場で動かない) */
+            singEl.style.position = 'absolute';
+            singEl.style.bottom = 'auto';
+            wrap.appendChild(singEl);
+            var sx = window.scrollX || window.pageXOffset || 0, sy = window.scrollY || window.pageYOffset || 0;
+            var w = singEl.offsetWidth, h = singEl.offsetHeight;
+            var x = rightHalf ? (r.right - w) : r.left;
+            x = Math.max(8, Math.min((window.innerWidth || 0) - w - 8, x));
+            var y = r.top - h - 6;
+            if (y < 8) y = r.bottom + 6;
+            singEl.style.left = (x + sx) + 'px';
+            singEl.style.top = (y + sy) + 'px';
+          }
+        }
+      } catch (e) { singEl = null; }
+      singTimer = setTimeout(singLoop, 5000 + Math.random() * 5000);
+    }
+    if (SONG.length) singTimer = setTimeout(singLoop, 3000);
 
     initOk = true;
   } catch (err) {
