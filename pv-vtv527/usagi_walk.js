@@ -150,11 +150,11 @@
       '#usagiBubble.ub-below .ub-tail{top:-10px;}' +
       /* 2026-10-12 たけろう「うさぎが歌っている感じ」: 歩いている時の小さな歌のふきだし。押せない(押すとうさぎに届く)。
          動きは CSS だけ(出る→4秒→消える)。動きを減らす設定の人には動かさない */
-      '.usagi-sing{position:absolute;bottom:' + (SIZE + 6) + 'px;left:0;white-space:nowrap;background:#fff;border-radius:16px;' +
+      '.usagi-sing{position:absolute;bottom:' + (SIZE + 6) + 'px;left:0;width:max-content;max-width:min(78vw,360px);background:#fff;border-radius:16px;' +
         'padding:6px 14px;font-weight:900;font-size:20px;line-height:1.4;color:#3a2a20;box-shadow:0 4px 0 rgba(0,0,0,.15);' +
-        'pointer-events:none;animation:usagiSing 4.2s ease forwards;}' +
-      '.usagi-sing b{color:#e0197a;margin-right:4px;}' +
-      '@keyframes usagiSing{0%{opacity:0;transform:translateY(6px)}10%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0}}' +
+        'pointer-events:none;animation:usagiSing 1.2s ease forwards;}' +
+      '.usagi-sing b{color:#e0197a;margin:0 4px;}' +
+      '@keyframes usagiSing{0%{opacity:0;transform:translateY(4px)}12%{opacity:1;transform:none}88%{opacity:1}100%{opacity:0}}' +
       '@media (prefers-reduced-motion:reduce){.usagi-sing{animation:none;}}';
     document.head.appendChild(style);
 
@@ -1131,11 +1131,12 @@
        歌詞は data/うさぎのセリフ.js の SONG(無いページでは歌わない)。歩いている時(walker)で、会話していない時だけ。
        5〜10秒ごとに1つ出して4秒で消える。画面が見えていない時(別のタブ)は何もしない。続けて同じ歌詞は出さない */
     var SONG = (window.USAGI_SERIFU && window.USAGI_SERIFU.SONG) || [];
-    var singEl = null, singTimer = null, singLast = -1;
+    var singEl = null, singTimer = null, singIdx = 0;
     function singStop() {
       clearTimeout(singTimer); singTimer = null;
       if (singEl) { try { singEl.remove(); } catch (e) {} singEl = null; }
-      if (SONG.length) singTimer = setTimeout(singLoop, 6000 + Math.random() * 4000);
+      singIdx = 0; /* 押した後は、また最初から歌う */
+      if (SONG.length) singTimer = setTimeout(singLoop, 6000);
     }
     function singLoop() {
       singTimer = null;
@@ -1146,14 +1147,17 @@
         var ok = SONG.length && state === 'idle' && !bubble && !document.hidden && wrap.style.visibility !== 'hidden' &&
           r.width > 0 && r.bottom > 0 && r.top < (window.innerHeight || 0); /* 画面に見えている時だけ */
         if (ok) {
-          var i = Math.floor(Math.random() * SONG.length);
-          if (SONG.length > 1 && i === singLast) i = (i + 1) % SONG.length;
-          singLast = i;
+          /* 2026-10-13 たけろう「ランダムじゃなく歌の順番で・1秒ずつ・初めと終わりに音符」 */
+          var i = singIdx % SONG.length;
           singEl = document.createElement('div');
           singEl.className = 'usagi-sing';
           var note = document.createElement('b'); note.textContent = '♪';
+          var note2 = document.createElement('b'); note2.textContent = '♪';
           singEl.appendChild(note);
           singEl.appendChild(document.createTextNode(SONG[i]));
+          singEl.appendChild(note2);
+          var showMs = Math.max(1000, SONG[i].length * 80); /* 1行 約1秒。長い行は読めるように少し長く */
+          singEl.style.animationDuration = (showMs / 1000) + 's';
           var rightHalf = r.left + r.width / 2 > (window.innerWidth || 0) / 2;
           if (walking) {
             /* 歩いている時: うさぎと一緒に動く入れ物の中に置く。右半分にいる時は左へのばす(画面の外にはみ出さない) */
@@ -1177,8 +1181,15 @@
             singEl.style.top = (y + sy) + 'px';
           }
         }
+        if (ok) {
+          singIdx++;
+          /* 最後まで歌ったら少し休んで、また最初から */
+          var wait = (singIdx % SONG.length === 0) ? 8000 : showMs + 150;
+          singTimer = setTimeout(singLoop, wait);
+          return;
+        }
       } catch (e) { singEl = null; }
-      singTimer = setTimeout(singLoop, 5000 + Math.random() * 5000);
+      singTimer = setTimeout(singLoop, 2000);
     }
     if (SONG.length) singTimer = setTimeout(singLoop, 3000);
 
