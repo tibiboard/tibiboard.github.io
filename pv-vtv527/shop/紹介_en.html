@@ -210,7 +210,7 @@ body{background:linear-gradient(180deg,#5da6e0,#9573cc 45%,#e96da8) fixed !impor
 
 /* 背景コンクリート(2026-09-07 たけろう「すべてのページの背景に」: トップと同じ素材・白35%かぶせ。かぶせは z-index:-1 で本文の下) */
 body{background:#d9d6d3 !important}
-body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/bg_concrete.jpg') center/cover no-repeat}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/bg_concrete.webp') center/cover no-repeat}
 /* 9/7 試し: 各段(.ehon)の色は塗りつぶしで壁が見えないので、同じ色を 65% に透かしてコンクリートを混ぜる(色・段の並びは不変) */
 /* 9/7 たけろう指示「項目(01,02…)ごとにコンクリートの背景を分ける」: 各段が自分のコンクリート板を持つ(fixedでなく段に貼る=段ごとに別の板に見える)。
    板の切り出し位置は段ごとに上/下/中で変える。段と段の間は 10px あけて後ろの壁を見せる=継ぎ目 */
@@ -218,22 +218,22 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .ehon.bg-mint{--tint:linear-gradient(180deg,rgba(156,203,238,.45),rgba(189,167,226,.45))}
 .ehon.bg-white{--tint:linear-gradient(180deg,rgba(249,222,188,.45),rgba(212,182,232,.45))}
 .ehon.bg-pink{--tint:linear-gradient(180deg,rgba(243,172,204,.45),rgba(201,173,230,.45))}
-.ehon{--wall:url('photos/bg_concrete.jpg')}
+.ehon{--wall:url('photos/bg_concrete.webp')}
 /* 上の .ehon.bg-* (塗りつぶし) に勝つため同じ強さの選択子で上書き */
 .ehon.bg-mint,.ehon.bg-white,.ehon.bg-pink{background:var(--tint),var(--wall) center/cover no-repeat}
 /* 2026-09-09 たけろう指示「新しい壁紙を当ててみて」: 12段を今日入れた24枚から割り当て。戻し= _直前退避6-09-09_紹介_壁紙お試し\ */
-.ehon:nth-of-type(1){--wall:url('photos/wall_hikari_con.jpg')}  /* ひかりのコンクリ(2026-09-09 お試し) */
-.ehon:nth-of-type(2){--wall:url('photos/wall_shiro_con.jpg')}  /* しろコンクリ(2026-09-09 お試し) */
-.ehon:nth-of-type(3){--wall:url('photos/wall_shiro_kami.jpg')}  /* しろいかみ(2026-09-09 たけろう「3番だけ違うのに」) */
-.ehon:nth-of-type(4){--wall:url('photos/wall_momo_kabe.jpg')}  /* ももいろのかべ=明るめ(2026-09-09 たけろう「4段目は少し明るく」) */
-.ehon:nth-of-type(5){--wall:url('photos/wall_sabi_kabe.jpg')}  /* さびたしろかべ(2026-09-09 お試し) */
-.ehon:nth-of-type(6){--wall:url('photos/wall_cream_renga.jpg')}  /* クリームレンガ(2026-09-09 お試し) */
-.ehon:nth-of-type(7){--wall:url('photos/wall_mizu_con.jpg')}  /* みずいろコンクリ(2026-09-09 お試し) */
-.ehon:nth-of-type(8){--wall:url('photos/wall_midori_tile.jpg')}  /* みどりタイル(2026-09-09 お試し) */
-.ehon:nth-of-type(9){--wall:url('photos/wall_shiro_renga.jpg')}  /* しろレンガ(2026-09-09 お試し) */
-.ehon:nth-of-type(10){--wall:url('photos/wall_ishi_kabe.jpg') ;background-position:center bottom}  /* いしのかべ(2026-09-09 お試し) */
-.ehon:nth-of-type(11){--wall:url('photos/wall_pink_kabe.jpg');background-position:center bottom}  /* ピンクのかべ(2026-09-09 お試し) */
-.ehon:nth-of-type(12){--wall:url('photos/wall_aka_renga2.jpg');background-position:center bottom}  /* あかレンガ2(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(1){--wall:url('photos/wall_hikari_con.jpg')}  /* ひかりのコンクリ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(2){--wall:url('photos/wall_shiro_con.jpg')}  /* しろコンクリ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(3){--wall:url('photos/wall_shiro_kami.webp')}  /* しろいかみ(2026-09-09 たけろう「3番だけ違うのに」) */
+.ehon.wall-on:nth-of-type(4){--wall:url('photos/wall_momo_kabe.webp')}  /* ももいろのかべ=明るめ(2026-09-09 たけろう「4段目は少し明るく」) */
+.ehon.wall-on:nth-of-type(5){--wall:url('photos/wall_sabi_kabe.jpg')}  /* さびたしろかべ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(6){--wall:url('photos/wall_cream_renga.jpg')}  /* クリームレンガ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(7){--wall:url('photos/wall_mizu_con.jpg')}  /* みずいろコンクリ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(8){--wall:url('photos/wall_midori_tile.jpg')}  /* みどりタイル(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(9){--wall:url('photos/wall_shiro_renga.jpg')}  /* しろレンガ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(10){--wall:url('photos/wall_ishi_kabe.jpg') ;background-position:center bottom}  /* いしのかべ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(11){--wall:url('photos/wall_pink_kabe.jpg');background-position:center bottom}  /* ピンクのかべ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(12){--wall:url('photos/wall_aka_renga2.jpg');background-position:center bottom}  /* あかレンガ2(2026-09-09 お試し) */
 .ehon+.ehon{margin-top:10px}
 .std-tag{position:absolute;right:14px;top:-14px;transform:rotate(12deg);background:var(--pink);color:#fff;font-family:"Mochiy Pop One","M PLUS Rounded 1c",sans-serif;font-weight:400;font-size:clamp(18px,3vw,26px);padding:4px 18px;border-radius:999px;box-shadow:0 4px 0 rgba(0,0,0,.18);letter-spacing:2px}
 .opt-plus{flex:0 0 auto;width:auto;align-self:center;font-family:"Mochiy Pop One","M PLUS Rounded 1c",sans-serif;font-size:clamp(34px,6vw,56px);color:var(--pink-deep);line-height:1;margin:0 -4px}
@@ -272,7 +272,7 @@ const EHON = [
   <style>#sec01 .photo-wrap{width:100vw !important;max-width:none !important;height:min(86svh,1100px) !important;max-height:none !important;aspect-ratio:auto !important;border-radius:0 !important;margin-left:calc(50% - 50vw)}#sec01 .photo-wrap img{object-position:center 62%}#sec01{padding-top:0 !important}
   /* 2026-09-11 たけろう指示「スマホで1枚目の透明ケースの写真が両端見切れる」: 4:3 の写真を 86svh の縦長の枠に cover で入れていたため。スマホは写真の比率のままにする */
   @media(max-width:640px){#sec01 .photo-wrap{height:auto !important;aspect-ratio:4/3 !important}}</style>
-  <div class="photo-wrap"><img src="photos/ehon_s_1.jpg" alt="clear tibiboard lit from below" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.jpg</div>'"></div>
+  <div class="photo-wrap"><img src="photos/ehon_s_1.webp" loading="lazy" alt="clear tibiboard lit from below" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.webp</div>'"></div>
   <h2 data-ehon="0"></h2>
   <p class="sub" data-ehonp="0"></p>
   <button class="keycap mmbtn" id="openMM">📏 See the real size</button>
@@ -295,7 +295,7 @@ const EHON = [
 <!-- 3 -->
 <section class="ehon bg-white">
   <div class="sec-num">03</div>
-  <div class="photo-wrap"><img src="photos/ehon_2.jpg" alt="key shape" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_2.jpg</div>'"></div>
+  <div class="photo-wrap"><img src="photos/ehon_2.webp" loading="lazy" alt="key shape" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_2.webp</div>'"></div>
   <h2 data-ehon="1"></h2>
   <p class="sub" data-ehonp="1"></p>
 </section>
@@ -304,9 +304,9 @@ const EHON = [
 <section class="ehon bg-mint">
   <div class="sec-num">03b</div>
   <div class="photo-wrap zsw" id="csw">
-    <img src="photos/ehon_s_1.jpg" alt="clear, lit from below (green and yellow)" class="on">
-    <img src="photos/cine_24.jpg" alt="clear (pink and orange)" loading="lazy">
-    <img src="photos/ehon_s_2.jpg" alt="clear (light blue)" loading="lazy">
+    <img src="photos/ehon_s_1.webp" loading="lazy" alt="clear, lit from below (green and yellow)" class="on">
+    <img src="photos/cine_24.webp" alt="clear (pink and orange)" loading="lazy">
+    <img src="photos/ehon_s_2.webp" alt="clear (light blue)" loading="lazy">
     <img src="photos/cut_54.webp" alt="clear (pink)" class="cut" loading="lazy">
     <img src="photos/cut_49.webp" alt="clear (blue)" class="cut" loading="lazy">
     <div class="zmarks"><button type="button" class="zm cl on" style="--c:#b7e86a" aria-label="clear 1"><i></i></button><button type="button" class="zm cl" style="--c:#ff9a8a" aria-label="clear 2"><i></i></button><button type="button" class="zm cl" style="--c:#6fd6e6" aria-label="clear 3"><i></i></button><button type="button" class="zm cl" style="--c:#f59ac7" aria-label="clear 4"><i></i></button><button type="button" class="zm cl" style="--c:#8fb4ef" aria-label="clear 5"><i></i></button></div>
@@ -320,11 +320,11 @@ const EHON = [
 <section class="ehon bg-pink">
   <div class="sec-num">04</div>
   <div class="photo-wrap zsw" id="zsw">
-    <img src="photos/ehon_z.jpg" alt="round Z (textured finish)" class="on">
-    <img src="photos/ehon_z_2.jpg" alt="square Z (textured finish, left and right)" loading="lazy">
-    <img src="photos/ehon_z_3.jpg" alt="black Z (textured finish)" loading="lazy">
-    <img src="photos/ehon_z_4.jpg" alt="round Z (textured, stacked)" loading="lazy">
-    <img src="photos/ehon_z_5.jpg" alt="round Z (textured, outdoors)" loading="lazy">
+    <img src="photos/ehon_z.webp" loading="lazy" alt="round Z (textured finish)" class="on">
+    <img src="photos/ehon_z_2.webp" alt="square Z (textured finish, left and right)" loading="lazy">
+    <img src="photos/ehon_z_3.webp" alt="black Z (textured finish)" loading="lazy">
+    <img src="photos/ehon_z_4.webp" alt="round Z (textured, stacked)" loading="lazy">
+    <img src="photos/ehon_z_5.webp" alt="round Z (textured, outdoors)" loading="lazy">
     <div class="zmarks"><button type="button" class="zm ci on" aria-label="round"><i></i></button><button type="button" class="zm sq" aria-label="square"><i></i></button><button type="button" class="zm bk" aria-label="black"><i></i></button><button type="button" class="zm ci" aria-label="round"><i></i></button><button type="button" class="zm ci" aria-label="round"><i></i></button></div>
   </div>
   <h2 data-ehon="2"></h2>
@@ -334,7 +334,7 @@ const EHON = [
 <!-- 5 -->
 <section class="ehon bg-mint">
   <div class="sec-num">05</div>
-  <div class="photo-wrap"><img src="photos/ehon_3.jpg" alt="name plate" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_3.jpg</div>'"></div>
+  <div class="photo-wrap"><img src="photos/ehon_3.webp" loading="lazy" alt="name plate" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_3.webp</div>'"></div>
   <h2 data-ehon="3"></h2>
   <p class="sub" data-ehonp="3"></p>
 </section>
@@ -343,7 +343,7 @@ const EHON = [
 <section class="ehon bg-pink">
   <div class="sec-num">06</div>
   <div class="photo-wrap">
-    <video id="shindoVideo" src="photos/shindo_demo.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video>
+    <video id="shindoVideo" data-src="photos/shindo_demo_s.mp4" autoplay preload="none" loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video>
     <button id="soundToggle" type="button" aria-pressed="false">🔇 Sound on</button>
   </div>
   <h2 data-ehon="4"></h2>
@@ -398,7 +398,7 @@ const EHON = [
 <!-- 8 -->
 <section class="ehon bg-mint">
   <div class="sec-num">07</div>
-  <div class="photo-wrap"><video src="photos/app_demo.mp4" autoplay loop muted playsinline style="width:100%;display:block"></video></div>
+  <div class="photo-wrap"><video data-src="photos/app_demo.mp4" autoplay preload="none" loop muted playsinline style="width:100%;display:block"></video></div>
   <h2 data-ehon="5"></h2>
   <p class="sub" data-ehonp="5"></p>
   <p style="font-size:16px;color:#1b1622;max-width:560px">* The app keeps getting updates. The screen may look a little different from this.</p>
@@ -407,7 +407,7 @@ const EHON = [
 <!-- 9 -->
 <section class="ehon bg-white">
   <div class="sec-num">08</div>
-  <div class="photo-wrap"><img src="photos/ehon_6.jpg" alt="keycaps" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_6.jpg</div>'"></div>
+  <div class="photo-wrap"><img src="photos/ehon_6.webp" loading="lazy" alt="keycaps" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_6.webp</div>'"></div>
   <h2 data-ehon="6"></h2>
   <p class="sub" data-ehonp="6"></p>
 </section>
@@ -415,7 +415,7 @@ const EHON = [
 <!-- 9b (うさぎ彫りキャップ・きぶんで変わる) -->
 <section class="ehon bg-mint">
   <div class="sec-num">09</div>
-  <div class="photo-wrap"><img src="photos/ehon_usagicap.jpg" alt="engraved bunny keycap" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_usagicap.jpg</div>'">
+  <div class="photo-wrap"><img src="photos/ehon_usagicap.webp" loading="lazy" alt="engraved bunny keycap" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_usagicap.webp</div>'">
     <div style="position:absolute;left:3%;top:5%;pointer-events:none;background:var(--pink-deep);color:#fff;font-weight:900;font-size:clamp(14px,2.4vw,25px);padding:4px 16px;border-radius:999px;letter-spacing:1px;border:3px solid #fff;filter:drop-shadow(0 4px 6px rgba(0,0,0,.28))">His name is batsubei</div>
   </div>
   <h2>One engraved bunny keycap<br>comes as a bonus.</h2>
@@ -583,7 +583,7 @@ const EHON = [
 
 <section class="ehon bg-pink">
   <div class="sec-num">11</div>
-  <div class="photo-wrap"><video src="photos/ehon_7_led.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video></div>
+  <div class="photo-wrap"><video data-src="photos/ehon_7_led.mp4" autoplay preload="none" loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video></div>
   <h2 data-ehon="8"></h2>
   <p class="sub" data-ehonp="8"></p>
   <div class="bottombtns">
@@ -597,9 +597,9 @@ const EHON = [
 <div class="overlay" id="mmOverlay">
   <div class="overlay-box" style="max-width:720px">
     <h3 style="font-size:clamp(24px,5vw,34px)">About the size of a credit card</h3>
-    <img src="photos/ehon_suica_1.jpg" alt="tibiboard with a Suica card on it (angled)" style="width:100%;border-radius:18px;display:block;margin:10px 0">
-    <img src="photos/ehon_suica_2.jpg" alt="tibiboard with a Suica card on it (top view)" style="width:100%;border-radius:18px;display:block;margin:10px 0">
-    <img src="photos/ehon_card_maru.jpg" alt="round tibiboard with a credit card on it" style="width:100%;border-radius:18px;display:block;margin:10px 0">  <!-- 2026-09-30 たけろう: まるにクレカをのせた写真 -->
+    <img src="photos/ehon_suica_1.webp" loading="lazy" alt="tibiboard with a Suica card on it (angled)" style="width:100%;border-radius:18px;display:block;margin:10px 0">
+    <img src="photos/ehon_suica_2.webp" loading="lazy" alt="tibiboard with a Suica card on it (top view)" style="width:100%;border-radius:18px;display:block;margin:10px 0">
+    <img src="photos/ehon_card_maru.webp" loading="lazy" alt="round tibiboard with a credit card on it" style="width:100%;border-radius:18px;display:block;margin:10px 0">  <!-- 2026-09-30 たけろう: まるにクレカをのせた写真 -->
     <button class="mm-close" id="closeMM" style="font-size:20px;padding:14px 34px">Close</button>
   </div>
 </div>
@@ -696,9 +696,9 @@ document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset
     /* 2026-09-29 たけろう指示: 扇形の写真(cine_07)と kazycap様のキーキャップ写真(cine_23)を新しい2枚(cine_24 ピンクとオレンジ / cine_25 ラベンダー)に入れ替え。元の写真は photos に残してある */
     /* 2026-09-30 たけろう指示: cine_03・cine_11 を外し、cine_22・cine_26(about_colors を横長に切り出し)・cine_27(about_texture を横長に切り出し)・cine_23(kazycap様のキーキャップ・クレジットも出る)を追加 */
     /* 2026-09-30 たけろう指示(2回目): cine_01・cine_26 を外し、cine_28〜31(撮影生データの4枚。縦長と4:3 は左右を黒で切らずに)を追加 */
-    const SNS_MAIN = '';   /* 例: 'cine_03.jpg' を入れると1枚目固定 */
+    const SNS_MAIN = '';   /* 例: 'cine_03.webp' を入れると1枚目固定 */
     /* 2026-10-06 たけろう指示: cine_02・cine_10 を外した。作り手の X を小さく足した */
-    let names = ['cine_04.jpg','cine_05.jpg','cine_06.jpg','cine_24.jpg','cine_08.jpg','cine_09.jpg','cine_12.jpg','cine_13.jpg','cine_14.jpg','cine_15.jpg','cine_16.jpg','cine_17.jpg','cine_18.jpg','cine_25.jpg','cine_22.jpg','cine_27.jpg','cine_23.jpg','cine_28.jpg','cine_29.jpg','cine_30.jpg','cine_31.jpg'];
+    let names = ['cine_04.webp','cine_05.webp','cine_06.webp','cine_24.webp','cine_08.webp','cine_09.webp','cine_12.webp','cine_13.webp','cine_14.webp','cine_15.webp','cine_16.webp','cine_17.webp','cine_18.webp','cine_25.webp','cine_22.webp','cine_27.webp','cine_23.webp','cine_28.webp','cine_29.webp','cine_30.webp','cine_31.webp'];
     for(let i=names.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [names[i],names[j]]=[names[j],names[i]]; }
     if(SNS_MAIN){ names = [SNS_MAIN, ...names.filter(n=>n!==SNS_MAIN)]; }
     track.innerHTML = names.map(n=>`<div class="slide"><img src="photos/${n}" alt="tibiboard" loading="lazy"></div>`).join('');
@@ -708,7 +708,7 @@ document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset
     const CREDIT_DEFAULT='The chocolate-mint keycaps are by KaniCraft → <a href="https://kanicraft.booth.pm" target="_blank" rel="noopener">BOOTH (KaniCraft)</a> / <a href="https://x.com/craft_kani" target="_blank" rel="noopener">X(@craft_kani)</a>';
     const CREDIT_KAZYCAP='The lettered keycaps are made by kazycap → <a href="https://kz-keyboard-shop.booth.pm/items/8469772" target="_blank" rel="noopener">BOOTH(kz-keyboard-shop)</a> / <a href="https://x.com/kazu_dob" target="_blank" rel="noopener">X(@kazu_dob)</a>';
     function updateCredit(i){
-      credit.innerHTML = ['cine_23.jpg','cine_27.jpg'].includes(names[i]) ? CREDIT_KAZYCAP : CREDIT_DEFAULT; /* 2026-09-30: 文字入りキーキャップの写真はすべて kazycap様の案内 */
+      credit.innerHTML = ['cine_23.webp','cine_27.webp'].includes(names[i]) ? CREDIT_KAZYCAP : CREDIT_DEFAULT; /* 2026-09-30: 文字入りキーキャップの写真はすべて kazycap様の案内 */
     }
     updateCredit(0);
     document.getElementById('gachaSlider').after(credit);
@@ -833,5 +833,20 @@ body>*{position:relative;z-index:1}
   .gacha-slider{padding:6px 0 !important}
 }
 </style>
+<script>
+/* 2026-10-12 軽くする: 段の壁紙と動画は、画面に近づいた時だけ読む。IntersectionObserver が無いブラウザでは全部すぐ読む(前と同じ) */
+(function(){
+  var walls = document.querySelectorAll('.ehon');
+  var vids = document.querySelectorAll('video[data-src]');
+  function wallOn(el){ el.classList.add('wall-on'); }
+  function vidOn(v){ if(v.getAttribute('src')) return; v.src = v.getAttribute('data-src'); var p = v.play && v.play(); if(p && p.catch) p.catch(function(){}); }
+  if(!('IntersectionObserver' in window)){ walls.forEach(wallOn); vids.forEach(vidOn); return; }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(!e.isIntersecting) return; var t = e.target; io.unobserve(t); if(t.tagName === 'VIDEO') vidOn(t); else wallOn(t); });
+  }, {rootMargin: '100% 0px'});
+  walls.forEach(function(el){ io.observe(el); });
+  vids.forEach(function(v){ io.observe(v); });
+})();
+</script>
 </body>
 </html>

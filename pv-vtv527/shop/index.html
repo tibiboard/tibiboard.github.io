@@ -65,7 +65,7 @@ body.rumble{animation:rumble .5s}
 /* ヒーロー: 主役はばつべー。背景は日替わり(水玉/キャンディ縞/市松) */
 .hero{position:relative;min-height:62vh;display:flex;flex-direction:column;align-items:center;justify-content:center;border-bottom:10px solid var(--pink-deep);padding:36px 16px}
 /* マミ試作(旧: var(--mint)ベタ水玉 ←戻す時用) */
-.hero.bg0{background:url('photos/wall_glass_tile.jpg') center/cover no-repeat} /* 2026-09-13: ガラスタイルに固定 */ /* ガラスタイル(2026-09-09 たけろう「ヒーローのグラデーションも質感のある背景に」。元のグラデは _直前退避6-09-09_index_壁紙お試し\) */
+.hero.bg0{background:url('photos/wall_glass_tile.webp') center/cover no-repeat} /* 2026-09-13: ガラスタイルに固定 */ /* ガラスタイル(2026-09-09 たけろう「ヒーローのグラデーションも質感のある背景に」。元のグラデは _直前退避6-09-09_index_壁紙お試し\) */
 .hero.bg1{background:url('photos/wall_pink_kabe.jpg') center/cover no-repeat} /* ピンクのかべ(2026-09-09 たけろう「ヒーローのグラデーションも質感のある背景に」。元のグラデは _直前退避6-09-09_index_壁紙お試し\) */
 .hero.bg2{background:url('photos/wall_kuro_tile.jpg') center/cover no-repeat} /* くろタイル(2026-09-09 たけろう「ヒーローのグラデーションも質感のある背景に」。元のグラデは _直前退避6-09-09_index_壁紙お試し\) */
 .hero img.batsu{width:min(80vh,96vw,720px);filter:drop-shadow(0 16px 0 rgba(18,122,117,.45));cursor:pointer;transition:transform .15s;
@@ -614,7 +614,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <!-- スポンサーシップ告知(2026-08-23 たけろう指示: 大きく告知。ロゴ掲載は合意済み) -->
   <section id="sponsor-sec">
     <div class="sponsor">
-      <img class="sp-banner" src="photos/fireworks_banner.png" alt="ちびボード × FIREWORKS スポンサーシップ締結のお知らせ" loading="lazy">
+      <img class="sp-banner" src="photos/fireworks_banner.webp" alt="ちびボード × FIREWORKS スポンサーシップ締結のお知らせ" loading="lazy">
       <h2>FIREWORKS を おうえんしています</h2>
       <p>ちびボードは、新潟のeスポーツチーム <b>FIREWORKS</b> のスポンサーになりました。</p>
       <p>FIREWORKSは「地方から、eスポーツの熱量を打ち上げる」チーム。選手・ストリーマー・実況者が活動していて、新潟駅南口のeスポーツカフェ&amp;バー <b>e-spopia(エスポピア)</b> が ホームです。</p>
@@ -632,7 +632,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
     <div class="found-x" style="position:relative;z-index:1;display:flex;justify-content:center;margin:0 0 16px"><div class="x-video-embed" style="width:min(560px,100%)"><blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://twitter.com/karou2rikon/status/2104483597793271810">過労さんのポスト(NyattoLand for X)</a></blockquote>
       <div class="x-video-fallback" data-video-src="photos/nyattoland_2.mp4">
         <button type="button" aria-expanded="false">うまく再生できない時はこちら ▶</button>
-        <video controls playsinline preload="none" poster="photos/nyattoland_2_poster.jpg" hidden></video>
+        <video controls playsinline preload="none" poster="photos/nyattoland_2_poster.webp" hidden></video>
       </div></div></div>
     <!-- 2026-10-12 たけろう: 動画は X の埋め込みに(過労さんのポスト)。前= NyattoLand の紹介動画(19時に新しい動画へ差し替え・お店の中に置く。外のSNSは埋め込まない) -->
     
@@ -756,7 +756,7 @@ function slot(file, label, size, ratio){
   return `<div class="slot" style="aspect-ratio:${ratio}">
     <div class="ic">📷</div>
     <div class="t">写真は準備中です</div>
-    ${file?`<img src="photos/${file}" alt="${label}" onerror="this.remove()">`:''}
+    ${file?`<img src="photos/${file}" alt="${label}" onerror="if(this.src.slice(-5)==='.webp'){this.onerror=function(){this.remove()};this.src=this.src.slice(0,-5)+'.jpg'}else{this.remove()}">`:''}
   </div>`;
 }
 /* ===== ページ内リンクを確実に届かせる ===== */
@@ -878,7 +878,7 @@ const cardOf = i => {
   <div class="item ${i.state==='いる'?'alive':'sold'} ${i.state==='予告'?'yokoku':''} ${i.state==='展示'?'tenji':''}">
     ${i.state==='旅立ち'?`<div class="stamp">${i.date.replaceAll('-','.')}</div>`:''}
     ${TAGS_IN_PHOTO?`<div class="card-head"><span class="ch-no">${(i.name.match(/^(No\.\s*\d+)/)||[])[1]||''}</span><span class="tg model">${shapeKey(i.shape)==='za'?'tibiboard30Z':'tibiboard30'}</span><span class="tg pitch">17mmピッチ</span></div>`:''}
-    <div class="ph">${slot(i.base?i.base+'_1.jpg':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}${i.state==='旅立ち'?'<div class="tape">SOLD OUT</div>':''}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags in-photo"'):''}</div>
+    <div class="ph">${slot(i.base?i.base+'_1.webp':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}${i.state==='旅立ち'?'<div class="tape">SOLD OUT</div>':''}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags in-photo"'):''}</div>
     ${(()=>{ /* 2026-09-11 たけろう指示(スマホの棚を詰める): No.◯◯◯ は左上の細い枠へ、名前は小さく */
       const m = i.name.match(/^(No\.\s*\d+)\s*(.*)$/); const no = m ? m[1] : ''; const nm = m ? (m[2] || i.name) : i.name;
       return `<div class="no">${no}${(no&&!TAGS_IN_PHOTO)?'<br>':''}${TAGS_IN_PHOTO?'':'tibiboard30'}</div><div class="nm">${nm}</div>`; })()}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags inline phone-only"'):tagsHtml(i)}
@@ -989,7 +989,7 @@ const runImgs = (window.CHIBI ? CHIBI.ALL.slice().sort(()=>Math.random()-.5).sli
 /* 2026-10-06: あそびばの2つの絵は、ばつべーを押す前から出しておく(先に下までスクロールすると空の枠が見えていた) */
 (function(){ const p=runImgs.slice().sort(()=>Math.random()-.5); const a=document.getElementById('pg1'), b=document.getElementById('pg2'); if(a&&!a.getAttribute('src')) a.src=p[0]; if(b&&!b.getAttribute('src')) b.src=p[1]; })();
 const mojiSec = document.getElementById('moji-sec');
-const batsuSnd = new Audio('photos/batsu_click.wav'); batsuSnd.volume = 0.7; /* 2026-08-15たけろう: 音量7割に */
+const batsuSnd = new Audio('photos/batsu_click.mp3'); batsuSnd.volume = 0.7; /* 2026-08-15たけろう: 音量7割に */
 /* 2026-08-21たけろう: 声は1日1回だけ(しつこいので)。2回目からは鳴らさない */
 document.getElementById('batsu').addEventListener('click', ()=>{
   const b=document.getElementById('batsuSay'); if(b) b.remove();

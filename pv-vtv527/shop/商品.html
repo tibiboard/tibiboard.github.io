@@ -90,7 +90,7 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;fon
 /* 背景コンクリート(2026-09-07 たけろう: 商品ページも試しに混ぜる。トップと同じ素材・白35%かぶせ。
    かぶせは z-index:-1 で本文の下に置く(トップは #world を上げる方式だが、このページは包み要素が無いため) */
 body{background:#d9d6d3}
-body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/bg_concrete.jpg') center/cover no-repeat}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/bg_concrete.webp') center/cover no-repeat}
 /* 2026-09-07 たけろう指示: うさぎは絵文字でなく公式ばつべー原本。文中の小さなばつべー */
 .bb{height:1.25em;width:auto;vertical-align:-.25em;display:inline-block}
 .bb-logo{height:44px;vertical-align:middle}
@@ -156,7 +156,7 @@ function slot(file, label, size, ratio){
   return `<div class="slot" style="aspect-ratio:${ratio}">
     <div class="ic">📷</div>
     <div class="t">写真は準備中です</div>
-    ${file?`<img src="photos/${file}" alt="${label}" onerror="this.remove()">`:''}
+    ${file?`<img src="photos/${file}" alt="${label}" onerror="if(this.src.slice(-5)==='.webp'){this.onerror=function(){this.remove()};this.src=this.src.slice(0,-5)+'.jpg'}else{this.remove()}">`:''}
   </div>`;
 }
 const CUTS = [
@@ -169,8 +169,8 @@ const CUTS = [
 if(it && it.state==='いる'){
   document.getElementById('pgtitle').textContent = it.name;
   document.title = `${it.name} — ちびボードのお店`;
-  const main = slot(it.base?it.base+'_1.jpg':'', it.name+' '+CUTS[0].label, CUTS[0].size, '1/1');
-  const th = CUTS.slice(1).map(c=>slot(it.base?`${it.base}_${c.n}.jpg`:'', c.label, c.size, '1/1')).join('');
+  const main = slot(it.base?it.base+'_1.webp':'', it.name+' '+CUTS[0].label, CUTS[0].size, '1/1');
+  const th = CUTS.slice(1).map(c=>slot(it.base?`${it.base}_${c.n}.webp`:'', c.label, c.size, '1/1')).join('');
   document.getElementById('detail').innerHTML = `
   <div class="pd">
     <div class="top">
