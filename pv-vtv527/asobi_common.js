@@ -179,6 +179,8 @@
      取得済みは報酬IDで保存。番号を更新しても同じ報酬を重ねて出さない。 */
   C.TREASURE_SECRET_P = 0.05;
   C.HIDDEN_CMD_ENABLED = true;
+  /* 2026-10-12 たけろう「隠しコマンドがどんな風に出るか確かめたい」: ?debugsecret=1 で宝箱の中身を必ず隠しコマンドにする(このパソコンの中だけ。公開サイトでは効かない) */
+  if(LOCAL_DEBUG_HOST && /[?&]debugsecret=1/.test(location.search)){ C.TREASURE_SECRET_P = 1; if(!(parseInt(LS.getItem('chibi_keys')||'0',10)>0)) LS.setItem('chibi_keys','1'); } /* 鍵が無ければ1本わたす */
   const SECRET_REWARDS = [
   {
     "itemId": "vibe_kodou",
