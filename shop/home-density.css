@@ -71,3 +71,14 @@
 #sponsor-sec .sponsor .sp-banner{width:100%;max-width:220px;height:auto;aspect-ratio:16/9;margin:0;border-radius:8px}
 #sponsor-sec .sponsor-copy{min-width:0}
 @media(max-width:600px){#sponsor-sec .sponsor{grid-template-columns:1fr;gap:10px;text-align:center}#sponsor-sec .sponsor .sp-banner{max-width:200px;margin:0 auto}}
+
+/* Keep this two-line instruction centered on portrait phones only. */
+#asobi-sec .slot-phone-break{display:none}
+@media(max-width:600px) and (orientation:portrait){
+ #asobi-sec .slot-step-title{display:grid;grid-template-columns:30px minmax(0,1fr) 30px;column-gap:6px}
+ #asobi-sec .slot-step-copy{text-align:center;line-height:1.6}
+ #asobi-sec .slot-phone-break{display:block}
+}
+@media(max-width:360px) and (orientation:portrait){
+ #asobi-sec .slot-step-title{font-size:16px;column-gap:4px}
+}
