@@ -75,7 +75,7 @@
 /* Keep this two-line instruction centered on portrait phones only. */
 #asobi-sec .slot-phone-break{display:none}
 @media(max-width:600px) and (orientation:portrait){
- #asobi-sec .slot-step-title{display:grid;grid-template-columns:30px minmax(0,1fr) 30px;column-gap:6px}
+ #asobi-sec .slot-step-title{display:grid;grid-template-columns:30px max-content;justify-content:center;column-gap:8px}
  #asobi-sec .slot-step-copy{text-align:center;line-height:1.6}
  #asobi-sec .slot-phone-break{display:block}
 }
