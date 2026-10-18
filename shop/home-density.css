@@ -1,0 +1,73 @@
+/* Compact main layout. Removing this stylesheet restores the previous density.
+   Keep the opening switch, mascot, keyboard river, artwork and palette intact. */
+#shelf-sec{padding:24px 18px!important}
+#shelf-sec .item{padding:14px;border-radius:18px}
+#shelf-sec .item .nm{font-size:20px;margin:8px 0 3px}
+#shelf-sec .item .pr{font-size:18px}
+#shelf-sec .item .st{font-size:18px}
+#shelf-sec .item.sold .st{font-size:20px;padding:7px 16px;border-width:4px}
+#world .shop-metal{max-width:460px;min-height:64px!important;margin:14px auto;padding:12px 36px!important}
+#world .shop-metal .metal-title{font-size:clamp(19px,2vw,24px)!important;line-height:1.4}
+#oshirase-sec{padding:16px 18px 8px}
+#oshirase-sec .oshirase-board{padding:14px 16px}
+#oshirase-sec .oshirase-ttl{font-size:20px;letter-spacing:0;margin-bottom:8px;padding:0}
+#oshirase-sec .oshirase-ttl .ic{font-size:20px}
+#oshirase-sec .oshirase-list{gap:6px}
+#oshirase-sec .oshirase-list li{padding:7px 10px;gap:4px 10px}
+#oshirase-sec .oshirase-list .od{font-size:14px}
+#oshirase-sec .oshirase-list .ot{font-size:17px;line-height:1.6}
+#pv-sec{padding-top:20px!important;padding-bottom:20px!important}
+#pv-sec .song-heading{max-width:720px;padding:12px 16px!important;margin:0 auto 12px!important}
+#pv-sec h2.pv-h{font-size:clamp(24px,2.3vw,28px)!important;line-height:1.35;letter-spacing:0}
+#pv-sec h2.pv-h ~ p{font-size:18px!important;line-height:1.5}
+#pv-sec h2.pv-h ~ p + p{font-size:17px!important;margin-top:4px}
+#pv-sec .song-heading .song-poster{width:132px;margin:10px auto 12px}
+#pv-sec .song-videos{max-width:440px;flex-basis:440px;gap:12px}
+#pv-sec .song-version{font-size:18px;margin-bottom:6px}
+#sponsor-sec{max-width:760px;padding:12px 18px 16px}
+#sponsor-sec .sponsor{padding:14px 16px;border-radius:14px}
+#sponsor-sec .sponsor p,#sponsor-sec .sponsor a{font-size:18px;line-height:1.6}
+#sponsor-sec .sponsor a{margin-top:4px;padding-block:8px;min-height:44px;box-sizing:border-box}
+#found-sec{max-width:720px;padding:16px 18px!important}
+#found-sec .found-panel{padding:16px 18px;margin-bottom:0;border-width:3px!important}
+#found-sec .found-name{font-size:28px;margin:0 0 8px;line-height:1.35}
+#found-sec .found-text{font-size:18px;line-height:1.65}
+#found-sec .found-go{font-size:18px;margin-top:10px;padding:9px 20px;min-height:44px;box-sizing:border-box}
+#found-sec .found-x{margin-top:14px!important}
+#asobi-sec{padding:20px 18px!important}
+#asobi-sec .ab-title{font-size:28px;letter-spacing:0;margin-bottom:12px;padding:4px 12px}
+#asobi-sec .ab-step{max-width:620px;padding:12px 10px}
+#asobi-sec .ab-head{font-size:20px;gap:8px;margin-bottom:10px;line-height:1.45}
+#asobi-sec .ab-no{width:34px;height:34px;font-size:21px}
+#asobi-sec .ab-games{gap:12px}
+#asobi-sec .ab-game{padding:8px 4px;gap:6px}
+#asobi-sec .ab-game .pi{width:min(112px,26vw)}
+#asobi-sec .ab-game .ab-gname{font-size:18px;min-height:0!important;line-height:1.5}
+#world #asobi-sec .ab-game .ab-go.shop-metal{min-height:48px!important;margin:8px auto 0!important;padding:9px 24px!important}
+#world #asobi-sec .ab-game .ab-go.shop-metal .metal-title{font-size:18px!important}
+#world #asobi-sec .ab-go.big.shop-metal{min-height:60px!important;margin:10px auto!important}
+#asobi-sec .ab-arrow{font-size:24px}
+#asobi-sec .ab-foot{max-width:620px;margin-top:14px;align-items:center}
+#asobi-sec .ab-zukan{font-size:18px;min-height:44px;padding:5px 12px}
+#asobi-sec .ab-zukan img{height:32px;width:auto}
+#world>footer{padding:18px;font-size:15px;line-height:1.7}
+@media(max-width:600px){
+ #shelf-sec{padding:18px 14px!important}
+ #shelf-sec .item{padding:10px}
+ #shelf-sec .item .nm,#shelf-sec .item.sold .st{font-size:17px}
+ #world .shop-metal{width:calc(100% - 24px);min-height:60px!important}
+ #pv-sec .song-heading .song-poster{width:108px}
+ #pv-sec .song-videos{max-width:300px;flex-basis:100%;gap:10px}
+ #found-sec .found-name{font-size:25px}
+ #found-sec .found-panel{padding:14px 12px}
+ #asobi-sec .ab-head{font-size:18px}
+ #asobi-sec .ab-no{width:30px;height:30px;font-size:19px}
+ #asobi-sec .ab-game .pi{width:96px;max-width:100%}
+ #asobi-sec .ab-foot{flex-wrap:wrap;justify-content:center;gap:12px}
+}
+
+/* A compact sponsorship image remains visible alongside its short introduction. */
+#sponsor-sec .sponsor{display:grid;grid-template-columns:220px minmax(0,1fr);align-items:center;gap:18px}
+#sponsor-sec .sponsor .sp-banner{width:100%;max-width:220px;height:auto;aspect-ratio:16/9;margin:0;border-radius:8px}
+#sponsor-sec .sponsor-copy{min-width:0}
+@media(max-width:600px){#sponsor-sec .sponsor{grid-template-columns:1fr;gap:10px;text-align:center}#sponsor-sec .sponsor .sp-banner{max-width:200px;margin:0 auto}}

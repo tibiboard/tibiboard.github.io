@@ -21,11 +21,11 @@
 <meta name="twitter:site" content="@tibiboard">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ちびボード30｜手づくりの30キー無線分割キーボード</title>
-<script src="data/商品リスト.js?v=20261018r1"></script>
-<script src="data/おしらせ.js?v=20261018r1"></script>
-<script src="data/うさぎ図鑑.js?v=20261018r1"></script>
-<script src="../asobi_common.js?v=20261018r1"></script>
-<script src="usagi-serifu-local.js?v=20261018r1"></script>
+<script src="data/商品リスト.js?v=20261019r1"></script>
+<script src="data/おしらせ.js?v=20261019r1"></script>
+<script src="data/うさぎ図鑑.js?v=20261019r1"></script>
+<script src="../asobi_common.js?v=20261019r1"></script>
+<script src="usagi-serifu-local.js?v=20261019r1"></script>
 <style>
 :root{
   --pink:#e0197a;--pink-deep:#b81163;--pink-pale:#ffe3f0;
@@ -463,15 +463,17 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .found-go{display:inline-block;margin-top:14px;font-weight:900;font-size:24px;color:#fff;background:linear-gradient(135deg,#ee85b5,#b79ce0);border-radius:999px;padding:8px 26px}
 
 </style>
-<link rel="stylesheet" href="shop-accessibility.css?v=20261018r1">
+<link rel="stylesheet" href="shop-accessibility.css?v=20261019r1">
 <link rel="canonical" href="https://tibiboard.github.io/shop/">
-<link rel="stylesheet" href="shop-theme.css?v=20261018r1"><!-- 2026-10-06 お店の色(全ページ共通)。この行を消すと元の色 -->
-<script src="paint-state.js?v=20261018r1"></script>
-<link rel="stylesheet" href="sample.css?v=20261018r1">
-<link rel="stylesheet" href="fish.css?v=20261018r1">
-<link rel="stylesheet" href="metal-buttons.css?v=20261018r1">
-<link rel="stylesheet" href="song-videos.css?v=20261018r1">
-<script src="song-videos.js?v=20261018r1" defer></script>
+<link rel="stylesheet" href="shop-theme.css?v=20261019r1"><!-- 2026-10-06 お店の色(全ページ共通)。この行を消すと元の色 -->
+<script src="paint-state.js?v=20261019r1"></script>
+<link rel="stylesheet" href="sample.css?v=20261019r1">
+<link rel="stylesheet" href="fish.css?v=20261019r1">
+<link rel="stylesheet" href="metal-buttons.css?v=20261019r1">
+<link rel="stylesheet" href="song-videos.css?v=20261019r1">
+<script src="song-videos.js?v=20261019r1" defer></script>
+<link rel="stylesheet" href="home-sections.css?v=20261019r1">
+<link rel="stylesheet" href="home-density.css?v=20261019r1">
 </head>
 <body>
 
@@ -534,7 +536,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <!-- みんなの棚(全個体がここに整列。いる子は光る) -->
   <section class="scene-wall scene-flowers" id="shelf-sec">
     <!-- 2026-10-06 たけろう指示: 棚の上に紹介ページへの入口(魅力を見てもらってから棚へ) -->
-    <div class="shelf-intro"><a class="shop-metal intro-door" href="紹介.html?v=22"><span class="metal-title">tibiboard30の紹介を見る ▶</span></a></div>
+    <div class="shelf-intro"><a class="shop-metal intro-door" href="紹介.html?v=22"><span class="metal-title">tibiboard30の紹介 ▶</span></a></div>
 
     <div class="shelf" id="shelf"></div>
   </section>
@@ -546,23 +548,18 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   </section>
 
   <!-- おしらせ板(公式ニュース枠。棚が増えても押されないよう最下部固定。2026-08-15移設) -->
-  <section class="scene-wall scene-flowers" id="oshirase-sec">
-    <div class="oshirase-board">
-      <div class="oshirase-ttl"><span class="ic">🪧</span>おしらせ</div>
-      <ul class="oshirase-list" id="oshiraseList"></ul>
-      <button class="oshirase-more" id="oshiraseMore" hidden>もっとみる ▾</button>
-    </div>
-  </section>
+
   <!-- Official song: YouTube playlist and click-to-load video players. -->
   <section class="scene-wall scene-resin" id="pv-sec" style="max-width:1100px;margin:28px auto;padding:22px 16px;text-align:center">
 
     <!-- 2026-10-12 たけろう: 作った人の行はすりガラスの上に(ピンクのレンガの上でも読めるように) -->
-    <div style="display:inline-block;margin:6px auto 16px;padding:10px 18px;border-radius:16px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.7)">
+    <div class="song-heading" style="display:inline-block;margin:6px auto 16px;padding:10px 18px;border-radius:16px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.7)">
     <h2 class="pv-h">公式ソング「ちびちび☆ちびボード!」</h2>
+    <figure class="song-poster" role="img" aria-label="公式ソングのポスター"><div class="song-poster-art"></div></figure>
     <p class="pv-sub2">ちびボード × <a href="https://www.youtube.com/playlist?list=PLJlTy_xjwryE" target="_blank" rel="noopener" style="color:inherit">過労@にゃっとランドforX</a></p>
     <p class="pv-listen">♡ いちど 聞いてみてね ♡</p>
     </div>
-    <div class="pv-two" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:flex-start"><div class="song-videos"><article class="song-video"><a class="song-version" href="https://www.youtube.com/shorts/Io0KBsbFRYc" target="_blank" rel="noopener">オルタ版</a><div class="song-screen"><button type="button" data-song-video="Io0KBsbFRYc" aria-label="オルタ版を再生"><img src="https://i.ytimg.com/vi/Io0KBsbFRYc/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><span class="song-play" aria-hidden="true"><span>▶</span></span></button></div></article><article class="song-video"><a class="song-version" href="https://www.youtube.com/shorts/MHXhsuLsqqM" target="_blank" rel="noopener">ポップ版</a><div class="song-screen"><button type="button" data-song-video="MHXhsuLsqqM" aria-label="ポップ版を再生"><img src="https://i.ytimg.com/vi/MHXhsuLsqqM/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><span class="song-play" aria-hidden="true"><span>▶</span></span></button></div></article></div><figure class="song-poster" role="img" aria-label="公式ソングのポスター"><div class="song-poster-art"></div></figure></div>
+    <div class="pv-two" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:flex-start"><div class="song-videos"><article class="song-video"><a class="song-version" href="https://www.youtube.com/shorts/Io0KBsbFRYc" target="_blank" rel="noopener">オルタ版</a><div class="song-screen"><button type="button" data-song-video="Io0KBsbFRYc" aria-label="オルタ版を再生"><img src="https://i.ytimg.com/vi/Io0KBsbFRYc/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><span class="song-play" aria-hidden="true"><span>▶</span></span></button></div></article><article class="song-video"><a class="song-version" href="https://www.youtube.com/shorts/MHXhsuLsqqM" target="_blank" rel="noopener">ポップ版</a><div class="song-screen"><button type="button" data-song-video="MHXhsuLsqqM" aria-label="ポップ版を再生"><img src="https://i.ytimg.com/vi/MHXhsuLsqqM/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><span class="song-play" aria-hidden="true"><span>▶</span></span></button></div></article></div></div>
   </section>
   <script>
   (function(){
@@ -593,23 +590,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
   <!-- スポンサーシップ告知(2026-08-23 たけろう指示: 大きく告知。ロゴ掲載は合意済み) -->
   <section class="scene-wall scene-resin" id="sponsor-sec">
-    <div class="sponsor">
-      <img class="sp-banner" src="photos/fireworks_banner.webp" alt="ちびボード × FIREWORKS スポンサーシップ締結のお知らせ" loading="lazy">
-      <h2>FIREWORKS を おうえんしています</h2>
-      <p>ちびボードは、新潟のeスポーツチーム <b>FIREWORKS</b> のスポンサーになりました。</p>
-      <p>FIREWORKSは「地方から、eスポーツの熱量を打ち上げる」チーム。選手・ストリーマー・実況者が活動していて、新潟駅南口のeスポーツカフェ&amp;バー <b>e-spopia(エスポピア)</b> が ホームです。</p>
-      <div class="sp-links">
-        <a href="https://x.com/eFIREWORKS_" target="_blank" rel="noopener">FIREWORKS の X ▶</a>
-        <a class="sub" href="https://www.e-sportsbar-niigata.com/fireworks/" target="_blank" rel="noopener">チーム紹介(公式サイト) ▶</a>
-      </div>
-      <div class="sp-small">選手のみなさんの手もとで、ちびボードが活躍する日を たのしみにしています<img class="bb" src="../img/バツベイ_アイコン800.png" alt="ばつべー"></div>
-    </div>
+    <div class="sponsor"><img class="sp-banner" src="photos/fireworks_banner.webp" width="1200" height="675" alt="ちびボード × FIREWORKS" loading="lazy"><div class="sponsor-copy"><p>eスポーツチーム「FIREWORKS」のスポンサーになりました。</p>
+      <a href="https://www.e-sportsbar-niigata.com/fireworks/" target="_blank" rel="noopener">FIREWORKSについて（公式サイト）▶</a>
+    </div></div>
   </section>
 
   <!-- 2026-10-06 たけろう指示: NyattoLand for X(Chrome 拡張)に tibiboard30 が登場する。「登場します」とだけ言う。作った人の X を小さく -->
   <section class="scene-wall scene-resin" id="found-sec">
     <!-- 2026-10-12 たけろう: NyattoLand(過労さんのアプリ)と公式ソングは別の話なので段を分ける -->
-    <a class="found-card" href="https://nyatto-land-for-x.thekarou.com" target="_blank" rel="noopener">
+    <div class="found-panel found-card"><a class="found-link" href="https://nyatto-land-for-x.thekarou.com" target="_blank" rel="noopener">
             <div class="found-name">NyattoLand for X</div>
       <div class="found-text">タイムラインに猫が住みつく、とってもかわいい、やみつき Chrome 拡張機能。<br>tibiboard30 が 登場します。</div>
       <div class="found-go">見に行く ▶</div>
@@ -618,6 +607,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
     <!-- 2026-10-12 たけろう: 動画は X の埋め込みに(過労さんのポスト)。前= NyattoLand の紹介動画(19時に新しい動画へ差し替え・お店の中に置く。外のSNSは埋め込まない) -->
 
 
+  
+    </div>
   </section>
 
   <!-- 2026-10-06 たけろう指示: うさぎずかん・ゲームは本業ではないので一番下 -->
@@ -657,6 +648,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
         <div class="mycoin" id="mycoin"></div>
         <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="データのほぞんについて">?</button>
       </div>
+    </div>
+  </section>
+
+  <section class="scene-wall scene-flowers" id="oshirase-sec">
+    <div class="oshirase-board">
+      <div class="oshirase-ttl"><span class="ic">🪧</span>おしらせ</div>
+      <ul class="oshirase-list" id="oshiraseList"></ul>
+      <button class="oshirase-more" id="oshiraseMore" hidden>もっとみる ▾</button>
     </div>
   </section>
 
@@ -1053,7 +1052,7 @@ try {
 } catch (e) { try { console.error('datainfo popup failed', e); } catch (e2) {} }
 </script>
 <!-- 版バッジは asobi_common.js が全ページ共通で出す(2026-08-20) -->
-<script src="usagi-walk-local.js?v=20261018r1"></script>
+<script src="usagi-walk-local.js?v=20261019r1"></script>
 
 <!-- 2026-09-12 たけろう決定「E」: トップの見出しとうさぎの一言は 白い丸文字+黒い影(ドットの地は廃止)。CSS の末尾に置く(後ろの指定に負けないため) -->
 <style>
@@ -1200,7 +1199,7 @@ try {
   else window.addEventListener('resize',place);
 })();
 </script>
-<script src="paint-intro.js?v=20261018r2"></script>
-<script src="fish.js?v=20261018r1"></script>
+<script src="paint-intro.js?v=20261019r1"></script>
+<script src="fish.js?v=20261019r1"></script>
 </body>
 </html>

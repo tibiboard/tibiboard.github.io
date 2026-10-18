@@ -949,9 +949,11 @@
   /* =====================================================================
      版バッジ(2026-08-20 たけろう「私が見ている物と君が作った物が同じか、数字で確認できる物が要る。どの仕事にも言える」)
      このファイルを読む全ページの左下に「版 2026-08-20 02:15 ローカル」を自動で出す(手書き禁止。ファイルの更新時刻を機械で読む)。
-     ローカル(8917)も本番(tibiboard.github.io)も同じ見た目。ページ自身の更新時刻なので、開いている物の版がそのまま分かる。
+     版表示はローカル(8917)・家Wi-Fiだけ。本番には表示しない。ページ自身の更新時刻なので、開いている物の版がそのまま分かる。
      ===================================================================== */
   function verBadge(){
+    // Version information is for local checks only; no badge or HEAD requests on the public site.
+    if(!(['localhost','127.0.0.1'].includes(location.hostname)||/^192\.168\./.test(location.hostname))) return;
     if(document.getElementById('verbadge')) return;   /* ページが自前で持っていればそちらを尊重 */
     const d = new Date(document.lastModified);
     const z = n => String(n).padStart(2,'0');
