@@ -1,0 +1,56 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ケースの素材 — ちびボードのお店</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&family=Mochiy+Pop+One&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#e0197a;--pink-deep:#8d2f5e;--mint-deep:#0e3b39}
+body{margin:0;font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic UI",sans-serif;color:#1b1622;background:#d9d6d3}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/wall_kuro_tile.jpg') center/cover no-repeat} /* 2026-09-14 たけろう指示: 素材ページの壁=黒タイル(石畳から変更) */
+body>*{position:relative;z-index:1}
+.band{background:var(--pink-deep);color:#fff;padding:14px 20px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.band h1{font-size:24px;margin:0;font-family:"Mochiy Pop One","M PLUS Rounded 1c",sans-serif;font-weight:400} /* 2026-09-14 たけろう指示: 見出しは丸っこい書体(もちいポップ) */
+.band a{color:#fff;font-weight:900;text-decoration:none}
+.band .sf{font-size:44px;font-weight:900;background:#fff;color:var(--pink-deep);padding:0 16px;border-radius:8px} /* 2026-09-14 たけろう指示: 左上は公式の「ちボ」マーク(紹介ページと同じ) */
+main{max-width:980px;margin:0 auto;padding:24px 16px 60px}
+h2{font-size:clamp(28px,5vw,44px);color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.6);text-align:center;margin:10px 0 4px;font-family:"Mochiy Pop One","M PLUS Rounded 1c",sans-serif;font-weight:400}
+.lead{text-align:center;font-size:20px;font-weight:700;margin:0 0 26px;font-family:"Mochiy Pop One","M PLUS Rounded 1c",sans-serif;font-weight:400;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+.card{display:grid;grid-template-columns:minmax(200px,1fr) 1.2fr;gap:18px;align-items:center;background:rgba(255,255,255,.88);border-radius:22px;padding:18px;margin:0 0 18px;box-shadow:0 8px 24px rgba(0,0,0,.10)}
+.card img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;display:block}
+.card h3{font-size:28px;margin:0 0 6px;color:var(--pink-deep);font-family:"Mochiy Pop One","M PLUS Rounded 1c",sans-serif;font-weight:400}
+.card .tag,.card-tag-inline{display:inline-block;background:var(--pink);color:#fff;font-weight:900;border-radius:999px;padding:2px 14px;font-size:20px;margin-left:8px;vertical-align:middle}
+.card dl{margin:0;display:grid;grid-template-columns:5.5em 1fr;gap:6px 10px;font-size:20px}
+.card dt{color:#667;font-weight:900}.card dd{margin:0}
+.todo{color:#b04a7c}
+/* 2026-09-14 たけろう指示: 写真は ◀ ▶ で送る(枚数が増えても構図を変えない) */
+.pics{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/3;background:#eee}.pics img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}.pics img.on{display:block}
+.pics .pv{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:999px;border:0;background:rgba(255,255,255,.9);color:var(--pink-deep);font-size:26px;font-weight:900;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center}.pics .pv.l{left:8px}.pics .pv.r{right:8px}
+.pics .pn{position:absolute;right:10px;bottom:8px;background:rgba(0,0,0,.55);color:#fff;font-weight:900;font-size:16px;border-radius:999px;padding:2px 10px}
+@media(max-width:640px){.card{grid-template-columns:1fr}}
+/* 2026-10-12 たけろう指示: 素材ごとに「製作者のひとこと」を付けた */
+.memo{margin:14px 0 0;padding:10px 14px;background:#fff4f9;border-radius:14px;font-size:20px;line-height:1.6}.memo b{display:block;color:var(--pink-deep);font-size:18px}
+</style><link rel="stylesheet" href="shop-theme.css"><!-- 2026-10-06 お店の色(全ページ共通)。この行を消すと元の色 -->
+</head><body>
+<div class="band"><a class="sf" href="index.html?in=1" title="お店にもどる">ちボ</a><a href="紹介.html">◀ 紹介にもどる</a></div>
+<main>
+<!-- 2026-10-06 たけろう指示:「3つの素材から」とは言わない(見出しを外した) -->
+<h2>ケースの素材のはなし</h2><!-- 2026-10-06 たけろう指示: 「見た目は写真で…」の文はなし。題名をここへ -->
+<!-- 2026-10-09 たけろう指示: 一口メモは全部外した -->
+<!-- 2026-10-06 たけろう指示: 写真の入れ替え(ガラス=3枚目を先頭+cine_31/クリア=3枚目 cine_24・4枚目 青っぽいクリア cut_49・cine_09 は外す)・素材のタグ(PLA/PETG/クリア/ラメ)を付けた。発売の時に棚の子にも同じタグを付ける -->
+<!-- 2026-09-13 新設(たけろう指示 9/12: 紹介2番「ケースの素材もいろいろあるよ」→ くわしく → このページ)。__要記入__ はたけろうの言葉で埋める(素材ごとの こだわり・弱点も正直に) -->
+<div class="card"><div class="pics"><img src="photos/sozai_pla_1.webp" alt="いろいろな色の PLA のケース"><img src="photos/sozai_pla_2.webp" alt="PLA と PETG のケース"></div><div><h3>標準の PLA / PETG <span class="tag">PLA</span><span class="tag">PETG</span></h3><dl><dt>見た目</dt><dd>肌が いちばん きれい</dd><dt>触り心地</dt><dd>しっとり</dd><dt>発色</dt><dd>鮮やかなものから パステルまで きれいに発色する</dd></dl><p class="memo"><b>製作者のひとこと</b>いちばん かわいい配色が作れる、マット系だけを 使っています</p></div></div>
+<div class="card"><div class="pics"><img src="photos/sozai_glass_3.webp" alt="ガラスファイバー入り"><img src="photos/cine_31.webp" alt="ガラスファイバー入り"></div><div><h3>ガラスファイバー入り <span class="tag">ガラスファイバー</span></h3><dl><dt>見た目</dt><dd>さらっと 落ちついた色。見た目では分かりにくい</dd><dt>触り心地</dt><dd>心地よい 細かな ざらざら</dd><dt>発色</dt><dd>独特の色合いで 少し落ち着いた雰囲気</dd></dl><p class="memo"><b>製作者のひとこと</b>製作者の 推し素材。いちばん刺さった、某メーカーのガラスファイバー素材です。最高にかわいい色が いくつかありました。生産終了の可能性があったので、推しの色だけ 多めに購入しています</p></div></div>
+<div class="card"><div class="pics"><img src="photos/ehon_s_1.webp" alt="クリア(下から光)"><img src="photos/ehon_s_2.webp" alt="クリア(机の上)"><img src="photos/cine_24.webp" alt="クリア"><img src="photos/cut_49.webp" alt="青っぽいクリア" style="object-fit:contain;background:#eef2f6"></div><div><h3>クリア <span class="tag">クリア</span><span class="tag">ラメ</span></h3><dl><dt>見た目</dt><dd>光が とおる。印象が いちばん変わる</dd><dt>触り心地</dt><dd>つるつる</dd><dt>発色</dt><dd>メーカーや印刷の仕方によって 発色や透明度が大きく変わる</dd></dl><p class="memo"><b>製作者のひとこと</b>いちばん研究していて、手間ひまも かかります。でも、ちびボードの代表的な商品に なりそうです</p></div></div>
+<p class="lead" style="margin-top:26px"><b>ラメ入り</b>もあるよ <span class="card-tag-inline">ラメ</span></p>
+<script>
+/* 2026-09-14: 素材カードの写真送り。◀ ▶ で1枚ずつ。枚数は img の数で自動 */
+document.querySelectorAll('.pics').forEach(box=>{
+  const imgs=[...box.querySelectorAll('img')]; let i=0; if(!imgs.length) return;
+  const l=document.createElement('button'), r=document.createElement('button'), n=document.createElement('span');
+  l.className='pv l'; l.type='button'; l.textContent='◀'; l.setAttribute('aria-label','まえの写真');
+  r.className='pv r'; r.type='button'; r.textContent='▶'; r.setAttribute('aria-label','つぎの写真');
+  n.className='pn';
+  const show=k=>{ i=(k+imgs.length)%imgs.length; imgs.forEach((im,j)=>im.classList.toggle('on',j===i)); n.textContent=(i+1)+' / '+imgs.length; };
+  l.onclick=()=>show(i-1); r.onclick=()=>show(i+1);
+  box.append(l,r,n); if(imgs.length<2){l.hidden=true;r.hidden=true;} show(0);
+});
+</script>
+</main></body></html>

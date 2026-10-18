@@ -10,6 +10,24 @@
    =================================================================== */
 (function(){
   const C = window.CHIBI = {};
+  /* ---- 2026-09-30: 保存の入口(ここ1か所だけ)。ブラウザが保存を禁止していても
+     ページは止めない(その場合は開いている間だけ覚えて、閉じたら消える)。
+     ほかのページ(うさぎ探し など)も window.CHIBI_LS を使う ---- */
+  const LS = window.CHIBI_LS = (function(){
+    const mem = {};
+    let on = false;
+    try { const t = '__chibi_t'; localStorage.setItem(t, '1'); localStorage.removeItem(t); on = true; } catch(e){}
+    return {
+      getItem(k){ if(on){ try{ return localStorage.getItem(k); }catch(e){} } return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; },
+      setItem(k, v){ mem[k] = String(v); if(on){ try{ localStorage.setItem(k, String(v)); }catch(e){} } },
+      removeItem(k){ delete mem[k]; if(on){ try{ localStorage.removeItem(k); }catch(e){} } }
+    };
+  })();
+
+  /* ---- asobi_common.js自身の場所を特定(このファイルはBASEデザイン案直下に実在)。
+     ページごとに参照パスの深さが違っても、ここからの相対で音ファイルへ辿り着ける ---- */
+  const SELF_SRC = (document.currentScript && document.currentScript.src) || '';
+  const SELF_BASE = SELF_SRC ? SELF_SRC.replace(/asobi_common\.js.*$/, '') : '';
 
   /* ---- うさぎ69種(透過フォルダの実ファイルに一致) ---- */
   C.DIR = 'img/usagi/';   // ページ位置により C.DIR を上書き可
@@ -33,11 +51,12 @@
   /* ばつべーは世界に1匹だけ(キティ方式)。集めているのは「コーデ(着こなし)」なので個体名は使わない(2026-08-14たけろう) */
   C.seriesJa = {cute:'キュートコーデ', edgy:'エッジコーデ', street:'ストリートコーデ'};
 
-  /* ---- デバッグ: ?debug=1 で優先権当選確率100% ---- */
-  C.DEBUG = /[?&]debug=1/.test(location.search);
+  /* ---- デバッグ: ?debug=1 で優先権当選確率100%。ローカル環境だけで有効 ---- */
+  const LOCAL_DEBUG_HOST = ['localhost','127.0.0.1'].includes(location.hostname)||/^192\.168\./.test(location.hostname);
+  C.DEBUG = LOCAL_DEBUG_HOST && /[?&]debug=1/.test(location.search);
 
   /* ---- デバッグ: ?debugwin=1 で大当たり(宝箱)確定。localhostのみ有効(2026-08-14新設) ---- */
-  C.DEBUG_WIN = ['localhost','127.0.0.1'].includes(location.hostname) && /[?&]debugwin=1/.test(location.search);
+  C.DEBUG_WIN = LOCAL_DEBUG_HOST && /[?&]debugwin=1/.test(location.search);
 
   /* ---- デバッグ2(2026-08-12): 表示確認用。本番の人はURLを知らないので影響なし
        ?debugcoin=25 … コインを25枚にセット
@@ -46,20 +65,20 @@
        ?debugreset=1 … コイン・日次・鍵・図鑑を全部消して初見さん状態に ---- */
   (function(){
     const q = location.search;
-    if(!['localhost','127.0.0.1'].includes(location.hostname)) return; // デバッグ機能は公開サイトでは無効(2026-08-13)
+    if(!(['localhost','127.0.0.1'].includes(location.hostname)||/^192\.168\./.test(location.hostname))) return; // デバッグ機能は公開サイトでは無効(2026-08-13)
     const mCoin = q.match(/[?&]debugcoin=(\d+)/);
-    if(mCoin) localStorage.setItem('chibi_coins', String(Math.max(0,parseInt(mCoin[1],10))));
+    if(mCoin) LS.setItem('chibi_coins', String(Math.max(0,parseInt(mCoin[1],10))));
     const mKey = q.match(/[?&]debugkey=([01])/);
     if(mKey){
       if(mKey[1]==='1'){
-        if(!localStorage.getItem('chibi_atari')){
+        if(!LS.getItem('chibi_atari')){
           const d=new Date(), t=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-          localStorage.setItem('chibi_atari', JSON.stringify({code:'DEBUGKEY', date:t}));
+          LS.setItem('chibi_atari', JSON.stringify({code:'DEBUGKEY', date:t}));
         }
-      } else localStorage.removeItem('chibi_atari');
+      } else LS.removeItem('chibi_atari');
     }
     if(/[?&]debugreset=1/.test(q)){
-      ['chibi_coins','chibi_daily','chibi_zukan','chibi_atari'].forEach(k=>localStorage.removeItem(k));
+      ['chibi_coins','chibi_daily','chibi_zukan','chibi_atari'].forEach(k=>LS.removeItem(k));
     }
     if(mCoin||mKey||/debugreset/.test(q)) C.DEBUG_TOOLS = true;
   })();
@@ -67,7 +86,7 @@
   /* ---- 開発パネル(2026-08-16): ?dev=1 で画面右下に小さな操作板。localhostのみ・本番では何も出ない。
        上のdebug○○のURLを覚えなくていいようにボタン化しただけ(中身は同じ) ---- */
   (function(){
-    if(!['localhost','127.0.0.1'].includes(location.hostname)) return;
+    if(!(['localhost','127.0.0.1'].includes(location.hostname)||/^192\.168\./.test(location.hostname))) return;
     if(!/[?&]dev=1/.test(location.search)) return;
     const go = extra => { const u=new URL(location.href); u.searchParams.set('dev','1');
       ['debugcoin','debugkey','debugreset','debugwin'].forEach(k=>u.searchParams.delete(k));
@@ -76,12 +95,13 @@
       b.style.cssText='font:700 12px sans-serif;padding:4px 8px;border:0;border-radius:6px;background:#fff;color:#222;cursor:pointer'; return b;};
     const mk=()=>{
       const p=document.createElement('div');
-      p.style.cssText='position:fixed;right:8px;bottom:8px;z-index:99999;background:#222c;color:#fff;padding:8px;border-radius:10px;display:flex;flex-wrap:wrap;gap:6px;max-width:260px;font:700 12px sans-serif;align-items:center';
+      /* 2026-08-20: スロットの演出ボタン板(右下)と被って押せなかったので左上へ */
+      p.style.cssText='position:fixed;left:8px;top:8px;z-index:99999;background:#222c;color:#fff;padding:8px;border-radius:10px;display:flex;flex-wrap:wrap;gap:6px;max-width:260px;font:700 14px sans-serif;align-items:center';
       const st=document.createElement('span'); st.style.cssText='width:100%';
-      const zukan=(()=>{try{return JSON.parse(localStorage.getItem('chibi_zukan')||'[]').length}catch(e){return 0}})();
-      st.textContent='🛠dev  🪙'+(localStorage.getItem('chibi_coins')||0)+'  🔑'+(localStorage.getItem('chibi_atari')?'あり':'なし')+'  📖'+zukan+'匹';
+      const zukan=(()=>{try{return JSON.parse(LS.getItem('chibi_zukan')||'[]').length}catch(e){return 0}})();
+      st.textContent='🛠dev  🪙'+(LS.getItem('chibi_coins')||0)+'  🔑'+(LS.getItem('chibi_atari')?'あり':'なし')+'  📖'+zukan+'匹';
       p.appendChild(st);
-      p.appendChild(btn('🪙+10',()=>go({debugcoin:String((parseInt(localStorage.getItem('chibi_coins')||'0',10)||0)+10)})));
+      p.appendChild(btn('🪙+10',()=>go({debugcoin:String((parseInt(LS.getItem('chibi_coins')||'0',10)||0)+10)})));
       p.appendChild(btn('🪙0',()=>go({debugcoin:'0'})));
       p.appendChild(btn('🔑あり',()=>go({debugkey:'1'})));
       p.appendChild(btn('🔑なし',()=>go({debugkey:'0'})));
@@ -97,19 +117,21 @@
   C.today = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 
   /* ---- コイン ---- */
-  C.getCoins = () => parseInt(localStorage.getItem('chibi_coins')||'0',10)||0;
-  C.setCoins = n => localStorage.setItem('chibi_coins', String(Math.max(0,n)));
+  /* 2026-08-20 コインGUI大改装(たけろう指示): 持てる上限は99まい。それ以上は増えない(減らない側の下限は0のまま) */
+  C.COIN_MAX = 99;
+  C.getCoins = () => parseInt(LS.getItem('chibi_coins')||'0',10)||0;
+  C.setCoins = n => LS.setItem('chibi_coins', String(Math.max(0,Math.min(C.COIN_MAX,n))));
   C.addCoins = n => { C.setCoins(C.getCoins()+n); return C.getCoins(); };
   C.spendCoin = () => { if(C.getCoins()<1) return false; C.setCoins(C.getCoins()-1); return true; };
 
   /* ---- 日次カウンタ(日付が変わったら自動リセット) ---- */
   C.daily = () => {
     let d = {};
-    try{ d = JSON.parse(localStorage.getItem('chibi_daily')||'{}'); }catch(e){}
+    try{ d = JSON.parse(LS.getItem('chibi_daily')||'{}'); }catch(e){}
     if(d.date !== C.today()) d = {date:C.today(), usagi:0, run:0, perfect:0, chal:0};
     return d;
   };
-  C.saveDaily = d => localStorage.setItem('chibi_daily', JSON.stringify(d));
+  C.saveDaily = d => LS.setItem('chibi_daily', JSON.stringify(d));
 
   /* ---- ミニゲーム日次記録(game = 'usagi' | 'run') ---- */
   C.gameDone = g => !!C.daily()[g];
@@ -129,16 +151,17 @@
   C.chalLeft  = () => Infinity;
   C.useChal   = () => {};
 
-  /* ---- 宝箱は週1回まで(2026-08-14たけろう決定): 獲得したら7日間は大当たり抽選そのものをスキップ(ハズレ扱い)。
-     ゲームを遊ぶこと自体・コイン獲得は無制限。ガチャ・スロット共通でここに1本化する。 ---- */
-  C.TREASURE_COOLDOWN_MS = 7*24*60*60*1000;
+  /* ---- 宝箱の週1回制限は撤廃(2026-08-18たけろう決定): 「回数は制限しない。当たりにくさは1/100と宝箱の中身5%だけで制御。
+     ゲームが増えてコインが増えれば当たりも自然に増える」。COOLDOWN=0で常に抽選可(関数は互換のため残す)。 ---- */
+  C.TREASURE_COOLDOWN_MS = 0;
   C.canDrawTreasure = () => {
-    const t = localStorage.getItem('chibi_treasure_last');
+    return true; /* 2026-09-13 たけろう決定: 週1回の上限は無し(何回でも)。下の判定は残すが通らない */
+    const t = LS.getItem('chibi_treasure_last');
     if(!t) return true;
     const last = new Date(t).getTime();
     return isNaN(last) ? true : (Date.now() - last) >= C.TREASURE_COOLDOWN_MS;
   };
-  C.markTreasureWin = () => localStorage.setItem('chibi_treasure_last', new Date().toISOString());
+  C.markTreasureWin = () => LS.setItem('chibi_treasure_last', new Date().toISOString());
 
   /* ---- 大当たり(→宝箱3択へ)の抽選: 1/100(2026-08-14たけろう指示。ガチャ・スロット共通)
      ?debug=1 / ?debugwin=1(localhostのみ) で必ず当たり(週1回制限もバイパス、確認用)
@@ -152,27 +175,269 @@
     return win;
   };
 
-  /* ---- 宝箱の中身抽選(2026-08-14新設、確率は同日たけろう改定): 95%=うさぎ(かぶりあり)/5%=かくしコマンド ----
-     戻り値: {type:'usagi', id, isNew} または {type:'secret'} */
+  /* 宝箱: 95%うさぎ / 5%かくしコマンド。番号の正本は ★かくしコマンド台帳.md。
+     取得済みは報酬IDで保存。番号を更新しても同じ報酬を重ねて出さない。 */
   C.TREASURE_SECRET_P = 0.05;
-  /* 2026-08-15たけろう指示: かくしコマンドはアプリ側の機能が未実装のため、排出そのものを停止する(当面100%うさぎ)。
-     9月のアプリ公開でアプリ側が実装できたら、このフラグを true に戻すだけで復活する(確率は上のTREASURE_SECRET_Pのまま5%・値は変更していない)。 */
-  C.HIDDEN_CMD_ENABLED = false;
+  C.HIDDEN_CMD_ENABLED = true;
+  /* 2026-10-12 たけろう「隠しコマンドがどんな風に出るか確かめたい」: ?debugsecret=1 で宝箱の中身を必ず隠しコマンドにする(このパソコンの中だけ。公開サイトでは効かない) */
+  if(LOCAL_DEBUG_HOST && /[?&]debugsecret=1/.test(location.search)){ C.TREASURE_SECRET_P = 1; if(!(parseInt(LS.getItem('chibi_keys')||'0',10)>0)) LS.setItem('chibi_keys','1'); } /* 鍵が無ければ1本わたす */
+  const SECRET_REWARDS = [
+  {
+    "itemId": "vibe_kodou",
+    "code": "J570GFB9"
+  },
+  {
+    "itemId": "vibe_triple",
+    "code": "959AHE90"
+  },
+  {
+    "itemId": "wall:27805449",
+    "code": "11A0C1AG"
+  },
+  {
+    "itemId": "wall:4668291",
+    "code": "H06GC20G"
+  },
+  {
+    "itemId": "wall:27109494",
+    "code": "3771AI9E"
+  },
+  {
+    "itemId": "wall:panel",
+    "code": "J3J37CCD"
+  },
+  {
+    "itemId": "wall:midori_ki",
+    "code": "3A7D2009"
+  },
+  {
+    "itemId": "wall:renga",
+    "code": "JC6F0AB7"
+  },
+  {
+    "itemId": "wall:ao",
+    "code": "AB1D017I"
+  },
+  {
+    "itemId": "wall:shirokabe",
+    "code": "ED66GCFI"
+  },
+  {
+    "itemId": "wall:mizuiro",
+    "code": "597DHEHH"
+  },
+  {
+    "itemId": "wall:shikkui",
+    "code": "1IJ56DJA"
+  },
+  {
+    "itemId": "wall:hikari_con",
+    "code": "D977878B"
+  },
+  {
+    "itemId": "wall:momo_kabe",
+    "code": "GJDI07EF"
+  },
+  {
+    "itemId": "wall:ki_totan",
+    "code": "J3J08C6D"
+  },
+  {
+    "itemId": "wall:ishi_koke",
+    "code": "4DFJ52H0"
+  },
+  {
+    "itemId": "wall:glass_tile",
+    "code": "6HGFI035"
+  },
+  {
+    "itemId": "wall:aka_punch",
+    "code": "76C8HC7B"
+  },
+  {
+    "itemId": "wall:pink_kabe",
+    "code": "CJ28FGG1"
+  },
+  {
+    "itemId": "wall:ao_con",
+    "code": "5GF13391"
+  },
+  {
+    "itemId": "wall:aka_renga",
+    "code": "1EFHFI83"
+  },
+  {
+    "itemId": "wall:kurai_renga",
+    "code": "DGI8DF5G"
+  },
+  {
+    "itemId": "wall:cha_block",
+    "code": "63J39A11"
+  },
+  {
+    "itemId": "wall:ishi_kabe",
+    "code": "BAHG7CA6"
+  },
+  {
+    "itemId": "wall:mizu_con",
+    "code": "FB07J971"
+  },
+  {
+    "itemId": "wall:shiro_renga",
+    "code": "89CHDHFB"
+  },
+  {
+    "itemId": "wall:cha_renga",
+    "code": "71EG2FJJ"
+  },
+  {
+    "itemId": "wall:sabi_kabe",
+    "code": "76AGC485"
+  },
+  {
+    "itemId": "wall:midori_tile",
+    "code": "DGC4BIA3"
+  },
+  {
+    "itemId": "wall:shiro_kami",
+    "code": "64DJ9GI9"
+  },
+  {
+    "itemId": "wall:kuro_tile",
+    "code": "HD97J96I"
+  },
+  {
+    "itemId": "wall:shiro_con",
+    "code": "083AGC7H"
+  },
+  {
+    "itemId": "wall:hagare_kabe",
+    "code": "5C3F75B5"
+  },
+  {
+    "itemId": "wall:cream_renga",
+    "code": "BFI054H8"
+  },
+  {
+    "itemId": "wall:aka_renga2",
+    "code": "203D71E8"
+  },
+  {
+    "itemId": "vibe_neko",
+    "code": "E2J5H413"
+  },
+  {
+    "itemId": "vibe_kaidan",
+    "code": "8982G0AH"
+  },
+  {
+    "itemId": "vibe_nami",
+    "code": "HA36AB37"
+  },
+  {
+    "itemId": "vibe_rocket",
+    "code": "81H6IIFF"
+  },
+  {
+    "itemId": "vibe_warai",
+    "code": "84IGH1C3"
+  },
+  {
+    "itemId": "vibe_taiko",
+    "code": "H28G7JH2"
+  },
+  {
+    "itemId": "vibe_shizuku",
+    "code": "E62I884E"
+  },
+  {
+    "itemId": "vibe_pyon",
+    "code": "B3B1I0BE"
+  },
+  {
+    "itemId": "vibe_kaminari",
+    "code": "FGCIIDAB"
+  },
+  {
+    "itemId": "vibe_yukidoke",
+    "code": "IB6G5GFH"
+  },
+  {
+    "itemId": "vibe_ochiba",
+    "code": "J500HBBC"
+  },
+  {
+    "itemId": "vibe_kodama",
+    "code": "F5666ACE"
+  },
+  {
+    "itemId": "vibe_brake",
+    "code": "4AD90A6I"
+  },
+  {
+    "itemId": "vibe_elevator",
+    "code": "BH57J2HH"
+  },
+  {
+    "itemId": "vibe_kaeru",
+    "code": "259A22H8"
+  },
+  {
+    "itemId": "vibe_hotaru",
+    "code": "24C7CJC1"
+  },
+  {
+    "itemId": "kbskin_set",
+    "code": "DHH15HBF"
+  },
+  {
+    "itemId": "vibe_fuwa",
+    "code": "63BHDA5E"
+  },
+  {
+    "itemId": "vibe_tokotoko",
+    "code": "77IHF9I0"
+  },
+  {
+    "itemId": "vibe_bururun",
+    "code": "0D3G65G7"
+  }
+];
+  const SECRET_HISTORY_KEY = 'chibi_secret_rewards_v1';
+  C.getSecretHistory = () => {
+    try {
+      const rows = JSON.parse(LS.getItem(SECRET_HISTORY_KEY) || '[]');
+      return Array.isArray(rows) ? rows.filter(row => row && typeof row.itemId === 'string' && typeof row.code === 'string') : [];
+    } catch(e) { return []; }
+  };
+  C.issueSecret = () => {
+    const history = C.getSecretHistory();
+    const owned = new Set(history.map(row => row.itemId));
+    const remaining = SECRET_REWARDS.filter(row => !owned.has(row.itemId));
+    if (!remaining.length) return null;
+    const reward = remaining[Math.floor(Math.random() * remaining.length)];
+    LS.setItem(SECRET_HISTORY_KEY, JSON.stringify([...history, reward]));
+    return {type:'secret', ...reward};
+  };
   C.openTreasure = () => {
-    if(C.HIDDEN_CMD_ENABLED && Math.random() < C.TREASURE_SECRET_P) return {type:'secret'};
-    const id = C.drawCard();          // C.ALLから一様ランダム・かぶりあり
-    const isNew = C.addZukan(id);     // 新規ならずかんに追加、かぶりなら変化なし
+    if(C.HIDDEN_CMD_ENABLED && Math.random() < C.TREASURE_SECRET_P) {
+      const secret = C.issueSecret();
+      if(secret) return secret;
+    }
+    // 全番号を取得済みなら、うさぎが出る。空の当たりや重複番号にはしない。
+    const id = C.drawCard();
+    const isNew = C.addZukan(id);
     return {type:'usagi', id, isNew};
   };
 
   /* ---- 図鑑コレクション ---- */
   C.getZukan = () => {
-    try{ const a=JSON.parse(localStorage.getItem('chibi_zukan')||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; }
+    try{ const a=JSON.parse(LS.getItem('chibi_zukan')||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; }
   };
   C.addZukan = id => {
     const a = C.getZukan();
     const isNew = !a.includes(id);
-    if(isNew){ a.push(id); localStorage.setItem('chibi_zukan', JSON.stringify(a)); }
+    if(isNew){ a.push(id); LS.setItem('chibi_zukan', JSON.stringify(a)); }
     return isNew;
   };
   C.zukanComplete = () => C.getZukan().length >= C.ALL.length;
@@ -190,15 +455,172 @@
   };
   C.setAtari = () => {
     const code = C.makeCode();
-    localStorage.setItem('chibi_atari', JSON.stringify({code, date:C.today()}));
+    LS.setItem('chibi_atari', JSON.stringify({code, date:C.today()}));
     return code;
   };
-  C.getAtari = () => { try{ return JSON.parse(localStorage.getItem('chibi_atari')||'null'); }catch(e){ return null; } };
+  C.getAtari = () => { try{ return JSON.parse(LS.getItem('chibi_atari')||'null'); }catch(e){ return null; } };
+
+  /* ---- 🔑 かぎ(2026-09-13 たけろう設計): 当たり=鍵を手に入れる → 鍵は持ち物(chibi_keys) → トップの宝箱で使う ---- */
+  C.getKeys = () => { const n = parseInt(LS.getItem('chibi_keys')||'0',10); return isNaN(n)?0:Math.max(0,n); };
+  C.addKeys = n => {
+    LS.setItem('chibi_keys', String(Math.max(0, C.getKeys()+n)));
+    if(C.getKeys()>0) LS.setItem('chibi_atari', JSON.stringify({code:'KEY', date:C.today()})); /* うさぎの「君…もってるね」用 */
+    else LS.removeItem('chibi_atari');
+    try{ C.refreshCoinGui(false); }catch(e){}
+    return C.getKeys();
+  };
+  C.useKey = () => { if(C.getKeys()<1) return false; C.addKeys(-1); return true; };
+  /* 音(合成): 鍵ゲット=きらきら上昇 / 鍵をさす=ガチャッ */
+  C._ac = () => { if(!C._sndAc) C._sndAc = new (window.AudioContext||window.webkitAudioContext)(); return C._sndAc; };
+  C._tone = (f,t0,dur,type,gain,slide) => { try{ const a=C._ac(), o=a.createOscillator(), g=a.createGain(); o.type=type||'sine';
+    o.frequency.setValueAtTime(f,a.currentTime+t0); if(slide) o.frequency.exponentialRampToValueAtTime(slide,a.currentTime+t0+dur);
+    g.gain.setValueAtTime(Math.min(gain||0.1,0.3),a.currentTime+t0); g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+t0+dur);
+    o.connect(g); g.connect(a.destination); o.start(a.currentTime+t0); o.stop(a.currentTime+t0+dur+0.05); }catch(e){} };
+  C.sndKeyGet = () => { [880,1175,1568,2093,2637].forEach((f,i)=>C._tone(f,i*0.07,0.28,'triangle',0.16)); };
+  /* 2026-09-13 たけろう指示: 鍵を差して回す音(金属の擦れ→カチッ→ガチャン)と、ふたがゆっくり開く音(ドアのきしみ) */
+  C._noise = (t0,dur,gain,hp) => { try{ const a=C._ac(); const len=Math.floor(a.sampleRate*dur), buf=a.createBuffer(1,len,a.sampleRate), d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len); const src=a.createBufferSource(); src.buffer=buf;
+    const f=a.createBiquadFilter(); f.type='bandpass'; f.frequency.value=hp||3000; f.Q.value=1.2; const g=a.createGain(); g.gain.value=Math.min(gain||0.1,0.3);
+    src.connect(f); f.connect(g); g.connect(a.destination); src.start(a.currentTime+t0); }catch(e){} };
+  C.sndKeyOpen = () => {
+    C._noise(0,0.18,0.12,4200);                       /* 鍵を差す: シャッ(金属の擦れ) */
+    [0.22,0.30,0.38].forEach(t=>C._tone(1800,t,0.03,'square',0.10));  /* 回す: カチカチカチ */
+    C._tone(160,0.46,0.08,'square',0.25,90); C._noise(0.46,0.08,0.18,900);  /* ガチャン */
+    C._tone(90,0.55,0.25,'sine',0.2,50);                                 /* ゴトッ(低い余韻) */
+  };
+  C.sndCreak = (dur) => { dur=dur||1.6; try{ const a=C._ac(), o=a.createOscillator(), g=a.createGain(); o.type='sawtooth';
+    o.frequency.setValueAtTime(220,a.currentTime); o.frequency.linearRampToValueAtTime(340,a.currentTime+dur*0.5); o.frequency.linearRampToValueAtTime(260,a.currentTime+dur);
+    const lfo=a.createOscillator(), lg=a.createGain(); lfo.frequency.value=11; lg.gain.value=28; lfo.connect(lg); lg.connect(o.frequency);
+    const f=a.createBiquadFilter(); f.type='lowpass'; f.frequency.value=1400;
+    g.gain.setValueAtTime(0.0001,a.currentTime); g.gain.exponentialRampToValueAtTime(0.09,a.currentTime+0.15); g.gain.setValueAtTime(0.09,a.currentTime+dur*0.8); g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+dur);
+    o.connect(f); f.connect(g); g.connect(a.destination); o.start(); lfo.start(); o.stop(a.currentTime+dur+0.05); lfo.stop(a.currentTime+dur+0.05); }catch(e){}
+    C._noise(0,dur,0.05,600); };
+  /* 鍵が画面に出て、くるくる回りながら ポケット(コインの札)へ飛び込む演出 */
+  C.keyFly = (n, done) => {
+    const target = document.getElementById('keyFloat') || document.querySelector('.chibiCoinGui .cg-key') || document.querySelector('.chibiCoinGui') || document.body;
+    const tr = target.getBoundingClientRect();
+    const tx = (tr.left + tr.width/2) || window.innerWidth-40, ty = (tr.top + tr.height/2) || 40;
+    if(!document.getElementById('chibiKeyFlyCss')){ const st=document.createElement('style'); st.id='chibiKeyFlyCss';
+      st.textContent = `.chibiKeyFly{position:fixed;z-index:99999;left:50%;top:45%;font-size:64px;line-height:1;pointer-events:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35));transform:translate(-50%,-50%) scale(.2);animation:chibiKeyFly 1.25s cubic-bezier(.3,.9,.4,1) forwards}
+      @keyframes chibiKeyFly{0%{transform:translate(-50%,-50%) scale(.2) rotate(0);opacity:0}25%{transform:translate(-50%,-50%) scale(1.6) rotate(-20deg);opacity:1}60%{transform:translate(-50%,-50%) scale(1.3) rotate(340deg);opacity:1}100%{transform:translate(calc(var(--tx) - 50%),calc(var(--ty) - 50%)) scale(.35) rotate(720deg);opacity:0}}`;
+      document.head.appendChild(st); }
+    let left = n;
+    for(let i=0;i<n;i++){ setTimeout(()=>{ const k=document.createElement('div'); k.className='chibiKeyFly'; k.textContent='🔑';
+      k.style.setProperty('--tx',(tx-window.innerWidth/2)+'px'); k.style.setProperty('--ty',(ty-window.innerHeight*0.45)+'px');
+      document.body.appendChild(k); setTimeout(()=>{ k.remove(); if(--left===0){ try{ C.refreshCoinGui(false); }catch(e){} if(done) done(); } },1300); }, i*180); }
+  };
 
   /* ---- 共通ヘッダーバー(コイン表示)を差し込むヘルパー
      ⚠2026-08-14: 回数上限は撤廃したので「のこり◯回」表示は出さない ---- */
   C.statusHtml = () =>
     `🪙 <b>${C.getCoins()}</b> コイン` + (C.DEBUG?' <span style="color:#e0197a">[DEBUG]</span>':'');
+
+  /* =====================================================================
+     🪙 コインGUI 大改装(2026-08-20 たけろう指示): 任天堂ふうの丸い金貨。
+     ×(かけざん記号)はどこにも出さない。金貨の上に数字がのるだけ。
+     使い方: C.mountCoinGui(el, {size:220}) で描画→ C.refreshCoinGui(true/false) で更新+スピン。
+     複数の金貨が同時にページ内にあってよい(スロット/ガチャ/index等、mountした全部をrefreshで一斉更新)。
+     ===================================================================== */
+  if(!document.getElementById('chibiCoinGuiCss')){
+    const st = document.createElement('style'); st.id = 'chibiCoinGuiCss';
+    st.textContent = `
+      .chibiCoinGui{display:inline-flex;flex-direction:column;align-items:center;gap:6px;user-select:none}
+      .chibiCoinGui .cg-disc{
+        /* 大きさは font-size 1つで決める(width=1em)。中の縁・数字・影は全部 em なので、どのサイズでも同じ比率で描ける */
+        position:relative; font-size:min(220px,70vw); width:1em; height:1em; border-radius:50%;
+        background:radial-gradient(circle at 34% 28%, #fff7d6 0%, #ffd54f 42%, #f5b300 78%, #e0a010 100%);
+        border:.06em solid #c99a1e; box-shadow:0 .045em 0 0 #a67c12, 0 .09em .14em 0 rgba(0,0,0,.45);
+        display:flex; align-items:center; justify-content:center;
+        transform-style:preserve-3d; transition:filter .2s;
+      }
+      .chibiCoinGui.small .cg-disc{font-size:120px}
+      .chibiCoinGui .cg-disc::before{
+        content:""; position:absolute; inset:.07em; border-radius:50%;
+        border:.035em solid rgba(255,255,255,.55);
+        box-shadow:inset 0 -.06em .12em rgba(0,0,0,.22), inset 0 .04em .08em rgba(255,255,255,.65);
+      }
+      .chibiCoinGui .cg-num{
+        position:relative; z-index:2; font-weight:900; color:#5a3a1a;
+        font-size:.42em; line-height:1; letter-spacing:.02em;
+        text-shadow:0 .05em 0 rgba(255,255,255,.5);
+        font-family:"Hiragino Maru Gothic ProN",Meiryo,sans-serif;
+      }
+      .chibiCoinGui .cg-spin{ animation: chibiCoinSpin .7s ease-out; }
+      @keyframes chibiCoinSpin{
+        0%{transform:rotateY(0)}
+        100%{transform:rotateY(720deg)}
+      }
+      .chibiCoinGui.empty .cg-disc{ filter:grayscale(1) brightness(.92) }
+      .chibiCoinGui.empty .cg-num{ color:#c0304a }
+      .chibiCoinGui .cg-key{position:relative;font-size:28px;font-weight:900;color:#6a5200;background:#fff3c4;border-radius:999px;padding:4px 18px;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+      .chibiCoinGui .cg-key.has{background:#ffd54f;color:#4a3600;animation:cgKeyGlow 1.4s ease-in-out infinite}
+      .chibiCoinGui .cg-key.has::before,.chibiCoinGui .cg-key.has::after{content:'✦';position:absolute;top:-10px;color:#fff;font-size:22px;text-shadow:0 0 6px #ffd54f;animation:cgStar 1.6s linear infinite}
+      .chibiCoinGui .cg-key.has::before{left:-8px}
+      .chibiCoinGui .cg-key.has::after{right:-8px;animation-delay:.8s}
+      @keyframes cgKeyGlow{0%,100%{box-shadow:0 3px 0 rgba(0,0,0,.12),0 0 0 rgba(255,213,79,0)}50%{box-shadow:0 3px 0 rgba(0,0,0,.12),0 0 22px rgba(255,213,79,.9)}}
+      @keyframes cgStar{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:1}100%{transform:translateY(-26px) scale(1.2) rotate(40deg);opacity:0}}
+      .chibiCoinGui .cg-note{
+        /* 2026-08-20 たけろう「文字が小さすぎる。3倍に。可愛い文字で」→ 11px→約3倍・丸ゴ・太字 */
+        font-size:clamp(24px,5.5vw,34px); font-weight:900; color:#ffd54f; text-align:center; letter-spacing:.03em;
+        font-family:"Hiragino Maru Gothic ProN","Rounded Mplus 1c","M PLUS Rounded 1c",Meiryo,sans-serif;
+        text-shadow:0 2px 0 rgba(0,0,0,.35); margin-top:4px;
+      }
+    `;
+    document.head.appendChild(st);
+  }
+  const CG_REGISTRY = [];
+  /* opts: {size:220(px, 数字指定時のみ上書き), note:true/false(下に「99まいまで」注記)} */
+  C.mountCoinGui = (el, opts) => {
+    if(!el) return;
+    opts = opts || {};
+    el.classList.add('chibiCoinGui');
+    if(opts.size) el.style.setProperty('--cg-size', opts.size+'px');
+    const disc = document.createElement('div'); disc.className='cg-disc';
+    if(opts.size){ disc.style.fontSize = 'min('+opts.size+'px,70vw)'; }
+    const num = document.createElement('div'); num.className='cg-num';
+    num.textContent = String(Math.min(C.COIN_MAX, C.getCoins()));
+    disc.appendChild(num);
+    el.innerHTML = '';
+    el.appendChild(disc);
+    /* 2026-09-13: 🔑 かぎの数(持っていると光って星が飛ぶ) */
+    const key = document.createElement('div'); key.className='cg-key'+(C.getKeys()>0?' has':'');
+    key.innerHTML = '🔑 <b>'+C.getKeys()+'</b>';
+    el.appendChild(key);
+    if(opts.note !== false){
+      const note = document.createElement('div'); note.className='cg-note';
+      note.textContent = 'コインは 99まいまで もてるよ';
+      el.appendChild(note);
+    }
+    el.classList.toggle('empty', C.getCoins()<1);
+    if(!CG_REGISTRY.includes(el)) CG_REGISTRY.push(el);
+  };
+  let _cgLast = null;
+  /* spin=true でコイン枚数変化時にY軸スピン+数字ロール、false なら即時表示のみ */
+  C.refreshCoinGui = (spin) => {
+    const val = Math.min(C.COIN_MAX, C.getCoins());
+    const from = _cgLast===null ? val : _cgLast;
+    CG_REGISTRY.forEach(el=>{
+      if(!el.isConnected){ return; }
+      const disc = el.querySelector('.cg-disc');
+      const num = el.querySelector('.cg-num');
+      if(!disc || !num) return;
+      el.classList.toggle('empty', val<1);
+      const kb = el.querySelector('.cg-key'); if(kb){ const kn=C.getKeys(); kb.innerHTML='🔑 <b>'+kn+'</b>'; kb.classList.toggle('has', kn>0); }
+      if(spin && from!==val){
+        disc.classList.remove('cg-spin'); void disc.offsetWidth; disc.classList.add('cg-spin');
+        const dur=700, t0=performance.now();
+        (function step(now){
+          const p=Math.min(1,(now-t0)/dur);
+          const cur=Math.round(from+(val-from)*p);
+          num.textContent=String(cur);
+          if(p<1) requestAnimationFrame(step); else num.textContent=String(val);
+        })(t0);
+      } else {
+        num.textContent = String(val);
+      }
+    });
+    _cgLast = val;
+  };
 
   /* ---- うさぎの名前(シリーズ名+No.) ---- */
   C.nameOf = id => { const [s,n]=(id||'').split('_'); return (s && C.seriesJa[s]) ? (C.seriesJa[s]+' No.'+n) : 'ばつべー'; };
@@ -416,11 +838,31 @@
     const ov = document.createElement('div'); ov.id='chibiTreasureOv';
     ov.innerHTML = `<div class="wrap">
       <div class="ttl">🎉 たからばこを 1つ えらんでね!</div>
-      <div class="ttlsub">📱 ちびボードアプリの「かくしコマンド」は、9月のアプリ公開で じっそう予定だよ🐰</div>
       <div class="row">${chestHtml(0)}${chestHtml(1)}${chestHtml(2)}</div>
       <div class="result" id="chibiTreasureResult"></div>
       </div>`;
     document.body.appendChild(ov);
+    /* 2026-09-13 たけろう決定(見本C): 暗い部屋・上からの光の輪の中に宝箱と、光に集まってきたばつべー。外は真っ暗 */
+    if(!document.getElementById('chibiTreasureDarkCss')){ const st=document.createElement('style'); st.id='chibiTreasureDarkCss'; st.textContent=`
+      #chibiTreasureOv{background:radial-gradient(ellipse at 50% 62%,#3a1a2c 0%,#160810 55%,#0d060b 100%) !important}
+      #chibiTreasureOv::before{background-image:none !important;background:radial-gradient(ellipse at 50% 60%,rgba(0,0,0,0) 28%,rgba(0,0,0,.55) 60%,rgba(0,0,0,.92) 100%) !important;z-index:2}
+      #chibiTreasureOv .tk-cone{position:absolute;left:50%;top:-6vh;width:0;height:0;transform:translateX(-50%);border-left:26vw solid transparent;border-right:26vw solid transparent;border-top:96vh solid rgba(255,236,190,.14);filter:blur(8px);pointer-events:none}
+      #chibiTreasureOv .tk-pool{position:absolute;left:50%;top:50%;width:min(96vw,960px);height:min(52vh,440px);transform:translate(-50%,-38%);border-radius:50%;background:radial-gradient(ellipse at 50% 45%,rgba(255,240,200,.9) 0%,rgba(255,230,180,.55) 42%,rgba(255,220,160,0) 72%);pointer-events:none}
+      #chibiTreasureOv .tk-crowd{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+      #chibiTreasureOv .tk-crowd img{position:absolute;width:var(--w);transform:translate(-50%,-50%) rotate(var(--r));animation:tkBreath 2.4s ease-in-out infinite;animation-delay:var(--d)}
+      @keyframes tkBreath{0%,100%{transform:translate(-50%,-50%) rotate(var(--r)) translateY(0)}50%{transform:translate(-50%,-50%) rotate(var(--r)) translateY(-8px)}}
+      #chibiTreasureOv .wrap{z-index:3}
+      #chibiTreasureOv .ttl{color:#fff !important;text-shadow:0 0 18px rgba(255,220,120,.9),0 5px 0 rgba(0,0,0,.6) !important}
+      #chibiTreasureOv .ttlsub{color:#ffd54f !important;opacity:1 !important}
+      #chibiTreasureOv .chibiChest{filter:drop-shadow(0 0 18px rgba(255,220,120,.55))}
+      @media(max-width:640px){#chibiTreasureOv .tk-crowd img{width:calc(var(--w) * .62)}}`; document.head.appendChild(st); }
+    (function(){ const cone=document.createElement('div'); cone.className='tk-cone'; const pool=document.createElement('div'); pool.className='tk-pool';
+      const crowd=document.createElement('div'); crowd.className='tk-crowd'; const dir=C.DIR||'img/usagi/'; const ids=(C.ALL||[]).slice().sort(()=>Math.random()-.5);
+      const put=(x,y,w,i)=>{ const im=document.createElement('img'); im.src=dir+ids[i%ids.length]+'.png'; im.style.left=x+'%'; im.style.top=y+'%'; im.style.setProperty('--w',w+'px'); im.style.setProperty('--r',(Math.random()*16-8)+'deg'); im.style.setProperty('--d',(-Math.random()*2.4)+'s'); crowd.appendChild(im); };
+      /* 奥の列(光の中・小さめ)と 手前の列(光の輪の手前・大きめ・のぞき込む) */
+      const back=12, front=9; for(let i=0;i<back;i++){ const t=i/(back-1); put(8+84*t, 30+Math.sin(t*Math.PI)*-4, 78+Math.random()*16, i); }
+      for(let i=0;i<front;i++){ const t=i/(front-1); put(6+88*t, 88+Math.sin(t*Math.PI)*-6, 120+Math.random()*24, back+i); }
+      ov.insertBefore(cone, ov.firstChild); ov.insertBefore(pool, ov.firstChild.nextSibling); ov.insertBefore(crowd, ov.querySelector('.wrap')); })();
     const chests = [...ov.querySelectorAll('.chibiChest')];
     let picked=false;
     chests.forEach(ch=>{
@@ -438,8 +880,9 @@
             shareText = 'たからばこから ちびボードアプリの隠しコマンドが でたよ🐰 #ちびボード';
             box.innerHTML = `<div class="icon64">📱</div>
               <div class="name">📱 ちびボードアプリの隠しコマンド ゲット!</div>
-              <div class="sub">① この画面を スクショ<br>② X(@tibiboard)の「かくしコマンドうけつけ」の 固定ポストに リプライで おくってね<br>③ お店が きづきしだい、こちらから DMで コマンドを おくるね(1〜2日いない)<br>④ Xを もっていない人は <b>tibiboard100@gmail.com</b> へ おくってもOK</div>
-              <button class="go tweet" style="background:#e0197a;border-bottom-color:#a3105a;border-radius:999px">じまんする</button>
+              <div class="sub" style="font-size:28px">${result.code.slice(0,4)} ${result.code.slice(4)}</div>
+              <div class="sub">この番号を スクショで とってね。<br>ちびボードアプリの「金庫の番号」に 入れると ひらくよ。</div>
+              <button class="go tweet" style="background:#e0197a;border-bottom-color:#a3105a;border-radius:999px">X で じまんする</button>
               <button class="go">とじる ▶</button>`;
             blobPromise = chibiMakeCardBlob({icon:'📱', caption:'隠しコマンドを\nみつけた!'});
           } else {
@@ -449,7 +892,7 @@
             box.innerHTML = `<div class="card"><img src="${C.DIR}${result.id}.png"></div>
               <div class="name">ばつべーの<br>〈${name}〉を<br>みつけた!</div>
               <div class="sub">${isNew ? '✨NEW! ずかんに はいったよ' : 'この コーデは もう もってた! ざんねん!'}</div>
-              <button class="go tweet" style="background:#e0197a;border-bottom-color:#a3105a;border-radius:999px">じまんする</button>
+              <button class="go tweet" style="background:#e0197a;border-bottom-color:#a3105a;border-radius:999px">X で じまんする</button>
               <button class="go">とじる ▶</button>`;
             blobPromise = chibiMakeCardBlob({imgSrc:`${C.DIR}${result.id}.png`, caption:`ばつべーの\n〈${name}〉を\nみつけた!`});
           }
@@ -465,4 +908,77 @@
       };
     });
   };
+
+  /* ===================================================================
+     🔘 押した感の統一(S5, 2026-08-17): 全ボタン共通の「沈む」演出+音+振動。
+     お店本体・遊びの主要ボタン(.keybtn/.lever/#startbtn/.btn)に自動で効く
+     (このファイルを読み込んでいるページなら各ページ側の追加コードは不要)。
+     音は既存の photos/batsu_click.wav を、このファイル自身の場所からの相対で再生する。
+     =================================================================== */
+  let _pressSnd = null;
+  function ensurePressCss(){
+    if(document.getElementById('chibiPressCss')) return;
+    const st = document.createElement('style'); st.id = 'chibiPressCss';
+    st.textContent = '.chibi-pressing{transition:transform .08s ease !important;transform:scale(.93) translateY(3px) !important}';
+    document.head.appendChild(st);
+  }
+  C.press = function(el){
+    if(!el || !el.classList) return;
+    ensurePressCss();
+    el.classList.add('chibi-pressing');
+    setTimeout(()=>el.classList.remove('chibi-pressing'), 90);
+    /* 2026-08-21たけろう(2回目の指摘): ボタンの音は「ばつべーの声」でなく普通のポッ音に。
+       声の録音(batsu_click.wav)は使わず、WebAudioの短い澄んだ音1つだけ */
+    try{
+      if(!C._pressAc){ C._pressAc = new (window.AudioContext || window.webkitAudioContext)(); }
+      const a = C._pressAc, o = a.createOscillator(), g = a.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(660, a.currentTime);
+      g.gain.setValueAtTime(0.09, a.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + 0.06);
+      o.connect(g); g.connect(a.destination);
+      o.start(); o.stop(a.currentTime + 0.1);
+    }catch(e){}
+    if(navigator.vibrate){ try{ navigator.vibrate(30); }catch(e){} }
+  };
+  /* 主要ボタンへ自動で配線(各ページはこのファイルを読み込むだけでよい) */
+  document.addEventListener('click', function(e){
+    const el = e.target.closest && e.target.closest('.keybtn,.lever,#startbtn,.btn');
+    if(el) C.press(el);
+  }, true);
+
+  /* =====================================================================
+     版バッジ(2026-08-20 たけろう「私が見ている物と君が作った物が同じか、数字で確認できる物が要る。どの仕事にも言える」)
+     このファイルを読む全ページの左下に「版 2026-08-20 02:15 ローカル」を自動で出す(手書き禁止。ファイルの更新時刻を機械で読む)。
+     ローカル(8917)も本番(tibiboard.github.io)も同じ見た目。ページ自身の更新時刻なので、開いている物の版がそのまま分かる。
+     ===================================================================== */
+  function verBadge(){
+    if(document.getElementById('verbadge')) return;   /* ページが自前で持っていればそちらを尊重 */
+    const d = new Date(document.lastModified);
+    const z = n => String(n).padStart(2,'0');
+    const stamp = isNaN(d) ? '?' : d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+' '+z(d.getHours())+':'+z(d.getMinutes());
+    const where = (location.hostname==='localhost'||location.hostname==='127.0.0.1') ? 'ローカル' : (/^192\.168\./.test(location.hostname) ? '家Wi-Fi' : '本番');
+    const b = document.createElement('div'); b.id='verbadge';
+    b.textContent = '版 '+stamp+' '+where;
+    b.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:9999;background:#000c;color:#fff;font:700 12px/1.6 sans-serif;padding:3px 10px;border-radius:99px;pointer-events:none;letter-spacing:.5px';
+    document.body.appendChild(b);
+    /* 2026-08-22たけろう「変更した時間が出ないと最新版か分からない」:
+       HTML自身だけでなく、読み込んでいる部品(JS)も含めて一番新しい更新時刻を出す。
+       (共通部品だけ直した時にバッジが動かない穴をふさぐ) */
+    try{
+      let newest = isNaN(d) ? 0 : d.getTime();
+      const urls = [].map.call(document.querySelectorAll('script[src]'), s=>s.src)
+        .filter(u => u && u.indexOf(location.origin)===0);
+      Promise.all(urls.map(u => fetch(u, {method:'HEAD', cache:'no-store'})
+        .then(r => new Date(r.headers.get('Last-Modified')||0).getTime()||0)
+        .catch(()=>0)))
+      .then(times => {
+        const mx = Math.max.apply(null, [newest].concat(times));
+        if(mx > newest){
+          const m = new Date(mx);
+          b.textContent = '版 '+m.getFullYear()+'-'+z(m.getMonth()+1)+'-'+z(m.getDate())+' '+z(m.getHours())+':'+z(m.getMinutes())+' '+where;
+        }
+      }).catch(()=>{});
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', verBadge); else verBadge();
 })();

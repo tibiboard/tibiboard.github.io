@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet"><!-- 2026-09-11: 帯の「ちボ」を index と同じ書体に -->
 <meta charset="utf-8">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
@@ -8,13 +10,14 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ちびボードのお店">
 <meta property="og:title" content="ちびボード — ちいさな、分割キーボード。1台ずつ、手づくり。">
-<meta property="og:description" content="手のひらサイズのかわいい左右分割キーボード tibiboard30。うさぎのばつべーと、1台ずつ手づくりのお店🐰">
+<meta property="og:description" content="手のひらサイズのかわいい左右分割キーボード tibiboard30。うさぎのばつべーと、1台ずつ手づくりのお店">
 <meta property="og:image" content="https://tibiboard.github.io/shop/og.jpg">
 <meta property="og:url" content="https://tibiboard.github.io/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@tibiboard">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>tibiboard30 くわしい仕様と注意がき — ちびボードのお店</title>
+<script src="../asobi_common.js?v=202610072100"></script>
 <style>
 :root{
   --pink:#e0197a;--pink-deep:#b81163;--pink-pale:#ffe3f0;
@@ -22,9 +25,10 @@
   --ink:#222226;--ink2:#4a4450;--line:#8b8792;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--mint-pale);color:var(--ink);overflow-x:hidden;line-height:1.8}
+body{font-family:'M PLUS Rounded 1c',"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--mint-pale);color:var(--ink);overflow-x:hidden;line-height:1.8}
 .band{background:var(--pink-deep);color:#fff;padding:20px 28px;display:flex;align-items:baseline;gap:22px;flex-wrap:wrap}
-.band .sf{font-size:52px;font-weight:900;background:#fff;color:var(--pink-deep);padding:0 18px;border-radius:9px}
+.band .sf{font-size:40px;font-weight:900;background:#fff;color:var(--pink-deep);padding:0 14px;border-radius:8px} /* 2026-09-11: index と同じ */
+@media(max-width:640px){.band .sf{font-size:26px;padding:0 8px}}
 .band h1{font-size:clamp(28px,4.5vw,40px);font-weight:900;letter-spacing:4px}
 .band a{color:#ffd0e5;font-size:18px;font-weight:900;margin-left:auto;text-decoration:none}
 section{max-width:980px;margin:0 auto;padding:56px 22px}
@@ -61,16 +65,26 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:36px;fon
 
 /* 80sマミ強化: 帯を虹パステルグラデに(2026-08-15) */
 .band{background:linear-gradient(90deg,#b79ce0,#ee85b5 45%,#8ec5e8) !important}
+
+/* 背景コンクリート(2026-09-07 たけろう「すべてのページの背景に」: トップと同じ素材・白35%かぶせ。かぶせは z-index:-1 で本文の下) */
+body{background:#d9d6d3 !important}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/wall_ishi_kabe.jpg')/* いしのかべ(2026-09-09 お試し) */ center/cover no-repeat}
+/* 2026-09-07 たけろう指示: うさぎは絵文字でなく公式ばつべー原本。文中の小さなばつべー */
+.bb{height:1.25em;width:auto;vertical-align:-.25em;display:inline-block}
+.bb-logo{height:44px;vertical-align:middle}
+.warnbox{background:#fff3f6;border:4px solid #ff3b5c;color:#7a1030;border-radius:18px;padding:16px 20px;font-size:24px;line-height:1.5;margin:26px 0 18px;font-weight:700} /* 2026-09-14 たけろう指示: マル型の USB-C の注意を目立つ色で上の方に */
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
+<link rel="stylesheet" href="shop-theme.css"><!-- 2026-10-06 お店の色(全ページ共通)。この行を消すと元の色 -->
 </head>
 <body>
 
-<div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0" title="お店にもどる">ちボ</a><h1>tibiboard30 くわしい仕様と注意がき</h1><a href="index.html?in=1">◀ お店にもどる</a></div>
+<div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0" title="お店にもどる">ちボ</a><h1>tibiboard30 くわしい仕様と注意がき</h1><a class="lang" href="詳しく_en.html" style="margin-left:0;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">EN</a><a href="index.html?in=1">◀ お店にもどる</a></div>
 
 <!-- 仕様 -->
 <section id="spec">
   <h2>tibiboard30 のくわしい仕様</h2>
-  <div class="sub">中身は どの子も同じです。ちがうのは 色と かたち(四角/丸)だけ</div>
+  <div class="sub">中身は どの子も同じです。ちがうのは 色と かたち（シカク／マル）だけ</div>
   <table class="spec">
     <tr><th>キー数</th><td>30(左手15・右手15の左右分割)</td></tr>
     <tr><th>スイッチ</th><td>Kailh Choc V2(ロープロファイル/ホットスワップ対応)</td></tr>
@@ -78,34 +92,35 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:36px;fon
     <tr><th>接続</th><td>左手側: USB / Bluetooth、右手側: 左手側と自動で つながります</td></tr>
     <tr><th>対応OS(打つ)</th><td>Windows / Mac / iPad など(普通のキーボードとして動きます)</td></tr>
     <tr><th>対応OS(設定アプリ)</th><td>デスクトップ版: Windows 10 / 11 / ブラウザ版: MacなどでもOK(Chrome・Edgeで開くだけ)</td></tr>
-    <tr><th>バッテリー</th><td>充電式(USB Type-Cで充電)。品質を確認したセルのみ使用</td></tr>
+    <tr><th>バッテリー</th><td>リチウムポリマー電池(リチウムイオン電池の一種)450mAh・左右に1つずつ。充電式(USB Type-Cで充電)。電池専業メーカー製・保護回路つき。<br>左手側はパソコンなどの機器とのBluetooth接続と振動を受け持つため、右手側の2〜3倍電池を使います。1日10時間の使用で2〜3週間は持ちます(つながっている機器が多いとき・振動をたくさん使うときは短くなります)</td></tr><!-- 2026-09-16 たけろう: 持ち時間 --><!-- 2026-09-13 たけろう: 種類を書く -->
     <tr><th>ファームウェア</th><td>ZMK(オープンソース)ベース</td></tr>
-    <tr><th>技適</th><td>工事設計認証 211-220207</td></tr>
+    <tr><th>無線マイコン</th><td>Seeed Studio XIAO nRF52840（技適については下の「ご購入前に」をご確認ください）</td></tr>
     <tr><th>ケース</th><td>3Dプリント(1台ずつ製作。積層痕・色味の個体差があります)</td></tr>
-    <tr><th>おまけ機能</th><td>専用アプリ / <b>微振動</b>フィードバック(<b>左手側のみ</b>) / 電池残量LED / 打鍵数カウント</td></tr>
-    <tr><th>セット内容</th><td>本体(左手側・右手側) / うさぎ彫りキャップ1個(おまもり) / 専用アプリ(購入者ページからダウンロード)<br>※<b>キースイッチと配色キーキャップは +5,000円</b>です(購入時に選べます)<br>※USB-Cケーブルは付属しません</td></tr>
+    <tr><th>おまけ機能</th><td>専用アプリ / <b>振動</b>フィードバック(<b>左手側のみ</b>) / 電池残量LED / 打鍵数カウント</td></tr>
+    <tr><th>セット内容</th><td>・本体(左手側・右手側)<br>・専用アプリ(購入者ページからダウンロード)<br>・うさぎ彫りキャップ1個(おまもり)=<b>キーキャップとキースイッチ(+7,000円)を購入していただいた方のみ</b><br>※<b>キーキャップとキースイッチで +7,000円</b>です(購入時に選べます)<br>※USB-Cケーブルは付属しません</td></tr>
   </table>
-  <div class="omake">🎁 <b>アプリと微振動は「おまけ」です。</b>主役は、手のひらにおさまるこの子のかわいさと、一台ずつ手作りする丁寧さ。</div>
+  <!-- 2026-09-13 たけろう指示: 「アプリと振動はおまけです」の枠は削除 -->
 </section>
 
 <!-- ご購入前に -->
 <section id="notice">
+  <div class="warnbox">⚠ <b>マルタイプをご購入の方へ</b><br>USB-Cケーブルは、<b>先端のコネクターの外装が小さいもの</b>をご用意ください。外装が大きいと、ケースに当たって差し込めないことがあります。</div>
   <h2>ご購入前に かならずお読みください</h2>
   <div class="sub">大事なことなので、買う前にここだけは読んでください</div>
   <div class="notice">
     <ul>
-      <li><b>送料込み</b>の価格です。<b>キースイッチと配色キーキャップは +5,000円</b>です(購入時に選べます)。</li>
+      <li><b>送料込み</b>の価格です。</li>
       <li>発送は<b>通常1〜2週間</b>です。</li>
       <li>キースイッチは <b>Kailh Choc V2</b>(ロープロファイル=背の低いスイッチ)です。Cherry MX など通常サイズのスイッチはケースと干渉するため使えません。</li>
       <li>キーキャップは <b>17mmピッチ用(外形16.5mm以下)</b>に対応。MBKなど18mmピッチ用の一般的なChocキーキャップ(幅17.5mm)は使えません。</li>
-      <li>選択肢のオリジナルキーキャップは、<b>搭載スイッチに合わせて調整した3Dプリント品</b>です。ほかのスイッチでのはまり具合は保証できません。</li>
-      <li>本製品は<b>技適取得済み</b>です(工事設計認証 <b>211-220207</b>)。</li>
+      <li>オリジナルキーキャップは、<b>Kailh Deep Sea Silent Mini(Choc V2)に合わせて作った3Dプリント品</b>です。ほかのスイッチでのはまり具合は保証できません。</li>
+      <li>使用している無線マイコンは、<b>技適取得済みのSeeed Studio XIAO nRF52840</b>です（工事設計認証 211-220207）。</li>
       <li>設定アプリは<b>デスクトップ版(Windows 10/11)</b>と<b>ブラウザ版</b>の2つ。ブラウザ版はMacなどでも、ChromeかEdgeで開いてUSBをつなぐだけで使えます。</li>
-      <li>アプリのインストール時に青い警告(Windows SmartScreen)が出ることがあります。個人制作のアプリのためで、ウイルスではありません。「詳細情報」→「実行」でインストールできます(手順書つき)。</li>
-      <li>USBケーブルは<b>左手側</b>につないでください。<b>USB-Cケーブルは付属しません。</b></li>
+      <li>Windowsでアプリをインストールする際、青い警告（SmartScreen）が出る場合があります。購入者ページから入手したファイルか確認し、付属の組み立てガイド／スタートガイドの手順をご確認ください。</li>
+      <li><b>情報の収集について:</b> 設定アプリ(デスクトップ版・ブラウザ版とも)は、利用状況や個人情報などの情報を<b>一切収集・送信しません</b>。設定はお使いのパソコンとキーボード本体にだけ保存されます。</li>
       <li>ケース・キーキャップは3Dプリント製です。積層痕(細かな横縞)・ごく小さな気泡・色味の個体差があります。不良ではなく、手作り品ならではの個性です。</li>
-      <li>1台ずつ個別に作っているため、色や仕様のご指定・変更はできません。</li>
-      <li><b>ケースの底の色、電源スイッチ、右手側ネームプレートの色・デザイン・素材、おまけのうさぎ彫りキーキャップ</b>は、製作者がそのとき選んだものになります(左手側のロゴプレートは固定)。一点物ならではのお楽しみとしてお受け取りください。</li>
+      <li>1台ずつ個別に作っているため、色や仕様の変更・カスタマイズ等をご希望の場合は、製作者に聞いてみてください。応じられるかもしれません。</li>
+      <li><b>ケースの底の色、電源スイッチ、ネームプレートの色・デザイン・素材、おまけのうさぎ彫りキーキャップ</b>は、製作者がそのとき選んだものになります。一点物ならではのお楽しみとしてお受け取りください。</li>
       <li><b>初期不良保証:</b> お手元に届いてから <b>14日以内</b>にご連絡いただいた動作不良は、無償で交換・修理いたします。お客様都合による返品・交換はご遠慮ください。</li>
       <li><b>小さなお子様・ペットのいるご家庭へ:</b> キーキャップ・キースイッチは外れる小さな部品です。誤飲にご注意ください。</li>
       <li><b>電池について:</b> リチウムポリマー電池を内蔵しています(電池専業メーカー製・保護回路内蔵)。ロット出荷検査報告書を確認のうえ、1個ずつ受け入れ検査をして搭載しています。高温の場所(真夏の車内など)に放置しない・強い衝撃を与えない・膨らみに気づいたら使用を中止してください。廃棄時はお住まいの自治体の小型充電式電池の回収ルールに従ってください。</li>
@@ -121,21 +136,18 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:36px;fon
   <details><summary>数字や記号は どうやって打つんですか?</summary>
     <p>「レイヤー」というしくみで、キーを押しながら別のキーを押すと数字や記号が出ます。ふだんの文字と合わせて、30キーで全部カバーできます。慣れると手をほとんど動かさなくなります。</p></details>
   <details><summary>設定を変えるのは むずかしくないですか?</summary>
-    <p>専用アプリ(日本語)がついています。デスクトップ版(Windows)とブラウザ版(MacなどでもOK)の2つ。USBケーブルでつなぐだけで自動接続。キーの割り当ては、画面のキーを選んで手元のキーボードを押すだけです。変更はぜんぶ自動保存、「元に戻す」でいつでもやり直せます。</p></details>
+    <p>専用アプリ（日本語）で設定できます。左手側をUSBでパソコンにつないで使います。キーの割り当ては、画面のキーを選んで手元のキーボードを押すだけです。変更はぜんぶ自動保存、「元に戻す」でいつでもやり直せます。</p></details>
   <details><summary>Mac や iPad でも使えますか?</summary>
     <p>使えます(普通のBluetoothキーボードとして動きます)。キー割り当ての変更も、<b>ブラウザ版アプリ</b>(Chrome・Edge)ならMacからできます。設定はキーボード本体に保存されるので、どの機器でもそのまま使えます。</p></details>
   <details><summary>スイッチは交換できますか?</summary>
-    <p>ホットスワップ対応なので交換できます。ただし必ず<b>ロープロファイル(背の低い)スイッチ</b>をお使いください。Cherry MX など通常サイズのスイッチはケースと干渉します。</p></details>
-  <details><summary>微振動って なんですか?</summary>
+    <p>はんだ付けなしで交換できます。対応するスイッチとキーキャップの条件は、上の「ご購入前に」をご確認ください。</p></details>
+  <details><summary>振動って なんですか?</summary>
     <p>左手側が「ブルッ」と手に返事をする<b>おまけ機能</b>です。Bluetoothの接続先を切り替えたときなど、画面を見なくても「届いた」ことが分かります。アプリでオン/オフを切り替えられます。</p></details>
-  <details><summary>充電ケーブルは付いていますか?</summary>
-    <p>付属しません。USB-Cケーブルはお手元のものをご用意ください。充電するときはUSBケーブルを<b>左手側</b>につないでください。</p></details>
   <details><summary>こまったときは どこに連絡すればいいですか?</summary>
-    <p>アプリ内の「困ったときは」によくあるトラブルの解決方法をまとめています。それでも解決しないときは、次のどれでもOKです(人間が対応します🐰)。</p>
+    <p>アプリの画面の一番下にある「無線接続 不具合解決」に、よくあるトラブルの解決方法をまとめています。それでも解決しないときは、次のどれでもOKです(人間が対応します<img class="bb" src="../img/バツベイ_アイコン800.png" alt="ばつべー">)。</p>
     <ul>
-      <li><b>メール:</b> tibiboard100@gmail.com</li>
       <li><b>X:</b> @tibiboard へDM(届かないときはリプライでもOK)</li>
-      <li><b>BASEで購入した方:</b> BASEの購入履歴からメッセージ機能でご連絡いただけます</li>
+      <li><b>ご購入された方:</b> ご購入のときに届いたメール(件名の最後が「ご購入いただきありがとうございます。」)の一番下にある「フォームから問い合わせる」からご連絡いただけます</li>
     </ul></details>
 </section>
 
@@ -145,13 +157,12 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:36px;fon
   <div class="sub">販売と決済はBASEショップでおこないます</div>
   <div class="tokusho" style="padding:24px 26px">
     <p style="font-size:19px;line-height:2">特定商取引法に基づく表記は、ご購入いただくBASEショップのページに掲載しています。<br>
-    <a href="#" id="tokusho-link" style="font-weight:900">📄 BASEショップの表記を見る ▶</a><span style="font-size:15px;color:#8b8792">(ショップ公開後にリンクが有効になります)</span></p>
+    <a aria-disabled="true" id="tokusho-link" style="font-weight:900">📄 BASEショップの表記を見る ▶</a><span style="font-size:15px;color:#8b8792">(ショップ公開後にリンクが有効になります)</span></p>
   </div>
   <div style="text-align:center"><a class="keybtn" href="index.html?in=1">◀ お店にもどる</a></div>
 </section>
 
-<footer>ちびボード — うさぎと、手づくりのキーボード。<br>X <b>@tibiboard</b> / 技適 211-220207</footer>
-<div style="position:fixed;left:8px;bottom:8px;z-index:9999;background:#000c;color:#fff;font:700 13px/1.6 sans-serif;padding:4px 12px;border-radius:99px;pointer-events:none" id="verbadge"></div>
-<script>if(['localhost','127.0.0.1'].includes(location.hostname)){document.getElementById('verbadge').textContent='版: '+new Date(document.lastModified).toLocaleString('ja-JP');}else{document.getElementById('verbadge').remove();}</script>
+<footer>ちびボード — うさぎと、手づくりのキーボード。<br>X <b>@tibiboard</b></footer>
+<!-- 版バッジは asobi_common.js が全ページ共通で出す(2026-08-20) -->
 </body>
 </html>

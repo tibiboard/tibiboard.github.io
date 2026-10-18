@@ -3,22 +3,24 @@
 <head>
 <meta name="description" content="tibiboard30ってなに? 実測93.8mm・キー30個・ぷるっと振動。ちいさくてかわいい左右分割キーボードの絵本しょうかい。">
 <meta charset="utf-8">
+
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ちびボードのお店">
 <meta property="og:title" content="ちびボード — ちいさな、分割キーボード。1台ずつ、手づくり。">
-<meta property="og:description" content="手のひらサイズのかわいい左右分割キーボード tibiboard30。うさぎのばつべーと、1台ずつ手づくりのお店🐰">
+<meta property="og:description" content="手のひらサイズのかわいい左右分割キーボード tibiboard30。うさぎのばつべーと、1台ずつ手づくりのお店">
 <meta property="og:image" content="https://tibiboard.github.io/shop/og.jpg">
 <meta property="og:url" content="https://tibiboard.github.io/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@tibiboard">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>tibiboard30って? — ちびボードのお店</title>
+<script src="../asobi_common.js?v=202610072100"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&family=Mochiy+Pop+One&display=swap" rel="stylesheet">
 <style>
 :root{--pink:#e0197a;--pink-deep:#b81163;--pink-pale:#ffe3f0;--mint:#3ec9c2;--mint-pale:#ddf5f2;--mint-deep:#127a75;--ink:#222226;--ink2:#4a4450;--line:#8b8792}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -36,16 +38,35 @@ img{max-width:100%}
 .ehon.bg-pink{background:linear-gradient(180deg,#f3accc,#c9ade6)}
 .ehon{position:relative}
 .ehon>*{position:relative;z-index:1}
-.ehon .photo-wrap{width:min(92vw,900px);height:58vh;height:58svh;border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.15);position:relative;background:#e9e7ec;z-index:1}
+.ehon .photo-wrap{width:min(94vw,1040px);height:66vh;height:66svh;/* 2026-09-12 たけろう指示: 紙芝居を一回り大きく(900→1040・58→66svh) */border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.15);position:relative;background:#e9e7ec;z-index:1}
 .ehon .photo-wrap img{width:100%;height:100%;object-fit:cover;display:block}
 .ehon .photo-wrap.slot-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#6b6672;border:3px dashed var(--line)}
 .ehon .photo-wrap.slot-empty .ic{font-size:48px}
+/* Z写真の切り替え(まる/しかく)2026-08-23: 1枠に2枚、形マークで入れ替え。スマホは左右スワイプでも */
+.ehon .photo-wrap.zsw img{position:absolute;inset:0;opacity:0;transition:opacity .45s ease}
+.ehon .photo-wrap.zsw img.on{opacity:1}
+.zmarks{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:14px;z-index:3}
+.zm{width:54px;height:54px;border-radius:999px;border:3px solid var(--pink);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;box-shadow:0 4px 0 rgba(0,0,0,.18);opacity:.55;transition:transform .2s,opacity .2s}
+.zm i{display:block;width:26px;height:26px;background:var(--pink)}
+.zm.ci i{border-radius:50%}
+.zm.sq i{border-radius:6px}
+.zm.bk i{border-radius:50%;background:#1b1622}
+.zm.s1 i,.zm.s2 i{border-radius:4px;transform:rotate(45deg);width:20px;height:20px;background:linear-gradient(135deg,#bff5c8,#7fe0d0);border:2px solid var(--mint-deep)}
+.zm.s2 i{background:linear-gradient(135deg,#f6f39a,#cfe97a)}
+
+/* 2026-10-08 クリアの段(03b): 印は丸に写真の色・切り抜き写真は切らずに見せる・準備中の札 */
+.zm.cl i{border-radius:50%;background:var(--c);opacity:.8;box-shadow:inset 0 0 0 3px rgba(255,255,255,.75)}
+.ehon .photo-wrap.zsw img.cut{object-fit:contain;background:#eef2f6}
+.ehon .soon{display:inline-block;margin:12px auto 0;padding:6px 22px;border-radius:999px;border:3px solid var(--pink);background:#fff;color:var(--pink);font-weight:900;font-size:24px}
+.zm.on{opacity:1;transform:scale(1.12)}
+.zm:active{transform:scale(.95)}
+
 .ehon h2{font-size:clamp(34px,6vw,64px);font-weight:900;letter-spacing:1px;text-wrap:balance;color:var(--mint-deep-txt,#0e3b39)}
 .ehon.bg-mint h2,.ehon.bg-white h2{color:#0e3b39}
 .ehon.bg-pink h2{color:#7a0f45}
 .ehon h2 em{font-style:normal;color:var(--pink)}
 .ehon.bg-pink h2 em{color:var(--mint-deep)}
-.ehon p.sub{font-size:clamp(15px,2.4vw,20px);color:var(--ink2);font-weight:700;max-width:640px}
+.ehon p.sub{font-size:clamp(18px,2.4vw,22px);color:#1b1622;font-weight:700;max-width:680px}/* 2026-09-12 たけろう指示: 灰色をやめ、どの背景でも読める濃い色。小さい字も18px以上に */
 
 /* セクション番号キーキャップ */
 .sec-num{position:absolute;left:clamp(10px,3vw,24px);top:14px;width:48px;height:48px;border-radius:20%;
@@ -139,7 +160,7 @@ footer a{color:#ffd0e5}
   /* スマホ: 枠を写真と同じ16:10にして左右の見切れを無くす(2026-08-15たけろう指摘) */
   .ehon .photo-wrap{height:auto;aspect-ratio:16/10;width:94vw;max-height:48svh}
   .overlay-box{padding:18px 12px 22px}
-  .ehon.gacha-sec{padding:0 0 22px}
+  .ehon.gacha-sec{padding:0 0 22px;min-height:auto}   /* 2026-08-17: 02枠の下に大きな空白が出ていた(min-height:100svh+上寄せ)。スマホは中身の高さだけに */
   .gacha-slider{height:42vh;height:42svh}
   .marquee-row img{height:var(--h,110px)}
   .marquee-row{gap:10px}
@@ -169,6 +190,9 @@ footer a{color:#ffd0e5}
 /* スマホ: シネスコ比だと画面の下6割が空くため、スライドを縦に伸ばして1画面を埋める(2026-08-31) */
 @media (max-width:640px){
   .gacha-track .slide{aspect-ratio:auto;height:calc(100svh - 210px) !important}
+  /* 2026-09-11 たけろう指示「1・2・10枚目が両端見切れる」: 縦に伸ばした枠に cover で入れると横が切れる(写真は全部 2.35:1)。
+     切らずに全体を見せる(上下は映画の黒帯) */
+  .gacha-track .slide img{object-fit:contain}
 }
 
 /* ===== クリィミーマミ配色(2026-08-15全ページ統一)。旧値: pink#e0197a/deep#b81163/mint#3ec9c2/mint-deep#127a75 ===== */
@@ -183,10 +207,43 @@ footer a{color:#ffd0e5}
 
 /* ページ最外の背景もマミの空に(2026-08-15) */
 body{background:linear-gradient(180deg,#5da6e0,#9573cc 45%,#e96da8) fixed !important}
+
+/* 背景コンクリート(2026-09-07 たけろう「すべてのページの背景に」: トップと同じ素材・白35%かぶせ。かぶせは z-index:-1 で本文の下) */
+body{background:#d9d6d3 !important}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/bg_concrete.webp') center/cover no-repeat}
+/* 9/7 試し: 各段(.ehon)の色は塗りつぶしで壁が見えないので、同じ色を 65% に透かしてコンクリートを混ぜる(色・段の並びは不変) */
+/* 9/7 たけろう指示「項目(01,02…)ごとにコンクリートの背景を分ける」: 各段が自分のコンクリート板を持つ(fixedでなく段に貼る=段ごとに別の板に見える)。
+   板の切り出し位置は段ごとに上/下/中で変える。段と段の間は 10px あけて後ろの壁を見せる=継ぎ目 */
+/* 9/7 たけろう「一種類でなく全部違う種類のコンクリートを」: 段ごとに別の壁(アプリの壁紙9種を photos/wall_*.jpg に縮小)。色の透かしは段の色クラス、壁は段の順番で決める。透かしは 65%→45%(壁の種類の違いが見えるように) */
+.ehon.bg-mint{--tint:linear-gradient(180deg,rgba(156,203,238,.45),rgba(189,167,226,.45))}
+.ehon.bg-white{--tint:linear-gradient(180deg,rgba(249,222,188,.45),rgba(212,182,232,.45))}
+.ehon.bg-pink{--tint:linear-gradient(180deg,rgba(243,172,204,.45),rgba(201,173,230,.45))}
+.ehon{--wall:url('photos/bg_concrete.webp')}
+/* 上の .ehon.bg-* (塗りつぶし) に勝つため同じ強さの選択子で上書き */
+.ehon.bg-mint,.ehon.bg-white,.ehon.bg-pink{background:var(--tint),var(--wall) center/cover no-repeat}
+/* 2026-09-09 たけろう指示「新しい壁紙を当ててみて」: 12段を今日入れた24枚から割り当て。戻し= _直前退避6-09-09_紹介_壁紙お試し\ */
+.ehon.wall-on:nth-of-type(1){--wall:url('photos/wall_hikari_con.jpg')}  /* ひかりのコンクリ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(2){--wall:url('photos/wall_shiro_con.jpg')}  /* しろコンクリ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(3){--wall:url('photos/wall_shiro_kami.webp')}  /* しろいかみ(2026-09-09 たけろう「3番だけ違うのに」) */
+.ehon.wall-on:nth-of-type(4){--wall:url('photos/wall_momo_kabe.webp')}  /* ももいろのかべ=明るめ(2026-09-09 たけろう「4段目は少し明るく」) */
+.ehon.wall-on:nth-of-type(5){--wall:url('photos/wall_sabi_kabe.jpg')}  /* さびたしろかべ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(6){--wall:url('photos/wall_cream_renga.jpg')}  /* クリームレンガ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(7){--wall:url('photos/wall_mizu_con.jpg')}  /* みずいろコンクリ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(8){--wall:url('photos/wall_midori_tile.jpg')}  /* みどりタイル(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(9){--wall:url('photos/wall_shiro_renga.jpg')}  /* しろレンガ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(10){--wall:url('photos/wall_ishi_kabe.jpg') ;background-position:center bottom}  /* いしのかべ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(11){--wall:url('photos/wall_pink_kabe.jpg');background-position:center bottom}  /* ピンクのかべ(2026-09-09 お試し) */
+.ehon.wall-on:nth-of-type(12){--wall:url('photos/wall_aka_renga2.jpg');background-position:center bottom}  /* あかレンガ2(2026-09-09 お試し) */
+.ehon+.ehon{margin-top:10px}
+.std-tag{position:absolute;right:14px;top:-14px;transform:rotate(12deg);background:var(--pink);color:#fff;font-family:"Mochiy Pop One","M PLUS Rounded 1c",sans-serif;font-weight:400;font-size:clamp(18px,3vw,26px);padding:4px 18px;border-radius:999px;box-shadow:0 4px 0 rgba(0,0,0,.18);letter-spacing:2px}
+.opt-plus{flex:0 0 auto;width:auto;align-self:center;font-family:"Mochiy Pop One","M PLUS Rounded 1c",sans-serif;font-size:clamp(34px,6vw,56px);color:var(--pink-deep);line-height:1;margin:0 -4px}
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
+<link rel="stylesheet" href="shop-theme.css"><!-- 2026-10-06 お店の色(全ページ共通)。この行を消すと元の色 -->
+<link rel="stylesheet" href="metal-buttons.css?v=24">
 </head>
 <body>
-<div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0" title="お店にもどる">ちボ</a><h1>tibiboard30って?</h1><a href="index.html?in=1">◀ お店にもどる</a></div>
+<div class="band"><a class="sf" href="index.html?in=1&v=20" style="text-decoration:none;cursor:pointer;margin-left:0" title="お店にもどる">ちボ</a><h1>tibiboard30って?</h1><a class="lang" href="紹介_en.html" style="margin-left:0;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">EN</a><a href="index.html?in=1&v=20">◀ お店にもどる</a></div>
 
 <script>
 /* ============================================
@@ -195,24 +252,28 @@ body{background:linear-gradient(180deg,#5da6e0,#9573cc 45%,#e96da8) fixed !impor
    写真を差し替えたい時は photos/ehon_◯.jpg を上書き保存するだけ
    ============================================ */
 const EHON = [
-  {h:'ちいさい。<br>ふたつに わかれてる。', p:'キーピッチ17mm(ふつうは19mm)。無線(Bluetooth)。USBでも つながる'},
-  {h:'かたちは シカクと マル。',           p:'どちらにも Zエディションが あるよ'},
-  {h:'Zは、<em>とくべつ</em>。',          p:'Zが ついたら ザラザラエディションだよ'},
+  {h:'ちいさい。<br>かわいい。<br>ふたつに わかれてる。', p:'左右あわせて 30キー。キーピッチ17mm(ふつうは19mm)。無線(Bluetooth)。USBでも つながる'},  /* 2026-09-12 たけろう指示: 30キーを入れる */
+  {h:'かたちは シカクと マル。',           p:'ケースの素材も いろいろあるよ → <a href="素材.html" style="color:var(--pink);text-decoration:underline">くわしく</a>'},  /* 2026-09-12 たけろう指示(2回目)。ここから素材の紹介ページへ飛ばす予定 */
+  {h:'Zは、<em>とくべつ</em>。',      p:'Zが ついたら ザラザラエディションだよ'},
   {h:'1台ずつ、手づくり。',                p:'ケースは3Dプリント。うさぎのネームプレートつき'},
-  {h:'左手が<br>ぷるっと ふるえる。',       p:'振動の設定も アプリで できる'},
-  {h:'キーの編集が かんたん。',            p:'デスクトップ版と ブラウザ版。Macでも つかえる'},
-  {h:'キースイッチを つけかえられる。',     p:'ホットスワップ対応。おまけキャップつき'},
+  {h:'左手が<br>ぷるっと ふるえる。',       p:'バイブが 入っています'},  /* 2026-09-12 たけろう指示 */
+  {h:'<em>専用アプリ</em>つき。<br>キーの編集が かんたん。', p:'デスクトップ版と ブラウザ版。Macでも つかえる'},  /* 2026-09-12 たけろう指示: 専用アプリが付いてくると大きく */
+  {h:'キースイッチを つけかえられる。',     p:'ホットスワップ対応。'}  /* 2026-09-13 たけろう / 2026-10-09 たけろう指示: うさぎキャップの話は次の段にあるので外した */,
   {h:'キット版と 完成版、えらべます。',      p:'じぶんで 組んでみたい人は キット版'},
-  {h:'LEDが でんちの のこりを おしえてくれる。', p:'しんごうと おなじだよ。75%〜=にじいろ / 50%〜=あお / 25%〜=きいろ / それより下=あか'},
+  {h:'LEDが でんちの のこりを<br>おしえてくれる。',  /* 2026-09-12 たけろう指示: 「のこりを」で改行 */ p:'しんごうと おなじだよ。75%〜=にじいろ / 50%〜=あお / 25%〜=きいろ / それより下=あか'},
+  {h:'クリアは、<br><em>超かわいい</em>。', p:'1台つくるのに とても 時間が かかりますが、<br>わたし史上 最高に かわいい できなので、いくつ つくれるか わかりませんが がんばります。'},  /* 2026-10-08 たけろう指示: クリアの段(03b)。良い所と悪い所を両方 / 2026-10-09 たけろう指示:「割に合わない」→「1台つくるのに とても時間がかかる」 */
 ];
 /* ▲編集ここまで▲ */
 </script>
 
 
 <!-- 1 -->
-<section class="ehon bg-mint">
+<section class="ehon bg-mint" id="sec01">
   <div class="sec-num">01</div>
-  <div class="photo-wrap"><img src="photos/ehon_1.jpg" alt="左右2台のちびボード" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.jpg</div>'"></div>
+  <style>#sec01 .photo-wrap{width:100vw !important;max-width:none !important;height:min(86svh,1100px) !important;max-height:none !important;aspect-ratio:auto !important;border-radius:0 !important;margin-left:calc(50% - 50vw)}#sec01 .photo-wrap img{object-position:center 62%}#sec01{padding-top:0 !important}
+  /* 2026-09-11 たけろう指示「スマホで1枚目の透明ケースの写真が両端見切れる」: 4:3 の写真を 86svh の縦長の枠に cover で入れていたため。スマホは写真の比率のままにする */
+  @media(max-width:640px){#sec01 .photo-wrap{height:auto !important;aspect-ratio:4/3 !important}}</style>
+  <div class="photo-wrap"><img src="photos/ehon_s_1.webp" loading="lazy" alt="下から光るクリアのちびボード" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_1.webp</div>'"></div>
   <h2 data-ehon="0"></h2>
   <p class="sub" data-ehonp="0"></p>
   <button class="keycap mmbtn" id="openMM">📏 じっすんで みる</button>
@@ -235,15 +296,37 @@ const EHON = [
 <!-- 3 -->
 <section class="ehon bg-white">
   <div class="sec-num">03</div>
-  <div class="photo-wrap"><img src="photos/ehon_2.jpg" alt="キーの形" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_2.jpg</div>'"></div>
+  <div class="photo-wrap"><img src="photos/ehon_2.webp" loading="lazy" alt="キーの形" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_2.webp</div>'"></div>
   <h2 data-ehon="1"></h2>
   <p class="sub" data-ehonp="1"></p>
+</section>
+
+<!-- 3b クリア(2026-10-08 たけろう指示: Z の1つ上に。形でなく素材と作り方がちがう・手間がいちばんかかる・発売日にはまだ売らない=準備中。写真はクリアだけ) -->
+<section class="ehon bg-mint">
+  <div class="sec-num">03b</div>
+  <div class="photo-wrap zsw" id="csw">
+    <img src="photos/ehon_s_1.webp" loading="lazy" alt="下から光るクリア(緑と黄色)" class="on">
+    <img src="photos/cine_24.webp" alt="クリア(ピンクとオレンジ)" loading="lazy">
+    <img src="photos/ehon_s_2.webp" alt="クリア(水色)" loading="lazy">
+    <img src="photos/cut_54.webp" alt="クリア(ピンク)" class="cut" loading="lazy">
+    <img src="photos/cut_49.webp" alt="クリア(青)" class="cut" loading="lazy">
+    <div class="zmarks"><button type="button" class="zm cl on" style="--c:#b7e86a" aria-label="クリア 1"><i></i></button><button type="button" class="zm cl" style="--c:#ff9a8a" aria-label="クリア 2"><i></i></button><button type="button" class="zm cl" style="--c:#6fd6e6" aria-label="クリア 3"><i></i></button><button type="button" class="zm cl" style="--c:#f59ac7" aria-label="クリア 4"><i></i></button><button type="button" class="zm cl" style="--c:#8fb4ef" aria-label="クリア 5"><i></i></button></div>
+  </div>
+  <h2 data-ehon="9"></h2>
+  <p class="sub" data-ehonp="9"></p>
 </section>
 
 <!-- 4 (Zエディション ホロカード) -->
 <section class="ehon bg-pink">
   <div class="sec-num">04</div>
-  <div class="photo-wrap"><img src="photos/ehon_z.jpg" alt="Zエディションのざらざら仕上げ"></div>
+  <div class="photo-wrap zsw" id="zsw">
+    <img src="photos/ehon_z.webp" loading="lazy" alt="マルZ(ざらざら仕上げ)" class="on">
+    <img src="photos/ehon_z_2.webp" alt="シカクZ(ざらざら仕上げ・左手用と右手用)" loading="lazy">
+    <img src="photos/ehon_z_3.webp" alt="くろZ(ざらざら仕上げ・黒)" loading="lazy">
+    <img src="photos/ehon_z_4.webp" alt="マルZ(ざらざら・積んだところ)" loading="lazy">
+    <img src="photos/ehon_z_5.webp" alt="マルZ(ざらざら・そとで)" loading="lazy">
+    <div class="zmarks"><button type="button" class="zm ci on" aria-label="マル"><i></i></button><button type="button" class="zm sq" aria-label="シカク"><i></i></button><button type="button" class="zm bk" aria-label="くろ"><i></i></button><button type="button" class="zm ci" aria-label="マル"><i></i></button><button type="button" class="zm ci" aria-label="マル"><i></i></button></div>
+  </div>
   <h2 data-ehon="2"></h2>
   <p class="sub" data-ehonp="2"></p>
 </section>
@@ -251,7 +334,7 @@ const EHON = [
 <!-- 5 -->
 <section class="ehon bg-mint">
   <div class="sec-num">05</div>
-  <div class="photo-wrap"><img src="photos/ehon_3.jpg" alt="ネームプレート" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_3.jpg</div>'"></div>
+  <div class="photo-wrap"><img src="photos/ehon_3.webp" loading="lazy" alt="ネームプレート" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_3.webp</div>'"></div>
   <h2 data-ehon="3"></h2>
   <p class="sub" data-ehonp="3"></p>
 </section>
@@ -260,26 +343,71 @@ const EHON = [
 <section class="ehon bg-pink">
   <div class="sec-num">06</div>
   <div class="photo-wrap">
-    <video id="shindoVideo" src="photos/shindo_demo.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video>
+    <video id="shindoVideo" data-src="photos/shindo_demo_s.mp4" autoplay preload="none" loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video>
     <button id="soundToggle" type="button" aria-pressed="false">🔇 おとを だす</button>
   </div>
   <h2 data-ehon="4"></h2>
   <p class="sub" data-ehonp="4"></p>
 </section>
 
+<style>
+/* いつ ぷるっとする?(2026-09-06) 絵本02のスライダーと同じ操作感・カードは絵+1行だけ */
+.shin-sec{padding-top:18px}
+.shin-slider{position:relative;width:min(92vw,560px);margin:0 auto}
+.shin-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:0}
+.shin-track::-webkit-scrollbar{display:none}
+.shin-card{flex:0 0 100%;scroll-snap-align:center;background:#fff;border:6px solid var(--pink);border-radius:28px;padding:34px 22px 30px;text-align:center;box-shadow:0 8px 0 rgba(184,17,99,.18)}
+.shin-card .ic{font-size:clamp(64px,14vw,96px);line-height:1}
+.shin-card .t{font-size:clamp(22px,4.2vw,30px);font-weight:900;color:var(--pink-deep);margin-top:10px;line-height:1.5}
+.shin-card .s{font-size:clamp(15px,2.6vw,18px);color:var(--ink2);font-weight:700;margin-top:6px}
+.shin-card .buzz{display:inline-block;margin-top:12px;font-size:20px;font-weight:900;color:var(--mint-deep);animation:shinbuzz 1.2s ease-in-out infinite}
+@keyframes shinbuzz{0%,100%{transform:translate(0)}20%{transform:translate(-3px,1px)}40%{transform:translate(3px,-1px)}60%{transform:translate(-2px,0)}80%{transform:translate(2px,1px)}}
+.shin-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:52px;height:52px;border-radius:50%;border:0;background:#fff;color:var(--pink-deep);font-size:22px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.18);font-family:inherit}
+.shin-arrow.prev{left:-8px}.shin-arrow.next{right:-8px}
+.shin-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.shin-dots span{width:12px;height:12px;border-radius:50%;background:#fff;opacity:.55;border:2px solid var(--pink-deep)}
+.shin-dots span.active{background:var(--pink-deep);opacity:1}
+</style>
+<!-- 6b いつ ぷるっとする?(2026-09-06 たけろう指示: 項目が多いのでスライド) -->
+<section class="ehon bg-pink shin-sec">
+  <div class="sec-num">06b</div>
+  <h2>いつ ぷるっとする?</h2>
+  <p class="sub">← → で めくってね</p><!-- 2026-09-12 たけろう指示: 「左手側が手に返事をします」は削除 -->
+  <div class="shin-slider">
+    <div class="shin-track" id="shinTrack"><div class="shin-card"><div class="ic">🔌</div><div class="t">電源を いれたとき</div><div class="s">「ついたよ」の合図</div><div class="buzz">ぷるっ</div></div><div class="shin-card"><div class="ic">🔋</div><div class="t">でんちが 少ないとき</div><div class="s">そろそろ充電してね</div><div class="buzz">ぷるっ</div></div><div class="shin-card"><div class="ic">📶</div><div class="t">つなぐ先を かえたとき</div><div class="s">パソコン→iPad など</div><div class="buzz">ぷるっ</div></div><div class="shin-card"><div class="ic">✅</div><div class="t">つながったとき</div><div class="s">画面を見なくても分かる</div><div class="buzz">ぷるっ</div></div><div class="shin-card"><div class="ic">🔤</div><div class="t">レイヤーが かわったとき</div><div class="s">数字・記号モードに入った合図</div><div class="buzz">ぷるっ</div></div><div class="shin-card"><div class="ic">⏱</div><div class="t">タイマー・ポモドーロ</div><div class="s">時間が来たら ブルッ</div><div class="buzz">ぷるっ</div></div><div class="shin-card"><div class="ic">⌨</div><div class="t">好きなキーに 紐づけられる</div><div class="s">アプリで設定するだけ</div><div class="buzz">ぷるっ</div></div></div>
+    <button type="button" class="shin-arrow prev" id="shinPrev" aria-label="まえへ">◀</button>
+    <button type="button" class="shin-arrow next" id="shinNext" aria-label="つぎへ">▶</button>
+  </div>
+  <div class="shin-dots" id="shinDots"></div>
+</section>
+<script>
+(function(){
+  const track=document.getElementById('shinTrack'); if(!track) return;
+  const slides=Array.from(track.children), dotsWrap=document.getElementById('shinDots');
+  slides.forEach((_,i)=>{const d=document.createElement('span'); if(i===0) d.classList.add('active'); dotsWrap.appendChild(d);});
+  const dots=Array.from(dotsWrap.children); let idx=0;
+  function goTo(i,instant){ idx=(i+slides.length)%slides.length; track.scrollTo({left:track.clientWidth*idx,behavior:instant?'auto':'smooth'}); dots.forEach((d,j)=>d.classList.toggle('active',j===idx)); }
+  document.getElementById('shinPrev').addEventListener('click',()=>goTo(idx-1));
+  document.getElementById('shinNext').addEventListener('click',()=>goTo(idx+1));
+  track.addEventListener('scroll',()=>{const i=Math.round(track.scrollLeft/track.clientWidth); if(i!==idx){idx=i; dots.forEach((d,j)=>d.classList.toggle('active',j===idx));}},{passive:true});
+  window.addEventListener('resize',()=>goTo(idx,true));
+})();
+</script>
+
+
 <!-- 8 -->
 <section class="ehon bg-mint">
   <div class="sec-num">07</div>
-  <div class="photo-wrap"><video src="photos/app_demo.mp4" autoplay loop muted playsinline style="width:100%;display:block"></video></div>
+  <div class="photo-wrap"><video data-src="photos/app_demo.mp4?v=20261018" autoplay preload="none" loop muted playsinline style="width:100%;display:block"></video></div>
   <h2 data-ehon="5"></h2>
   <p class="sub" data-ehonp="5"></p>
-  <p style="font-size:13px;color:var(--ink2);opacity:.85;max-width:520px">※アプリは これからも こうしんして よくしていくよ。がめんは いまの ものと ちがうことが あるよ</p>
+  <p style="font-size:16px;color:#1b1622;max-width:560px">※アプリは これからも こうしんして よくしていくよ。がめんは いまの ものと ちがうことが あるよ</p>
 </section>
 
 <!-- 9 -->
 <section class="ehon bg-white">
   <div class="sec-num">08</div>
-  <div class="photo-wrap"><img src="photos/ehon_6.jpg" alt="キーキャップ" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_6.jpg</div>'"></div>
+  <div class="photo-wrap"><img src="photos/ehon_6.webp" loading="lazy" alt="キーキャップ" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_6.webp</div>'"></div>
   <h2 data-ehon="6"></h2>
   <p class="sub" data-ehonp="6"></p>
 </section>
@@ -287,111 +415,192 @@ const EHON = [
 <!-- 9b (うさぎ彫りキャップ・きぶんで変わる) -->
 <section class="ehon bg-mint">
   <div class="sec-num">09</div>
-  <div class="photo-wrap"><img src="photos/ehon_usagicap.jpg" alt="うさぎ彫りキーキャップ" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_usagicap.jpg</div>'">
+  <div class="photo-wrap"><img src="photos/ehon_usagicap.webp" loading="lazy" alt="うさぎ彫りキーキャップ" onerror="this.parentElement.classList.add('slot-empty');this.remove();this.parentElement.innerHTML='<div class=ic>📷</div><div>ehon_usagicap.webp</div>'">
     <div style="position:absolute;left:3%;top:5%;pointer-events:none;background:var(--pink-deep);color:#fff;font-weight:900;font-size:clamp(14px,2.4vw,25px);padding:4px 16px;border-radius:999px;letter-spacing:1px;border:3px solid #fff;filter:drop-shadow(0 4px 6px rgba(0,0,0,.28))">名前は ばつべー だよ</div>
   </div>
   <h2>うさぎ彫りの キーキャップを<br>1個 おまけ。</h2>
-  <p class="sub">うさぎ彫りのキーキャップ、ケースの底の色、電源スイッチ、右手側ネームプレートの色・デザイン・素材も、せいさくしゃが そのとき かわいいと思ったもので(素材によって おねだんも変わります)。</p>
+  <p class="sub" style="color:var(--pink);font-weight:900">※ キーキャップとキースイッチ(+7,000円)を 購入していただいた方のみ</p><!-- 2026-09-13 たけろう -->
+  <p class="sub">うさぎ彫りのキーキャップ、ケースの底の色、電源スイッチ、ネームプレートの色・デザイン・素材も、せいさくしゃが そのとき かわいいと思ったもので(素材によって おねだんも変わります)。</p>
 </section>
 
 <!-- 10 (LED動画) -->
-<section class="ehon bg-white">
+<section class="ehon bg-white" id="sec10">
   <div class="sec-num">10</div>
+  <style>@media(max-width:640px){#sec10 .photo-wrap{flex-direction:column !important;align-items:center !important}#sec10 .photo-wrap>div{max-width:100% !important;width:100%}} /* 2026-09-11 たけろう指示: スマホで見切れる→縦並び */
+  #sec10 .photo-wrap{height:auto !important;max-height:none !important;aspect-ratio:auto !important}#sec10 .photo-wrap svg{max-height:150px;flex:0 0 auto !important}#sec10 .photo-wrap>div{justify-content:flex-start !important;min-height:0}#sec10 .photo-wrap div[style*='border-radius:999px']{white-space:nowrap;font-size:clamp(18px,3vw,26px) !important}</style>
   <div class="photo-wrap" style="background:linear-gradient(180deg,var(--mint-pale),var(--pink-pale));display:flex;align-items:stretch;justify-content:center;gap:clamp(10px,2.5vw,22px);padding:clamp(10px,2.5vw,22px)">
-    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;position:relative">
-      <div style="position:absolute;top:-10px;right:-10px;background:var(--pink-deep);color:#fff;font-weight:900;font-size:clamp(11px,1.6vw,14px);padding:8px 14px;border-radius:16%;box-shadow:0 4px 0 #8a3f66;transform:rotate(8deg)">9がつから</div>
+    <!-- 2026-10-09 たけろう指示: BASE と同じ足し算の見せ方(キットがもと + 組み立て + キーキャップとキースイッチ)。前は 完成 / キット −10,000 -->
+    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;position:relative"><div class="std-tag">標準</div>
       <svg viewBox="0 0 220 180" style="width:100%;max-width:260px;flex:1" xmlns="http://www.w3.org/2000/svg">
-        <!-- 基板(緑) -->
-        <g transform="translate(30,66) rotate(-6)">
-          <rect x="0" y="0" width="98" height="62" rx="8" fill="#3f9e6e" stroke="#1f6b45" stroke-width="3.5"/>
-          <circle cx="12" cy="12" r="5" fill="#cfe9db" stroke="#1f6b45" stroke-width="2"/>
-          <circle cx="86" cy="12" r="5" fill="#cfe9db" stroke="#1f6b45" stroke-width="2"/>
-          <circle cx="12" cy="50" r="5" fill="#cfe9db" stroke="#1f6b45" stroke-width="2"/>
-          <circle cx="86" cy="50" r="5" fill="#cfe9db" stroke="#1f6b45" stroke-width="2"/>
-          <rect x="30" y="20" width="38" height="22" rx="3" fill="#1f6b45"/>
+        <defs>
+          <filter id="kitDS" x="-40%" y="-40%" width="180%" height="180%">
+            <feDropShadow dx="2" dy="3" stdDeviation="1.6" flood-color="#000" flood-opacity="0.22"/>
+          </filter>
+        </defs>
+        <!-- ケース半分(ラベンダー) -->
+        <g transform="translate(8,96) rotate(-10)" filter="url(#kitDS)">
+          <rect x="0" y="0" width="72" height="48" rx="16" fill="#d9d3f0" stroke="var(--line)" stroke-width="3.5"/>
         </g>
-        <!-- ころがるキーキャップ -->
-        <g transform="translate(150,34) rotate(18)">
-          <rect x="0" y="0" width="34" height="34" rx="8" fill="var(--gold)" stroke="var(--pink-deep)" stroke-width="3"/>
-          <rect x="5" y="5" width="24" height="16" rx="4" fill="#fff8e0"/>
+        <!-- 基板(みどり) -->
+        <g transform="translate(66,14) rotate(9)" filter="url(#kitDS)">
+          <rect x="0" y="0" width="76" height="50" rx="8" fill="var(--mint)" stroke="var(--mint-deep)" stroke-width="3.5"/>
+          <circle cx="12" cy="12" r="4" fill="var(--gold)"/>
+          <circle cx="64" cy="12" r="4" fill="var(--gold)"/>
+          <circle cx="12" cy="38" r="4" fill="var(--gold)"/>
+          <circle cx="64" cy="38" r="4" fill="var(--gold)"/>
+          <circle cx="38" cy="25" r="4" fill="var(--gold)"/>
         </g>
-        <g transform="translate(150,96) rotate(-14)">
-          <rect x="0" y="0" width="30" height="30" rx="8" fill="var(--pink)" stroke="var(--pink-deep)" stroke-width="3"/>
-          <rect x="4" y="4" width="22" height="14" rx="4" fill="#ffeaf3"/>
+        <!-- キースイッチ 6個 -->
+        <g transform="translate(150,50) rotate(-12)" filter="url(#kitDS)">
+          <rect width="18" height="18" rx="3" fill="#efeaf7" stroke="var(--line)" stroke-width="3"/>
+          <rect x="6" y="-5" width="6" height="7" rx="2" fill="var(--pink-deep)"/>
+        </g>
+        <g transform="translate(174,68) rotate(14)" filter="url(#kitDS)">
+          <rect width="18" height="18" rx="3" fill="#efeaf7" stroke="var(--line)" stroke-width="3"/>
+          <rect x="6" y="-5" width="6" height="7" rx="2" fill="var(--mint-deep)"/>
+        </g>
+        <g transform="translate(140,86) rotate(6)" filter="url(#kitDS)">
+          <rect width="18" height="18" rx="3" fill="#efeaf7" stroke="var(--line)" stroke-width="3"/>
+          <rect x="6" y="-5" width="6" height="7" rx="2" fill="var(--gold)"/>
+        </g>
+        <g transform="translate(112,58) rotate(-18)" filter="url(#kitDS)">
+          <rect width="18" height="18" rx="3" fill="#efeaf7" stroke="var(--line)" stroke-width="3"/>
+          <rect x="6" y="-5" width="6" height="7" rx="2" fill="var(--pink)"/>
+        </g>
+        <g transform="translate(96,96) rotate(10)" filter="url(#kitDS)">
+          <rect width="18" height="18" rx="3" fill="#efeaf7" stroke="var(--line)" stroke-width="3"/>
+          <rect x="6" y="-5" width="6" height="7" rx="2" fill="var(--mint-deep)"/>
+        </g>
+        <g transform="translate(60,72) rotate(-8)" filter="url(#kitDS)">
+          <rect width="18" height="18" rx="3" fill="#efeaf7" stroke="var(--line)" stroke-width="3"/>
+          <rect x="6" y="-5" width="6" height="7" rx="2" fill="var(--pink-deep)"/>
+        </g>
+        <!-- キーキャップ(パステル) -->
+        <g transform="translate(24,42) rotate(16)" filter="url(#kitDS)">
+          <rect width="28" height="28" rx="7" fill="#fff3b0" stroke="var(--line)" stroke-width="3"/>
+          <rect x="4" y="4" width="20" height="12" rx="4" fill="#fffbe0"/>
+        </g>
+        <g transform="translate(178,110) rotate(-10)" filter="url(#kitDS)">
+          <rect width="26" height="26" rx="7" fill="var(--pink)" stroke="var(--pink-deep)" stroke-width="3"/>
+          <rect x="4" y="4" width="18" height="11" rx="4" fill="#ffeaf3"/>
+        </g>
+        <g transform="translate(40,130) rotate(-14)" filter="url(#kitDS)">
+          <rect width="26" height="26" rx="7" fill="#d9d3f0" stroke="var(--line)" stroke-width="3"/>
+          <rect x="4" y="4" width="18" height="11" rx="4" fill="#f0ecfb"/>
+        </g>
+        <g transform="translate(130,130) rotate(12)" filter="url(#kitDS)">
+          <rect width="24" height="24" rx="7" fill="var(--mint)" stroke="var(--mint-deep)" stroke-width="3"/>
+          <rect x="4" y="4" width="16" height="10" rx="4" fill="#e6f6ee"/>
+        </g>
+        <!-- うさぎネームプレート -->
+        <g transform="translate(150,20) rotate(-6)" filter="url(#kitDS)">
+          <circle cx="4" cy="-6" r="4.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="2.5"/>
+          <circle cx="20" cy="-6" r="4.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="2.5"/>
+          <rect x="-6" y="0" width="36" height="18" rx="9" fill="#fff" stroke="var(--pink-deep)" stroke-width="3"/>
         </g>
         <!-- ネジ2個 -->
-        <g transform="translate(24,20) rotate(10)">
-          <circle r="9" fill="#dcd9e2" stroke="var(--line)" stroke-width="2.5"/>
-          <path d="M-5 0h10M0 -5v10" stroke="var(--line)" stroke-width="2"/>
-        </g>
-        <g transform="translate(196,150) rotate(-15)">
+        <g transform="translate(20,20) rotate(12)" filter="url(#kitDS)">
           <circle r="8" fill="#dcd9e2" stroke="var(--line)" stroke-width="2.5"/>
           <path d="M-4.5 0h9M0 -4.5v9" stroke="var(--line)" stroke-width="2"/>
+        </g>
+        <g transform="translate(200,150) rotate(-18)" filter="url(#kitDS)">
+          <circle r="7" fill="#dcd9e2" stroke="var(--line)" stroke-width="2.5"/>
+          <path d="M-4 0h8M0 -4v8" stroke="var(--line)" stroke-width="2"/>
+        </g>
+        <!-- USBケーブル -->
+        <g transform="translate(4,158) rotate(4)" filter="url(#kitDS)">
+          <path d="M0 10 C 10 -6, 24 22, 34 6" fill="none" stroke="var(--ink2)" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <!-- XIAOマイコン -->
+        <g transform="translate(96,20) rotate(-4)" filter="url(#kitDS)">
+          <rect width="20" height="12" rx="2" fill="#2b2b33" stroke="var(--line)" stroke-width="2"/>
+          <rect x="2" y="-3" width="2.4" height="3" fill="#c8c8c8"/><rect x="7" y="-3" width="2.4" height="3" fill="#c8c8c8"/><rect x="12" y="-3" width="2.4" height="3" fill="#c8c8c8"/><rect x="16" y="-3" width="2.4" height="3" fill="#c8c8c8"/>
+          <rect x="2" y="12" width="2.4" height="3" fill="#c8c8c8"/><rect x="7" y="12" width="2.4" height="3" fill="#c8c8c8"/><rect x="12" y="12" width="2.4" height="3" fill="#c8c8c8"/><rect x="16" y="12" width="2.4" height="3" fill="#c8c8c8"/>
         </g>
       </svg>
       <div style="font-size:clamp(30px,5.5vw,42px);line-height:1;margin:2px 0 -2px">🔧🪛</div>
       <div style="font-weight:900;color:var(--mint-deep);font-size:clamp(19px,3.4vw,25px)">キットばん</div>
       <div style="font-size:clamp(13px,2.2vw,16px);color:var(--ink2);font-weight:700">じぶんで くみたてる</div>
+      <p class="kit-difficulty" style="font-size:18px;line-height:1.6;margin:10px 4px 0;color:var(--ink);font-weight:700">組み立ては難しめです。細かいはんだ付け作業があります。</p>
     </div>
-    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px">
+    <div class="opt-plus" aria-hidden="true">+</div>
+    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;position:relative">
       <svg viewBox="0 0 220 180" style="width:100%;max-width:260px;flex:1" xmlns="http://www.w3.org/2000/svg">
         <!-- 完成キーボード本体どーん -->
-        <rect x="16" y="46" width="188" height="98" rx="18" fill="var(--pink-pale)" stroke="var(--pink-deep)" stroke-width="4"/>
-        <g fill="var(--mint-deep)">
-          <rect x="30" y="60" width="30" height="24" rx="6"/><rect x="66" y="60" width="30" height="24" rx="6"/><rect x="102" y="60" width="30" height="24" rx="6"/><rect x="138" y="60" width="30" height="24" rx="6"/><rect x="174" y="60" width="16" height="24" rx="6"/>
+        <rect x="14" y="44" width="192" height="102" rx="20" fill="var(--pink-pale)" stroke="var(--pink-deep)" stroke-width="5"/>
+        <!-- つやつやハイライト -->
+        <ellipse cx="66" cy="58" rx="48" ry="9" fill="#ffffff" opacity="0.55" transform="rotate(-8 66 58)"/>
+        <g fill="var(--mint)" stroke="var(--mint-deep)" stroke-width="3">
+          <rect x="30" y="60" width="30" height="24" rx="6"/><rect x="66" y="60" width="30" height="24" rx="6"/><rect x="102" y="60" width="30" height="24" rx="6"/><rect x="138" y="60" width="30" height="24" rx="6"/>
           <rect x="30" y="90" width="30" height="24" rx="6"/><rect x="66" y="90" width="30" height="24" rx="6"/><rect x="102" y="90" width="30" height="24" rx="6"/><rect x="138" y="90" width="30" height="24" rx="6"/><rect x="174" y="90" width="16" height="24" rx="6"/>
           <rect x="30" y="120" width="66" height="18" rx="6"/><rect x="102" y="120" width="88" height="18" rx="6"/>
         </g>
-        <text x="110" y="34" font-size="30" text-anchor="middle">✨</text>
-        <text x="24" y="42" font-size="22" text-anchor="middle">✨</text>
-        <text x="198" y="160" font-size="24" text-anchor="middle">✨</text>
+        <!-- アクセントキー(ピンク) -->
+        <rect x="174" y="60" width="16" height="24" rx="6" fill="var(--pink)" stroke="var(--pink-deep)" stroke-width="3"/>
+        <!-- うさぎ耳ネームプレート(側面) -->
+        <g transform="translate(202,92)">
+          <circle cx="4" cy="-11" r="5.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="3"/>
+          <circle cx="4" cy="11" r="5.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="3"/>
+          <rect x="-3" y="-7" width="15" height="20" rx="7.5" fill="#fff" stroke="var(--pink-deep)" stroke-width="3"/>
+        </g>
+        <text x="110" y="32" font-size="28" text-anchor="middle">✨</text>
+        <text x="22" y="40" font-size="20" text-anchor="middle">✨</text>
+        <text x="200" y="34" font-size="18" text-anchor="middle">✨</text>
+        <text x="26" y="164" font-size="20" text-anchor="middle">✨</text>
       </svg>
       <div style="font-size:clamp(30px,5.5vw,42px);line-height:1;margin:2px 0 -2px">📦✨</div>
-      <div style="font-weight:900;color:var(--pink-deep);font-size:clamp(19px,3.4vw,25px)">かんせいばん</div>
-      <div style="font-size:clamp(13px,2.2vw,16px);color:var(--ink2);font-weight:700">とどいたら すぐ つかえる</div>
+      <div style="font-weight:900;color:var(--pink-deep);font-size:clamp(19px,3.4vw,25px)">くみたて</div>
+      <div style="font-size:clamp(13px,2.2vw,16px);color:var(--ink2);font-weight:700">かんせいばんで とどく。すぐ つかえる</div>
+      <div style="margin-top:8px;background:var(--mint);color:#fff;font-weight:900;font-size:clamp(24px,4vw,30px);border-radius:999px;padding:6px 22px;box-shadow:0 4px 0 rgba(0,0,0,.12)">+10,000えん</div>
+    </div>
+    <div class="opt-plus" aria-hidden="true">+</div>
+    <div style="flex:1;max-width:340px;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 10px;margin-top:clamp(18px,4vw,40px);border:3px dashed var(--pink)">
+      <svg viewBox="0 0 220 180" style="width:100%;max-width:260px;flex:1;min-height:56px" xmlns="http://www.w3.org/2000/svg">
+        <!-- スイッチ・キーキャップなし: 本体だけ(ソケットの穴が見えている) -->
+        <rect x="14" y="44" width="192" height="102" rx="20" fill="var(--pink-pale)" stroke="var(--pink-deep)" stroke-width="5"/>
+        <ellipse cx="66" cy="58" rx="48" ry="9" fill="#ffffff" opacity="0.55" transform="rotate(-8 66 58)"/>
+        <g fill="#f3e9ee" stroke="var(--ink2)" stroke-width="2.5" stroke-dasharray="5 4">
+          <rect x="32" y="62" width="26" height="20" rx="4"/><rect x="68" y="62" width="26" height="20" rx="4"/><rect x="104" y="62" width="26" height="20" rx="4"/><rect x="140" y="62" width="26" height="20" rx="4"/><rect x="176" y="62" width="14" height="20" rx="4"/>
+          <rect x="32" y="92" width="26" height="20" rx="4"/><rect x="68" y="92" width="26" height="20" rx="4"/><rect x="104" y="92" width="26" height="20" rx="4"/><rect x="140" y="92" width="26" height="20" rx="4"/><rect x="176" y="92" width="14" height="20" rx="4"/>
+          <rect x="32" y="122" width="62" height="16" rx="4"/><rect x="104" y="122" width="86" height="16" rx="4"/>
+        </g>
+        <!-- ソケットの点(中心の穴) -->
+        <g fill="var(--ink2)" opacity="0.5">
+          <circle cx="45" cy="72" r="2.5"/><circle cx="81" cy="72" r="2.5"/><circle cx="117" cy="72" r="2.5"/><circle cx="153" cy="72" r="2.5"/>
+          <circle cx="45" cy="102" r="2.5"/><circle cx="81" cy="102" r="2.5"/><circle cx="117" cy="102" r="2.5"/><circle cx="153" cy="102" r="2.5"/>
+        </g>
+        <text x="110" y="32" font-size="24" text-anchor="middle">🔩</text>
+      </svg>
+      <div style="font-weight:900;color:var(--pink-deep);font-size:clamp(17px,3vw,25px);text-align:center;line-height:1.3">キーキャップと<br>キースイッチ</div>
+      <div style="font-size:clamp(18px,2.2vw,20px);line-height:1.7;color:var(--ink2);font-weight:700">Kailh Deep Sea Silent Mini Islet + キャップ。<br><br>自分でそろえる方は、Kailh Choc V2のロープロファイルスイッチと、Choc V2対応で17mmキーピッチに収まるキーキャップをご用意ください。</div>
+      <div style="margin-top:8px;background:var(--pink);color:#fff;font-weight:900;font-size:clamp(24px,4vw,30px);border-radius:999px;padding:6px 22px;box-shadow:0 4px 0 rgba(0,0,0,.12)">+7,000えん</div>
     </div>
   </div>
+  <p class="sub" style="text-align:center;margin:10px auto 0">おねだんは 材料や つくり方で 上がることがあります。</p>
   <h2 data-ehon="7"></h2>
   <p class="sub" data-ehonp="7"></p>
 </section>
 
 <section class="ehon bg-pink">
   <div class="sec-num">11</div>
-  <div class="photo-wrap"><video src="photos/ehon_7_led.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video></div>
+  <div class="photo-wrap"><video data-src="photos/ehon_7_led.mp4" autoplay preload="none" loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video></div>
   <h2 data-ehon="8"></h2>
   <p class="sub" data-ehonp="8"></p>
   <div class="bottombtns">
-    <a class="keycap keybtn accent" href="詳しく.html">📋 仕様をみる ▶</a>
-    <a class="backlink" href="index.html?in=1">◀ お店にもどる</a>
+    <a class="shop-metal" href="詳しく.html"><span class="metal-title">仕様をみる ▶</span></a>
+<!-- 2026-10-12 発売まで準備中(押せない)。発売の時は控えの <a href> に戻す --><a class="shop-metal" href="購入者.html?v=23"><span class="metal-title">ご購入いただいた方はこちら ▶</span></a>
+    <a class="backlink" href="index.html?in=1&v=20">◀ お店にもどる</a>
   </div>
 </section>
 
-<!-- 実寸オーバーレイ -->
+<!-- じっすん=Suica写真2枚(2026-08-20 たけろう撮影・決定8/19「実寸ギミック→Suica写真に差し替え」) -->
 <div class="overlay" id="mmOverlay">
-  <div class="overlay-box">
-    <h3>じっすんで みる</h3>
-    <div class="note">画面のmm表示は端末によって誤差があります(スマホでも±10%ほど)。カードで合わせると精度アップ。</div>
-
-    <div style="overflow-x:auto;max-width:100%;padding-bottom:4px">
-      <div class="mm-stage" id="mmStage">
-        <div class="mm-hand" id="mmHand"></div>
-        <div class="mm-card" id="mmCard"></div>
-      </div>
-    </div>
-
-    <div class="mm-pc-note" id="pcNote">📱 実寸は スマホで見てね(PCの画面では正確に出せません)</div>
-
-    <div class="mm-toggle">
-      <button id="tabSize" class="active">実寸で見る</button>
-      <button id="tabCard">カードで ぴったり合わせる</button>
-    </div>
-
-    <div class="mm-slider-wrap" id="sliderWrap">
-      <input type="range" id="mmSlider" min="0.7" max="1.3" step="0.01" value="1">
-      <div class="val" id="mmVal">倍率: 1.00倍</div>
-    </div>
-
-    <button class="mm-close" id="closeMM">とじる</button>
+  <div class="overlay-box" style="max-width:720px">
+    <h3 style="font-size:clamp(24px,5vw,34px)">Suica(クレカ)と おなじくらい</h3>
+    <img src="photos/ehon_suica_1.webp" loading="lazy" alt="Suicaをのせたちびボード(ななめ)" style="width:100%;border-radius:18px;display:block;margin:10px 0">
+    <img src="photos/ehon_suica_2.webp" loading="lazy" alt="Suicaをのせたちびボード(真上)" style="width:100%;border-radius:18px;display:block;margin:10px 0">
+    <img src="photos/ehon_card_maru.webp" loading="lazy" alt="クレジットカードをのせたちびボード（マル）" style="width:100%;border-radius:18px;display:block;margin:10px 0">  <!-- 2026-09-30 たけろう: まるにクレカをのせた写真 -->
+    <button class="mm-close" id="closeMM" style="font-size:20px;padding:14px 34px">とじる</button>
   </div>
 </div>
 
@@ -400,80 +609,18 @@ const EHON = [
 <script>
 /* 編集ブロック(EHON)を各画面に流し込む */
 document.querySelectorAll('[data-ehon]').forEach(el=>{ el.innerHTML = EHON[+el.dataset.ehon].h; });
-document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset.ehonp].p; if(t){el.textContent=t;}else{el.remove();} });
+document.querySelectorAll('[data-ehonp]').forEach(el=>{ const t=EHON[+el.dataset.ehonp].p; if(t){el.innerHTML=t;}else{el.remove();} /* 2026-09-13: 「くわしく」のリンクを入れるため innerHTML */ });
 </script>
 <script>
-/* 実寸ギミック: 片手側 = 横100mm×縦65mm 【要実寸確認】(★これは何か.mdに明記なし。確定値が出たらここを差し替え) */
-const MM_W = 100, MM_H = 65;
-const CARD_W = 85.6, CARD_H = 54; // クレジットカード標準サイズ
-
-const overlay = document.getElementById('mmOverlay');
-const stage = document.getElementById('mmStage');
-const hand = document.getElementById('mmHand');
-const card = document.getElementById('mmCard');
-const slider = document.getElementById('mmSlider');
-const mmVal = document.getElementById('mmVal');
-const sliderWrap = document.getElementById('sliderWrap');
-const tabSize = document.getElementById('tabSize');
-const tabCard = document.getElementById('tabCard');
-const pcNote = document.getElementById('pcNote');
-
-function getScale(){
-  const s = localStorage.getItem('chibi_mm_scale');
-  return s ? parseFloat(s) : 1;
-}
-function setScale(v){
-  localStorage.setItem('chibi_mm_scale', v);
-}
-
-function render(){
-  const scale = getScale();
-  const s = scale; // 1mm = s px (CSSのmm単位をベースに調整)
-  hand.style.width = (MM_W * s) + 'mm';
-  hand.style.height = (MM_H * s) + 'mm';
-  card.style.width = (CARD_W * s) + 'mm';
-  card.style.height = (CARD_H * s) + 'mm';
-  stage.style.width = (MM_W * s) + 'mm';
-  stage.style.height = (MM_H * s) + 'mm';
-}
-
-function setHandImage(){
-  hand.innerHTML = '<img src="photos/ehon_1_left.jpg" alt="片手のじっすん" onerror="this.parentElement.style.background=\'#cfd6d5\';this.remove()">';
-}
-
-document.getElementById('openMM').addEventListener('click', ()=>{
-  overlay.classList.add('open');
-  setHandImage();
-  slider.value = getScale();
-  mmVal.textContent = '倍率: ' + getScale().toFixed(2) + '倍';
-  render();
-  checkPC();
-});
-document.getElementById('closeMM').addEventListener('click', ()=>overlay.classList.remove('open'));
-overlay.addEventListener('click', (e)=>{ if(e.target===overlay) overlay.classList.remove('open'); });
-
-tabSize.addEventListener('click', ()=>{
-  tabSize.classList.add('active'); tabCard.classList.remove('active');
-  card.style.display='none'; sliderWrap.classList.remove('show');
-});
-tabCard.addEventListener('click', ()=>{
-  tabCard.classList.add('active'); tabSize.classList.remove('active');
-  card.style.display='block'; sliderWrap.classList.add('show');
-});
-
-slider.addEventListener('input', ()=>{
-  const v = parseFloat(slider.value);
-  setScale(v);
-  mmVal.textContent = '倍率: ' + v.toFixed(2) + '倍';
-  render();
-});
-
-function checkPC(){
-  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  const wide = window.innerWidth > 1024;
-  pcNote.style.display = (wide && !isTouch) ? 'block' : 'none';
-}
-window.addEventListener('resize', checkPC);
+/* じっすん=写真を見せるだけ(2026-08-20)。旧・mm計算ギミックは撤去 */
+(function(){
+  const overlay = document.getElementById('mmOverlay');
+  const btn = document.getElementById('openMM');
+  if(!overlay || !btn) return;
+  btn.addEventListener('click', ()=>overlay.classList.add('open'));
+  document.getElementById('closeMM').addEventListener('click', ()=>overlay.classList.remove('open'));
+  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) overlay.classList.remove('open'); });
+})();
 </script>
 
 <script>
@@ -543,16 +690,27 @@ window.addEventListener('resize', checkPC);
   if(track){
     /* SNS投稿の厳選画像66枚をランダム順で流す(毎回違う並び)。
        メインを固定したい時は SNS_MAIN にファイル名を入れる(1枚目に固定) */
-    const SNS_COUNT = 18;   /* たけろう厳選(cine_◯◯.jpg)。2026-08-15映画風に刷新 */
-    const SNS_MAIN = '';   /* 例: 'cine_03.jpg' を入れると1枚目固定 */
-    let names = Array.from({length:SNS_COUNT}, (_,i)=>`cine_${String(i+1).padStart(2,'0')}.jpg`);
+    /* 2026-09-07 たけろう指示: 透明ケースは1枚だけ(cine_19)。20〜22 は外した(メイン写真がSなので) */
+    /* 2026-09-09 たけろう指示: cine_19 は 01 の写真(ehon_s_1)と同じ物なので 02 からは外した(01 で使う) */
+    /* 2026-09-07 たけろう指示: kazycap様(@kazu_dob)のキーキャップ写真 cine_23 を追加。表示中だけクレジットを切替 */
+    /* 2026-09-29 たけろう指示: 扇形の写真(cine_07)と kazycap様のキーキャップ写真(cine_23)を新しい2枚(cine_24 ピンクとオレンジ / cine_25 ラベンダー)に入れ替え。元の写真は photos に残してある */
+    /* 2026-09-30 たけろう指示: cine_03・cine_11 を外し、cine_22・cine_26(about_colors を横長に切り出し)・cine_27(about_texture を横長に切り出し)・cine_23(kazycap様のキーキャップ・クレジットも出る)を追加 */
+    /* 2026-09-30 たけろう指示(2回目): cine_01・cine_26 を外し、cine_28〜31(撮影生データの4枚。縦長と4:3 は左右を黒で切らずに)を追加 */
+    const SNS_MAIN = '';   /* 例: 'cine_03.webp' を入れると1枚目固定 */
+    /* 2026-10-06 たけろう指示: cine_02・cine_10 を外した。作り手の X を小さく足した */
+    let names = ['cine_04.webp','cine_05.webp','cine_06.webp','cine_24.webp','cine_08.webp','cine_09.webp','cine_12.webp','cine_13.webp','cine_14.webp','cine_15.webp','cine_16.webp','cine_17.webp','cine_18.webp','cine_25.webp','cine_22.webp','cine_27.webp','cine_23.webp','cine_28.webp','cine_29.webp','cine_30.webp','cine_31.webp'];
     for(let i=names.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [names[i],names[j]]=[names[j],names[i]]; }
     if(SNS_MAIN){ names = [SNS_MAIN, ...names.filter(n=>n!==SNS_MAIN)]; }
     track.innerHTML = names.map(n=>`<div class="slide"><img src="photos/${n}" alt="ちびボード" loading="lazy"></div>`).join('');
-    /* キーキャップ作家クレジット(常時表示・スライダー直下) */
+    /* キーキャップ作家クレジット(表示中の写真に応じて切替) */
     const credit=document.createElement('div');
     credit.className='gacha-credit';
-    credit.innerHTML='チョコミントキーキャップは クラブクラフト様の作品です → <a href="https://kanicraft.booth.pm" target="_blank" rel="noopener">BOOTH(かにクラフト)</a>';
+    const CREDIT_DEFAULT='チョコミントキーキャップは クラブクラフト様の作品です → <a href="https://kanicraft.booth.pm" target="_blank" rel="noopener">BOOTH(かにクラフト)</a> / <a href="https://x.com/craft_kani" target="_blank" rel="noopener">X(@craft_kani)</a>';
+    const CREDIT_KAZYCAP='文字入りのキーキャップは kazycap様の作品です → <a href="https://kz-keyboard-shop.booth.pm/items/8469772" target="_blank" rel="noopener">BOOTH(kz-keyboard-shop)</a> / <a href="https://x.com/kazu_dob" target="_blank" rel="noopener">X(@kazu_dob)</a>';
+    function updateCredit(i){
+      credit.innerHTML = ['cine_23.webp','cine_27.webp'].includes(names[i]) ? CREDIT_KAZYCAP : CREDIT_DEFAULT; /* 2026-09-30: 文字入りキーキャップの写真はすべて kazycap様の案内 */
+    }
+    updateCredit(0);
     document.getElementById('gachaSlider').after(credit);
     const slides = Array.from(track.children);
     const dotsWrap = document.getElementById('gachaDots');
@@ -569,6 +727,7 @@ window.addEventListener('resize', checkPC);
       idx = (i + slides.length) % slides.length;
       track.scrollTo({left: track.clientWidth * idx, behavior: instant ? 'auto' : 'smooth'});
       dots.forEach((d,j)=>d.classList.toggle('active', j===idx));
+      updateCredit(idx);
     }
     /* 2026-08-15修正: スマホで縦スクロール中にページが「ぴょん」と飛ぶ問題。
        原因①自動送りのscrollToが画面外でも4秒ごとに発火して縦スクロールに割り込む
@@ -587,7 +746,7 @@ window.addEventListener('resize', checkPC);
     document.getElementById('gachaNext').addEventListener('click', ()=>{ goTo(idx+1); startAuto(); });
     track.addEventListener('scroll', ()=>{
       const i = Math.round(track.scrollLeft / track.clientWidth);
-      if(i!==idx){ idx=i; dots.forEach((d,j)=>d.classList.toggle('active', j===idx)); }
+      if(i!==idx){ idx=i; dots.forEach((d,j)=>d.classList.toggle('active', j===idx)); updateCredit(idx); }
     }, {passive:true});
     window.addEventListener('resize', ()=>goTo(idx, true));
   }
@@ -595,7 +754,99 @@ window.addEventListener('resize', checkPC);
 })();
 </script>
 
-<div style="position:fixed;left:8px;bottom:8px;z-index:9999;background:#000c;color:#fff;font:700 13px/1.6 sans-serif;padding:4px 12px;border-radius:99px;pointer-events:none" id="verbadge"></div>
-<script>if(['localhost','127.0.0.1'].includes(location.hostname)){document.getElementById('verbadge').textContent='版: '+new Date(document.lastModified).toLocaleString('ja-JP');}else{document.getElementById('verbadge').remove();}</script>
+<!-- 版バッジは asobi_common.js が全ページ共通で出す(2026-08-20) -->
+
+<script>
+/* Z写真の切り替え(2026-08-23) */
+(function(){
+  /* 2026-10-08: Z(#zsw)とクリア(#csw)の両方で同じ動き */
+  document.querySelectorAll('.photo-wrap.zsw').forEach(box=>{
+  const imgs=[...box.querySelectorAll('img')], marks=[...box.querySelectorAll('.zm')];
+  let cur=0;
+  const show=n=>{cur=(n+imgs.length)%imgs.length; imgs.forEach((im,i)=>im.classList.toggle('on',i===cur)); marks.forEach((m,i)=>m.classList.toggle('on',i===cur));};
+  marks.forEach((m,i)=>m.addEventListener('click',e=>{e.stopPropagation(); show(i);}));
+  let sx=null;
+  box.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
+  box.addEventListener('touchend',e=>{ if(sx==null) return; const dx=e.changedTouches[0].clientX-sx; sx=null; if(Math.abs(dx)>40) show(cur+(dx<0?1:-1)); },{passive:true});
+  });
+})();
+</script>
+
+<!-- 2026-09-12 たけろう指摘「iPad で写真が合っていない」: タブレット幅(641〜1100px)はスマホ用の @media(640px) に入らず PC の縦長固定(66svh)の枠になり、横長の写真が切れていた。
+     タブレットでは枠を写真の比率(4:3)にして、写真は切らずに全部見せる(contain)。この指定は CSS の末尾に置く(後ろの指定に負けないため) -->
+<style>
+@media (min-width:641px) and (max-width:1100px){
+  .ehon .photo-wrap{height:auto !important;aspect-ratio:8/5 !important;max-height:72svh !important;width:min(94vw,900px) !important} /* 写真の多くは 1600×1000(8:5)なので枠も 8:5=灰色の余白が出ない */
+  .ehon .photo-wrap img{object-fit:contain !important;background:#e9e7ec}
+  #sec01 .photo-wrap{height:auto !important;aspect-ratio:4/3 !important;width:100vw !important;max-width:none !important}
+  #sec01 .photo-wrap img{object-fit:cover !important;object-position:center 62%}
+  #sec10 .photo-wrap{aspect-ratio:auto !important;flex-direction:column !important;align-items:center !important}
+  #sec10 .photo-wrap>div{max-width:100% !important;width:100%}
+  .gacha-track .slide img{object-fit:contain !important}
+}
+</style>
+
+<!-- 2026-09-12 たけろう指示「3番の壁(しろいかみ)を全部に。スクロールしても背景が変わらない=トップと同じ固定の下敷き」。
+     段ごとの壁と色の掛け合わせは全部やめ、トップと同じ body::before(position:fixed・iOS でも動く)で1枚だけ敷く。CSS の末尾に置く -->
+<style>
+.ehon,.ehon.bg-mint,.ehon.bg-white,.ehon.bg-pink{background:transparent !important}
+body{background:#d9d6d3 !important}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/wall_ao_con.jpg') center/cover no-repeat} /* 2026-10-12 たけろう: 紹介の背景=トップの前の背景(あおいコンクリ)。トップは新しい背景にする。前=wall_mizuiro.jpg */ /* 2026-09-13 たけろう指示: 紹介の壁=みずいろ */
+body>*{position:relative;z-index:1}
+</style>
+
+<!-- 2026-09-12 たけろう指示「2番のスライドの黒い背景も同じ壁紙に」: 黒い帯とクレジットの黒地を透明にして下敷きの壁を見せる -->
+<style>
+.gacha-slider{background:transparent !important}
+.gacha-slider::after{display:none !important}
+.gacha-credit{background:transparent !important;color:#4a4450 !important}
+.gacha-credit a{color:#8d2f5e !important}
+</style>
+
+<style>
+/* 2026-09-12: スライドの四隅減光(黒)と黒地も止める。写真の周りは壁 */
+.gacha-track .slide{background:transparent !important}
+.gacha-track .slide::before,.gacha-track .slide::after,.gacha-track::before,.gacha-track::after{display:none !important}
+.gacha-track .slide img{filter:none !important}
+</style>
+
+<!-- 2026-09-13 たけろう指示: 小さい黒い文字を丸くて太い字に(細く見えた)。「セット購入者のみ」の注意は白い板で読めるように -->
+<style>
+.ehon p.sub,.shin-card .s,.shin-dlg p{font-family:'M PLUS Rounded 1c','Hiragino Maru Gothic ProN','Yu Gothic',Meiryo,sans-serif !important;font-weight:900 !important;color:#1b1622 !important}
+.ehon p.sub[style*="--pink"]{background:rgba(255,255,255,.92);color:#b0135f !important;border-radius:14px;padding:8px 16px;display:inline-block;font-size:clamp(20px,2.6vw,24px) !important}
+</style>
+
+<!-- 2026-10-06 たけろう指摘「iPad や iPhone で 01・02… の下にすきまができる」: 各段が「画面1枚ぶんの高さ」(min-height:100svh)で中身を真ん中に置いていたので、
+     中身が画面より低いと上下が空いていた。スマホとタブレット(横向きの iPad も)は、段の高さを中身ぶんだけにする。この指定は CSS の末尾に置く -->
+<style>
+@media (max-width:1100px), (hover:none) and (pointer:coarse){
+  .ehon,.ehon.gacha-sec{min-height:auto !important;justify-content:flex-start !important;padding-top:76px !important;padding-bottom:40px !important}
+}
+</style>
+
+<!-- 2026-10-06 たけろう指摘「iPhone で 02 の左上のマークとスライドの写真の間・写真とキーキャップの説明の間にすきま」(Safari・Edge とも。iPad は OK):
+     スマホはスライドの枠を画面ほぼいっぱいの高さ(100svh-210px)にしていたが、写真は横長(2.35:1)を切らずに入れるので、上下に約230pxずつ空きが出ていた。
+     スマホだけ、枠を写真と同じ形(2.35:1)にして、上下の余白(26px)も小さくする -->
+<style>
+@media (max-width:640px){
+  .gacha-track .slide{aspect-ratio:2.35/1 !important;height:auto !important}
+  .gacha-slider{padding:6px 0 !important}
+}
+</style>
+<script>
+/* 2026-10-12 軽くする: 段の壁紙と動画は、画面に近づいた時だけ読む。IntersectionObserver が無いブラウザでは全部すぐ読む(前と同じ) */
+(function(){
+  var walls = document.querySelectorAll('.ehon');
+  var vids = document.querySelectorAll('video[data-src]');
+  function wallOn(el){ el.classList.add('wall-on'); }
+  function vidOn(v){ if(v.getAttribute('src')) return; v.src = v.getAttribute('data-src'); var p = v.play && v.play(); if(p && p.catch) p.catch(function(){}); }
+  if(!('IntersectionObserver' in window)){ walls.forEach(wallOn); vids.forEach(vidOn); return; }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(!e.isIntersecting) return; var t = e.target; io.unobserve(t); if(t.tagName === 'VIDEO') vidOn(t); else wallOn(t); });
+  }, {rootMargin: '100% 0px'});
+  walls.forEach(function(el){ io.observe(el); });
+  vids.forEach(function(v){ io.observe(v); });
+})();
+</script>
 </body>
 </html>

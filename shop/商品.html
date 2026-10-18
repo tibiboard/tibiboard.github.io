@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet"><!-- 2026-09-11: 帯の「ちボ」を index と同じ書体に -->
 <meta charset="utf-8">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
@@ -8,14 +10,15 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ちびボードのお店">
 <meta property="og:title" content="ちびボード — ちいさな、分割キーボード。1台ずつ、手づくり。">
-<meta property="og:description" content="手のひらサイズのかわいい左右分割キーボード tibiboard30。うさぎのばつべーと、1台ずつ手づくりのお店🐰">
+<meta property="og:description" content="手のひらサイズのかわいい左右分割キーボード tibiboard30。うさぎのばつべーと、1台ずつ手づくりのお店">
 <meta property="og:image" content="https://tibiboard.github.io/shop/og.jpg">
 <meta property="og:url" content="https://tibiboard.github.io/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@tibiboard">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>この子のページ — ちびボードのお店</title>
-<script src="data/商品リスト.js"></script>
+<script src="data/商品リスト.js?v=20261017-7000"></script>
+<script src="../asobi_common.js?v=202610072100"></script>
 <style>
 :root{
   --pink:#e0197a;--pink-deep:#b81163;--pink-pale:#ffe3f0;
@@ -23,10 +26,11 @@
   --ink:#222226;--ink2:#4a4450;--line:#8b8792;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--mint-pale);color:var(--ink);overflow-x:hidden;line-height:1.8}
+body{font-family:'M PLUS Rounded 1c',"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:var(--mint-pale);color:var(--ink);overflow-x:hidden;line-height:1.8}
 img{max-width:100%}
 .band{background:var(--pink-deep);color:#fff;padding:14px 20px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
-.band .sf{font-size:44px;font-weight:900;background:#fff;color:var(--pink-deep);padding:0 16px;border-radius:8px}
+.band .sf{font-size:40px;font-weight:900;background:#fff;color:var(--pink-deep);padding:0 14px;border-radius:8px} /* 2026-09-11: index と同じ */
+@media(max-width:640px){.band .sf{font-size:26px;padding:0 8px}}
 .band h1{font-size:clamp(32px,5.5vw,42px);font-weight:900;letter-spacing:4px}
 .band a{color:#ffd0e5;font-size:19px;font-weight:900;margin-left:auto;text-decoration:none}
 section{max-width:1680px;margin:0 auto;padding:40px clamp(18px,3vw,60px)}
@@ -49,6 +53,18 @@ section{max-width:1680px;margin:0 auto;padding:40px clamp(18px,3vw,60px)}
 .gal .thumbs .slot .fn{display:none}
 .tag{position:absolute;top:10px;right:10px;background:var(--mint-deep);color:#fff;font-weight:900;font-size:18px;border-radius:999px;padding:8px 20px;z-index:4}
 .pd h3{font-size:38px;font-weight:900;line-height:1.5}
+/* かわいいタグ(形・素材)2026-08-23 */
+.tags{position:absolute;left:10px;bottom:10px;display:flex;gap:7px;z-index:4;pointer-events:none}
+.tg{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#fff;border:3px solid var(--pink);border-radius:999px;padding:4px 12px;font-weight:900;font-size:24px;line-height:1;color:var(--pink-deep);box-shadow:0 3px 0 rgba(0,0,0,.18);font-family:inherit}
+.tg.shape{padding:6px 9px}
+.tg.shape i{display:block;width:26px;height:26px;background:var(--pink);box-sizing:border-box}
+.tg.shape.sq i{border-radius:6px}
+.tg.shape.ci i{border-radius:50%}
+.tg.shape.za i{border-radius:6px;background:radial-gradient(circle,#fff 1.6px,transparent 2px) 0 0/7px 7px,var(--pink)}
+.tg.mat{background:linear-gradient(160deg,#e9f7ff,#cfeeff);border-color:#5fb7e6;color:#1a6f9c}
+.tags.inline{position:static;margin:4px 0 10px}
+@media (max-width:640px){.tg{font-size:20px;padding:3px 9px}.tg.shape i{width:20px;height:20px}}
+
 .pd .col{font-size:19px;color:var(--pink-deep);font-weight:900;margin:6px 0}
 .pd .story{font-size:20px;line-height:2;color:var(--ink);margin:10px 0}
 .pd .price{font-size:48px;font-weight:900;color:var(--pink-deep);margin:10px 0 2px}
@@ -70,11 +86,20 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;fon
 
 /* 80sマミ強化: 帯を虹パステルグラデに(2026-08-15) */
 .band{background:linear-gradient(90deg,#b79ce0,#ee85b5 45%,#8ec5e8) !important}
+/* 背景コンクリート(2026-09-07 たけろう: 商品ページも試しに混ぜる。トップと同じ素材・白35%かぶせ。
+   かぶせは z-index:-1 で本文の下に置く(トップは #world を上げる方式だが、このページは包み要素が無いため) */
+body{background:#d9d6d3}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),url('photos/bg_concrete.webp') center/cover no-repeat}
+/* 2026-09-07 たけろう指示: うさぎは絵文字でなく公式ばつべー原本。文中の小さなばつべー */
+.bb{height:1.25em;width:auto;vertical-align:-.25em;display:inline-block}
+.bb-logo{height:44px;vertical-align:middle}
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
+<link rel="stylesheet" href="shop-theme.css"><!-- 2026-10-06 お店の色(全ページ共通)。この行を消すと元の色 -->
 </head>
 <body>
 
-<div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0" title="お店にもどる">ちボ</a><h1 id="pgtitle">この子のページ</h1><a href="index.html?in=1">◀ お店にもどる</a></div>
+<div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0" title="お店にもどる">ちボ</a><h1 id="pgtitle">この子のページ</h1><a class="lang" href="商品_en.html" style="margin-left:0;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">EN</a><a href="index.html?in=1">◀ お店にもどる</a></div>
 <section><div id="detail"></div></section>
 <footer>ちびボード — うさぎと、手づくりのキーボード。<br>X <b>@tibiboard</b> / 技適 211-220207 / <a href="詳しく.html" style="color:#ffd0e5">仕様・注意がき</a></footer>
 
@@ -89,27 +114,48 @@ function parseShop(txt){
     const c = l.split('|').map(s=>s.trim());
     if(c.length < 3) return;
     const st = c[1] || '';
-    items.push({name:c[0], state:st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':'いる')),
+    items.push({name:c[0], state:st==='いる'?'いる':(st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':'準備中'))),
       price:parseInt(c[2])||0, base:(c[3]||'').replace(/\.(jpg|jpeg|png|webp)$/i,''),
-      color:c[4]||'', story:c[5]||'', url:c[6]||'', ship:c[7]||'', kind:(c[8]==='キット')?'キット':'完成'});
+      color:c[4]||'', story:c[5]||'', url:c[6]||'', ship:c[7]||'', kind:/キット/.test(c[8]||'')?'キット':'完成', set:/セット/.test(c[8]||''), shape:c[9]||'', mat:c[10]||''});
   });
   return items;
 }
+
+/* ---- かわいいタグ(形・素材)2026-08-23 たけろう指示: 販売中もSOLD OUTも両方に出す ---- */
+function shapeKey(v){ v=(v||'').trim(); if(/しかく|四角|□|sq/i.test(v)) return 'sq'; if(/まる|丸|〇|○|ci/i.test(v)) return 'ci'; if(/ざらざら|ザラザラ|zara/i.test(v)) return 'za'; return ''; }
+function tagsHtml(it){
+  const sk = shapeKey(it.shape); const glass = /ガラス|glass|gf/i.test(it.mat||'');
+  if(!sk && !glass) return '';
+  const names = {sq:'シカク', ci:'マル', za:'ざらざら'};
+  return `<div class="tags">${sk?`<span class="tg shape ${sk}" title="${names[sk]}"><i></i></span>`:''}${glass?`<span class="tg mat">✨ガラス</span>`:''}</div>`;
+}
 const items = parseShop(window.SHOP_DATA);
 const id = new URLSearchParams(location.search).get('id');
+// Keep the selected item when switching languages.
+document.querySelectorAll('a.lang').forEach(link=>{
+  const target = new URL(link.getAttribute('href'), location.href);
+  if(id) target.searchParams.set('id', id);
+  link.href = target.href;
+});
 const it = items.find(i=>i.name===id);
 if(!it || it.state!=='いる'){ location.replace('index.html?in=1'); }
 
 const yen = n => '¥' + n.toLocaleString();
-const TODO = '<span class="todo">__要記入__</span>';
-const val = v => (!v || v==='__要記入__' || /^__要記入__/.test(v)) ? TODO + (v.replace(/^__要記入__/,'')||'') : v;
+const TODO = '<span class="todo">準備中</span>';
+// 未記入メモや相対パスを購入先として開かない。購入先は外部のHTTPS URLだけを許可する。
+function validPurchaseUrl(value){
+  if(!value || value.includes('__要記入__')) return '';
+  try{
+    const u = new URL(value);
+    return u.protocol === 'https:' ? u.href : '';
+  }catch(_e){ return ''; }
+}
+const val = v => (!v || v==='__要記入__' || /^__要記入__/.test(v)) ? TODO : v;
 function slot(file, label, size, ratio){
   return `<div class="slot" style="aspect-ratio:${ratio}">
-    <div class="fn">📷 ${file||'—'}</div>
     <div class="ic">📷</div>
-    <div class="t">ここに ${label} の写真</div>
-    <div class="s">推奨 ${size}<br>photos/${file||'__要記入__'}</div>
-    ${file?`<img src="photos/${file}" alt="${label}" onerror="this.remove()">`:''}
+    <div class="t">写真は準備中です</div>
+    ${file?`<img src="photos/${file}" alt="${label}" onerror="if(this.src.slice(-5)==='.webp'){this.onerror=function(){this.remove()};this.src=this.src.slice(0,-5)+'.jpg'}else{this.remove()}">`:''}
   </div>`;
 }
 const CUTS = [
@@ -122,33 +168,50 @@ const CUTS = [
 if(it && it.state==='いる'){
   document.getElementById('pgtitle').textContent = it.name;
   document.title = `${it.name} — ちびボードのお店`;
-  const main = slot(it.base?it.base+'_1.jpg':'', it.name+' '+CUTS[0].label, CUTS[0].size, '1/1');
-  const th = CUTS.slice(1).map(c=>slot(it.base?`${it.base}_${c.n}.jpg`:'', c.label, c.size, '1/1')).join('');
+  const main = slot(it.base?it.base+'_1.webp':'', it.name+' '+CUTS[0].label, CUTS[0].size, '1/1');
+  const th = CUTS.slice(1).map(c=>slot(it.base?`${it.base}_${c.n}.webp`:'', c.label, c.size, '1/1')).join('');
   document.getElementById('detail').innerHTML = `
   <div class="pd">
     <div class="top">
       <div class="gal">
-        <div class="main">${main}<div class="tag">🐰 いまここにいます</div></div>
-        <div class="thumbs">${th}</div>
+        <div class="main">${main}<div class="tag">いまここにいます</div></div>
+        <div class="thumbs" id="galThumbs">${th}</div>
       </div>
       <div>
         <h3>${it.name}</h3>
+        ${tagsHtml(it).replace('class="tags"','class="tags inline"')}
         <div class="col">配色: ${val(it.color)}</div>
         <div class="story">${val(it.story)}</div>
-        <div class="price">${yen(it.price)} <small>(税・送料込)</small></div>
+        ${it.state==='いる' ? (()=>{ const PP = window.PRICE_PARTS || {assembly:10000, set:7000}; /* 2026-10-07 試し: 全部入りを大きく・内訳は全部プラス */
+          return `<div class="price">${yen(it.price+PP.set)} <small>全部入り(税・送料込)</small></div>
+        <div class="price-parts"><div>キット <b>${yen(it.price-PP.assembly)}</b></div><div>＋ 組み立て <b>${yen(PP.assembly)}</b></div><div>＋ キースイッチ・キーキャップ <b>${yen(PP.set)}</b></div></div>
+        <p class="purchase-includes">USB-Cケーブルは付属しません。</p>`; })()
+        : `<div class="price">${yen(it.price)} <small>(税・送料込)</small></div>
+        <p class="purchase-includes">表示価格にはキースイッチ・キーキャップを含みません。セットは +7,000円。USB-Cケーブルは付属しません。</p>`}
         <div class="ship">🚚 発送: ${it.ship||TODO}</div>
-        <div style="font-size:13px;font-weight:700;color:#6b6672;margin-top:6px">🎨 ケースの底の色、電源スイッチ、右手側ネームプレートの色・デザイン・素材、おまけのうさぎ彫りキーキャップは、せいさくしゃが そのとき かわいいと思ったもので(一点物の おたのしみ)</div>
-        ${it.url && it.url!=='__要記入__'
-          ? `<a class="keybtn big" href="${it.url}" target="_blank" rel="noopener">この子を むかえにいく ▶</a>`
-          : `<div class="keybtn big" style="background:#8b8792;border-bottom-color:#5f5b66;cursor:not-allowed">購入リンク ${TODO}</div>`}
-        <div class="buynote">・送料込みの価格です<br>・1台ずつ最終調整してからお届けします<br>・お問い合わせは購入したお店のメッセージ機能へ</div>
+        <div style="font-size:13px;font-weight:700;color:#6b6672;margin-top:6px">🎨 ケースの底の色、電源スイッチ、ネームプレートの色・デザイン・素材、おまけのうさぎ彫りキーキャップ(キーキャップとキースイッチのセットを買った方のみ)は、せいさくしゃが そのとき かわいいと思ったもので(一点物の おたのしみ)</div>
+        ${validPurchaseUrl(it.url)
+          ? `<a class="keybtn big" href="${validPurchaseUrl(it.url)}" target="_blank" rel="noopener noreferrer">この子を むかえにいく ▶</a>`
+          : `<div class="keybtn big" style="background:#8b8792;border-bottom-color:#5f5b66;cursor:not-allowed">販売の準備中です</div>`}
+        <div class="buynote">・送料込みの価格です<br>・1台ずつ最終調整してからお届けします<br>・お問い合わせは、ご購入のときに届いたメールの一番下にある「フォームから問い合わせる」から</div>
         <div style="font-size:13px;font-weight:900;margin-top:10px"><a href="詳しく.html" style="color:var(--mint-deep)">📋 くわしい仕様・注意がきを見る ▶</a></div>
       </div>
     </div>
   </div>`;
 }
 </script>
-<div style="position:fixed;left:8px;bottom:8px;z-index:9999;background:#000c;color:#fff;font:700 13px/1.6 sans-serif;padding:4px 12px;border-radius:99px;pointer-events:none" id="verbadge"></div>
-<script>if(['localhost','127.0.0.1'].includes(location.hostname)){document.getElementById('verbadge').textContent='版: '+new Date(document.lastModified).toLocaleString('ja-JP');}else{document.getElementById('verbadge').remove();}</script>
+<!-- 版バッジは asobi_common.js が全ページ共通で出す(2026-08-20) -->
+<script>
+/* 2026-09-13 たけろう指示: 下の4枚は カーソルを当てる(スマホは押す)と 大きい方に入れ替わる */
+(function(){
+  const th=document.getElementById('galThumbs'); if(!th) return;
+  const main=document.querySelector('.gal .main img'); if(!main) return;
+  th.querySelectorAll('img').forEach(im=>{
+    const swap=()=>{ if(im.src && main.src!==im.src){ main.src=im.src; main.alt=im.alt||main.alt; } };
+    im.style.cursor='zoom-in';
+    im.addEventListener('mouseenter', swap); im.addEventListener('click', swap);
+  });
+})();
+</script>
 </body>
 </html>

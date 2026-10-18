@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<script>document.documentElement.dataset.paint="white";</script>
+
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
-<meta name="description" content="ちびボード(tibiboard)のお店。手のひらサイズのかわいい左右分割キーボード tibiboard30。あそべるお店で、うさぎをあつめながらドロップを待とう🐰">
+<meta name="description" content="左右に分かれた30キーの手づくりキーボード、ちびボード30。Bluetooth・USB接続。実物の写真、仕様、購入前の注意、商品を紹介します。">
 <meta charset="utf-8">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ちびボードのお店">
-<meta property="og:title" content="ちびボード — ちいさな、分割キーボード。1台ずつ、手づくり。">
-<meta property="og:description" content="手のひらサイズのかわいい左右分割キーボード tibiboard30。うさぎのばつべーと、1台ずつ手づくりのお店🐰">
+<meta property="og:title" content="ちびボード30｜手づくりの30キー無線分割キーボード">
+<meta property="og:description" content="左右に分かれた30キーの手づくりキーボード、ちびボード30。Bluetooth・USB接続。実物の写真、仕様、購入前の注意、商品を紹介します。">
 <meta property="og:image" content="https://tibiboard.github.io/shop/og.jpg">
-<meta property="og:url" content="https://tibiboard.github.io/">
+<meta property="og:url" content="https://tibiboard.github.io/shop/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@tibiboard">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ちびボードのお店</title>
-<script src="data/商品リスト.js"></script>
+<title>ちびボード30｜手づくりの30キー無線分割キーボード</title>
+<script src="data/商品リスト.js?v=20261017-7000"></script>
 <script src="data/おしらせ.js"></script>
 <script src="data/うさぎ図鑑.js"></script>
-<script src="../asobi_common.js"></script>
+<script src="../asobi_common.js?v=202610072100"></script>
+<script src="usagi-serifu-local.js?v=10"></script>
 <style>
 :root{
   --pink:#e0197a;--pink-deep:#b81163;--pink-pale:#ffe3f0;
@@ -59,9 +63,9 @@ body.rumble{animation:rumble .5s}
 /* ヒーロー: 主役はばつべー。背景は日替わり(水玉/キャンディ縞/市松) */
 .hero{position:relative;min-height:62vh;display:flex;flex-direction:column;align-items:center;justify-content:center;border-bottom:10px solid var(--pink-deep);padding:36px 16px}
 /* マミ試作(旧: var(--mint)ベタ水玉 ←戻す時用) */
-.hero.bg0{background:radial-gradient(circle at 20% 30%,#fff 3px,transparent 4px),radial-gradient(circle at 70% 60%,#fff 3px,transparent 4px),radial-gradient(circle at 45% 85%,#fff 2px,transparent 3px),linear-gradient(160deg,#5da6e0,#9573cc 55%,#e96da8);background-size:180px 180px,240px 240px,140px 140px,auto}
-.hero.bg1{background:repeating-linear-gradient(45deg,var(--mint) 0 34px,#4fd4cb 34px 68px)}
-.hero.bg2{background:conic-gradient(var(--mint) 90deg,#4fd4cb 90deg 180deg,var(--mint) 180deg 270deg,#4fd4cb 270deg);background-size:120px 120px}
+ /* 2026-09-13: ガラスタイルに固定 */ /* ガラスタイル(2026-09-09 たけろう「ヒーローのグラデーションも質感のある背景に」。元のグラデは _直前退避6-09-09_index_壁紙お試し\) */
+ /* ピンクのかべ(2026-09-09 たけろう「ヒーローのグラデーションも質感のある背景に」。元のグラデは _直前退避6-09-09_index_壁紙お試し\) */
+ /* くろタイル(2026-09-09 たけろう「ヒーローのグラデーションも質感のある背景に」。元のグラデは _直前退避6-09-09_index_壁紙お試し\) */
 .hero img.batsu{width:min(80vh,96vw,720px);filter:drop-shadow(0 16px 0 rgba(18,122,117,.45));cursor:pointer;transition:transform .15s;
   animation:batsuhop 3.2s ease-in-out infinite}
 @keyframes batsuhop{0%,86%,100%{transform:translateY(0)}88%{transform:translateY(-16px)}91%{transform:translateY(0)}93%{transform:translateY(-10px)}96%{transform:translateY(0)}}
@@ -75,6 +79,10 @@ body.rumble{animation:rumble .5s}
 .hero img.batsu:hover{transform:scale(1.05) rotate(-2deg)}
 .hero .catch{margin-top:22px;font-size:clamp(32px,5.5vw,54px);font-weight:900;color:#0e3b39;line-height:1.6;text-shadow:0 3px 0 rgba(255,255,255,.8);text-align:center}
 .hero .catch small{display:block;font-size:22px;margin-top:8px;color:#12504d}
+/* 2026-09-11 たけろう決定「ドットにしよう」(見本 I): 壁の上で文字が沈むので、白ドットの地で浮かせる */
+.hero .catch{display:inline-block;background:radial-gradient(circle,#fff 1.6px,transparent 2px) 0 0/8px 8px,rgba(255,255,255,.35);padding:14px 18px;border-radius:22px;text-shadow:0 0 6px #fff,0 0 10px #fff;max-width:calc(100vw - 32px);box-sizing:border-box;margin-left:auto;margin-right:auto}
+/* 2026-09-11 たけろう「うさぎの一行もドットじゃないと見えない」 */
+.hero .whisper{display:inline-block;background:radial-gradient(circle,#fff 1.6px,transparent 2px) 0 0/8px 8px,rgba(255,255,255,.35);padding:6px 14px;border-radius:14px;color:#12504d;text-shadow:0 0 6px #fff,0 0 10px #fff;max-width:calc(100vw - 32px);box-sizing:border-box;white-space:normal;margin-left:auto;margin-right:auto}
 .hero .whisper{margin-top:14px;color:#0d4a41;font-size:19px;letter-spacing:4px;opacity:.8}
 #stampede{position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:99;display:none}
 #stampede img{position:absolute;width:66px;animation:run 1.6s linear forwards}
@@ -144,6 +152,16 @@ section{max-width:980px;margin:0 auto;padding:46px 18px}
 
 /* おしらせ板(木の立て看板風。2026-08-15新設。やりすぎ歓迎の合言葉どおり派手に) */
 #oshirase-sec{max-width:760px;padding:30px 18px 10px;margin:0 auto}
+/* スポンサーシップ告知 2026-08-23 */
+#sponsor-sec{max-width:900px;padding:14px 18px 30px;margin:0 auto}
+.sponsor{background:#fff;border-radius:26px;padding:24px 20px 28px;box-shadow:0 10px 30px rgba(0,0,0,.14);text-align:center}
+.sponsor .sp-banner{width:100%;max-width:860px;border-radius:18px;display:block;margin:0 auto 16px}
+.sponsor h2{font-size:clamp(26px,5vw,36px);margin:0 0 6px;color:var(--pink-deep);font-weight:900;background:none;padding:0;display:block;letter-spacing:1px} /* 2026-09-11: 全体のh2(ピンク地)が被ってピンク文字が沈んでいた */
+.sponsor p{font-size:clamp(18px,3.2vw,22px);margin:6px 0;font-weight:700}
+.sp-links{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:14px}
+.sp-links a{display:inline-block;background:var(--pink);color:#fff;text-decoration:none;font-size:20px;font-weight:900;padding:10px 20px;border-radius:999px;box-shadow:0 5px 0 var(--pink-deep)}
+.sp-links a.sub{background:var(--mint-deep);box-shadow:0 5px 0 #0b514d}
+.sp-small{font-size:16px;opacity:.85;margin-top:14px;font-weight:700}
 .oshirase-board{position:relative;background:linear-gradient(180deg,#e8c99a,#d8ae76);border:6px solid #a87643;border-radius:14px;padding:22px 24px 18px;
   box-shadow:0 8px 0 #8a5f33,0 8px 18px rgba(0,0,0,.18);transform:rotate(-.6deg)}
 .oshirase-board::before{content:"📌";position:absolute;top:-16px;left:22px;font-size:26px;transform:rotate(-18deg)}
@@ -194,6 +212,7 @@ h2{font-size:24px;font-weight:900;display:inline-block;background:var(--pink-dee
   .item.sold .st{font-size:17px;padding:7px 14px;border-width:4px}
   .item.tenji .st{font-size:14px}
   .item .stamp{font-size:11px;padding:3px 40px;right:-42px;top:12px}}
+
 .item{background:#241a22;border-radius:24px;padding:20px;text-align:center;color:#cfc4cc;position:relative;overflow:hidden}
 .item .ph{position:relative;aspect-ratio:1/1;border-radius:16px;overflow:hidden}
 .item .ph .slot{width:100%}
@@ -227,8 +246,41 @@ h2{font-size:24px;font-weight:900;display:inline-block;background:var(--pink-dee
   padding:10px 24px;border-radius:999px;border:5px solid #fff;transform:rotate(-4deg);
   box-shadow:0 6px 0 rgba(0,0,0,.3);text-shadow:0 2px 0 rgba(0,0,0,.2);display:inline-block;margin-top:6px}
 @media (max-width:640px){.item.junbi .st{font-size:20px;padding:8px 18px}}
+
+/* かわいいタグ(形・素材)2026-08-23 */
+.tags{position:absolute;left:10px;bottom:10px;display:flex;gap:7px;z-index:4;pointer-events:none}
+.tg{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#fff;border:3px solid var(--pink);border-radius:999px;padding:4px 12px;font-weight:900;font-size:24px;line-height:1;color:var(--pink-deep);box-shadow:0 3px 0 rgba(0,0,0,.18);font-family:inherit}
+.tg.shape{padding:6px 9px}
+.tg.shape i{display:block;width:26px;height:26px;background:var(--pink);box-sizing:border-box}
+.tg.shape.sq i{border-radius:6px}
+.tg.shape.ci i{border-radius:50%}
+.tg.shape.za i{border-radius:6px;background:radial-gradient(circle,#fff 1.6px,transparent 2px) 0 0/7px 7px,var(--pink)}
+.tg.mat{background:linear-gradient(160deg,#e9f7ff,#cfeeff);border-color:#5fb7e6;color:#1a6f9c}
+.tags.inline{position:static;margin:4px 0 6px;justify-content:center;pointer-events:auto;flex-wrap:wrap;row-gap:4px}
+.tags.inline .tg{font-size:15px;padding:3px 9px;border-width:2px}
+.tags.inline .tg.model{background:var(--pink-deep);border-color:var(--pink-deep);color:#fff}
+.tags.inline .tg.shape i{width:14px;height:14px}
+@media (max-width:640px){.tg{font-size:20px;padding:3px 9px}.tg.shape i{width:20px;height:20px}}
 .item .stamp{position:absolute;top:18px;right:-46px;transform:rotate(35deg);background:var(--mint-deep);color:#fff;font-size:15px;font-weight:900;padding:5px 52px;z-index:5}
 .item.tenji{outline:3px dashed var(--pink)}
+/* 2026-09-11 たけろう指示「スマホで SOLD OUT の札やタグが大きすぎて商品が見えない」:
+   202行あたりのスマホ用の指定は、後ろにある通常の指定(.item.sold .st / .item .stamp / .tg)に上書きされて効いていなかった(実測: 札162px・帯142px・タグ92px)。
+   通常の指定より後ろに置き直す。写真(123px角)の上に乗る物を小さく */
+@media (max-width:640px){
+  .item.sold .st{font-size:15px;padding:5px 12px;border-width:3px;box-shadow:0 4px 0 rgba(0,0,0,.35);margin-top:6px}
+  .item .stamp{font-size:10px;padding:2px 34px;right:-38px;top:10px}
+  .tags{left:6px;bottom:6px;gap:4px}
+  .tg{font-size:12px;padding:2px 7px;border-width:2px;gap:3px;white-space:nowrap}
+  .tg.shape{padding:3px 5px}
+  .tg.shape i{width:13px;height:13px}
+}
+
+/* じゅんびちゅう大カード(S1, 2026-08-17): 棚の先頭・幅いっぱい。影のばつべー+日付だけ大きく */
+.item.junbi-big{grid-column:1/-1;padding:0;background:linear-gradient(150deg,#2c2130,#1a1018);cursor:default}
+.jb-inner{position:relative;display:flex;align-items:center;justify-content:center;min-height:min(46vw,320px);padding:18px;overflow:hidden}
+.jb-usagi{width:min(230px,34vw);transition:filter .8s ease;animation:junbiBounce 1.6s ease-in-out infinite;filter:drop-shadow(0 10px 14px rgba(0,0,0,.5))}
+.jb-date{position:absolute;right:6%;bottom:4%;font-size:clamp(52px,11vw,120px);font-weight:900;color:#fff;line-height:1;letter-spacing:1px;text-shadow:0 5px 0 rgba(0,0,0,.4)}
+@media(max-width:640px){.jb-inner{min-height:220px;padding:12px}.jb-date{right:5%;bottom:4%}}
 
 /* ばつべーの扉 */
 .doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:36px;max-width:980px;margin:0 auto}
@@ -256,8 +308,25 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;fon
 .gate .wrong{color:#ff9ec2;font-weight:900;margin-top:10px;min-height:1.3em}
 
 
-/* いま持っているコイン(大きく。任天堂GUI=分かりやすく大きくシンプル) */
-.mycoin{width:fit-content;margin:48px auto 0;background:#3a2233;color:var(--gold,#ffd54f);font-size:clamp(42px,9vw,84px);font-weight:900;letter-spacing:4px;border-radius:999px;padding:clamp(10px,2vw,18px) clamp(30px,6vw,70px);box-shadow:inset 0 5px 14px rgba(0,0,0,.6), 0 7px 0 rgba(0,0,0,.2)}
+/* いま持っているコイン(2026-08-20: 任天堂ふうの丸い金貨GUIに大改装。中身はasobi_common.jsのC.mountCoinGui) */
+.mycoin{width:fit-content;margin:48px auto 0}
+.datainfo-btn{display:block;width:44px;height:44px;min-width:44px;min-height:44px;margin:10px auto 0;
+  border-radius:50%;border:0;background:var(--pink);color:#fff;font-size:24px;font-weight:900;
+  line-height:44px;padding:0;cursor:pointer;box-shadow:0 4px 0 var(--pink-deep);font-family:inherit}
+.datainfo-back{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20000;display:flex;
+  align-items:center;justify-content:center;padding:20px}
+.datainfo-pop{position:relative;max-width:min(92vw,460px);max-height:86vh;overflow:auto;background:#fff;
+  border-radius:26px;padding:30px 26px 26px;box-shadow:0 10px 0 rgba(0,0,0,.18)}
+.datainfo-pop h3{font-size:26px;font-weight:900;margin:0 0 16px;color:#3a2a20;text-align:center}
+.datainfo-pop p{font-size:24px;font-weight:700;line-height:1.7;color:#3a2a20;margin:0 0 12px}
+.datainfo-close{position:absolute;top:10px;right:12px;width:40px;height:40px;border-radius:50%;border:0;
+  background:var(--mint-deep);color:#fff;font-size:22px;font-weight:900;cursor:pointer;line-height:40px;padding:0}
+/* 金貨部品(asobi_common)は inline-flex なので、ここでは block 化して中央に。注記は明るい背景なので濃い色に(2026-08-20) */
+#mycoin.chibiCoinGui{display:flex;margin:48px auto 0}
+#mycoin .cg-note{color:#b8860b;text-shadow:0 2px 0 #fff}
+/* 文中の小さな金貨=大きな金貨(asobi_commonの .cg-disc)をそのまま小さく使う(2026-08-20 たけろう「同じコインを小さくして使えばいい」) */
+.chibiCoinGui.inline{display:inline-flex;vertical-align:-.28em;margin-right:.1em}
+#pcoin.chibiCoinGui{display:flex;margin:18px auto 0}
 /* コインの使い道: ミニチュアのガチャ&スロット */
 .coingames{display:flex;gap:70px;justify-content:center;margin-top:34px}
 .chalcall{text-align:center;margin-top:6px}
@@ -296,7 +365,7 @@ footer{background:var(--pink-deep);color:#fff;text-align:center;padding:26px;fon
 .pgame:hover{transform:translateY(-5px) rotate(-1deg)}
 img.pi{width:clamp(90px,16vw,150px);height:auto;aspect-ratio:1/1;object-fit:contain}
 .pgame .pl{font-weight:900;font-size:clamp(15px,2vw,19px);margin-top:8px}
-.playdoor .pcoin{width:fit-content;margin:18px auto 0;background:#3a2233;color:#ffd54f;font-size:clamp(26px,4vw,38px);font-weight:900;letter-spacing:2px;border-radius:999px;padding:9px 30px}
+.playdoor .pcoin{width:fit-content;margin:18px auto 0}
 
 /* かくれうさぎ(ゲームへの隠し入口) */
 .peek{position:absolute;width:56px;cursor:pointer;transition:transform .15s;filter:drop-shadow(0 3px 0 rgba(0,0,0,.25))}
@@ -345,20 +414,79 @@ body{background:var(--mint-pale)}
 
 /* 👉指差しをマミ色に */
 .lever-rail::before, .body2::before{filter:sepia(1) saturate(2.2) hue-rotate(295deg) brightness(1.08) drop-shadow(0 3px 5px rgba(0,0,0,.4)) !important}
+
+/* コイン表示「🪙 × 数字」: 3部品を中心揃え。×は明るい白・小さめ(2026-08-20 たけろう「×がずれてる・明るい色に」) */
+
+/* 背景コンクリート(2026-09-07 たけろう: 試しに入れる。パネル調・白を35%かぶせて可愛さを残す) */
+body{background:#d9d6d3}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),var(--wall,url('photos/wall_ao_con.jpg'))/* あおいコンクリ(2026-09-09 たけろう「メインは未使用のいい背景」) */ center/cover no-repeat}
+#world{position:relative;z-index:1}
+#shelf-sec,#doors-sec,#moji-sec{background:transparent !important}
+/* 2026-09-07 たけろう指示: うさぎは絵文字でなく公式ばつべー原本。文中の小さなばつべー */
+.bb{height:1.25em;width:auto;vertical-align:-.25em;display:inline-block}
+.bb-logo{height:44px;vertical-align:middle}
+
+/* ↓ 2026-09-11: スマホの棚カードの指定。通常指定より後ろに置かないと負ける(3回目の教訓) */
+/* 2026-09-11 たけろう指示「スマホの棚が縦長すぎる。SOLD OUT は写真の右端にテープ、No.は左上の細い枠、名前は小さく、タグは横1列」 */
+.item .no{display:none}
+.item .ph .tape{display:none}
+@media(max-width:640px){
+  .item{padding:6px}   /* 2026-09-11: 写真をなるべく大きく・文字はさらに小さく */
+  .item .no{display:block;position:absolute;left:10px;top:3px;font-size:10px;line-height:1.15;color:#cfc4cc;z-index:6;letter-spacing:.3px;max-width:60%;text-align:left}
+  .item .ph{margin-top:22px}
+  .item .ph{margin-top:14px}
+  .item .nm{font-size:12px;margin:4px 0 0;line-height:1.2}
+  .tags.inline{margin:1px 0 2px;gap:3px;flex-wrap:nowrap !important;justify-content:center;overflow:hidden}   /* 後ろの flex-wrap:wrap に負けないよう !important(実機で縦に並んだ) */
+  .tags.inline .tg{font-size:9px;padding:0 4px;border-width:1.5px;gap:2px;white-space:nowrap;line-height:1.3}
+  .tags.inline .tg.model{display:none}   /* ちびボード30 は左上の行に書いた */
+  .tags.inline .tg.shape i{width:9px;height:9px}
+  .tags.inline .tg.shape.sq i,.tg.shape.sq i{border-radius:1px !important}       /* 四角が丸く見えていた */
+  .item .pr{font-size:13px;margin:0;line-height:1.2}
+  .item.sold .st{display:none !important}   /* スマホは写真の中のテープ(.tape)で表す(後ろの通常指定に負けないよう !important) */
+  .item .ph .tape{display:block;position:absolute;right:-14px;bottom:14px;width:max-content;white-space:nowrap;transform:rotate(-24deg);font-size:10px;font-weight:900;padding:2px 20px;border-radius:2px;background:#ff3b5c;color:#fff;box-shadow:0 3px 6px rgba(0,0,0,.45);letter-spacing:1px;line-height:1.2;z-index:6;font-family:'M PLUS Rounded 1c',sans-serif}
+}
+/* 2026-10-06: 紹介への近道(ばつべーの後)・下に移した あそびば・紹介された枠 */
+.intro-door{max-width:520px;margin:0 auto 10px}
+.intro-door .intro-sub{font-weight:900;font-size:24px;color:var(--pink-deep);margin-top:8px}
+#asobi-sec{max-width:none;padding:40px 18px 30px;background:linear-gradient(180deg,#f9debc,#d4b6e8)}
+#asobi-sec .asobi-doors{grid-template-columns:minmax(280px,420px);justify-content:center}
+#asobi-sec .asobi-play{margin-top:36px}
+#asobi-sec #pcoin{display:none}
+.shelf-intro{text-align:center;margin:0 auto 30px} /* すぐ下に同じコインがあるので、あそびばの中のコインは出さない */
+#found-sec{max-width:760px;padding:24px 18px 10px;margin:0 auto}
+.found-card{display:block;text-decoration:none;color:#3a2a33;background:#fff;border:5px solid #f3accc;border-radius:22px;padding:22px 24px;text-align:center;box-shadow:0 6px 0 rgba(183,156,224,.35)}
+.found-card:hover{transform:translateY(-3px)}
+.found-lead{font-weight:900;font-size:24px;color:var(--pink-deep)}
+.found-name{font-weight:900;font-size:clamp(28px,5vw,40px);margin:6px 0 10px;letter-spacing:1px}
+.found-text{font-size:24px;line-height:1.6}
+.found-by{text-align:center;font-size:18px;margin-top:10px;color:#3a2a33}.found-by a{color:inherit}
+.found-go{display:inline-block;margin-top:14px;font-weight:900;font-size:24px;color:#fff;background:linear-gradient(135deg,#ee85b5,#b79ce0);border-radius:999px;padding:8px 26px}
+
 </style>
+<link rel="stylesheet" href="shop-accessibility.css">
+<link rel="canonical" href="https://tibiboard.github.io/shop/">
+<link rel="stylesheet" href="shop-theme.css"><!-- 2026-10-06 お店の色(全ページ共通)。この行を消すと元の色 -->
+<script src="paint-state.js?v=1"></script>
+<link rel="stylesheet" href="sample.css?v=11">
+<link rel="stylesheet" href="fish.css?v=3">
+<link rel="stylesheet" href="metal-buttons.css?v=24">
 </head>
 <body>
 
+
 <!-- 開幕: 電源スイッチ -->
 <div id="bootflash"></div>
-<div id="boot">
+<div id="boot" class="off" hidden style="display:none">
   <div class="sw" id="sw"><div class="knob"></div></div>
   <div class="hint">— でんげんをいれてください —</div>
 </div>
 
 <!-- 世界 -->
-<div id="world">
-  <div class="band"><a class="sf" href="index.html?in=1" style="text-decoration:none;cursor:pointer;margin-left:0" title="お店にもどる">ちボ</a><h1>ちびボード</h1><span class="obi">〈ちいさな分割キーボード〉1台ずつ、手づくり。</span></div>
+<div id="world" class="lit">
+<div id="intro-art" class="art-a" aria-hidden="true"><img id="intro-image" alt=""></div><div id="scene-scroll-back" aria-hidden="true"><div class="scene-back scene-flower"></div><div class="scene-back scene-impasto-flower"></div><div class="scene-back scene-betta"></div><div class="scene-back scene-impasto"></div></div>
+<div id="memory-fish-layer" aria-hidden="true"><div class="memory-fish-route"><div class="memory-fish-facing"><div class="memory-fish-swim"><img class="memory-fish-body" src="assets/memory-goldfish.webp" alt="" width="1536" height="1024" decoding="async"><img class="memory-fish-tail" src="assets/memory-goldfish.webp" alt="" width="1536" height="1024" decoding="async"></div></div></div></div>
+<div id="paint-surface" aria-hidden="true"><svg class="paint-clips" width="0" height="0" aria-hidden="true"><defs><clipPath id="paint-reveal" clipPathUnits="objectBoundingBox"><polygon class="paint-pass stroke-0" points="0,0 1,0 .96,.05 1,.08 .97,.11 1,.14 .95,.18 1,.21 0,.25"/><polygon class="paint-pass stroke-1" points="0,.13 1,.19 1,.41 .04,.37 0,.34 .04,.30 0,.27 .05,.24 0,.20"/><polygon class="paint-pass stroke-2" points="0,.31 .97,.32 1,.35 .96,.38 1,.42 .95,.46 1,.51 0,.56"/><polygon class="paint-pass stroke-3" points="0,.48 1,.45 1,.71 .04,.73 0,.70 .04,.66 0,.62 .05,.57 0,.53"/><polygon class="paint-pass stroke-4" points="0,.64 .96,.63 1,.67 .95,.71 1,.75 .97,.79 1,.85 0,.89"/><polygon class="paint-pass stroke-5" points="0,.79 1,.78 1,1 0,1 .03,.97 0,.93 .04,.89 0,.85"/></clipPath></defs></svg><div class="paint-sheet"><picture><source media="(max-aspect-ratio:1/1)" srcset="assets/paint/paint-portrait-v4.webp"><img class="paint-full" src="assets/paint/paint-portrait-v4.webp" alt=""></picture></div></div>
+  <div class="band"><a class="band-logo" href="index.html?in=1" title="お店にもどる"><img src="icons/logo_wabun.png" alt="ちびボード"></a><h1 class="vh">ちびボード</h1><!-- 2026-10-06 たけろう指示: 左上は正式の和文ロゴ(★ロゴ正本/和文ロゴ_ちびボード横組み.png) --><span class="obi">〈ちいさな分割キーボード〉1台ずつ、手づくり。</span><a class="lang" href="index_en.html?in=1" style="margin-left:auto;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">EN</a></div>
 
   <!-- ヒーロー: 主役はばつべー -->
   <div class="hero" id="hero">
@@ -370,17 +498,16 @@ body{background:var(--mint-pale)}
     <span class="sparkle" style="right:18%;top:64%;font-size:30px;animation-delay:.4s">✦</span>
     <span class="sparkle" style="right:8%;top:40%;font-size:20px;animation-delay:1.3s">✧</span>
     <span class="sparkle" style="right:28%;top:12%;font-size:24px;animation-delay:2.1s">✦</span>
-    <div class="catch">ちいさな、ちいさなキーボード。<small>ひとつひとつ手作りしています。</small></div>
-    <div class="whisper">…このうさぎ、なにか知ってるみたい</div>
+    <div class="catch">ちっちゃめキーボード</div>
+
   </div>
   <div id="stampede"></div>
 
   <!-- もじばしら洪水(ばつべークリック→大行進→幕開きで登場) -->
-  <section id="moji-sec">
-    <div class="moji-head">
-      <h2 style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap">ぜんぶ、<em style="color:var(--pink)">ちがう子</em>。<img src="../img/バツベイ_アイコン800.png" alt="ばつべー" style="width:clamp(64px,9vw,140px)"></h2>
-      
-    </div>
+  <div id="continuous-wall">
+
+  <section class="scene-wall scene-flowers" id="moji-sec"><div class="river-white" aria-hidden="true"><svg class="white-texture" width="100%" height="100%" aria-hidden="true"><defs><pattern id="rivergrain" overflow="hidden" style="overflow:hidden" patternUnits="userSpaceOnUse" width="640" height="1024"><image href="assets/paint/paint-overlay-v3.webp" x="-448" width="1536" height="1024"/></pattern></defs><rect width="100%" height="100%" fill="url(#rivergrain)"/></svg></div>
+    <!-- 2026-10-06 たけろう指示:「ぜんぶ、ちがう子。」の見出しはやめた -->
     <div class="moji-stage">
       <div class="moji-flood">
         <div class="moji-row r1" id="mojiRow1"></div>
@@ -396,66 +523,148 @@ body{background:var(--mint-pale)}
       </div>
     </div>
     <div class="moji-cta">
-      <div class="playdoor-wrap">
-        <div class="playdoor">
-          <div class="pt">🎮 あそびば</div>
-          <div class="pgames">
-            <a class="pgame" href="../うさぎ探し体験版.html"><img class="pi" id="pg1" alt=""><div class="pl">🔍 うさぎ探し</div></a>
-            <a class="pgame" href="../はしればつべー.html"><img class="pi" id="pg2" alt=""><div class="pl">🏃 はしれ!ばつべー</div></a>
-          </div>
-          <div class="pcoin" id="pcoin">🪙 × 0</div>
-        </div>
-      </div>
+      <!-- 2026-10-06 たけろう指示: 紹介ページへの入口は棚の上の1つだけ(重複させない) -->
     </div>
   </section>
 
+  <div id="scene-region">
+
   <!-- みんなの棚(全個体がここに整列。いる子は光る) -->
-  <section id="shelf-sec">
-    
+  <section class="scene-wall scene-flowers" id="shelf-sec">
+    <!-- 2026-10-06 たけろう指示: 棚の上に紹介ページへの入口(魅力を見てもらってから棚へ) -->
+    <div class="shelf-intro"><a class="shop-metal intro-door" href="紹介.html?v=22"><span class="metal-title">tibiboard30の紹介を見る ▶</span></a></div>
+
     <div class="shelf" id="shelf"></div>
   </section>
 
   <!-- ばつべーの扉(部屋への入口。文字は最少) -->
-  <section id="doors-sec">
-    <div class="doors">
-      <a class="door" href="紹介.html">
-        <img class="door-icon icon-batsu" src="../img/バツベイ_アイコン800.png" alt="" onerror="this.remove()">
-        <div class="dl">❓ tibiboard30って?</div>
-      </a>
-      <a class="door mintdoor" href="うさぎのへや.html">
-        <img class="door-icon icon-usagi" src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">
-        <div class="dl">📖 うさぎずかん</div>
-      </a>
-    </div>
+  <section class="scene-wall scene-flowers" id="doors-sec">
+    <!-- 2026-10-12 発売まで準備中(押せない)。発売の時は控えの <a href> に戻す --><a class="shop-metal" href="購入者.html?v=23"><span class="metal-title">ご購入いただいた方はこちら ▶</span></a>
     <!-- コインの使い道: ミニチュアの台そのものを見せる(無料ゲームとは並べない) -->
-    <div class="mycoin" id="mycoin">🪙 × 0</div>
-    <div class="coingames">
-      <a class="minimachine" href="../ガチャ_新台.html" title="ガチャ">
-        <div class="gdome"><i style="background:#e84898;left:35px;top:65px"></i><i style="background:#5fd6c4;left:95px;top:45px"></i><i style="background:#ffd54f;left:65px;top:100px"></i><i style="background:#fff;left:120px;top:95px"></i></div>
-        <div class="gbody"><span class="ghandle">▶</span></div>
-      </a>
-      <a class="minimachine" href="../スロット_新台.html" title="スロット">
-        <div class="sbox">
-          <div class="sreels"><b></b><b></b><b></b></div>
-          <div class="sball"></div>
-        </div>
-      </a>
-    </div>
-    <div class="chalcall">
-      <div class="chalarrows"><span><svg viewBox="0 0 60 74" width="210" height="259"><path d="M30 7 Q34 7 37 11 L51 29 Q57 37 48 37 L41 37 L41 57 Q41 68 30 68 Q19 68 19 57 L19 37 L12 37 Q3 37 9 29 L23 11 Q26 7 30 7 Z" fill="#b79ce0" stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg></span><span><svg viewBox="0 0 60 74" width="210" height="259"><path d="M30 7 Q34 7 37 11 L51 29 Q57 37 48 37 L41 37 L41 57 Q41 68 30 68 Q19 68 19 57 L19 37 L12 37 Q3 37 9 29 L23 11 Q26 7 30 7 Z" fill="#ee85b5" stroke="#fff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></svg></span></div>
-      <div class="chaltext">🪙をつかって 🎁たからばこ!<br>📱<b>隠しコマンド</b>を ゲット!</div>
-    </div>
   </section>
 
   <!-- おしらせ板(公式ニュース枠。棚が増えても押されないよう最下部固定。2026-08-15移設) -->
-  <section id="oshirase-sec">
+  <section class="scene-wall scene-flowers" id="oshirase-sec">
     <div class="oshirase-board">
       <div class="oshirase-ttl"><span class="ic">🪧</span>おしらせ</div>
       <ul class="oshirase-list" id="oshiraseList"></ul>
       <button class="oshirase-more" id="oshiraseMore" hidden>もっとみる ▾</button>
     </div>
   </section>
+  <!-- 2026-10-12 たけろう: にゃっとランド スポンサーシップ(過労さんの応援ソング)。X の公式の埋め込み=再生は過労さんのポストに入る。
+       オルタ版のポストの中に通常版が入っているので1本だけ埋め込む(動画は2本出る)。X の部品は近づいた時だけ読む -->
+  <section class="scene-wall scene-resin" id="pv-sec" style="max-width:1100px;margin:28px auto;padding:22px 16px;text-align:center">
 
+    <!-- 2026-10-12 たけろう: 作った人の行はすりガラスの上に(ピンクのレンガの上でも読めるように) -->
+    <div style="display:inline-block;margin:6px auto 16px;padding:10px 18px;border-radius:16px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.7)">
+    <h2 class="pv-h">公式ソング「ちびちび☆ちびボード!」</h2>
+    <p class="pv-sub2">ちびボード × <a href="https://x.com/karou2rikon" target="_blank" rel="noopener" style="color:inherit">過労@にゃっとランドforX</a></p>
+    <p class="pv-listen">♡ いちど 聞いてみてね ♡</p>
+    </div>
+    <div class="pv-two" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:flex-start"><div class="x-video-embed" style="flex:1 1 360px;max-width:540px">
+      <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://twitter.com/karou2rikon/status/2108281286515367964">過労さんのポスト(応援ソング)</a></blockquote>
+    </div><figure class="song-poster" role="img" aria-label="公式ソングのポスター"><div class="song-poster-art"></div></figure></div>
+  </section>
+  <script>
+  (function(){
+    function init(){
+      var song=document.getElementById('pv-sec');
+      var nyatto=document.getElementById('found-sec');
+      var loaded=false;
+      function load(){
+        if(loaded) return;
+        loaded=true;
+        var script=document.createElement('script');
+        script.async=true;
+        script.src='https://platform.twitter.com/widgets.js';
+        document.body.appendChild(script);
+      }
+      if(!('IntersectionObserver' in window)){load();return;}
+      var observer=new IntersectionObserver(function(entries){
+        if(entries.some(function(entry){return entry.isIntersecting;})){
+          load();observer.disconnect();
+        }
+      },{rootMargin:'600px 0px'});
+      if(song) observer.observe(song);
+      if(nyatto) observer.observe(nyatto);
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+    else init();
+  })();
+  </script>
+
+
+  <!-- スポンサーシップ告知(2026-08-23 たけろう指示: 大きく告知。ロゴ掲載は合意済み) -->
+  <section class="scene-wall scene-resin" id="sponsor-sec">
+    <div class="sponsor">
+      <img class="sp-banner" src="photos/fireworks_banner.webp" alt="ちびボード × FIREWORKS スポンサーシップ締結のお知らせ" loading="lazy">
+      <h2>FIREWORKS を おうえんしています</h2>
+      <p>ちびボードは、新潟のeスポーツチーム <b>FIREWORKS</b> のスポンサーになりました。</p>
+      <p>FIREWORKSは「地方から、eスポーツの熱量を打ち上げる」チーム。選手・ストリーマー・実況者が活動していて、新潟駅南口のeスポーツカフェ&amp;バー <b>e-spopia(エスポピア)</b> が ホームです。</p>
+      <div class="sp-links">
+        <a href="https://x.com/eFIREWORKS_" target="_blank" rel="noopener">FIREWORKS の X ▶</a>
+        <a class="sub" href="https://www.e-sportsbar-niigata.com/fireworks/" target="_blank" rel="noopener">チーム紹介(公式サイト) ▶</a>
+      </div>
+      <div class="sp-small">選手のみなさんの手もとで、ちびボードが活躍する日を たのしみにしています<img class="bb" src="../img/バツベイ_アイコン800.png" alt="ばつべー"></div>
+    </div>
+  </section>
+
+  <!-- 2026-10-06 たけろう指示: NyattoLand for X(Chrome 拡張)に tibiboard30 が登場する。「登場します」とだけ言う。作った人の X を小さく -->
+  <section class="scene-wall scene-resin" id="found-sec">
+    <!-- 2026-10-12 たけろう: NyattoLand(過労さんのアプリ)と公式ソングは別の話なので段を分ける -->
+    <a class="found-card" href="https://nyatto-land-for-x.thekarou.com" target="_blank" rel="noopener">
+            <div class="found-name">NyattoLand for X</div>
+      <div class="found-text">タイムラインに猫が住みつく、とってもかわいい、やみつき Chrome 拡張機能。<br>tibiboard30 が 登場します。</div>
+      <div class="found-go">見に行く ▶</div>
+    </a>
+    <div class="found-x" style="position:relative;z-index:1;display:flex;justify-content:center;margin:0 0 16px"><div class="x-video-embed" style="width:min(560px,100%)"><blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://twitter.com/karou2rikon/status/2104483597793271810">過労さんのポスト(NyattoLand for X)</a></blockquote></div></div>
+    <!-- 2026-10-12 たけろう: 動画は X の埋め込みに(過労さんのポスト)。前= NyattoLand の紹介動画(19時に新しい動画へ差し替え・お店の中に置く。外のSNSは埋め込まない) -->
+
+
+  </section>
+
+  <!-- 2026-10-06 たけろう指示: うさぎずかん・ゲームは本業ではないので一番下 -->
+  <section class="scene-wall scene-paint" id="asobi-sec">
+    <!-- 2026-10-07 たけろう「あそびばは押すとゲームに行く動線が見えない」: ①ゲーム → ②スロット → ③かぎ・宝箱 の1本道。
+         コインは あそびばの右下・うさぎずかんは小さな入口。戻す時は _直前退避/2026-10-07_*_あそびばの前/ の index.html -->
+    <h2 class="ab-title">🎮 あそびば</h2>
+    <div class="ab-steps">
+      <div class="ab-step">
+        <div class="ab-head"><span class="ab-no">1</span>ゲームで コインを ゲット</div>
+        <div class="ab-games">
+          <a class="ab-game" href="../うさぎ探し体験版.html"><img class="pi" id="pg1" alt=""><span class="ab-gname">🔍 うさぎ探し</span><span class="ab-go shop-metal"><span class="metal-title">あそぶ ▶</span></span></a>
+          <a class="ab-game" href="../はしればつべー.html"><img class="pi" id="pg2" alt=""><span class="ab-gname">🏃 はしれ!ばつべー</span><span class="ab-go shop-metal"><span class="metal-title">あそぶ ▶</span></span></a>
+        </div>
+      </div>
+      <div class="ab-arrow" aria-hidden="true">▼</div>
+      <div class="ab-step">
+        <div class="ab-head"><span class="ab-no">2</span>コインを ゲットしたら スロットに 挑戦!</div>
+        <div class="coingames" id="takara">
+        <a class="minimachine" href="../スロット_新台.html?v=21" title="スロット">
+          <div class="sbox">
+            <div class="sreels"><b></b><b></b><b></b></div>
+            <div class="sball"></div>
+          </div>
+        </a>
+        </div>
+        <a class="ab-go big shop-metal" href="../スロット_新台.html?v=21"><span class="metal-title">スロットを まわす ▶</span></a>
+      </div>
+      <div class="ab-arrow" aria-hidden="true">▼</div>
+      <div class="ab-step">
+        <div class="ab-head"><span class="ab-no">3</span>大あたりで 🔑かぎ ゲット</div>
+      </div>
+    </div>
+    <div class="ab-foot">
+      <a class="ab-zukan" href="うさぎのへや.html"><img src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">📖 うさぎずかん ▶</a>
+      <div class="ab-coin">
+        <div class="mycoin" id="mycoin"></div>
+        <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="データのほぞんについて">?</button>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- scene-region -->
+  </div><!-- continuous-wall -->
   <footer>
     ちびボード — うさぎと、手づくりのキーボード。<br>
     X <b>@tibiboard</b> / 技適 211-220207 / <a href="詳しく.html" style="color:#ffd0e5">仕様・注意がき・特定商取引法に基づく表記</a>
@@ -490,7 +699,11 @@ function sndUnlock(){ noise(0,0.06,1400,0.7); tone(520,0.05,0.08,'square',0.2);
 function sndNope(){ tone(220,0,0.18,'sine',0.15,170); }
 
 /* ===== 開幕スイッチ ===== */
+/* 2026-08-17: 再読み込み時にブラウザが前回のスクロール位置を復元して、スイッチを押した後に
+   途中から表示される問題(スマホで実測)。スイッチ画面ではブラウザの復元を切り、押した時に先頭へ。 */
+try{ if(!/[?&]in=1/.test(location.search)) history.scrollRestoration='manual'; }catch(_){}
 document.getElementById('sw').onclick = function(){
+  window.scrollTo(0,0);
   this.classList.add('on');
   sndPowerOn();
   setTimeout(()=>{
@@ -505,7 +718,7 @@ document.getElementById('sw').onclick = function(){
 };
 
 /* ===== 背景の日替わり(水玉/キャンディ縞/市松) ===== */
-document.getElementById('hero').classList.add('bg' + (new Date().getDate() % 3));
+document.getElementById('hero').classList.add('bg0'); /* 2026-09-13 たけろう指示: 日替わり(9/9)をやめ、ガラスタイル1枚に固定(色が変わるとイメージが定着しない) */
 
 /* ===== 部屋の中から戻ってきた人(?in=1)はスイッチを飛ばす ===== */
 if(/[?&]in=1/.test(location.search)){
@@ -513,17 +726,19 @@ if(/[?&]in=1/.test(location.search)){
   document.getElementById('world').classList.add('lit');
 }
 
-/* ===== 持っているコインを大きく表示(あそび共通基盤から) ===== */
-if(window.CHIBI) document.getElementById('mycoin').textContent = '🪙 × ' + window.CHIBI.getCoins();
+/* ===== 持っているコインを大きく表示(あそび共通基盤から。2026-08-20: 丸い金貨GUIに大改装) ===== */
+if(window.CHIBI){
+  window.CHIBI.mountCoinGui(document.getElementById('mycoin'), {size:96, note:false}); /* 2026-10-07: あそびばの右下に小さく */
+  window.CHIBI.mountCoinGui(document.getElementById('pcoin'), {size:120, note:false});
+  window.CHIBI.refreshCoinGui(false);
+}
 
 /* ===== 写真プレースホルダ ===== */
 function slot(file, label, size, ratio){
   return `<div class="slot" style="aspect-ratio:${ratio}">
-    <div class="fn">📷 ${file||'—'}</div>
     <div class="ic">📷</div>
-    <div class="t">ここに ${label} の写真</div>
-    <div class="s">推奨 ${size}<br>photos/${file||'__要記入__'}</div>
-    ${file?`<img src="photos/${file}" alt="${label}" onerror="this.remove()">`:''}
+    <div class="t">写真は準備中です</div>
+    ${file?`<img src="photos/${file}" alt="${label}" onerror="if(this.src.slice(-5)==='.webp'){this.onerror=function(){this.remove()};this.src=this.src.slice(0,-5)+'.jpg'}else{this.remove()}">`:''}
   </div>`;
 }
 /* ===== ページ内リンクを確実に届かせる ===== */
@@ -553,12 +768,26 @@ function parseShop(txt){
     const c = l.split('|').map(s=>s.trim());
     if(c.length < 3) return;
     const st = c[1] || '';
-    items.push({name:c[0], state:st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':(st==='準備中'?'準備中':'いる'))),
+    items.push({name:c[0], state:st==='いる'?'いる':(st.startsWith('旅立ち')?'旅立ち':(st==='展示'?'展示':(st==='9月から'?'予告':'準備中'))),
+      /* 2026-08-17: 「準備中 2026-09-14」のように日付つきでも準備中判定されるようstartsWithに変更(S1) */
       date:(st.match(/\d{4}-\d{2}-\d{2}/)||[''])[0], price:parseInt(c[2])||0,
       base:(c[3]||'').replace(/\.(jpg|jpeg|png|webp)$/i,''), color:c[4]||'', story:c[5]||'',
-      url:c[6]||'', ship:c[7]||'', kind:(c[8]==='キット')?'キット':'完成'});
+      url:c[6]||'', ship:c[7]||'', kind:/キット/.test(c[8]||'')?'キット':'完成', set:/セット/.test(c[8]||''), shape:c[9]||'', mat:c[10]||''});
   });
   return {conf, items};
+}
+
+/* ---- かわいいタグ(形・素材)2026-08-23 たけろう指示: 販売中もSOLD OUTも両方に出す ---- */
+function shapeKey(v){ v=(v||'').trim(); if(/しかく|四角|□|sq/i.test(v)) return 'sq'; if(/まる|丸|〇|○|ci/i.test(v)) return 'ci'; if(/ざらざら|ザラザラ|zara/i.test(v)) return 'za'; return ''; }
+const clear0 = it => /透明|スケスケ|クリア|clear/i.test(it.mat||'');
+/* 2026-10-06 たけろう指示: 棚に「17mmピッチ」のタグ(いまの子は全部17mm。19mmは出さない) */
+function tagsHtml(it){
+  /* 2026-10-06 たけろう指示: 素材のタグ(PLA / PETG / クリア / ラメ / ガラス)を出せるように。商品リストの「素材」の欄に書いた言葉で出る(発売の時に書く) */
+  const sk = shapeKey(it.shape); const m = it.mat||'';
+  const T = t => `<span class="tg mat">${t}</span>`;
+  const mats = (/ガラス|glass|gf/i.test(m) ? T('✨ガラス') : '') + (/透明|スケスケ|クリア|clear/i.test(m) ? T('クリア') : '')
+    + (/PETG/i.test(m) ? T('PETG') : (/PLA/i.test(m) ? T('PLA') : '')) + (/ラメ|glitter/i.test(m) ? T('ラメ') : '');
+  return `<div class="tags inline"><span class="tg model">${sk==='za'?'tibiboard30Z':'tibiboard30'}</span><span class="tg pitch">17mmピッチ</span>${mats}</div>`;
 }
 const {conf, items} = parseShop(window.SHOP_DATA);
 
@@ -591,6 +820,9 @@ const {conf, items} = parseShop(window.SHOP_DATA);
 
 const alive = items.filter(i=>i.state==='いる');
 const yen = n => '¥' + n.toLocaleString();
+/* 2026-10-07 たけろう「全部入りいくら・最安値いくらも表示するの見せて」: 売っている子は 全部入りを大きく・キットの値段を小さく。部品の数字は 商品リスト.js の PRICE_PARTS */
+const PP = window.PRICE_PARTS || {assembly:10000, set:7000};
+const priceAlive = p => `<div class="pr">${yen(p+PP.set)}<span class="pr-tag">全部入り</span></div><div class="pr-min">キットなら ${yen(p-PP.assembly)}〜</div>`;
 const TODO = '<span class="todo">__要記入__</span>';
 const val = v => (!v || v==='__要記入__' || /^__要記入__/.test(v)) ? TODO + (v.replace(/^__要記入__/,'')||'') : v;
 
@@ -598,25 +830,47 @@ const val = v => (!v || v==='__要記入__' || /^__要記入__/.test(v)) ? TODO 
 
 /* ---- みんなの棚(全個体。いる子=光る+クリックでその子のページへ) ---- */
 /* 棚の描画。旅立ちが12台を超えたら月別アルバム式(◀▶でめくる)に自動で切り替わる(2026-08-14たけろう) */
+/* じゅんびちゅう大カードの「影の明るさ」を日付から計算(S1, 2026-08-17)。
+   7日前から少しずつ明るくなる(0.28→1.0)。日付が無ければ暗いまま固定 */
+function junbiGlow(dateStr){
+  if(!dateStr) return {label:'9月', bright:0.28, gray:0.85};
+  const d = new Date(dateStr+'T00:00:00');
+  if(isNaN(d)) return {label:'9月', bright:0.28, gray:0.85};
+  const now = new Date(); now.setHours(0,0,0,0);
+  const daysLeft = Math.round((d - now) / 86400000);
+  const t = Math.max(0, Math.min(1, (7 - daysLeft) / 7)); /* 7日以上前=0、当日以降=1 */
+  return {label:(d.getMonth()+1)+'.'+d.getDate(), bright:0.28 + t*0.72, gray:0.85 - t*0.85};
+}
+/* 2026-10-06 たけろう「タグも全部 写真の中に入れてみよう(戻せるように)」: true=写真の下のすきまにタグ(スマホは写真が小さいので名前の下のまま) / false=どの画面も名前の下 */
+const TAGS_IN_PHOTO = true;
+/* 2026-10-12 たけろう「発売まで準備中・中を見えなくする」: 発売の時に true へ(棚の子が押せる・購入者ページの入口が開く) */
+const SALE_OPEN = true;
 const cardOf = i => {
   const card = `
-  <div class="item ${i.state==='いる'?'alive':'sold'} ${(i.state==='予告'||i.state==='準備中')?'yokoku':''} ${i.state==='展示'?'tenji':''} ${i.state==='準備中'?'junbi':''}">
+  <div class="item ${i.state==='いる'?'alive':'sold'} ${i.state==='予告'?'yokoku':''} ${i.state==='展示'?'tenji':''}">
     ${i.state==='旅立ち'?`<div class="stamp">${i.date.replaceAll('-','.')}</div>`:''}
-    <div class="ph">${i.state==='準備中'?'<div class="junbi-box"><img class="junbi-usagi" src="../img/バツベイ_アイコン800.png" alt="じゅんびちゅうのばつべー"></div>':slot(i.base?i.base+'_1.jpg':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}</div>
-    <div class="nm">${i.state==='準備中'?'':i.name}</div>
-    ${(i.state==='いる'||i.state==='旅立ち')&&i.price?`<div class="pr">${yen(i.price)}</div>`:''}
-    <div class="st">${i.state==='いる'?'':(i.state==='予告'?'9月から':(i.state==='展示'?'てんじ(非売)':(i.state==='準備中'?'じゅんびちゅう':'SOLD OUT')))}</div>
+    ${TAGS_IN_PHOTO?`<div class="card-head"><span class="ch-no">${(i.name.match(/^(No\.\s*\d+)/)||[])[1]||''}</span><span class="tg model">${shapeKey(i.shape)==='za'?'tibiboard30Z':'tibiboard30'}</span><span class="tg pitch">17mmピッチ</span></div>`:''}
+    <div class="ph">${slot(i.base?i.base+'_1.webp':'', i.name+' 真正面', '1200×1200px(正方形)','1/1')}${i.state==='旅立ち'?'<div class="tape">SOLD OUT</div>':''}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags in-photo"'):''}</div>
+    ${(()=>{ /* 2026-09-11 たけろう指示(スマホの棚を詰める): No.◯◯◯ は左上の細い枠へ、名前は小さく */
+      const m = i.name.match(/^(No\.\s*\d+)\s*(.*)$/); const no = m ? m[1] : ''; const nm = m ? (m[2] || i.name) : i.name;
+      return `<div class="no">${no}${(no&&!TAGS_IN_PHOTO)?'<br>':''}${TAGS_IN_PHOTO?'':'tibiboard30'}</div><div class="nm">${nm}</div>`; })()}${TAGS_IN_PHOTO?tagsHtml(i).replace('class="tags inline"','class="tags inline phone-only"'):tagsHtml(i)}
+    ${i.state==='いる'&&i.price?priceAlive(i.price):(i.state==='旅立ち'&&i.price?`<div class="pr">${yen(i.price)}</div>`:'')}
+    <div class="st">${i.state==='準備中'?'準備中':i.state==='いる'?(SALE_OPEN?'':'準備中'):(i.state==='予告'?'9月から':(i.state==='展示'?'てんじ(非売)':'SOLD OUT'))}</div>
   </div>`;
-  return i.state==='いる' ? `<a class="itemlink" href="商品.html?id=${encodeURIComponent(i.name)}">${card}</a>` : card;
+  return i.state==='いる' && SALE_OPEN ? `<a class="itemlink" href="商品.html?id=${encodeURIComponent(i.name)}">${card}</a>` : card;
 };
+const junbiItems = items.filter(i=>i.state==='準備中');
 const soldItems = items.filter(i=>i.state==='旅立ち' && i.date);
-const otherItems = items.filter(i=>!(i.state==='旅立ち' && i.date));
+const otherItems = items.filter(i=>i.state!=='準備中' && !(i.state==='旅立ち' && i.date));
 const ALBUM_MIN = 13;   /* 旅立ちがこの数以上で月めくり式に */
 function renderShelf(){
   const el = document.getElementById('shelf');
-  if(!items.length){ el.innerHTML='<div style="font-weight:900;color:#4a4450">まだ 1台もいません。ここが 最初の1台の場所になります🐰</div>'; return; }
+  if(!items.length){ el.innerHTML='<div style="font-weight:900;color:#4a4450">まだ 1台もいません。ここが 最初の1台の場所になります<img class="bb" src="../img/バツベイ_アイコン800.png" alt="ばつべー"></div>'; return; }
+  const junbiHtml = junbiItems.map(cardOf).join(''); /* 準備中も通常サイズの棚カード */
   if(soldItems.length < ALBUM_MIN){
-    el.innerHTML = items.map(cardOf).join('');
+    /* 2026-08-20 修正: 旅立ち(日付つき)が12台以下の時に棚から消えていた(No.001カナリアのSOLD OUTが出ない不具合)。
+       アルバム式でない時は いる子・予告・展示 のあとに 旅立ち を並べる */
+    el.innerHTML = junbiHtml + otherItems.map(cardOf).join('') + soldItems.map(cardOf).join('');
   }else{
     /* 月別アルバム: いる子・予告・展示は常に先頭、旅立ちは月ごとにめくる */
     const months = [...new Set(soldItems.map(i=>i.date.slice(0,7)))].sort().reverse();
@@ -624,7 +878,7 @@ function renderShelf(){
     const m = months[Math.max(0, Math.min(window._albumIdx, months.length-1))];
     const [y,mo] = m.split('-');
     const page = soldItems.filter(i=>i.date.startsWith(m));
-    el.innerHTML = otherItems.map(cardOf).join('') +
+    el.innerHTML = junbiHtml + otherItems.map(cardOf).join('') +
       `<div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:22px;margin:26px 0 4px">
         <button onclick="window._albumIdx=Math.min(window._albumIdx+1,${months.length-1});renderShelf()" ${window._albumIdx>=months.length-1?'disabled':''}
           style="font-size:34px;font-weight:900;background:var(--pink);color:#fff;border:0;border-radius:999px;width:64px;height:64px;cursor:pointer;font-family:inherit;${window._albumIdx>=months.length-1?'opacity:.3;cursor:default':''}">◀</button>
@@ -642,15 +896,21 @@ renderShelf();
 const zukanRows = window.USAGI_DATA.split('\n').map(l=>l.trim())
  .filter(l=>l && !l.startsWith('//')).map(l=>l.split('|').map(s=>s.trim())).filter(c=>c.length>=4);
 
-/* ---- キーボード洪水(cut_01〜48.png)をもじばしらの奥へ流す ---- */
-(function(){
-  const CUT_COUNT = 48;
-  const cutFiles = Array.from({length:CUT_COUNT}, (_,i)=>`photos/cut_${String(i+1).padStart(2,'0')}.png`);
+/* ---- キーボード洪水(cut_01〜48)をもじばしらの奥へ流す ---- */
+/* 2026-09-14: 初回の表示を止めないよう、ページが出てから裏で組み立てる(load 後 1.5秒。ばつべーを押したら即) */
+window.__buildRiver = function(){ if(window.__riverBuilt) return; window.__riverBuilt = true; (function(){
+  const CUT_COUNT = 56; /* 2026-10-06 たけろう指示: 切り抜きを川に足した(cut_49 透明・50 オレンジ・51 黄・52 黄緑・53 黒・54 ピンク・55 黒い丸・56 ミント) */
+  const cutFiles = Array.from({length:CUT_COUNT}, (_,i)=>`photos/cut_${String(i+1).padStart(2,'0')}_s.webp`); /* 2026-09-14: 表示は高さ最大180px なので 600px 幅の小版(1枚 約50KB) */ /* 2026-09-14: png(1枚1MB・48枚で44MB)→ webp(透明のまま・同じ大きさ)。初回の読み込みが重い原因だった */
   const rows = [document.getElementById('mojiRow1'), document.getElementById('mojiRow2'), document.getElementById('mojiRow3')];
   if(!rows[0]) return;
   /* 全列に48台全員を流す(列ごとに並びだけ変える)。どの列でも全員に会える */
   const shuffled = ()=>{ const a=[...cutFiles]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
-  const bucket = [shuffled(), shuffled(), shuffled()];
+  /* 2026-09-11 たけろう報告「スマホで1列しか流れない/全く出ない時がある」: 288枚を loading=lazy で動く列に入れていた。
+     動いている要素の遅延読み込みは環境(iOS Safari 等)で発火しないことがあるので、遅延をやめ、スマホは枚数を 48→16/列 に絞る */
+  const MOBILE = matchMedia('(max-width:640px)').matches;
+  /* 2026-09-14 たけろう報告「iPad で川が流れず空白だらけ・回転すると直る」: iPad は 640px より広く PC 扱い=1列 96枚×3列(影つき)を Safari が描き切れない。タブレット幅(〜1100px)は 24枚/列に */
+  const TABLET = !MOBILE && matchMedia('(max-width:1100px)').matches;
+  const bucket = [shuffled(), shuffled(), shuffled()].map(a => MOBILE ? a.slice(0,16) : (TABLET ? a.slice(0,24) : a));
   const heights = [120,150,180,135,165,120,150];
   const rots = [-8,5,-4,7,-6,3,-8,6];
   rows.forEach((row, ri)=>{
@@ -659,8 +919,9 @@ const zukanRows = window.USAGI_DATA.split('\n').map(l=>l.trim())
     for(let pass=0; pass<2; pass++){
       list.forEach((f,i)=>{
         const img=document.createElement('img');
-        img.src=f; img.alt='ちびボード'; img.loading='lazy';
-        img.style.setProperty('--h', heights[i%heights.length]+'px');
+        img.src=f; img.alt='ちびボード'; img.loading='eager'; img.decoding='async';
+        const hh = heights[i%heights.length]; img.style.setProperty('--h', hh+'px');
+        img.width = Math.round(hh*600/395); img.height = hh; /* 2026-09-14: 小版は 600×395。読み込み前に幅を確保して隙間と再配置を防ぐ */
         img.style.transform='rotate('+rots[(i+ri*3)%rots.length]+'deg)';
         img.onerror=()=>img.remove();
         row.appendChild(img);
@@ -668,26 +929,71 @@ const zukanRows = window.USAGI_DATA.split('\n').map(l=>l.trim())
     }
   });
 })();
+  /* 2026-09-14 たけろう報告「スマホ/iPad で川が動かず、回転すると動き出す」: iOS Safari は隠れた(max-height:0)列の
+     アニメーションを開始しないことがある。回転=再計算と同じ事を、画像が揃った時と幕が開いた時に自分でやる(アニメーションを一度外して付け直す) */
+  window.__kickRiver = function(){
+    document.querySelectorAll('.moji-row').forEach(r=>{ r.style.animation='none'; void r.offsetWidth; r.style.animation=''; });
+  };
+  const imgs=[...document.querySelectorAll('.moji-row img')];
+  Promise.all(imgs.map(im=>im.complete?Promise.resolve():new Promise(res=>{im.onload=res; im.onerror=res;}))).then(()=>setTimeout(window.__kickRiver,50));
+};
+// Build the decorative river only when its section approaches the viewport.
+window.addEventListener('load', ()=>{
+  const section=document.getElementById('moji-sec');
+  if(!section) return; /* 2026-10-07: 「動きを減らす」の人にも川を作る(作らないと iPhone で空白だった) */
+  if('IntersectionObserver' in window){
+    const observer=new IntersectionObserver(entries=>{
+      const visible=entries.some(entry=>entry.isIntersecting);
+      section.classList.toggle('river-visible',visible);
+      if(visible) window.__buildRiver();
+    },{rootMargin:'200px'});
+    observer.observe(section);
+  }else{ section.classList.add('river-visible'); window.__buildRiver(); }
+});
+window.addEventListener('pageshow', ()=>{ if(window.__kickRiver) setTimeout(window.__kickRiver,300); });
+window.addEventListener('orientationchange', ()=>{ if(window.__kickRiver) setTimeout(window.__kickRiver,300); });
 
 /* ---- ばつべークリック → 大行進 → 幕開き(もじばしら洪水が現れる) ---- */
 /* 2026-08-15修正: 旧うさぎ図鑑.jsの10匹リストに存在しないファイル(street_12/street_20)が
    混ざっていて、大行進で2匹透明+扉絵柄に当たると絵が出なかった。
    正式58匹(CHIBI.ALL=実在確認済み)からランダム10匹に変更 */
+/* White backing copies for the stampede only; original character files are retained. */
+const whiteRunIds = new Set(["edgy_04", "street_15", "cute_11", "edgy_03", "edgy_19", "street_02", "street_07", "street_18", "cute_01", "cute_04", "cute_07", "cute_10", "cute_15", "cute_16", "cute_21", "cute_23", "street_05", "cute_03", "cute_20", "edgy_02", "edgy_07", "edgy_17", "street_04", "street_10", "street_11", "street_14", "edgy_14", "cute_18", "cute_19", "edgy_06", "edgy_10", "edgy_11", "edgy_15", "edgy_22", "street_13", "street_21"]);
+const whiteRunBase = new URL("assets/stampede-white/", location.href);
 const runImgs = (window.CHIBI ? CHIBI.ALL.slice().sort(()=>Math.random()-.5).slice(0,10) : zukanRows.map(c=>c[1].replace(/\.png$/,''))).map(n=>`../img/usagi/${n}.png`);
+/* 2026-10-06: あそびばの2つの絵は、ばつべーを押す前から出しておく(先に下までスクロールすると空の枠が見えていた) */
+(function(){ const p=runImgs.slice().sort(()=>Math.random()-.5); const a=document.getElementById('pg1'), b=document.getElementById('pg2'); if(a&&!a.getAttribute('src')) a.src=p[0]; if(b&&!b.getAttribute('src')) b.src=p[1]; })();
 const mojiSec = document.getElementById('moji-sec');
-const batsuSnd = new Audio('photos/batsu_click.wav'); batsuSnd.volume = 0.7; /* 2026-08-15たけろう: 音量7割に */
+const batsuSnd = new Audio('photos/batsu_click.mp3'); batsuSnd.volume = 0.35; /* 2026-10-18たけろう: 以前の音量0.7から半分に */
+/* 2026-08-21たけろう: 声は1日1回だけ(しつこいので)。2回目からは鳴らさない */
 document.getElementById('batsu').addEventListener('click', ()=>{
   const b=document.getElementById('batsuSay'); if(b) b.remove();
-  try{ batsuSnd.currentTime=0; batsuSnd.play(); }catch(e){}
+  try{
+    const today = new Date().toDateString();
+    if(localStorage.getItem('batsu_voice_day') !== today){
+      localStorage.setItem('batsu_voice_day', today);
+      batsuSnd.currentTime=0; batsuSnd.play();
+    }
+  }catch(e){}
 });
 document.getElementById('batsu').onclick = ()=>{
+  if(window.__buildRiver) window.__buildRiver();
   const hero = document.getElementById('hero');
   const st = document.getElementById('stampede');
+  // Place the fixed overlay outside transformed/stacked hero containers.
+  document.body.appendChild(st);
+  const mascotBox = document.getElementById('batsu').getBoundingClientRect();
+  const runSize = Math.max(66, Math.min(100, window.innerWidth * .11));
+  const laneTop = Math.max(8, Math.min(window.innerHeight-runSize-8, mascotBox.top+mascotBox.height*.15));
+  const laneBottom = Math.max(laneTop, Math.min(window.innerHeight-runSize-8, mascotBox.bottom-runSize*.7));
   st.style.display='block'; st.innerHTML='';
   for(let i=0;i<28;i++){
     const img=document.createElement('img');
-    img.src=runImgs[i%runImgs.length];
-    img.style.top=(5+Math.random()*85)+'vh';
+    const originalRunSrc=runImgs[i%runImgs.length];
+    const runId=originalRunSrc.split("/").pop().replace(/\.png$/, "");
+    img.src=whiteRunIds.has(runId) ? new URL(runId+".webp",whiteRunBase).href : originalRunSrc;
+    img.style.top=(laneTop+Math.random()*(laneBottom-laneTop))+'px';
+    img.style.width=runSize+'px';
     img.style.animationDelay=(Math.random()*0.9)+'s';
     st.appendChild(img);
   }
@@ -695,13 +1001,20 @@ document.getElementById('batsu').onclick = ()=>{
   const pick = runImgs.slice().sort(()=>Math.random()-.5);
   document.getElementById('pg1').src = pick[0];
   document.getElementById('pg2').src = pick[1];
-  if(window.CHIBI) document.getElementById('pcoin').textContent = '🪙 × ' + window.CHIBI.getCoins();
+  if(window.CHIBI) window.CHIBI.refreshCoinGui(false);
   /* 行進が去るタイミングでheroを消し、幕を開ける */
-  setTimeout(()=>{
+  /* 2026-09-13 たけろう報告「スマホの初回は流れるキーボードが空」: 写真48×3列がまだ届いていないのに流し始めていた。
+     行進(1.4秒)の間に写真が揃うのを待つ。揃わなければ最長4秒で開ける(2回目以降はキャッシュで即) */
+  const floodImgs = Array.from(document.querySelectorAll('.moji-row img'));
+  const floodReady = Promise.all(floodImgs.map(im => (im.complete ? Promise.resolve() : new Promise(r => { im.addEventListener('load', r, {once:true}); im.addEventListener('error', r, {once:true}); }))));
+  const minWait = new Promise(r => setTimeout(r, 1400));
+  Promise.race([Promise.all([floodReady, minWait]), new Promise(r => setTimeout(r, 4000))]).then(()=>{
     st.style.display='none';
     hero.classList.add('fadeout');
     setTimeout(()=>{
+      document.documentElement.classList.add('white-entry');
       mojiSec.classList.add('open');
+      if(window.__kickRiver){ setTimeout(window.__kickRiver,60); setTimeout(window.__kickRiver,700); } /* 2026-09-14: iOS で止まったままの川を動かす */
       setTimeout(()=>{
         const y = Math.max(0, mojiSec.getBoundingClientRect().top + window.scrollY - 8);
         const soft = !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -709,7 +1022,7 @@ document.getElementById('batsu').onclick = ()=>{
         catch(_){ window.scrollTo(0, y); }
       }, 120);
     }, 700);
-  }, 1400);
+  });
 };
 
 /* ---- かくれうさぎ → 隠し入口(見つけた人だけのお楽しみ) ---- */
@@ -717,8 +1030,180 @@ document.getElementById('peek1') && (document.getElementById('peek1').onclick = 
 
 /* 2026-08-15: 優先入場の鍵穴UI(openKeyhole/renderKeybox/keyOpened/tryKey等)は撤去。
    依頼主指示「優先入場はもう辞めた」。宝箱・図鑑・コインのロジックは無変更。 */
+
+/* ---- データほぞんの説明ポップアップ(2026-08-20) ---- */
+try {
+  var dataInfoBtn = document.getElementById('dataInfoBtn');
+  if (dataInfoBtn) {
+    dataInfoBtn.onclick = function () {
+      var back = document.createElement('div');
+      back.className = 'datainfo-back';
+      back.onclick = function (e) { if (e.target === back) back.remove(); };
+      back.innerHTML =
+        '<div class="datainfo-pop">' +
+          '<button class="datainfo-close" type="button" aria-label="とじる">×</button>' +
+          '<h3>💾 データの はなし</h3>' +
+          '<p>コインと 鍵、うさぎ図鑑は、いま つかっている ブラウザの なかに ほぞん されるよ。</p>' +
+          '<p>・べつの スマホや パソコンでは 0から</p>' +
+          '<p>・Cookie・サイトデータを削除すると消えます（元に戻せません）。検索履歴・閲覧履歴だけの削除では消えません。Safariの「履歴とWebサイトデータを消去」はサイトデータも削除します。</p>' +
+          '<p>・iPhoneの Safariは 7日 あそばないと きえることがある → ホームがめんに ついか すると だいじょうぶ</p>' +
+          '<p>・シークレットモードは とじたら きえる</p>' +
+        '</div>';
+      document.body.appendChild(back);
+      back.querySelector('.datainfo-close').onclick = function () { back.remove(); };
+    };
+  }
+} catch (e) { try { console.error('datainfo popup failed', e); } catch (e2) {} }
 </script>
-<div style="position:fixed;left:8px;bottom:8px;z-index:9999;background:#000c;color:#fff;font:700 13px/1.6 sans-serif;padding:4px 12px;border-radius:99px;pointer-events:none" id="verbadge"></div>
-<script>if(['localhost','127.0.0.1'].includes(location.hostname)){document.getElementById('verbadge').textContent='版: '+new Date(document.lastModified).toLocaleString('ja-JP');}else{document.getElementById('verbadge').remove();}</script>
+<!-- 版バッジは asobi_common.js が全ページ共通で出す(2026-08-20) -->
+<script src="usagi-walk-local.js?v=19"></script>
+
+<!-- 2026-09-12 たけろう決定「E」: トップの見出しとうさぎの一言は 白い丸文字+黒い影(ドットの地は廃止)。CSS の末尾に置く(後ろの指定に負けないため) -->
+<style>
+.hero .catch,.hero .whisper{background:none !important;padding:0 !important;border-radius:0 !important;color:#fff !important;opacity:1 !important;text-shadow:0 0 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.7),0 2px 2px rgba(0,0,0,.8) !important}
+.hero .catch small{color:#fff !important}
+</style>
+
+
+<!-- 2026-09-13 たけろう設計(改): 右下に大きな🔑を浮かせる。持っていると数字。押すと宝箱がポンと出る → 押すとガチャッ → 3択 -->
+<style>
+#mycoin .cg-key{display:none} /* トップでは鍵はコインの下に出さない(右下の🔑に一本化) */
+.key-float{position:fixed;right:18px;bottom:18px;z-index:9000;width:150px;height:150px;border:0;background:none;padding:0;cursor:pointer;font-family:inherit;filter:drop-shadow(0 8px 10px rgba(0,0,0,.35))}
+.key-float .kf-icon{display:block;font-size:120px;line-height:150px;text-align:center;transform:rotate(-30deg);transition:transform .2s}
+.key-float.none .kf-icon{filter:grayscale(1) brightness(.85);opacity:.55;font-size:90px}
+.key-float.has{animation:kfBob 1.6s ease-in-out infinite}
+.key-float:hover .kf-icon{transform:rotate(-30deg) scale(1.08)}
+.key-float .kf-n{position:absolute;right:2px;top:2px;min-width:52px;height:52px;border-radius:999px;background:#e0197a;color:#fff;font-size:30px;font-weight:900;line-height:52px;text-align:center;padding:0 8px;box-shadow:0 3px 0 #8d2f5e;display:none}
+.key-float.has .kf-n{display:block}
+.key-float.has::before,.key-float.has::after{content:'✦';position:absolute;color:#fff;font-size:30px;text-shadow:0 0 8px #ffd54f;animation:kfStar 1.6s linear infinite;pointer-events:none}
+.key-float.has::before{left:6px;top:20px}.key-float.has::after{right:14px;bottom:10px;animation-delay:.8s}
+.key-float.shake{animation:tbshake .5s}
+.key-float .kf-msg{position:absolute;right:0;bottom:152px;white-space:nowrap;font-size:20px;font-weight:900;color:#8d2f5e;background:#fff;border-radius:999px;padding:6px 16px;opacity:0;transition:opacity .2s;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.key-float .kf-msg.on{opacity:1}
+@keyframes kfBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes kfStar{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:1}100%{transform:translateY(-30px) scale(1.3) rotate(40deg);opacity:0}}
+@keyframes tbshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+/* 宝箱のポップアップ */
+#takaraOv{position:fixed;inset:0;z-index:30000;background:rgba(24,10,20,.72);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px}
+#takaraOv .tk-ttl{color:#fff;font-size:clamp(24px,5vw,34px);font-weight:900;text-shadow:0 3px 0 rgba(0,0,0,.4)}
+.takarabox{position:relative;border:0;background:none;padding:0;cursor:pointer;width:260px;height:270px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-family:inherit;animation:tbPon .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes tbPon{0%{transform:scale(.1);opacity:0}100%{transform:scale(1);opacity:1}}
+.takarabox .tb-lid{width:250px;height:44px;background:linear-gradient(#ffe27a,#e0a800);border:8px solid #7a4a00;border-bottom:0;border-radius:22px 22px 4px 4px;box-shadow:inset 0 4px 0 rgba(255,255,255,.5);transform-origin:left bottom;transition:transform 1.6s cubic-bezier(.3,.05,.6,1)} /* 2026-09-13: ゆっくり開く(1.6秒) */
+.takarabox .tb-body{position:relative;width:250px;height:180px;background:linear-gradient(#ffcf33,#d68f00);border:8px solid #7a4a00;border-radius:4px 4px 22px 22px;box-shadow:0 12px 0 #5a3600,0 18px 28px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}
+.takarabox .tb-q{font-size:120px;font-weight:900;color:#fff;text-shadow:5px 5px 0 #7a4a00;line-height:1}
+.takarabox .rv{position:absolute;width:14px;height:14px;border-radius:50%;background:#7a4a00}
+.takarabox .rv.a{left:10px;top:10px}.takarabox .rv.b{right:10px;top:10px}.takarabox .rv.c{left:10px;bottom:10px}.takarabox .rv.d{right:10px;bottom:10px}
+.takarabox:hover{transform:scale(1.04)}
+.takarabox.opening .tb-lid{transform:rotate(-75deg)}
+#takaraOv .tk-close{color:#fff;font-size:20px;font-weight:900;background:none;border:2px solid #fff;border-radius:999px;padding:6px 18px;cursor:pointer}
+
+/* 2026-09-14 たけろう指示: 🔑は浮かせない。ページの一番下に大きめに置く(鍵なし=半透明 / あり=きらきら+数字)。この指定は必ず CSS の末尾 */
+.key-float{position:relative;right:auto;bottom:auto;display:block;margin:34px auto 48px;width:220px;height:220px;z-index:1}
+.key-float .kf-icon{font-size:170px;line-height:220px}
+.key-float.none .kf-icon{font-size:150px;opacity:.35}
+.key-float .kf-n{min-width:64px;height:64px;font-size:38px;line-height:64px;right:6px;top:6px}
+.key-float .kf-msg{left:50%;right:auto;transform:translateX(-50%);bottom:214px}
+.key-float.has::before{left:0;top:26px}.key-float.has::after{right:8px;bottom:18px}
+/* 2026-09-14 たけろう指示: 売れた個体のタグ(キット=オレンジ / +セット=ピンク)。商品リストの種別欄から */
+.tg.kit{background:#ff8c1a;color:#fff}.tg.set{background:var(--pink);color:#fff}.tg.full{background:var(--mint-deep);color:#fff} /* 旅立ちの完成版 */
+</style>
+<button class="key-float none" id="keyFloat" type="button" title="かぎ" aria-label="かぎ"><span class="kf-icon">🔑</span><span class="kf-n" id="keyFloatN">0</span><span class="kf-msg" id="keyFloatMsg"></span></button>
+<script>
+(function(){
+  const C=window.CHIBI; if(!C) return;
+  C.DIR='../img/usagi/'; /* このページは shop/ の中。宝箱の中のばつべー画像はここから */
+  const kf=document.getElementById('keyFloat'), kn=document.getElementById('keyFloatN'), km=document.getElementById('keyFloatMsg');
+  const refresh=()=>{ const n=C.getKeys(); kn.textContent=String(n); kf.classList.toggle('has',n>0); kf.classList.toggle('none',n<1); kf.style.display=(document.getElementById('chibiTreasureOv')||document.getElementById('takaraOv'))?'none':''; };
+  refresh(); setInterval(refresh, 800);
+  const say=t=>{ km.textContent=t; km.classList.add('on'); setTimeout(()=>km.classList.remove('on'),2200); };
+  kf.addEventListener('click',()=>{
+    if(C.getKeys()<1){ kf.classList.remove('shake'); void kf.offsetWidth; kf.classList.add('shake'); say('🔑 かぎが ない… スロットで 手に入れよう'); return; }
+    if(document.getElementById('takaraOv')) return;
+    const ov=document.createElement('div'); ov.id='takaraOv';
+    ov.innerHTML='<div class="tk-ttl">'+'🔑 かぎで あける'+'</div><button class="takarabox" id="takarabox" type="button"><div class="tb-lid"></div><div class="tb-body"><span class="tb-q">?</span><i class="rv a"></i><i class="rv b"></i><i class="rv c"></i><i class="rv d"></i></div></button><button class="tk-close" type="button">'+'とじる'+'</button>';
+    document.body.appendChild(ov);
+    ov.querySelector('.tk-close').onclick=()=>ov.remove();
+    const box=ov.querySelector('#takarabox');
+    box.onclick=()=>{ if(box.classList.contains('opening')) return;
+      /* 2026-09-13 たけろう提供の音(受け渡し→snd/kagi_door_open.mp3): 鍵を差して回してドアが開く。鳴らせない時は合成音 */
+      let real=false; try{ const a=new Audio('../snd/kagi_door_open.mp3'); a.volume=0.9; const pr=a.play(); real=true; if(pr&&pr.catch) pr.catch(()=>{ C.sndKeyOpen(); setTimeout(()=>C.sndCreak(1.6),850); }); }catch(e){}
+      if(!real){ C.sndKeyOpen(); setTimeout(()=>C.sndCreak(1.6),850); }
+      setTimeout(()=>{ box.classList.add('opening'); }, 850);   /* ふたが ゆっくり開く(1.6秒) */
+      setTimeout(()=>{ C.useKey(); refresh(); ov.remove(); C.showTreasurePicker({
+        /* 2026-09-13 たけろう提供の音: 3択の宝箱を選んで開く時=「マジック」の最初の3秒(snd/takarabako_magic.mp3)。鳴らせない時は合成音 */
+        onPick:()=>{ try{ const a=new Audio('../snd/takarabako_magic.mp3'); a.volume=0.9; const pr=a.play(); if(pr&&pr.catch) pr.catch(()=>C.sndKeyGet()); setTimeout(()=>{ try{ a.pause(); }catch(e){} }, 3000); }catch(e){ C.sndKeyGet(); } },
+        onReveal:()=>{} }); }, 850+1700); };
+  });
+  if(location.hash==='#takara'){ setTimeout(()=>{ try{ kf.click(); }catch(e){} }, 800); }
+})();
+</script>
+
+<!-- 2026-10-06 たけろう「C1 で行こう」(見本17): 透明な「ちびボード」の文字の後ろをキーボードが通る時、文字の中のキーボードだけが その文字の色にそまる。
+     しくみ: キーボードの川を文字の数だけ写して、文字の形で切り抜き、色を付ける(filter は絵の部分だけ=すき間や壁紙はそまらない)。
+     パソコンだけ(スマホ・タブレットは T4 のまま。写す量が多いので重くしないため)。止める時は、この script のかたまりを消す -->
+<script>
+(function(){
+  try{
+    if(!matchMedia('(min-width:1101px) and (hover:hover) and (pointer:fine)').matches) return;
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var HUE=[300,130,5,215,300];
+    var built=false, tries=0;
+    function ready(flood){ var ims=flood.querySelectorAll('img'); if(!ims.length) return false; for(var i=0;i<ims.length;i++){ if(!ims[i].complete) return false; } return true; }
+    function build(){
+      var stage=document.querySelector('.moji-stage'); var flood=stage&&stage.querySelector('.moji-flood');
+      if(!flood||!ready(flood)) return false;
+      built=true;
+      var letters=[].slice.call(stage.querySelectorAll('.moji-pillar b'));
+      var NS='http://www.w3.org/2000/svg';
+      var svg=document.createElementNS(NS,'svg'); svg.setAttribute('width','0'); svg.setAttribute('height','0'); svg.setAttribute('aria-hidden','true'); svg.style.position='absolute';
+      var defs=document.createElementNS(NS,'defs'); svg.appendChild(defs); stage.appendChild(svg);
+      var pillarsEl=stage.querySelector('.moji-pillars');
+      var layers=letters.map(function(b,i){
+        var box=document.createElement('div'); box.className='moji-tint'; box.setAttribute('aria-hidden','true');
+        var inner=flood.cloneNode(true); inner.removeAttribute('id');
+        [].forEach.call(inner.querySelectorAll('[id]'),function(e){e.removeAttribute('id');});
+        [].forEach.call(inner.querySelectorAll('img'),function(im){im.style.filter='none';});
+        box.appendChild(inner); stage.insertBefore(box,pillarsEl);
+        var cp=document.createElementNS(NS,'clipPath'); cp.setAttribute('id','mojiTint'+i);
+        var t=document.createElementNS(NS,'text'); t.textContent=b.textContent; t.setAttribute('text-anchor','middle'); t.setAttribute('dominant-baseline','central');
+        cp.appendChild(t); defs.appendChild(cp);
+        box.style.clipPath='url(#mojiTint'+i+')'; box.style.webkitClipPath='url(#mojiTint'+i+')';
+        box.style.filter='grayscale(1) sepia(1) saturate(4) hue-rotate('+HUE[i%HUE.length]+'deg) brightness(1.08)';
+        box.style.position='absolute'; box.style.overflow='hidden'; box.style.pointerEvents='none'; box.style.zIndex='5';
+        inner.style.position='absolute';
+        return {b:b,t:t,box:box,inner:inner};
+      });
+      function place(){
+        var sr=stage.getBoundingClientRect(), fr=flood.getBoundingClientRect();
+        layers.forEach(function(L){
+          var r=L.b.getBoundingClientRect(), cs=getComputedStyle(L.b);
+          L.box.style.left=(r.left-sr.left)+'px'; L.box.style.top=(r.top-sr.top)+'px'; L.box.style.width=r.width+'px'; L.box.style.height=r.height+'px';
+          L.inner.style.left=(fr.left-r.left)+'px'; L.inner.style.top=(fr.top-r.top)+'px'; L.inner.style.width=fr.width+'px';
+          L.t.setAttribute('x',r.width/2); L.t.setAttribute('y',r.height/2); L.t.setAttribute('font-size',parseFloat(cs.fontSize));
+          L.t.style.fontFamily=cs.fontFamily; L.t.style.fontWeight=cs.fontWeight;
+        });
+      }
+      place(); stage.classList.add('tinted');
+      if(window.ResizeObserver){ new ResizeObserver(place).observe(stage); } else { window.addEventListener('resize',place); }
+      if(window.__kickRiver) window.__kickRiver(); // 写した川と元の川の動きをそろえる
+      return true;
+    }
+    var timer=setInterval(function(){ tries++; try{ if(build()||tries>240) clearInterval(timer); }catch(e){ clearInterval(timer); } },500);
+  }catch(e){}
+})();
+</script>
+
+<script>
+/* Layout follows content changes after the entry animation; no scroll event. */
+(function(){
+  var wall=document.getElementById('continuous-wall'), river=document.getElementById('moji-sec');
+  function place(){ wall.style.setProperty('--river-height',river.getBoundingClientRect().height+'px'); var back=document.getElementById('scene-scroll-back'); back.style.top=(wall.offsetTop+river.offsetHeight-28)+'px'; }
+  place();
+  if(window.ResizeObserver) new ResizeObserver(place).observe(river);
+  else window.addEventListener('resize',place);
+})();
+</script>
+<script src="paint-intro.js?v=6"></script>
+<script src="fish.js?v=3"></script>
 </body>
 </html>

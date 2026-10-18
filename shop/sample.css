@@ -1,0 +1,183 @@
+@charset "UTF-8";
+:root { --paper:#faf9f5; --ink:#513e38; }
+html,body {overflow-x:clip;}
+html[data-paint="black"] { --paper:#202020; --ink:#fff6ef; }
+body { background:var(--paper)!important; color:var(--ink); }
+body::before { display:none!important; background:none!important; }
+/* One foreground sheet sits between the document scenes and all content. */
+#world { position:relative;z-index:1;isolation:isolate; }
+#world > :not(#paint-surface):not(#scene-scroll-back) { position:relative;z-index:2; }
+#world > #stampede { position:fixed;z-index:99; }
+#paint-surface { position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden; }
+#paint-surface img { width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;display:block; }
+html[data-paint="black"] #paint-surface { filter:invert(1) brightness(1.35); }
+#hero.hero, #continuous-wall, #moji-sec { background:transparent!important; }
+#hero.hero { border-bottom:0!important; }
+#hero .catch,#hero .whisper,#hero small {color:var(--ink)!important;text-shadow:none!important;}
+#continuous-wall,#scene-region {position:relative;}
+#scene-region::before {content:none!important;}
+#scene-scroll-back {position:absolute;inset:0;z-index:0;pointer-events:none;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));overflow:hidden;}
+.scene-back {background-position:center;background-repeat:no-repeat;background-size:cover;margin-block:-96px;mask-image:linear-gradient(transparent,#000 96px,#000 calc(100% - 96px),transparent);}
+.scene-back:first-child {mask-image:linear-gradient(#000,#000 calc(100% - 96px),transparent);}
+.scene-back:last-child {mask-image:linear-gradient(transparent,#000 96px);}
+.scene-back-paint {background-image:url('assets/paint/color-only-03.webp');}
+#scene-region > section {position:relative;}
+#scene-region section.scene-wall {background:transparent!important;}
+#scene-region #asobi-sec {color:var(--ink);backdrop-filter:none!important;}
+#world > header,#world > footer {color:var(--ink);}
+#shelf-sec .card, #shelf .card {background:#fffaf5!important;color:#513e38!important;}
+#shelf .item {--ink:#513e38;background:#fffaf5!important;color:#513e38!important;backdrop-filter:none!important;}
+#shelf .item .nm,#shelf .item .pr,#shelf .item .no {color:#513e38!important;}
+#pv-sec .pv-head,#found-sec .found-card,#oshirase-sec {background:#fffaf5!important;color:#513e38!important;backdrop-filter:none!important;}
+.song-poster {max-width:calc(100vw - 48px);box-sizing:border-box;}
+@media(max-width:900px){#pv-sec .pv-two{flex-wrap:wrap!important;}}
+@media(max-width:640px){#shelf-sec .intro-door .dl{font-size:24px!important;} #shelf-sec .intro-door{min-width:0!important;}}
+#pv-sec,#sponsor-sec,#found-sec {margin-top:0!important;margin-bottom:0!important;}
+#pv-sec {padding-top:40px!important;padding-bottom:36px!important;}
+#found-sec {padding-top:24px!important;padding-bottom:38px!important;}
+#found-sec .found-card {margin-bottom:22px;}
+@media(max-width:360px){#shelf-sec .intro-door{max-width:100%!important;min-width:0!important;}#asobi-sec .ab-foot{flex-wrap:wrap;justify-content:center;}}
+/* The provided official-song still, cropped to the video picture, is a poster
+   on the wall beside the one retained X embed. */
+#pv-sec .pv-two { align-items: center !important; }
+.song-poster {
+  flex: 0 1 290px;
+  width: min(290px, 100%);
+  margin: 8px 6px 24px;
+  padding: 8px 8px 14px;
+  background: #fffdf8;
+  box-shadow: 7px 10px 0 #6b3b6060, 0 16px 26px #32152e3d;
+  transform: rotate(2deg);
+}
+.song-poster-art {
+  width: 100%;
+  aspect-ratio: 1;
+  background: url("assets/song/song-player-source.png") center center / 195.122% auto no-repeat;
+}
+@media (max-width: 640px) {
+  .song-poster { flex-basis: 240px; width: min(240px, 76vw); }
+}
+@media (max-width: 360px) {
+  #shelf-sec .intro-door { max-width: 100% !important; min-width: 0 !important; }
+  #asobi-sec .ab-foot { flex-wrap: wrap; justify-content: center; }
+}
+
+
+
+/* One document artwork, six fixed brush passes; each reveals the same final paint. */
+#intro-art{position:absolute!important;inset:0 0 auto;z-index:0!important;height:1800px;overflow:hidden;pointer-events:none;}
+#intro-art img{position:absolute;width:100%;height:100%;object-fit:cover;object-position:center;max-width:none;}
+#intro-art.art-a img{width:200%;object-position:left center;}
+#scene-scroll-back{grid-template-rows:repeat(5,minmax(0,1fr));}
+.scene-flower{background-image:url('assets/paint/flowers.webp');}
+.scene-impasto-flower{background-image:url('assets/paint/flower-betta.webp');background-size:300% auto;background-position:left center;}
+.scene-betta{background-image:url('assets/paint/flower-betta.webp');background-size:300% auto;background-position:center;}
+.scene-impasto{background-image:url('assets/paint/impasto.webp');}
+#paint-surface{mask:none;}
+/* A union clip reveals one texture: overlap never doubles its alpha. */
+.paint-sheet{position:absolute;inset:0;mask:url('assets/paint/paint-portrait-v4.webp') center / 100% 100% no-repeat;}
+.paint-sheet picture{display:block;width:100%;height:100%;}
+.paint-clips{position:absolute;}
+.paint-pass{transform-box:view-box;transform-origin:0 0;}
+.stroke-0{--delay:.42s;--duration:.77s;}
+.stroke-1{--delay:.99s;--duration:.66s;transform-origin:1px 0;}
+.stroke-2{--delay:1.47s;--duration:.83s;}
+.stroke-3{--delay:2.08s;--duration:.69s;transform-origin:1px 0;}
+.stroke-4{--delay:2.57s;--duration:.75s;}
+.stroke-5{--delay:3.11s;--duration:.81s;transform-origin:1px 0;}
+.paint-pending .paint-sheet{visibility:hidden;}
+.paint-running .paint-sheet{clip-path:var(--paint-clip,url(#paint-reveal));}
+.paint-running .paint-pass{animation:brush-pass var(--duration) cubic-bezier(.23,.55,.38,1) var(--delay) both;}
+.paint-mobile-reveal.paint-running .paint-pass{animation:none;transform:none;}
+@keyframes brush-pass{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+.paint-done .paint-sheet{clip-path:none;}
+@media(max-aspect-ratio:1/1){
+ #intro-art.art-a img{width:auto;height:100%;min-width:200%;object-fit:cover;left:0;}
+}
+#moji-sec{position:relative!important;isolation:isolate;}
+#moji-sec .river-white{position:absolute!important;inset:0;z-index:-1;pointer-events:none;background:#faf9f5;}
+#moji-sec .river-white svg{display:block;}
+.white-texture{background:#faf9f5;}
+@media(prefers-reduced-motion:reduce){.paint-pass{animation:none!important;transform:none!important;}.paint-sheet{clip-path:none!important;}}
+
+/* One full initial artwork: the left-half SVG only changes the viewing window. */
+#intro-art{height:100vh;background-image:url('assets/paint/flowers-fish-left.svg');background-size:cover;background-position:center top;background-repeat:no-repeat;}
+#intro-art.art-b{background-size:cover;background-position:center top;background-repeat:no-repeat;}
+.scene-back:first-child{mask-image:linear-gradient(transparent,#000 96px,#000 calc(100% - 96px),transparent);}
+#moji-sec .river-white{clip-path:polygon(0 0,100% 0,100% 96%,98% 96.6%,96% 96.1%,93% 97.8%,89% 96.8%,86% 98.1%,82% 96.9%,78% 98.4%,73% 97.1%,68% 99%,64% 98.1%,59% 99.3%,54% 97.5%,49% 98.4%,44% 97.2%,39% 99%,34% 97.8%,29% 98.7%,24% 97.1%,19% 98.4%,14% 96.8%,10% 98.2%,6% 96.7%,3% 97.5%,0 96%);}
+
+.scene-back:first-child{margin-top:-96px;}
+#moji-sec .river-white svg{height:100%;width:100%;}
+@media(max-aspect-ratio:1/1){
+ #moji-sec .river-white svg{background:#faf9f5 url('assets/paint/paint-portrait-v4.webp') center / cover no-repeat;}
+ #moji-sec .river-white svg>rect{display:none;}
+}
+
+/* Native-size art on both edges, with soft offset joins where a scene is taller. */
+#scene-scroll-back{grid-template-rows:repeat(4,minmax(0,1fr));}
+.scene-flower{--art:url('assets/paint/flowers.webp');--art-width:min(100vw,1024px);--art-ratio:1.5;}
+.scene-impasto-flower{--art:url('assets/paint/impasto-flower-panel.svg');--art-width:min(100vw,512px);--art-ratio:2;}
+.scene-betta{--art:url('assets/paint/betta-panel.svg');--art-width:min(100vw,512px);--art-ratio:2;}
+.scene-impasto{--art:url('assets/paint/impasto.webp');--art-width:min(100vw,1024px);--art-ratio:1.5;}
+.scene-back{position:relative;--tile-height:calc(var(--art-width) * var(--art-ratio));background-image:var(--art),var(--art);background-size:var(--art-width) auto;background-position:left top,right top;background-repeat:repeat-y;}
+.scene-back::before{content:'';position:absolute;inset:0;background-image:var(--art),var(--art);background-size:var(--art-width) auto;background-position:left calc(var(--tile-height) * .5),right calc(var(--tile-height) * .5);background-repeat:repeat-y;mask-image:repeating-linear-gradient(to bottom,#000 0,transparent calc(var(--tile-height) * .22),transparent calc(var(--tile-height) * .78),#000 var(--tile-height));}
+
+/* v4: full single artwork; fade into existing colorful layer, not into white. */
+#intro-art.art-a{background-image:url('assets/intro-keyboards-v4.webp');}
+#intro-art.art-a img{width:100%;height:100%;min-width:0;left:0;object-fit:cover;object-position:center;}
+#intro-art{mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 200px),transparent 100%);}
+
+/* Keep the painted surface during the river; remove the separate white wall. */
+#moji-sec .river-white{display:none!important;}
+
+#scene-scroll-back{margin-top:-240px;}
+
+#world>#scene-scroll-back{z-index:-1;}
+
+/* v5: replace the two repeated betta/flower bands with one continuous art. */
+#scene-scroll-back{grid-template-rows:1fr 2fr 1fr;}
+.scene-betta{display:none;}
+.scene-impasto-flower{--art:url('assets/soft-pattern-v5.webp');background-image:var(--art);background-size:cover;background-position:center;background-repeat:no-repeat;}
+.scene-impasto-flower::before{content:none;}
+
+/* v6: downstream artwork follows the selected intro palette. */
+#scene-scroll-back{grid-template-rows:repeat(3,minmax(0,1fr));}
+.scene-back{background-repeat:no-repeat;background-size:cover;background-position:center;}
+.scene-back::before{content:none;}
+html[data-intro="a"] .scene-flower{background-image:url('assets/vivid-first.webp');}
+html[data-intro="a"] .scene-impasto-flower{background-image:url('assets/vivid-second.webp');}
+html[data-intro="b"] .scene-flower{background-image:url('assets/paint/electronics.webp');}
+html[data-intro="b"] .scene-impasto{background-image:url('assets/soft-pattern-v5.webp');}
+
+/* v7: readable metal entrances; preserve the existing purchaser closed state. */
+#world .shop-metal{box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:space-between;gap:18px;width:calc(100% - 32px);max-width:560px;min-height:112px;margin:24px auto;padding:22px 28px;border:2px solid #8c96a2;border-bottom-width:5px;border-radius:7px;background:linear-gradient(#ffffffe0,#ffffffcf),url('assets/nameplate_metal.jpg') center/cover;color:#233a50;text-decoration:none;text-shadow:none;box-shadow:inset 0 0 0 4px #dce2e7,0 5px 0 #697788,0 9px 12px #0002;transition:transform .12s,box-shadow .12s;}
+#world .metal-title{flex:1;min-width:0;text-align:left;font:800 clamp(23px,2.3vw,28px)/1.45 Meiryo,sans-serif;overflow-wrap:anywhere;}
+#world .metal-action{flex:none;padding:13px 15px;background:#285472;color:#fff;border-radius:6px;font:700 17px/1.3 Meiryo,sans-serif;white-space:nowrap;box-shadow:0 2px 0 #15364d;}
+#world a.shop-metal:focus-visible{outline:3px solid #c8407e;outline-offset:6px;}
+@media(hover:hover){#world a.shop-metal:hover{border-color:#285472;transform:translateY(-2px);}}
+#world a.shop-metal:active{transform:translateY(3px);box-shadow:inset 0 0 0 4px #dce2e7,0 2px 0 #697788;}
+#world .shop-metal-disabled .metal-action{background:#e2e7eb;color:#4c5965;box-shadow:none;}
+@media(max-width:600px){#world .shop-metal{padding:20px 18px;gap:12px;}#world .metal-action{padding:12px 10px;font-size:16px;}}
+@media(prefers-reduced-motion:reduce){#world .shop-metal{transition:none;}}
+
+#world a.shop-metal,#world span.shop-metal{background:linear-gradient(#ffffffe0,#ffffffcf),url('assets/nameplate_metal.jpg') center/cover!important;color:#233a50!important;border:2px solid #8c96a2!important;border-bottom:5px solid #8c96a2!important;box-shadow:inset 0 0 0 4px #dce2e7,0 5px 0 #697788,0 9px 12px #0002!important;}
+#world .shop-metal .metal-action{background:#285472!important;color:#fff!important;font:700 17px/1.3 Meiryo,sans-serif!important;}
+#world .shop-metal-disabled .metal-action{background:#e2e7eb!important;color:#4c5965!important;}
+
+/* v8: viewport overlay crosses the visible mascot, above the painted surface. */
+body>#stampede{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;z-index:10000!important;pointer-events:none!important;overflow:hidden;}
+/* Let the actual brushed metal show; give only the letters a quiet light backing. */
+#world a.shop-metal,#world span.shop-metal{background:#bac2ca url('assets/nameplate_metal.jpg') center/cover!important;}
+#world .shop-metal .metal-title{background:#ffffffe3;border:1px solid #ffffffb0;border-radius:3px;padding:8px 10px;color:#233a50!important;}
+
+#world .shop-metal .metal-title{background:rgba(255,255,255,.88)!important;}
+
+/* v9: engraved lettering on the actual metal, with slotted steel screws. */
+#world .shop-metal{padding:24px 42px!important;border-radius:8px!important;}
+#world .shop-metal .metal-title{background:none!important;border:0!important;padding:0!important;text-align:center;font-size:clamp(24px,2.5vw,32px)!important;font-weight:900!important;color:#182b3c!important;text-shadow:0 1px 0 #ffffff,0 -1px 0 #586570!important;}
+#world .shop-metal::before,#world .shop-metal::after{content:'';display:block;position:absolute;top:calc(50% - 9px);width:18px;height:18px;border-radius:50%;border:1px solid #5d6269;background:linear-gradient(135deg,transparent 44%,#454b52 45%,#454b52 54%,#e6e9ed 55%,transparent 59%),radial-gradient(circle at 30% 25%,#fff,#c9cdd2 38%,#818992 75%,#e2e5e9);box-shadow:inset 0 1px 1px white,0 1px 2px #0007;}
+#world .shop-metal::before{left:13px;}
+#world .shop-metal::after{right:13px;transform:rotate(27deg);}
+#world .shop-metal-disabled{flex-wrap:wrap;justify-content:center;}
+#world .shop-metal-disabled .metal-title{flex-basis:100%;}
+#world .shop-metal-disabled .metal-action{font-size:13px!important;padding:4px 12px;}

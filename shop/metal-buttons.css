@@ -1,0 +1,23 @@
+/* Existing aluminium material and engraved letters; no new image assets. */
+.shop-metal{box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:center;gap:12px;width:calc(100% - 32px);max-width:560px;min-height:88px;margin:24px auto;padding:20px 42px;border:2px solid #8c96a2!important;border-bottom-width:5px!important;border-radius:8px!important;background:#bac2ca url('assets/nameplate_metal.jpg') center/cover!important;color:#182b3c!important;text-decoration:none;box-shadow:inset 0 0 0 4px #dce2e7,0 5px 0 #697788,0 9px 12px #0002!important;transition:transform .12s,box-shadow .12s}
+.shop-metal .metal-title{min-width:0;text-align:center;font:900 clamp(24px,2.5vw,32px)/1.4 Meiryo,sans-serif!important;color:#182b3c!important;text-shadow:0 1px 0 white,0 -1px 0 #586570!important;overflow-wrap:anywhere}
+.shop-metal::before,.shop-metal::after{content:'';position:absolute;top:calc(50% - 9px);width:18px;height:18px;border-radius:50%;border:1px solid #5d6269;background:linear-gradient(135deg,transparent 44%,#454b52 45%,#454b52 54%,#e6e9ed 55%,transparent 59%),radial-gradient(circle at 30% 25%,#fff,#c9cdd2 38%,#818992 75%,#e2e5e9);box-shadow:inset 0 1px 1px white,0 1px 2px #0007}
+.shop-metal::before{left:13px}.shop-metal::after{right:13px;transform:rotate(27deg)}
+a.shop-metal:focus-visible,.ab-game:focus-visible .shop-metal{outline:3px solid #c8407e;outline-offset:5px}
+a.shop-metal:active,.ab-game:active .shop-metal{transform:translateY(3px)}
+.shop-metal[aria-disabled="true"]{cursor:default;flex-wrap:wrap}
+.metal-state{display:block;width:100%;font:700 16px/1.4 Meiryo,sans-serif;color:#425261}
+#world .ab-game .ab-go.shop-metal{width:100%!important;min-height:62px!important;margin:12px auto 4px!important;padding:12px 28px!important;}
+#world .ab-game .ab-go.shop-metal .metal-title{font-size:clamp(18px,2.3vw,24px)!important}
+#world .ab-game .ab-go.shop-metal::before,#world .ab-game .ab-go.shop-metal::after{width:12px;height:12px;top:calc(50% - 6px)}
+#world .ab-game .ab-go.shop-metal::before{left:8px}#world .ab-game .ab-go.shop-metal::after{right:8px}
+#world .ab-go.big.shop-metal{width:calc(100% - 20px)!important;min-height:88px!important}
+.bottombtns .shop-metal{max-width:560px}
+@media(hover:hover){a.shop-metal:hover,.ab-game:hover .shop-metal{filter:brightness(1.06)}}
+@media(prefers-reduced-motion:reduce){.shop-metal{transition:none}}
+
+#world .ab-game .ab-gname{display:block;min-height:3em;line-height:1.5;}
+
+/* Reserved 1 + 3: explicit action and a physical, depressible plate. */
+a.shop-metal,.ab-game .shop-metal{cursor:pointer;box-shadow:inset 0 1px 0 4px #e2e7eb,0 8px 0 #657280,0 12px 14px #0003!important;}
+a.shop-metal:active,.ab-game:active .shop-metal{transform:translateY(5px);box-shadow:inset 0 1px 0 4px #dce2e7,0 3px 0 #657280,0 5px 7px #0003!important;}

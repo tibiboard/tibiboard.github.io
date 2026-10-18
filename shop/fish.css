@@ -1,0 +1,66 @@
+@charset "UTF-8";
+/* A single fish shares the background plane; the white surface naturally hides it. */
+#world>#memory-fish-layer{position:fixed!important;inset:0;z-index:0!important;overflow:hidden;pointer-events:none;opacity:0;--fish-size:clamp(104px,14vw,200px);}
+#world>#memory-fish-layer.fish-enabled{opacity:1;}
+.memory-fish-route{position:absolute;left:0;top:0;width:var(--fish-size);opacity:0;animation:memory-fish-drift 80s ease-in-out infinite;}
+.memory-fish-facing{animation:memory-fish-facing 80s steps(1,end) infinite;}
+.memory-fish-body{display:block;width:100%;height:auto;max-width:none;transform-origin:43% 52%;animation:memory-fish-breathe 5.3s ease-in-out infinite;}
+#memory-fish-layer *{animation-play-state:paused;}
+#memory-fish-layer.fish-active *{animation-play-state:running;}
+@keyframes memory-fish-drift{
+0%{transform:translate(calc(87vw - var(--fish-size) * .5),30vh) rotate(-3deg);opacity:0;}
+2%{transform:translate(calc(91vw - var(--fish-size) * .5),34vh) rotate(-6deg);opacity:1;}
+4%{transform:translate(calc(90vw - var(--fish-size) * .5),34vh) rotate(-6deg);opacity:1;}
+6%{transform:translate(calc(89vw - var(--fish-size) * .5),34vh) rotate(-6deg);opacity:1;}
+10%{transform:translate(calc(89vw - var(--fish-size) * .5),36vh) rotate(1deg);opacity:1;}
+13%{transform:translate(calc(91vw - var(--fish-size) * .5),36vh) rotate(1deg);opacity:1;}
+18%{transform:translate(calc(69vw - var(--fish-size) * .5),43vh) rotate(6deg);opacity:0;}
+24%{transform:translate(calc(46vw - var(--fish-size) * .5),52vh) rotate(3deg);opacity:0;}
+28%{transform:translate(calc(25vw - var(--fish-size) * .5),62vh) rotate(-2deg);opacity:0;}
+31%{transform:translate(calc(11vw - var(--fish-size) * .5),65vh) rotate(-5deg);opacity:1;}
+36%{transform:translate(calc(10vw - var(--fish-size) * .5),63vh) rotate(2deg);opacity:1;}
+40%{transform:translate(calc(8vw - var(--fish-size) * .5),60vh) rotate(6deg);opacity:1;}
+45%{transform:translate(calc(30vw - var(--fish-size) * .5),51vh) rotate(3deg);opacity:0;}
+52%{transform:translate(calc(51vw - var(--fish-size) * .5),46vh) rotate(-2deg);opacity:0;}
+56%{transform:translate(calc(72vw - var(--fish-size) * .5),63vh) rotate(-4deg);opacity:0;}
+60%{transform:translate(calc(88vw - var(--fish-size) * .5),70vh) rotate(-6deg);opacity:1;}
+65%{transform:translate(calc(91vw - var(--fish-size) * .5),73vh) rotate(2deg);opacity:1;}
+70%{transform:translate(calc(70vw - var(--fish-size) * .5),78vh) rotate(5deg);opacity:0;}
+78%{transform:translate(calc(51vw - var(--fish-size) * .5),36vh) rotate(-2deg);opacity:0;}
+83%{transform:translate(calc(28vw - var(--fish-size) * .5),28vh) rotate(-4deg);opacity:0;}
+87%{transform:translate(calc(10vw - var(--fish-size) * .5),25vh) rotate(-3deg);opacity:1;}
+92%{transform:translate(calc(12vw - var(--fish-size) * .5),27vh) rotate(3deg);opacity:1;}
+96%{transform:translate(calc(29vw - var(--fish-size) * .5),34vh) rotate(4deg);opacity:0;}
+100%{transform:translate(calc(70vw - var(--fish-size) * .5),27vh) rotate(0deg);opacity:0;}
+}
+/* Turn only while the fish is already hidden beneath the white paint. */
+@keyframes memory-fish-facing{0%{transform:scaleX(1);}24%{transform:scaleX(-1);}52%{transform:scaleX(1);}78%{transform:scaleX(-1);}100%{transform:scaleX(1);}}
+@keyframes memory-fish-breathe{0%,100%{transform:translate(1px,2px) rotate(.9deg);}48%{transform:translate(-1px,-2px) rotate(-1.1deg);}62%{transform:translate(-1px,-2px) rotate(-1.1deg);}}
+@media(prefers-reduced-motion:reduce){
+ #memory-fish-layer *{animation:none!important;}
+ #memory-fish-layer .memory-fish-route{transform:translate(calc(11vw - var(--fish-size) * .5),45vh);opacity:1;}
+ #memory-fish-layer .memory-fish-facing,#memory-fish-layer .memory-fish-body{transform:none;}
+}
+
+/* v3: same cached image, two CSS cutouts. The tail hinge stays fixed at x=52%. */
+.memory-fish-swim{position:relative;animation:memory-fish-stroke 4.8s ease-in-out infinite;}
+.memory-fish-body{animation:none;clip-path:inset(0 47.9% 0 0);}
+.memory-fish-tail{position:absolute;inset:0;display:block;width:100%;height:auto;max-width:none;clip-path:inset(0 0 0 52%);transform-origin:52% 40%;animation:memory-fish-tail 4.8s ease-in-out infinite;}
+@keyframes memory-fish-tail{
+ 0%,100%{transform:skewY(0deg) scaleX(1);}
+ 15%{transform:skewY(2.4deg) scaleX(.97);}
+ 33%{transform:skewY(-2.4deg) scaleX(.985);}
+ 48%{transform:skewY(1.2deg) scaleX(.99);}
+ 66%,84%{transform:skewY(0deg) scaleX(1);}
+}
+@keyframes memory-fish-stroke{
+ 0%,100%{transform:translate(1px,1px) rotate(.4deg);}
+ 23%{transform:translate(0,-1px) rotate(-.6deg);}
+ 45%{transform:translate(-4px,-2px) rotate(-.8deg);}
+ 72%{transform:translate(-2px,0) rotate(0deg);}
+}
+@media(prefers-reduced-motion:reduce){
+ .memory-fish-body{clip-path:none;}
+ .memory-fish-tail{display:none;}
+ .memory-fish-swim{transform:none;}
+}

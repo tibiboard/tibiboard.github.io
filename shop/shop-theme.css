@@ -1,0 +1,355 @@
+/* =====================================================================
+   tibiboard30 お店の色(全ページ共通・各ページの一番最後に読む)
+   2026-10-06 たけろう: ピンク×チョコミント(グラデーションなし)。帯・扉・おしらせは地も枠もなし(壁紙の上にそのまま)。
+   背景はページの壁紙を生かす。
+   コイン・スロット・あそびばの見た目はそのまま。
+
+   ★色を変えたい時は、下の :root の --t- で始まる行だけ直す(ほかは触らない)。
+   ★この一枚を外せば(各ページの <link ... shop-theme.css> の行を消せば)元の色に戻る。
+   ===================================================================== */
+:root{
+  --t-ink:#5a3a2e;       /* チョコ: 文字・一番下の帯 */
+  --t-ink-deep:#3e271f;  /* 暗いカード・影 */
+  --t-paper:#fff8ee;     /* クリーム: 小さな札の地 */
+  --t-line:rgba(90,58,46,.25);
+  --t-accent:#3aa79a;    /* ミント: 押すボタン */
+  --t-accent-deep:#257a70;
+  --t-pink:#ff8fb8;      /* ピンク: 「ちボ」の札などの差し色 */
+
+  /* 古い色の名前もここにそろえる(各ページの中の指定はそのまま、色だけ変わる) */
+  --pink:var(--t-pink);
+  --pink-deep:var(--t-ink);
+  --pink-pale:var(--t-paper);
+  --mint:#a8e6d8;
+  --mint-pale:var(--t-paper);
+  --mint-deep:var(--t-accent);
+}
+
+/* --- コイン・スロット・あそびば は元の色のまま(たけろう「コインとスロットのUIはそのままでいい」) --- */
+.playdoor-wrap,.playdoor,.playbox,#playdoor,.mycoin,#mycoin,.coingames,#takara,.minimachine,.chalcall,
+.takarabox,#takarabox,.pcoin,#pcoin,.datainfo-btn,.chibiCoinGui{
+  --pink:#ee85b5;--pink-deep:#c9679c;--pink-pale:#fbe9f0;
+  --mint:#9dd8c8;--mint-pale:#e9f2f8;--mint-deep:#6a9fc0;
+}
+
+/* --- 一番上の帯 --- */
+.band{color:var(--t-ink) !important}
+.band .sf{background:var(--t-pink) !important;color:#fff !important}
+.band a,.band a.back,.band .lang{color:var(--t-ink) !important}
+.band .lang{background:#fff !important;border:2px solid var(--t-line)}
+
+/* --- ボタン --- */
+.keybtn,.keybtn.mint{background:var(--t-accent) !important;color:#fff !important;border-bottom-color:var(--t-accent-deep) !important;box-shadow:none !important}
+
+/* --- 面は塗らず、壁紙を見せる --- */
+#shelf-sec,#doors-sec,#moji-sec,#asobi-sec{background:transparent !important}
+
+/* --- 扉(紹介・うさぎずかん など) --- */
+.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3){color:var(--t-ink)}
+
+/* --- 流れるキーボードの見出し・ちびボードの柱の文字 --- */
+.moji-head h2{color:var(--t-ink) !important}
+/* .moji-pillar b の色は下の T4 のかたまり */
+.sparkle{text-shadow:0 0 10px #fff8,0 0 20px #fff !important}
+
+/* --- おしらせ --- */
+
+.oshirase-ttl{color:var(--t-ink) !important}
+.oshirase-list li{background:transparent !important;border-color:var(--t-line) !important}
+.oshirase-list li .od{color:var(--t-ink) !important}
+.oshirase-more{background:var(--t-accent) !important;color:#fff !important;border-bottom-color:var(--t-accent-deep) !important}
+
+/* --- 棚のカード(写真が主役なので暗い地のまま、色味だけそろえる) --- */
+.item{background:var(--t-ink-deep)}
+.item .kind.full,.item .kind.kit{background:var(--t-paper) !important;color:var(--t-ink) !important;box-shadow:none !important}
+.item .stamp{background:var(--t-paper) !important;color:var(--t-ink) !important}
+.tg{border-color:var(--t-line) !important;color:var(--t-ink) !important}
+.tg.mat{background:#fff !important;border-color:var(--t-line) !important;color:var(--t-ink) !important}
+.tags.inline .tg.model{background:var(--t-pink) !important;border-color:var(--t-pink) !important;color:#fff !important}
+
+/* --- NyattoLand の枠 --- */
+.found-card{color:var(--t-ink) !important}
+.found-go{background:var(--t-accent) !important;color:#fff !important}
+
+/* --- 一番下 --- */
+footer{background:var(--t-ink) !important;color:var(--t-paper) !important}
+footer a{color:var(--t-paper) !important}
+
+/* --- 紹介ページ(絵本のページの色かぶせ・ボタン類) --- */
+.ehon.bg-mint,.ehon.bg-white,.ehon.bg-pink{--tint:none !important;background:transparent !important}
+.keycap.accent,.tap-badge{background:var(--t-accent) !important;color:#fff !important;box-shadow:0 6px 0 var(--t-accent-deep),0 10px 18px rgba(0,0,0,.18) !important}
+.mm-toggle button.active,#soundToggle.on{background:var(--t-accent) !important;color:#fff !important;box-shadow:0 4px 0 var(--t-accent-deep) !important}
+#soundToggle{background:#fff !important;color:var(--t-ink) !important}
+.photo-wrap{background:transparent !important}
+
+/* --- 棚の「いる子」(光るカード)はきなりの地+すみ茶の枠。光はピンクでなく白っぽい光 --- */
+.item.alive{background:var(--t-paper) !important;border-color:var(--t-ink) !important;animation:t-glow 2.4s ease-in-out infinite !important}
+@keyframes t-glow{0%,100%{box-shadow:0 0 0 rgba(255,250,235,0)}50%{box-shadow:0 0 36px 8px rgba(255,250,235,.95)}}
+
+/* --- 紹介ページの見出し・番号・注意書き(ページの中で色が直に書いてある所) --- */
+.ehon h2,.ehon .sec-num,.ehon p.sub{color:var(--t-ink) !important}
+body .gacha-credit a{color:var(--t-ink) !important}   /* 壁紙の上なので濃い色(ページの中の指定より強く) */
+
+/* =====================================================================
+   帯・扉・おしらせ・NyattoLand の枠: 地の色も枠線もぼかしもなし。壁紙の上にそのまま文字と絵をのせる
+   (2026-10-06 たけろう「ぼかしを取ってみて。その方がシンプルでいいかも」。すりガラスに戻す時は
+    _直前退避/2026-10-06_1710_ぼかしを取る前 の shop-theme.css)
+   ===================================================================== */
+.band,.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),.oshirase-board,.found-card{
+  background:transparent !important;border-color:transparent !important;box-shadow:none !important}
+/* おしらせの板の画びょう(📌)は板が見えなくなったので出さない */
+.oshirase-board::before,.oshirase-board::after{display:none !important}
+
+/* =====================================================================
+   すりガラス(色なし・枠なし)= 棚のカード・おしらせ・「購入いただいた方は」のボタン
+   2026-10-06 たけろう: おしらせは見本9の D で決定。棚と購入ボタンもすりガラスで試す。
+   ぼかしの強さは --t-glass-blur、白のうすさは --t-glass で変えられる
+   ===================================================================== */
+:root{--t-glass:rgba(255,255,255,.15);--t-glass-blur:4px}
+/* おしらせ: 1件ずつすりガラス */
+.oshirase-list li{background:var(--t-glass) !important;border:0 !important;border-radius:12px !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+/* 棚のカード: 売っている子も旅立った子もすりガラス。売っている子は白い光で分かる */
+.item,.item.alive,.item.sold{background:var(--t-glass) !important;border:0 !important;color:var(--t-ink) !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+.item .nm,.item .pr,.item.alive .nm,.item .no{color:var(--t-ink) !important}
+.tg.pitch{background:#fff !important;border-color:var(--t-line) !important;color:var(--t-ink) !important}
+/* 「購入いただいた方は こちらへどうぞ」: 半透明のすりガラス */
+a.keybtn[href^="購入者"]{background:var(--t-glass) !important;color:var(--t-ink) !important;border-bottom:0 !important;box-shadow:none !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+
+/* =====================================================================
+   入口(tibiboard30紹介・うさぎずかん・あそびば)= 半透明のすりガラスのカード(枠なし)
+   2026-10-06 19時 たけろう「全部 半透明のすりガラスにして作ってみて」。見本10の A の形(角の丸いカード)
+   ===================================================================== */
+.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3){background:var(--t-glass) !important;border:0 !important;border-radius:26px !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur));transition:transform .15s}
+.door:hover{transform:translateY(-4px)}
+/* あそびば: ピンクの箱と虹のふちをやめ、同じすりガラスに。中のゲームの入口も同じガラス。コイン・スロットは今のまま */
+.playdoor,#playdoor,.playbox{background:var(--t-glass) !important;border:0 !important;border-image:none !important;border-radius:26px !important;box-shadow:none !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+.playdoor .pt{color:var(--t-ink) !important}
+.pgame{background:var(--t-glass) !important;border:0 !important;color:var(--t-ink) !important;
+  -webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+
+/* =====================================================================
+   ふちなしのすりガラス・角は丸く(2026-10-06 22時 たけろう「もう一回ふちなしのすりガラス全部やってみて」「四角じゃなくて なるべく丸に」)
+   ギャラリー風(細い線・四角)の控え = BASEデザイン案/_直前退避/2026-10-06_2230_ふちなしすりガラスに戻す前/shop-theme.css
+   丸さを変える時は --t-round、ガラスの白さとぼかしは --t-glass と --t-glass-blur
+   ===================================================================== */
+:root{--t-glass:rgba(255,255,255,.18);--t-glass-blur:4px;--t-round:28px}
+.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),
+.playdoor,#playdoor,.playbox,.pgame,
+.item,.item.alive,.item.sold,
+.oshirase-list li,
+a.keybtn[href^="購入者"],
+main > .card{border:0 !important;border-radius:var(--t-round) !important}
+.item .ph,.item .ph .slot,.pgame .pi,main > .card .pics{border-radius:20px !important}
+a.keybtn[href^="購入者"]{border-radius:999px !important}
+main > .card{background:rgba(255,255,255,.9) !important;   /* 素材のカードは文が多いので白を強く(たけろう「文字が読みづらい」) */
+  box-shadow:none !important;-webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur))}
+
+/* =====================================================================
+   キーボードの川の上の大きな「ちびボード」= 見本14 の T4(パステルの半透明+同じ色のこいふち)
+   2026-10-06 たけろう「一回 T4 やってみて」
+   ===================================================================== */
+.moji-pillar b{-webkit-text-stroke:4px var(--d) !important;paint-order:stroke fill;filter:none !important;color:var(--c) !important}
+.moji-pillar.c1 b{--c:rgba(255,179,207,.35);--d:#e889ad}
+.moji-pillar.c2 b{--c:rgba(168,230,216,.35);--d:#6fc4b2}
+.moji-pillar.c3 b{--c:rgba(255,224,138,.35);--d:#e6bd4f}
+.moji-pillar.c4 b{--c:rgba(201,184,240,.35);--d:#9f88d6}
+.moji-pillar.c5 b{--c:rgba(255,143,184,.35);--d:#e0628f}
+
+/* 2026-10-06 C1(パソコンだけ・index の最後の script): 色がつく仕組みが動いている時は、文字の中の うすい色を消して ふちだけにする */
+.moji-stage.tinted .moji-pillar b{color:transparent !important}
+
+/* =====================================================================
+   入口: すりガラスは「文字の後ろだけ」(2026-10-06 たけろう「うさぎの裏は入れないでいい。テキストの裏だけ」=見本10 の B)
+   紹介・うさぎずかんの扉、あそびばの題名と2つのゲームの名前
+   ===================================================================== */
+.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),
+.playdoor,#playdoor,.playbox,.pgame{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
+.door .dl,.playdoor .pt,.pgame .pl{display:inline-block;background:var(--t-glass);-webkit-backdrop-filter:blur(var(--t-glass-blur));backdrop-filter:blur(var(--t-glass-blur));
+  border-radius:999px;padding:8px 26px}
+
+/* 2026-10-06 タグを写真の中(下のすきま)へ。index の TAGS_IN_PHOTO を false にすると名前の下に戻る */
+.tags.in-photo{position:absolute;left:10px;right:10px;bottom:10px;display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-start;pointer-events:none;z-index:4}
+.tags.in-photo .tg{font-size:15px;padding:3px 10px;border-width:2px;line-height:1.2}
+/* スマホは写真が小さく、タグが3段に重なって SOLD OUT のテープにもぶつかったので、名前の下のまま(2026-10-06 実測) */
+.tags.inline.phone-only{display:none !important}
+@media(max-width:640px){
+  .tags.in-photo{display:none !important}
+  .tags.inline.phone-only{display:flex !important}
+}
+.tags.in-photo .tg.model{background:var(--t-pink) !important;border-color:var(--t-pink) !important;color:#fff !important}
+
+/* 2026-10-06 たけろう「tibiboard30 の名前のタグだけ写真の一番上に。スマホもタブレットも」: 名前のタグは写真の左上、ほかのタグは写真の下(スマホは名前の下) */
+.item .ph .ph-model{position:absolute;left:10px;top:10px;z-index:5;font-size:15px;padding:3px 10px;border-width:2px;line-height:1.2;pointer-events:none}
+.tags.in-photo .tg.model,.tags.inline.phone-only .tg.model{display:none !important}
+@media(max-width:640px){.item .ph .ph-model{left:6px;top:6px;font-size:11px;padding:1px 7px;border-width:1.5px}}
+.item .ph .ph-model{background:var(--t-pink) !important;border-color:var(--t-pink) !important;color:#fff !important}
+
+/* =====================================================================
+   大きな「ちびボード」の文字: パソコン=C1(index の最後の script・.tinted が付く)/ iPad・スマホ=T4+H8(しずかなグロー)
+   2026-10-06 たけろう「君のアイデア通りに」。H8 は色と光だけの軽い動き。動きを減らす設定の人には動かさない
+   ===================================================================== */
+.moji-pillar.c1 b{--cs:#ffb3cf;--c85:rgba(255,179,207,.85);--i:0}
+.moji-pillar.c2 b{--cs:#a8e6d8;--c85:rgba(168,230,216,.85);--i:1}
+.moji-pillar.c3 b{--cs:#ffe08a;--c85:rgba(255,224,138,.85);--i:2}
+.moji-pillar.c4 b{--cs:#c9b8f0;--c85:rgba(201,184,240,.85);--i:3}
+.moji-pillar.c5 b{--cs:#ff8fb8;--c85:rgba(255,143,184,.85);--i:4}
+@keyframes t-glowfill{0%,100%{color:var(--c);text-shadow:0 0 0 transparent}50%{color:var(--c85);text-shadow:0 0 18px var(--cs)}}
+.moji-stage:not(.tinted) .moji-pillar b{animation:t-glowfill 4s ease-in-out infinite;animation-delay:calc(var(--i) * .4s)}
+@media(prefers-reduced-motion:reduce){.moji-pillar b{animation:none !important}}
+
+/* 2026-10-06 左上のロゴ=正式の和文ロゴ(ばつべー+ちびボード)。題名の文字(h1)は読み上げ用に残して見た目では隠す */
+.band .band-logo{display:block;line-height:0}
+.band .band-logo img{height:52px;width:auto;display:block}
+@media(max-width:640px){.band .band-logo img{height:38px}}
+.vh{position:absolute !important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 2026-10-06 たけろう「名前のタグと 17mmピッチ を左上に。17mm はもっと小さく。写真の上のすりガラスの所へ出して、写真のじゃまにならないように」:
+   写真の上に1行(名前のタグ+17mmピッチ)。写真の中・名前の下の 17mmピッチ は出さない */
+.item .card-head{display:flex;align-items:center;gap:6px;margin:0 0 8px;min-height:22px}
+.item .card-head .tg{font-size:13px;padding:2px 9px;border-width:1.5px;line-height:1.2}
+.item .card-head .tg.pitch{font-size:11px;padding:1px 7px;opacity:.9}
+.item .card-head .tg.model{background:var(--t-pink) !important;border-color:var(--t-pink) !important;color:#fff !important}
+.item .card-head ~ .ph .tg.pitch,.item .card-head ~ .tags .tg.pitch{display:none !important}
+.item .card-head .ch-no{display:none}
+@media(max-width:640px){
+  /* スマホ: 「No.」を行の頭に入れて名前のタグと重ならないように。右上の日付の帯と重なるので 17mmピッチ は名前の下のタグへ */
+  .item .card-head .ch-no{display:inline;font-size:10px;color:var(--t-ink);opacity:.75;margin-right:2px}
+  .item .card-head ~ .no{display:none !important}
+  .item .card-head .tg.pitch{display:none !important}
+  .item .card-head ~ .tags.phone-only .tg.pitch{display:inline-flex !important}
+  .item .card-head{justify-content:flex-start;gap:3px;margin:0 0 4px;min-height:14px}
+  .item .card-head .tg{font-size:9px;padding:0 5px;border-width:1px}
+  .item .card-head .tg.pitch{font-size:8px;padding:0 4px}
+  .item .card-head + .ph{margin-top:0 !important}
+}
+@media(max-width:640px){.item .stamp{top:12px !important;right:-36px !important;font-size:7px !important;padding:1px 30px !important}}  /* 日付の帯が名前のタグに重ならないよう、スマホは小さく上へ */
+
+/* 2026-10-07 たけろう「No.001 の隣に 17mmピッチ・その下に tibiboard30。写真に食い込んじゃっていいから」(スマホだけ):
+   1行目 = No.+17mmピッチ / 2行目 = tibiboard30 の札(写真の左上に少し重なる)。名前の下の 17mmピッチ は出さない。
+   戻す時はこのかたまりを消す */
+@media(max-width:640px){
+  .item .card-head{flex-wrap:wrap;position:relative;z-index:6;row-gap:0}
+  .item .card-head .tg.pitch{display:inline-flex !important;order:2}
+  .item .card-head .tg.model{order:3;margin:3px 0 -16px 4px}
+  .item .card-head ~ .tags.phone-only .tg.pitch{display:none !important}
+}
+
+/* 2026-10-07 たけろう「SOLD OUT の写真は左下にかなりスペースがある。ガラスやラメのタグを縦に入れられる(3つか4つ)」(スマホだけ):
+   素材のタグを写真の左下に縦に並べる。名前の下のタグは出さない。戻す時はこのかたまりを消す */
+@media(max-width:640px){
+  .tags.in-photo{display:flex !important;flex-direction:column;align-items:flex-start;left:6px;right:auto;bottom:6px;gap:3px}
+  .tags.in-photo .tg{font-size:9px;padding:0 5px;border-width:1px;line-height:1.5}
+  .tags.inline.phone-only{display:none !important}
+}
+
+/* =====================================================================
+   あそびば = 1本道(2026-10-07 たけろう「押すとゲームに行く動線が見えない」「UI 実装してみて」)
+   ① ゲームでコイン → ② スロットに挑戦 → ③ かぎで宝箱。コインは右下・うさぎずかんは小さな入口。
+   戻す時は _直前退避/2026-10-07_*_あそびばの前/ の index.html・index_en.html・shop-theme.css
+   ===================================================================== */
+#asobi-sec{text-align:center;padding:44px 16px 34px}
+#asobi-sec .ab-title{display:inline-block;margin:0 0 18px;padding:6px 34px;border-radius:999px;background:var(--t-glass);
+  font-size:clamp(34px,6vw,52px);font-weight:900;color:var(--t-ink);letter-spacing:2px}
+.ab-steps{display:flex;flex-direction:column;align-items:center;gap:4px}
+.ab-step{width:min(100%,720px);background:rgba(255,255,255,.6);border-radius:var(--t-round);padding:20px 16px 22px;box-shadow:0 6px 0 rgba(90,58,46,.12)}
+.ab-head{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 14px;
+  font-size:clamp(22px,3.6vw,30px);font-weight:900;color:var(--t-ink);line-height:1.35;text-align:left}
+.ab-no{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;
+  background:var(--t-pink);color:#fff;font-size:28px;font-weight:900}
+.ab-step:last-child .ab-head{margin:0}
+.ab-games{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ab-game{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px 16px;border-radius:22px;background:#fff;
+  color:var(--t-ink);text-decoration:none;box-shadow:0 5px 0 rgba(90,58,46,.15);transition:transform .12s}
+.ab-game:hover{transform:translateY(-4px)}
+.ab-game .pi{width:min(140px,30vw);aspect-ratio:1;height:auto;object-fit:contain}
+.ab-gname{font-size:clamp(18px,2.8vw,22px);font-weight:900}
+.ab-go{display:inline-block;padding:8px 24px;border-radius:999px;background:var(--t-accent);color:#fff;text-decoration:none;
+  font-size:clamp(18px,2.8vw,22px);font-weight:900;box-shadow:0 4px 0 var(--t-accent-deep)}
+.ab-go.big{margin-top:12px;padding:12px 32px;font-size:clamp(22px,3.6vw,28px)}
+.ab-go:hover{filter:brightness(1.08)}
+.ab-arrow{font-size:34px;line-height:1;color:var(--t-pink);animation:chalhop .55s ease-in-out infinite alternate}
+#asobi-sec .coingames{margin-top:0}
+.ab-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;width:min(100%,720px);margin:22px auto 0}
+.ab-zukan{display:inline-flex;align-items:center;gap:8px;padding:6px 18px 6px 8px;border-radius:999px;background:var(--t-glass);
+  color:var(--t-ink);text-decoration:none;font-size:20px;font-weight:900}
+.ab-zukan img{width:44px;height:44px;object-fit:contain}
+.ab-coin{display:flex;align-items:center;gap:8px}
+#asobi-sec #mycoin.chibiCoinGui{margin:0}
+#asobi-sec .ab-coin .datainfo-btn{margin:0}
+@media(max-width:640px){
+  .ab-step{padding:16px 10px 18px}
+  .ab-head{gap:8px}
+  .ab-no{width:38px;height:38px;font-size:22px}
+  .ab-games{gap:10px}
+  .ab-zukan{font-size:17px}
+}
+.ab-game .ab-go{margin-top:auto}   /* 2つのゲームの「あそぶ」を下でそろえる */
+.ab-zukan{white-space:nowrap}
+/* 2026-10-07 たけろう「あそぶボタンが付いたから分かる。白い背景はなし・半透明はそのまま」: ゲームの白いカードをやめる(ステップの半透明の板は残す) */
+.ab-game{background:transparent;box-shadow:none}
+
+/* 2026-10-07 試し: 値段 = 全部入り(大)+キットなら(小)。商品ページは内訳を全部プラスで */
+.item .pr-tag{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--t-pink);color:#fff;font-size:12px;vertical-align:3px}
+.item .pr-min{font-size:14px;font-weight:900;color:var(--t-ink);opacity:.8;margin-bottom:2px}
+.pd .price-parts{display:inline-block;margin:6px 0 4px;padding:10px 18px;border-radius:16px;background:rgba(255,255,255,.7);font-size:20px;font-weight:900;color:var(--t-ink);line-height:1.6;text-align:left}
+@media(max-width:640px){
+  .item .pr-tag{font-size:8px;padding:0 5px;margin-left:3px;vertical-align:2px}
+  .item .pr-min{font-size:10px}
+}
+.pd .price small{display:block;margin-top:2px}   /* 「全部入り(税・送料込)」が値段の横で折れて読みにくかった */
+
+/* 2026-10-12 たけろう: おしらせ・入口(tibiboard30紹介・うさぎずかん・あそびば)・あそびば・スポンサーシップの見出しは、
+   スポンサーシップの作った人の行と同じ濃さのすりガラスに(ピンクのレンガの上でも読めるように)。棚のカードと購入ボタンは今のまま(--t-glass)。
+   濃さは --t-glass2、ぼかしは --t-glass2-blur で変えられる */
+:root{--t-glass2:rgba(255,255,255,.55);--t-glass2-blur:10px}
+.oshirase-list li,.door,.door.mintdoor,.door:nth-child(2),.door:nth-child(3),.playdoor,#playdoor,.playbox{background:var(--t-glass2) !important;
+  -webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+#pv-sec h2{display:inline-block;background:var(--t-glass2) !important;color:var(--t-ink) !important;text-shadow:none !important;
+  padding:8px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.7);-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+/* 2026-10-12 たけろう(続き): 背景の無かった文字もぜんぶ同じすりガラスに=一番上の帯(ちびボード・〈ちいさな分割キーボード〉…)・
+   おしらせの題・NyattoLand for X のカード・あそびば(題と中の段) */
+.band,.oshirase-ttl,.found-card,.ab-title,.ab-step{background:var(--t-glass2) !important;
+  -webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+.oshirase-ttl,.found-card,.ab-title{border-radius:16px}
+.oshirase-ttl,.ab-title{display:inline-block;padding:6px 16px}
+.found-by{display:inline-block;background:var(--t-glass2) !important;padding:4px 12px;border-radius:12px;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+
+/* 2026-10-12 たけろう(3): tibiboard30紹介の入口は大きな四角とうさぎをやめ、文字だけのすりガラス */
+.intro-door{background:var(--t-glass2) !important;padding:10px 22px !important;min-height:0 !important;width:auto !important;display:inline-flex !important;border-radius:16px !important}
+.intro-door .door-icon{display:none !important}
+/* おしらせは全体を1つのすりガラスで囲み、1件ずつは分けない */
+.oshirase-board{background:var(--t-glass2) !important;border-radius:18px !important;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+.oshirase-list li,.oshirase-ttl{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
+/* 見出し(ちびボード × にゃっとランド)は作った人の行と同じ1つのすりガラスの中 */
+#pv-sec h2.pv-h{background:transparent !important;border:0 !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;padding:0 0 4px;margin:0;color:var(--t-ink) !important;text-shadow:none !important}
+
+/* 2026-10-12 たけろう(4): あそびばは題から③まで全部1つのすりガラス(中の段は分けない)・うさぎずかんも同じすりガラス */
+#asobi-sec{background:var(--t-glass2) !important;border-radius:26px;padding:18px 14px !important;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+#asobi-sec .ab-title,#asobi-sec .ab-step,#asobi-sec .playbox{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
+.ab-zukan{background:var(--t-glass2) !important;border-radius:16px;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+/* tibiboard30紹介: チョコミントの緑(すりガラスなし・うさぎなし) */
+.intro-door{background:#9FE2C8 !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;color:#5a3a2e !important;box-shadow:0 4px 0 #5a3a2e !important}
+.intro-door *{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important}
+/* 2026-10-12 たけろう「すごく聴いてほしいから文字を倍くらいに」: ちびボード × にゃっとランド の3行を大きく */
+#pv-sec h2.pv-h{font-size:clamp(30px,5.4vw,52px) !important;line-height:1.25}
+#pv-sec h2.pv-h ~ p{font-size:clamp(22px,3.4vw,34px) !important;line-height:1.4}
+#pv-sec h2.pv-h ~ p + p{font-size:clamp(17px,2.4vw,26px) !important}
+#pv-sec .pv-listen{font-size:clamp(24px,3.8vw,38px);font-weight:900;color:#e2468c;margin:6px 0 0}
+/* 2026-10-12: 壁の絵(body::before・画面に固定)は一番うしろへ。z-index:0 だと、位置指定の無い段(FIREWORKS・NyattoLand の X など)が壁の後ろに隠れていた */
+body::before{z-index:-1 !important}
+/* 2026-10-12 たけろう: 1行目=公式ソング(いちばん大きく)・2行目=ちびボード × 過労@にゃっとランドforX(少し小さく) */
+#pv-sec .pv-sub2{font-size:clamp(22px,3.4vw,34px) !important;font-weight:800;line-height:1.4;margin:4px 0;color:var(--t-ink)}
+
+/* X の動画が再生できない時の店内プレーヤー。ソングは許可後に data-video-src を1行設定する。 */
+.x-video-fallback{text-align:center;margin:12px auto 18px;max-width:540px}
+.x-video-fallback[data-video-src=""]{display:none}
+.x-video-fallback button{font:inherit;font-size:24px;font-weight:700;color:var(--t-ink);background:var(--t-glass2);border:1px solid rgba(255,255,255,.7);border-radius:14px;padding:7px 15px;cursor:pointer;-webkit-backdrop-filter:blur(var(--t-glass2-blur));backdrop-filter:blur(var(--t-glass2-blur))}
+.x-video-fallback button:hover,.x-video-fallback button:focus-visible{outline:2px solid var(--t-ink);outline-offset:2px}
+.x-video-fallback--needed button{box-shadow:0 0 0 4px rgba(255,255,255,.8),0 5px 16px rgba(35,20,32,.25);font-weight:900}
+.x-video-fallback video{display:block;width:100%;height:auto;margin:12px auto 0;border-radius:14px;background:#000}
+.x-video-fallback video[hidden]{display:none}
