@@ -16,11 +16,13 @@
   return {node,original:node.getAttribute('points'),points:node.getAttribute('points').trim().split(/\s+/).map(pair=>pair.split(',').map(Number)),
    delay:parseFloat(style.getPropertyValue('--delay'))*1000,duration:parseFloat(style.getPropertyValue('--duration'))*1000,right:index%2===1,last:-1};
  });
- let started=false,done=false,artReady=false,paintReady=paint.complete,frame=0,watchdog=0,artTimeout=0;
+ let started=false,done=false,artReady=false,paintReady=paint.complete,frame=0,watchdog=0,artTimeout=0,entryObserver=null;
+ const world=document.getElementById('world');
  const finish=()=>{
   if(done)return;done=true;cancelAnimationFrame(frame);clearTimeout(watchdog);clearTimeout(artTimeout);
   passes.forEach(pass=>pass.node.setAttribute('points',pass.original));
   document.removeEventListener('visibilitychange',onVisibility);
+  if(entryObserver)entryObserver.disconnect();
   root.classList.remove('paint-running','paint-pending');root.classList.add('paint-done');
  };
  const draw=elapsed=>passes.forEach(pass=>{
@@ -30,7 +32,7 @@
   pass.node.setAttribute('points',pass.points.map(([x,y])=>[(pass.right?1+(x-1)*amount:x*amount).toFixed(5),y].join(',')).join(' '));
  });
  const start=()=>{
-  if(started||done||!artReady||!paintReady||(phone&&document.hidden))return;
+  if(started||done||!artReady||!paintReady||(world&&!world.classList.contains('lit'))||(phone&&document.hidden))return;
   started=true;clearTimeout(artTimeout);
   if(reduce){finish();return;}
   if(!phone){root.classList.remove('paint-pending');root.classList.add('paint-running');watchdog=setTimeout(finish,4600);return;}
@@ -46,6 +48,7 @@
   frame=requestAnimationFrame(tick);watchdog=setTimeout(finish,4600);
  };
  function onVisibility(){if(!document.hidden)start();}
+ if(world&&!world.classList.contains('lit')){entryObserver=new MutationObserver(start);entryObserver.observe(world,{attributes:true,attributeFilter:['class']});}
  if(phone)document.addEventListener('visibilitychange',onVisibility);
  document.getElementById('paint-surface').addEventListener('animationend',e=>{if(!phone&&e.target.classList.contains('stroke-5'))finish();});
  const readyArt=()=>{artReady=true;start();};

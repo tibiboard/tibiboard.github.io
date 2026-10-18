@@ -37,7 +37,7 @@ body{font-family:'M PLUS Rounded 1c','Hiragino Maru Gothic ProN','Yu Gothic',Mei
 img{max-width:100%}
 
 /* ============ 開幕: 電源スイッチ ============ */
-#boot{position:fixed;inset:0;background:var(--dark);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s}
+#boot{position:fixed;inset:0;background:var(--dark);z-index:20000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s}
 #boot.off{opacity:0;pointer-events:none}
 #boot .hint{color:#8a6a7c;font-size:13px;letter-spacing:4px;margin-top:34px;animation:hintblink 3s infinite}
 @keyframes hintblink{50%{opacity:.25}}
@@ -46,7 +46,7 @@ img{max-width:100%}
 .sw.on .knob{bottom:76px;background:linear-gradient(var(--pink),var(--pink-deep))}
 body.rumble{animation:rumble .5s}
 @keyframes rumble{0%,100%{transform:translate(0)}15%{transform:translate(-7px,3px)}30%{transform:translate(6px,-4px)}45%{transform:translate(-5px,-3px)}60%{transform:translate(5px,4px)}75%{transform:translate(-3px,2px)}}
-#bootflash{position:fixed;inset:0;background:#fff;opacity:0;z-index:199;pointer-events:none}
+#bootflash{position:fixed;inset:0;background:#fff;opacity:0;z-index:19999;pointer-events:none}
 #bootflash.go{animation:bfl .9s}
 @keyframes bfl{15%{opacity:1}100%{opacity:0}}
 /* 2026-08-15: 優先入場の鍵穴UIは撤去(依頼主指示「優先入場はもう辞めた」) */
@@ -476,13 +476,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
 <!-- 開幕: 電源スイッチ -->
 <div id="bootflash"></div>
-<div id="boot" class="off" hidden style="display:none">
+<div id="boot">
   <div class="sw" id="sw"><div class="knob"></div></div>
   <div class="hint">— でんげんをいれてください —</div>
 </div>
 
 <!-- 世界 -->
-<div id="world" class="lit">
+<div id="world">
 <div id="intro-art" class="art-a" aria-hidden="true"><img id="intro-image" alt=""></div><div id="scene-scroll-back" aria-hidden="true"><div class="scene-back scene-flower"></div><div class="scene-back scene-impasto-flower"></div><div class="scene-back scene-betta"></div><div class="scene-back scene-impasto"></div></div>
 <div id="memory-fish-layer" aria-hidden="true"><div class="memory-fish-route"><div class="memory-fish-facing"><div class="memory-fish-swim"><img class="memory-fish-body" src="assets/memory-goldfish.webp" alt="" width="1536" height="1024" decoding="async"><img class="memory-fish-tail" src="assets/memory-goldfish.webp" alt="" width="1536" height="1024" decoding="async"></div></div></div></div>
 <div id="paint-surface" aria-hidden="true"><svg class="paint-clips" width="0" height="0" aria-hidden="true"><defs><clipPath id="paint-reveal" clipPathUnits="objectBoundingBox"><polygon class="paint-pass stroke-0" points="0,0 1,0 .96,.05 1,.08 .97,.11 1,.14 .95,.18 1,.21 0,.25"/><polygon class="paint-pass stroke-1" points="0,.13 1,.19 1,.41 .04,.37 0,.34 .04,.30 0,.27 .05,.24 0,.20"/><polygon class="paint-pass stroke-2" points="0,.31 .97,.32 1,.35 .96,.38 1,.42 .95,.46 1,.51 0,.56"/><polygon class="paint-pass stroke-3" points="0,.48 1,.45 1,.71 .04,.73 0,.70 .04,.66 0,.62 .05,.57 0,.53"/><polygon class="paint-pass stroke-4" points="0,.64 .96,.63 1,.67 .95,.71 1,.75 .97,.79 1,.85 0,.89"/><polygon class="paint-pass stroke-5" points="0,.79 1,.78 1,1 0,1 .03,.97 0,.93 .04,.89 0,.85"/></clipPath></defs></svg><div class="paint-sheet"><picture><source media="(max-aspect-ratio:1/1)" srcset="assets/paint/paint-portrait-v4.webp"><img class="paint-full" src="assets/paint/paint-portrait-v4.webp" alt=""></picture></div></div>
@@ -1203,7 +1203,7 @@ try {
   else window.addEventListener('resize',place);
 })();
 </script>
-<script src="paint-intro.js?v=20261018r1"></script>
+<script src="paint-intro.js?v=20261018r2"></script>
 <script src="fish.js?v=20261018r1"></script>
 </body>
 </html>
