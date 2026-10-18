@@ -212,7 +212,14 @@
       } catch (e) { return false; }
     }
     function allowedAnchor(el) {
-      if (!el || el === true || el.closest('#moji-sec')) return false;
+      if (!el || el === true || el.closest('#moji-sec,#shelf-sec')) return false;
+      // Reserve room for the mascot and its song above the product shelf.
+      var shelf = document.querySelector('#shelf-sec');
+      var box = el.getBoundingClientRect();
+      if (shelf) {
+        var shelfBox = shelf.getBoundingClientRect();
+        if (box.bottom > shelfBox.top - SIZE - 160 && box.top < shelfBox.bottom + SIZE + 160) return false;
+      }
       var r = el.getBoundingClientRect();
       return r.width > 0 && r.height > 0;
     }
@@ -330,12 +337,14 @@
     function buildWalker() {
       var band = document.createElement('div');
       band.className = 'usagi-band';
-      var regions = [].filter.call(document.querySelectorAll('#shelf-sec,#doors-sec,#oshirase-sec,footer'),function(el){return allowedAnchor(el)&&el.getBoundingClientRect().height>SIZE+60;});
+      var regions = [].filter.call(document.querySelectorAll('#doors-sec,#oshirase-sec,footer'),function(el){return allowedAnchor(el)&&el.getBoundingClientRect().height>SIZE+60;});
       if(!walkerPlacement || !walkerPlacement.el || !walkerPlacement.el.isConnected){walkerPlacement={el:regions.length?regions[Math.floor(Math.random()*regions.length)]:document.querySelector('footer'),ratio:Math.random()};}
       var r=walkerPlacement.el?pageRect(walkerPlacement.el):footerAnchorRect();
       var river = document.querySelector('#moji-sec');
       var riverBottom = river ? pageRect(river).bottom : 0;
-      var top = Math.max(r.top+SIZE+30,riverBottom+SIZE+30);
+      var shelf = document.querySelector('#shelf-sec');
+      var shelfBottom = shelf ? pageRect(shelf).bottom : 0;
+      var top = Math.max(r.top+SIZE+30,riverBottom+SIZE+30,shelfBottom+SIZE+160);
       band.style.top = (top+walkerPlacement.ratio*Math.max(0,r.bottom-top-SIZE-30))+'px';
       hop.style.position='static';hop.style.left='';hop.style.top='';
       band.style.width = pageWidth() + 'px';
@@ -548,7 +557,7 @@
       /* dynamic(#shelf .item等・複数候補): 出現のたびにランダムな1枚を選び直す。
          それ以外: resolveAnchorsで確定済みの要素をそのまま使う。 */
       var a = (def && def.dynamic) ? pickDynamicAnchor(def.anchorSel) : anchors[name];
-      if (!a) { name = 'walker'; currentSpotName = 'walker'; currentPop = null; return buildWalker(); }
+      if (!allowedAnchor(a)) { name = 'walker'; currentSpotName = 'walker'; currentPop = null; return buildWalker(); }
       var builder = def && def.builder;
       var arg = (def && def.arg) || {};
       if (builder === 'top') { currentPop = buildEarsBehindCoin(a, arg.randomX); }
@@ -1179,6 +1188,15 @@
             if (y < 8) y = r.bottom + 6;
             singEl.style.left = (x + sx) + 'px';
             singEl.style.top = (y + sy) + 'px';
+          }
+        }
+        // A song can be wider/taller than the mascot; check its actual box too.
+        if (singEl) {
+          var shelf = document.querySelector('#shelf-sec');
+          var songBox = singEl.getBoundingClientRect();
+          var shelfBox = shelf && shelf.getBoundingClientRect();
+          if (shelfBox && songBox.bottom > shelfBox.top - 16 && songBox.top < shelfBox.bottom + 16) {
+            singEl.remove(); singEl = null; ok = false;
           }
         }
         if (ok) {

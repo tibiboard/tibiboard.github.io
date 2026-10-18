@@ -473,7 +473,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 <link rel="stylesheet" href="song-videos.css?v=20261019r1">
 <script src="song-videos.js?v=20261019r1" defer></script>
 <link rel="stylesheet" href="home-sections.css?v=20261019r1">
-<link rel="stylesheet" href="home-density.css?v=20261019r4">
+<link rel="stylesheet" href="home-density.css?v=20261019-release1">
+<link rel="stylesheet" href="home-header.css?v=20261019-release1">
+<link rel="stylesheet" href="home-plates.css?v=20261019-release1">
 </head>
 <body>
 
@@ -490,7 +492,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 <div id="intro-art" class="art-a" aria-hidden="true"><img id="intro-image" alt=""></div><div id="scene-scroll-back" aria-hidden="true"><div class="scene-back scene-flower"></div><div class="scene-back scene-impasto-flower"></div><div class="scene-back scene-betta"></div><div class="scene-back scene-impasto"></div></div>
 <div id="memory-fish-layer" aria-hidden="true"><div class="memory-fish-route"><div class="memory-fish-facing"><div class="memory-fish-swim"><img class="memory-fish-body" src="assets/memory-goldfish.webp" alt="" width="1536" height="1024" decoding="async"><img class="memory-fish-tail" src="assets/memory-goldfish.webp" alt="" width="1536" height="1024" decoding="async"></div></div></div></div>
 <div id="paint-surface" aria-hidden="true"><svg class="paint-clips" width="0" height="0" aria-hidden="true"><defs><clipPath id="paint-reveal" clipPathUnits="objectBoundingBox"><polygon class="paint-pass stroke-0" points="0,0 1,0 .96,.05 1,.08 .97,.11 1,.14 .95,.18 1,.21 0,.25"/><polygon class="paint-pass stroke-1" points="0,.13 1,.19 1,.41 .04,.37 0,.34 .04,.30 0,.27 .05,.24 0,.20"/><polygon class="paint-pass stroke-2" points="0,.31 .97,.32 1,.35 .96,.38 1,.42 .95,.46 1,.51 0,.56"/><polygon class="paint-pass stroke-3" points="0,.48 1,.45 1,.71 .04,.73 0,.70 .04,.66 0,.62 .05,.57 0,.53"/><polygon class="paint-pass stroke-4" points="0,.64 .96,.63 1,.67 .95,.71 1,.75 .97,.79 1,.85 0,.89"/><polygon class="paint-pass stroke-5" points="0,.79 1,.78 1,1 0,1 .03,.97 0,.93 .04,.89 0,.85"/></clipPath></defs></svg><div class="paint-sheet"><picture><source media="(max-aspect-ratio:1/1)" srcset="assets/paint/paint-portrait-v4.webp"><img class="paint-full" src="assets/paint/paint-portrait-v4.webp" alt=""></picture></div></div>
-  <div class="band"><a class="band-logo" href="index_en.html?in=1" title="Back to the shop"><img src="icons/logo_wabun.png" alt="ちびボード"></a><h1 class="vh">tibiboard</h1><!-- 2026-10-06 たけろう指示: 左上は正式の和文ロゴ(★ロゴ正本/和文ロゴ_ちびボード横組み.png) --><span class="obi">A tiny split keyboard, made one at a time by hand.</span><a class="lang" href="index.html" style="margin-left:auto;background:#fff;color:var(--pink-deep);padding:2px 14px;border-radius:999px;font-size:17px;font-weight:900;text-decoration:none">日本語</a></div>
+  <div class="band home-topbar"><a class="band-logo" href="index_en.html?in=1" title="Back to the shop"><img src="icons/logo_wabun.png" alt="ちびボード"></a><h1 class="vh">tibiboard</h1><nav class="home-nav" aria-label="Shop navigation"><a class="lang" href="index.html?in=1">日本語</a><a class="owners-guide" href="購入者_en.html">Owners guide ▶</a></nav></div>
 
   <!-- ヒーロー: 主役はばつべー -->
   <div class="hero" id="hero">
@@ -536,14 +538,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <!-- みんなの棚(全個体がここに整列。いる子は光る) -->
   <section class="scene-wall scene-flowers" id="shelf-sec">
     <!-- 2026-10-06 たけろう指示: 棚の上に紹介ページへの入口(魅力を見てもらってから棚へ) -->
-    <div class="shelf-intro"><a class="shop-metal intro-door" href="紹介_en.html?v=22"><span class="metal-title">tibiboard30 introduction ▶</span></a></div>
+    <div class="shelf-intro"><a class="shop-metal app-metal intro-door" href="紹介_en.html?v=22"><span class="plate-material" aria-hidden="true"></span><span class="metal-title">tibiboard30 introduction ▶</span></a></div>
 
     <div class="shelf" id="shelf"></div>
   </section>
 
   <!-- ばつべーの扉(部屋への入口。文字は最少) -->
   <section class="scene-wall scene-flowers" id="doors-sec">
-    <!-- 2026-10-12 発売まで準備中(押せない)。発売の時は控えの <a href> に戻す --><a class="shop-metal" href="購入者_en.html?v=23"><span class="metal-title">Owners: guides & setup ▶</span></a>
     <!-- コインの使い道: ミニチュアの台そのものを見せる(無料ゲームとは並べない) -->
   </section>
 
@@ -615,13 +616,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <section class="scene-wall scene-paint" id="asobi-sec">
     <!-- 2026-10-07 たけろう「あそびばは押すとゲームに行く動線が見えない」: ①ゲーム → ②スロット → ③かぎ・宝箱 の1本道。
          コインは あそびばの右下・うさぎずかんは小さな入口。戻す時は _直前退避/2026-10-07_*_あそびばの前/ の index.html -->
-    <h2 class="ab-title">🎮 Playground</h2>
+    <h2 class="ab-title">Playground</h2>
     <div class="ab-steps">
       <div class="ab-step">
         <div class="ab-head"><span class="ab-no">1</span>Play games to earn coins</div>
         <div class="ab-games">
-          <a class="ab-game" href="../うさぎ探し体験版.html"><img class="pi" id="pg1" alt=""><span class="ab-gname">🔍 Find the bunny</span><span class="ab-go shop-metal"><span class="metal-title">Play ▶</span></span></a>
-          <a class="ab-game" href="../はしればつべー.html"><img class="pi" id="pg2" alt=""><span class="ab-gname">🏃 Run, batsubei!</span><span class="ab-go shop-metal"><span class="metal-title">Play ▶</span></span></a>
+          <a class="ab-game" href="../うさぎ探し体験版.html"><img class="pi" id="pg1" alt=""><span class="ab-go shop-metal app-metal"><span class="plate-material" aria-hidden="true"></span><span class="metal-title">Find the bunny ▶</span></span></a>
+          <a class="ab-game" href="../はしればつべー.html"><img class="pi" id="pg2" alt=""><span class="ab-go shop-metal app-metal"><span class="plate-material" aria-hidden="true"></span><span class="metal-title">Run, batsubei! ▶</span></span></a>
         </div>
       </div>
       <div class="ab-arrow" aria-hidden="true">▼</div>
@@ -635,7 +636,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
           </div>
         </a>
         </div>
-        <a class="ab-go big shop-metal" href="../スロット_新台.html?v=21"><span class="metal-title">Spin the slot ▶</span></a>
+        <a class="ab-go big shop-metal app-metal" href="../スロット_新台.html?v=21"><span class="plate-material" aria-hidden="true"></span><span class="metal-title">Spin the slot ▶</span></a>
       </div>
       <div class="ab-arrow" aria-hidden="true">▼</div>
       <div class="ab-step">
@@ -643,7 +644,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
       </div>
     </div>
     <div class="ab-foot">
-      <a class="ab-zukan" href="うさぎのへや.html"><img src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">📖 Bunny collection ▶</a>
+      <a class="ab-zukan shop-metal app-metal" href="うさぎのへや.html"><span class="plate-material" aria-hidden="true"></span><span class="metal-title">Bunny collection ▶</span></a>
       <div class="ab-coin">
         <button class="key-float none" id="keyFloat" type="button" title="かぎ" aria-label="かぎ"><span class="kf-icon">🔑</span><span class="kf-n" id="keyFloatN">0</span><span class="kf-msg" id="keyFloatMsg"></span></button>
         <div class="mycoin" id="mycoin"></div>
@@ -654,7 +655,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
   <section class="scene-wall scene-flowers" id="oshirase-sec">
     <div class="oshirase-board">
-      <div class="oshirase-ttl"><span class="ic">🪧</span>News</div>
+      <div class="oshirase-ttl">News</div>
       <ul class="oshirase-list" id="oshiraseList"></ul>
       <button class="oshirase-more" id="oshiraseMore" hidden>more ▾</button>
     </div>
@@ -663,6 +664,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   </div><!-- scene-region -->
   </div><!-- continuous-wall -->
   <footer>
+    <div class="footer-guide"><a href="購入者_en.html">Owners guide ▶</a></div>
     tibiboard — a bunny, and handmade keyboards.<br>
     X <b>@tibiboard</b> / Giteki 211-220207 / <a href="詳しく_en.html" style="color:#ffd0e5">Specs, notes &amp; legal</a>
     <img class="peek" id="peek1" src="../img/バツベイ_アイコン800.png" alt="" title="…?" onerror="this.remove()">
@@ -798,11 +800,6 @@ const {conf, items} = parseShop(window.SHOP_DATA);
     .filter(r=>r.date && r.text)
     .sort((a,b)=> b.date.localeCompare(a.date)); // 新しい順
   const SHOWN = 5;
-  /* 最終更新日をタイトル横に自動表示(おしらせ.jsの一番新しい日付から拾う=手間ゼロ) */
-  if(rows.length){
-    const ttl = document.querySelector('.oshirase-ttl');
-    if(ttl){ const s=document.createElement('span'); s.style.cssText='font-size:14px;font-weight:700;opacity:.75;margin-left:12px'; s.textContent=`(updated: ${rows[0].date})`; ttl.appendChild(s); }
-  }
   list.innerHTML = rows.map((r,i)=>
     `<li${i>=SHOWN?' class="hidden-more"':''}><span class="od">${r.date}</span><span class="ot">${r.text}</span></li>`
   ).join('');
@@ -1053,7 +1050,7 @@ try {
 } catch (e) { try { console.error('datainfo popup failed', e); } catch (e2) {} }
 </script>
 <!-- 版バッジは asobi_common.js が全ページ共通で出す(2026-08-20) -->
-<script src="usagi-walk-local.js?v=20261019r1"></script>
+<script src="usagi-walk-local.js?v=20261019-release1"></script>
 
 <!-- 2026-09-12 たけろう決定「E」: トップの見出しとうさぎの一言は 白い丸文字+黒い影(ドットの地は廃止)。CSS の末尾に置く(後ろの指定に負けないため) -->
 <style>
