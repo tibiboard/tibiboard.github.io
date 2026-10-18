@@ -470,6 +470,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 <link rel="stylesheet" href="sample.css?v=20261018r1">
 <link rel="stylesheet" href="fish.css?v=20261018r1">
 <link rel="stylesheet" href="metal-buttons.css?v=20261018r1">
+<link rel="stylesheet" href="song-videos.css?v=20261018r1">
+<script src="song-videos.js?v=20261018r1" defer></script>
 </head>
 <body>
 
@@ -551,24 +553,20 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
       <button class="oshirase-more" id="oshiraseMore" hidden>more ▾</button>
     </div>
   </section>
-  <!-- 2026-10-12 たけろう: にゃっとランド スポンサーシップ(過労さんの応援ソング)。X の公式の埋め込み=再生は過労さんのポストに入る。
-       オルタ版のポストの中に通常版が入っているので1本だけ埋め込む(動画は2本出る)。X の部品は近づいた時だけ読む -->
+  <!-- Official song: YouTube playlist and click-to-load video players. -->
   <section class="scene-wall scene-resin" id="pv-sec" style="max-width:1100px;margin:28px auto;padding:22px 16px;text-align:center">
 
     <!-- 2026-10-12 たけろう: 作った人の行はすりガラスの上に(ピンクのレンガの上でも読めるように) -->
     <div style="display:inline-block;margin:6px auto 16px;padding:10px 18px;border-radius:16px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.7)">
     <h2 class="pv-h">Official song: Chibi Chibi ☆ Chibiboard!</h2>
-    <p class="pv-sub2">tibiboard × <a href="https://x.com/karou2rikon" target="_blank" rel="noopener" style="color:inherit">過労@にゃっとランドforX</a></p>
+    <p class="pv-sub2">tibiboard × <a href="https://www.youtube.com/playlist?list=PLJlTy_xjwryE" target="_blank" rel="noopener" style="color:inherit">過労@にゃっとランドforX</a></p>
     <p class="pv-listen">♡ Have a listen ♡</p>
     </div>
-    <div class="pv-two" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:flex-start"><div class="x-video-embed" style="flex:1 1 360px;max-width:540px">
-      <blockquote class="twitter-tweet" data-lang="ja" data-dnt="true"><a href="https://twitter.com/karou2rikon/status/2108281286515367964">過労さんのポスト(応援ソング)</a></blockquote>
-    </div><figure class="song-poster" role="img" aria-label="公式ソングのポスター"><div class="song-poster-art"></div></figure></div>
+    <div class="pv-two" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:flex-start"><div class="song-videos"><article class="song-video"><a class="song-version" href="https://www.youtube.com/shorts/Io0KBsbFRYc" target="_blank" rel="noopener">Alternative version</a><div class="song-screen"><button type="button" data-song-video="Io0KBsbFRYc" aria-label="Play Alternative version"><img src="https://i.ytimg.com/vi/Io0KBsbFRYc/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><span class="song-play" aria-hidden="true"><span>▶</span></span></button></div></article><article class="song-video"><a class="song-version" href="https://www.youtube.com/shorts/MHXhsuLsqqM" target="_blank" rel="noopener">Pop version</a><div class="song-screen"><button type="button" data-song-video="MHXhsuLsqqM" aria-label="Play Pop version"><img src="https://i.ytimg.com/vi/MHXhsuLsqqM/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><span class="song-play" aria-hidden="true"><span>▶</span></span></button></div></article></div><figure class="song-poster" role="img" aria-label="公式ソングのポスター"><div class="song-poster-art"></div></figure></div>
   </section>
   <script>
   (function(){
     function init(){
-      var song=document.getElementById('pv-sec');
       var nyatto=document.getElementById('found-sec');
       var loaded=false;
       function load(){
@@ -585,7 +583,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
           load();observer.disconnect();
         }
       },{rootMargin:'600px 0px'});
-      if(song) observer.observe(song);
       if(nyatto) observer.observe(nyatto);
     }
     if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
