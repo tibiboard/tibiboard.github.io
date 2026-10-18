@@ -82,3 +82,13 @@
 @media(max-width:360px) and (orientation:portrait){
  #asobi-sec .slot-step-title{font-size:16px;column-gap:4px}
 }
+
+/* The existing key button lives beside the coin; keep its original event handlers. */
+#asobi-sec .ab-coin{gap:12px;justify-content:center}
+#asobi-sec #keyFloat{position:relative;inset:auto;flex:0 0 96px;display:block;width:96px;height:96px;margin:0;z-index:1;padding:0;filter:drop-shadow(0 3px 4px #0003)}
+#asobi-sec #keyFloat .kf-icon{font-size:74px;line-height:96px}
+#asobi-sec #keyFloat.none .kf-icon{font-size:64px;opacity:.4}
+#asobi-sec #keyFloat .kf-n{min-width:30px;height:30px;font-size:18px;line-height:30px;right:0;top:0;padding:0 5px}
+#asobi-sec #keyFloat .kf-msg{left:0;right:auto;bottom:100%;transform:none;width:min(260px,calc(100vw - 48px));box-sizing:border-box;white-space:normal;font-size:16px;line-height:1.5;text-align:center;margin-bottom:8px;padding:8px 12px}
+#asobi-sec #keyFloat.has::before{left:0;top:6px;font-size:18px}
+#asobi-sec #keyFloat.has::after{right:0;bottom:6px;font-size:18px}

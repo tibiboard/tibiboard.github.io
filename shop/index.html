@@ -473,7 +473,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 <link rel="stylesheet" href="song-videos.css?v=20261019r1">
 <script src="song-videos.js?v=20261019r1" defer></script>
 <link rel="stylesheet" href="home-sections.css?v=20261019r1">
-<link rel="stylesheet" href="home-density.css?v=20261019r2">
+<link rel="stylesheet" href="home-density.css?v=20261019r3">
 </head>
 <body>
 
@@ -645,6 +645,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
     <div class="ab-foot">
       <a class="ab-zukan" href="うさぎのへや.html"><img src="../img/usagi/cute_01.png" alt="" onerror="this.remove()">📖 うさぎずかん ▶</a>
       <div class="ab-coin">
+        <button class="key-float none" id="keyFloat" type="button" title="かぎ" aria-label="かぎ"><span class="kf-icon">🔑</span><span class="kf-n" id="keyFloatN">0</span><span class="kf-msg" id="keyFloatMsg"></span></button>
         <div class="mycoin" id="mycoin"></div>
         <button id="dataInfoBtn" class="datainfo-btn" type="button" aria-label="データのほぞんについて">?</button>
       </div>
@@ -1061,7 +1062,7 @@ try {
 </style>
 
 
-<!-- 2026-09-13 たけろう設計(改): 右下に大きな🔑を浮かせる。持っていると数字。押すと宝箱がポンと出る → 押すとガチャッ → 3択 -->
+<!-- 2026-09-13 たけろう設計(改): 鍵はコイン左の持ち物欄に置く。持っていると数字。押すと宝箱がポンと出る → 押すとガチャッ → 3択 -->
 <style>
 #mycoin .cg-key{display:none} /* トップでは鍵はコインの下に出さない(右下の🔑に一本化) */
 .key-float{position:fixed;right:18px;bottom:18px;z-index:9000;width:150px;height:150px;border:0;background:none;padding:0;cursor:pointer;font-family:inherit;filter:drop-shadow(0 8px 10px rgba(0,0,0,.35))}
@@ -1103,7 +1104,7 @@ try {
 /* 2026-09-14 たけろう指示: 売れた個体のタグ(キット=オレンジ / +セット=ピンク)。商品リストの種別欄から */
 .tg.kit{background:#ff8c1a;color:#fff}.tg.set{background:var(--pink);color:#fff}.tg.full{background:var(--mint-deep);color:#fff} /* 旅立ちの完成版 */
 </style>
-<button class="key-float none" id="keyFloat" type="button" title="かぎ" aria-label="かぎ"><span class="kf-icon">🔑</span><span class="kf-n" id="keyFloatN">0</span><span class="kf-msg" id="keyFloatMsg"></span></button>
+
 <script>
 (function(){
   const C=window.CHIBI; if(!C) return;
