@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>タイプリズム — tibiboard30</title><link rel="icon" href="assets/batsubei.png"><link rel="stylesheet" href="style.css"></head>
+<body>
+
+<main>
+ <aside class="controls" aria-label="曲と難易度">
+  <fieldset id="difficulty"><legend class="sr-only">むずかしさ</legend><div class="segmented"><button data-level="easy" aria-pressed="true">かんたん</button><button data-level="normal" aria-pressed="false">ふつう</button><button data-level="hard" aria-pressed="false">むずかしい</button></div><p class="sr-only" id="levelHint">ゆっくり、短いことばから。</p></fieldset>
+  <div class="track-list" id="tracks" role="group" aria-label="曲を選ぶ"><p>曲を読み込んでいます…</p></div>
+  <details class="settings"><summary>音量・タイミング</summary>
+   <label for="effectsVolume">効果音の音量 <output id="effectsVolumeValue">100%</output></label><input id="effectsVolume" type="range" min="0" max="200" value="100"><p>0%で消音。音楽の音量は変わりません。</p>
+   <label for="latency">打つタイミング <output id="latencyValue">0 ms</output></label><input id="latency" type="range" min="-250" max="250" step="5" value="0"><div class="range-label"><span>早め</span><span>遅め</span></div>
+   <p>音に合わせても判定がずれるときに調整します。</p>
+  </details>
+ </aside>
+ <section class="player" aria-label="リズムタイピング">
+  <div class="song-head"><div><h2 id="songTitle">曲をえらぼう</h2></div><label class="passage-choice">文章 <select id="passage" aria-label="小説を選ぶ"></select></label></div>
+  <div class="metrics"><div><span>スコア</span><strong id="score">000000</strong></div><div><span>連続</span><strong id="combo">0</strong></div><div><span>のこり</span><strong id="remaining">45<span>秒</span></strong></div></div>
+  <div class="stage" id="stage">
+   <div class="word-area"><p id="passageLine"></p><span id="kana">半角英数で入力してね</span><div id="word" aria-label="入力することば">s o r a</div></div>
+   <div class="lane"><canvas id="lane" aria-label="文字が右から左へ流れます。左のピンクの線で打ちます。"></canvas><div class="judgment-popup" id="judgmentPopup" hidden aria-hidden="true"><strong id="judgmentGrade"></strong><span id="judgmentTiming"></span></div><div class="target-label">ここで打つ</div></div>
+   <div class="stage-bottom"><div id="judgment" role="status" aria-live="polite">音楽に合わせて、ひと文字ずつ。</div><div class="beat-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
+   <div class="curtain" id="curtain" hidden><span class="curtain-note"></span><strong id="curtainTitle"></strong><p id="curtainText"></p></div>
+  </div>
+  <div class="transport"><button class="start" id="start" disabled>音楽を読み込み中</button><button class="pause" id="pause" disabled>一時停止</button><button class="stop" id="stop" disabled>やめる</button></div>
+  <p class="play-hint">半角英数で入力 · 長押しは不要 · Escで一時停止</p>
+  <section id="result" class="result" hidden aria-label="今回の記録"><h3>おつかれさま！</h3><div class="result-values"><p>合った文字<strong id="resultHits">—</strong></p><p>いちばん長い連続<strong id="resultCombo">—</strong></p><p>リズムの正確さ<strong id="resultAccuracy">—</strong></p></div><p id="resultGrades"></p><p id="resultNote"></p></section>
+  <p class="message" id="message" role="status">初回は選んだ曲だけ読み込みます。</p>
+  <details class="literature-credit"><summary>文章の出典</summary><p><a id="passageSource" target="_blank" rel="noopener"></a>（青空文庫）。著作権保護期間が満了した作品の冒頭を抜粋。入力用に区切りとローマ字を付け、句読点の入力は省いています。45秒間で抜粋の終わりまで進むと冒頭に戻ります。人間失格は「第一の手記」の冒頭です。</p></details>
+  <details class="credits"><summary>音楽の作者・利用条件</summary><p>Music: Kevin MacLeod (<a href="https://incompetech.com/" target="_blank" rel="noopener">incompetech.com</a>) / <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>。作者名を表示することで無料利用できる音源です。各曲の8〜56秒を抜粋・MP3へ再圧縮し、ゲームでは45秒でフェードします。</p><ul id="creditList"></ul><p>音と判定がずれるときは、「音量・タイミング」で調整できます。</p></details>
+ </section>
+</main><script type="module" src="game.js"></script></body></html>
