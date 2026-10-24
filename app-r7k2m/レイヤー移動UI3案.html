@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>レイヤー移動UI 3案</title>
+<style>
+  :root { --pink:#f472b6; --choco:#5d4037; --mint:#d7f5ec; --gray:#f3f4f6; }
+  * { box-sizing:border-box; margin:0; padding:0; font-family:"Hiragino Maru Gothic ProN","Yu Gothic UI",sans-serif; }
+  body { background:#eceff1; color:#333; padding:24px; }
+  h1 { font-size:30px; margin-bottom:6px; }
+  .note { font-size:20px; opacity:.75; margin-bottom:26px; }
+  section { background:#fff; border-radius:20px; padding:22px; margin-bottom:34px; box-shadow:0 4px 14px rgba(0,0,0,.08); }
+  section h2 { font-size:26px; margin-bottom:4px; }
+  section .sub { font-size:19px; opacity:.7; margin-bottom:14px; }
+  .panel { background:var(--gray); border-radius:14px; padding:16px; }
+  /* 疑似キー */
+  .keyrow { display:flex; gap:8px; margin-bottom:14px; }
+  .key { width:56px; height:56px; border-radius:10px; background:#fff; border:2px solid #cfd8dc; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:bold; }
+  .key.sel { border-color:var(--pink); background:#fde7f1; }
+  /* 案1: タブ */
+  .mini-tabs { display:flex; gap:8px; margin-bottom:14px; }
+  .mini-tab { font-size:21px; font-weight:bold; padding:8px 20px; border-radius:999px; background:#e0e0e0; cursor:pointer; }
+  .mini-tab.on { background:var(--pink); color:#fff; }
+  .cards { display:flex; gap:10px; flex-wrap:wrap; }
+  .card { width:132px; border-radius:14px; background:#fff; border:3px solid #e0e0e0; padding:10px 6px; text-align:center; cursor:pointer; }
+  .card .pic { font-size:34px; }
+  .card .nm { font-size:19px; font-weight:bold; margin-top:4px; }
+  .card .ds { font-size:15px; opacity:.65; margin-top:2px; line-height:1.35; }
+  .card.on { border-color:var(--pink); background:#fde7f1; }
+  /* 案2: 折りたたみ */
+  .chk { font-size:21px; display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .fold { font-size:20px; font-weight:bold; color:var(--choco); cursor:pointer; user-select:none; }
+  .foldbody { margin-top:10px; display:none; }
+  .foldbody.open { display:block; }
+  /* 案3 */
+  .flat .cards { margin-top:4px; }
+  .verdict { font-size:19px; background:var(--mint); border-radius:10px; padding:10px 14px; margin-top:14px; color:var(--choco); }
+</style>
+</head>
+<body>
+<h1>レイヤー移動の置き方 3案</h1>
+<div class="note">キーマップタブでキーを選んだ後の「下の設定パネル」の想定。カードは押して選べる(見た目だけの叩き台)。</div>
+
+<section>
+  <h2>案1: 小さいタブで「もじ/レイヤー」を分ける</h2>
+  <div class="sub">レイヤーを選んだ時だけ5枚のカードが出る。1画面1機能。</div>
+  <div class="panel">
+    <div class="keyrow"><div class="key">Q</div><div class="key sel">W</div><div class="key">E</div><div class="key">R</div></div>
+    <div class="mini-tabs" id="t1">
+      <div class="mini-tab" data-p="moji">もじ</div>
+      <div class="mini-tab on" data-p="layer">レイヤー</div>
+    </div>
+    <div id="p1moji" style="display:none; font-size:20px; padding:8px;">(ここに今までどおりの文字選択が出る)</div>
+    <div class="cards" id="p1layer"></div>
+  </div>
+  <div class="verdict">◎ 迷わない・広い。タブが1段増えるのだけが代償。</div>
+</section>
+
+<section>
+  <h2>案2: 今のチェックの下に「▼くわしい切り替え方」</h2>
+  <div class="sub">普段は今と同じ。開いた人だけ5枚が見える。</div>
+  <div class="panel">
+    <div class="keyrow"><div class="key">Q</div><div class="key sel">W</div><div class="key">E</div><div class="key">R</div></div>
+    <label class="chk"><input type="checkbox" checked style="width:22px;height:22px;"> このキーで別のレイヤーを開くだけ(文字は入力しない)</label>
+    <div class="fold" onclick="this.nextElementSibling.classList.toggle('open')">▼ くわしい切り替え方(全5種類)</div>
+    <div class="foldbody"><div class="cards" id="p2layer"></div></div>
+  </div>
+  <div class="verdict">○ 場所を取らない。ただし、たたまれた物は初心者には存在しないのと同じ。</div>
+</section>
+
+<section class="flat">
+  <h2>案3: 最初から5枚ぜんぶ並べる</h2>
+  <div class="sub">説明つきカードを常時表示。上級者は最速。</div>
+  <div class="panel">
+    <div class="keyrow"><div class="key">Q</div><div class="key sel">W</div><div class="key">E</div><div class="key">R</div></div>
+    <div style="font-size:20px; font-weight:bold; margin-bottom:8px;">レイヤーの切り替え方</div>
+    <div class="cards" id="p3layer"></div>
+  </div>
+  <div class="verdict">△ 情報量が多く「情報っぽく」見える。初心者の1画面目としては重い。</div>
+</section>
+
+<script>
+const KINDS = [
+  { pic:"👇", nm:"押してる間", ds:"押してる間だけ。離すと戻る" },
+  { pic:"👇✏️", nm:"長押しで", ds:"タップ=文字、長押し=レイヤー(今の基本)" },
+  { pic:"🔒", nm:"切り替えっぱなし", ds:"押すたびオン/オフ。記号をたくさん打つ時" },
+  { pic:"✨", nm:"次の1キーだけ", ds:"1回だけ効いて自動で戻る" },
+  { pic:"➡️", nm:"行ったきり", ds:"移動して戻らない(戻るキーが必要)" },
+];
+function fill(id, defOn) {
+  const el = document.getElementById(id);
+  KINDS.forEach((k, i) => {
+    const d = document.createElement("div");
+    d.className = "card" + (i === defOn ? " on" : "");
+    d.innerHTML = `<div class="pic">${k.pic}</div><div class="nm">${k.nm}</div><div class="ds">${k.ds}</div>`;
+    d.onclick = () => { el.querySelectorAll(".card").forEach(c => c.classList.remove("on")); d.classList.add("on"); };
+    el.appendChild(d);
+  });
+}
+fill("p1layer", 1); fill("p2layer", 1); fill("p3layer", 1);
+document.querySelectorAll("#t1 .mini-tab").forEach(t => {
+  t.onclick = () => {
+    document.querySelectorAll("#t1 .mini-tab").forEach(x => x.classList.remove("on"));
+    t.classList.add("on");
+    document.getElementById("p1moji").style.display = t.dataset.p === "moji" ? "block" : "none";
+    document.getElementById("p1layer").style.display = t.dataset.p === "layer" ? "flex" : "none";
+  };
+});
+</script>
+</body>
+</html>

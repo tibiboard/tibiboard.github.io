@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>盤面ケース枠 見本</title>
+<style>
+  :root { --pink:#f472b6; --choco:#5d4037; }
+  * { box-sizing:border-box; margin:0; padding:0; font-family:"Hiragino Maru Gothic ProN","Yu Gothic UI",sans-serif; }
+  body { background:#eceff1; padding:24px; color:#37474f; }
+  h1 { font-size:30px; margin-bottom:6px; }
+  .note { font-size:19px; opacity:.7; margin-bottom:24px; }
+  section { background:#fff; border-radius:20px; padding:20px; margin-bottom:30px; box-shadow:0 4px 14px rgba(0,0,0,.08); }
+  section h2 { font-size:24px; margin-bottom:12px; }
+  .board { display:grid; grid-template-columns:repeat(5,56px); gap:8px; justify-content:center; padding:26px 30px; }
+  .key { width:56px; height:56px; border-radius:12px; background:#fff; border:2px solid #cfd8dc; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,.08); }
+  .key.sel { background:#fbd0e8; border-color:var(--pink); color:#8d2f5e; }
+  /* 四角ケース: 白い透明PLA風の厚い縁 + USB口 */
+  .case-sq { position:relative; width:fit-content; margin:0 auto; border-radius:26px; background:linear-gradient(180deg,#fafafa,#e8eaed); box-shadow:inset 0 0 0 10px rgba(255,255,255,.85), inset 0 0 0 12px #cfd8dc, 0 10px 22px rgba(0,0,0,.18); }
+  .usb { position:absolute; top:-8px; left:50%; transform:translateX(-50%); width:64px; height:16px; border-radius:8px; background:#b0bec5; box-shadow:inset 0 2px 3px rgba(0,0,0,.3); }
+  /* 丸ケース */
+  .case-rd { position:relative; width:fit-content; margin:0 auto; border-radius:120px; background:linear-gradient(180deg,#fafafa,#e8eaed); box-shadow:inset 0 0 0 10px rgba(255,255,255,.85), inset 0 0 0 12px #cfd8dc, 0 10px 22px rgba(0,0,0,.18); padding:14px 26px; }
+  .case-rd .board { padding:18px 24px; }
+  /* チョコミント版 */
+  .case-mint { position:relative; width:fit-content; margin:0 auto; border-radius:26px; background:linear-gradient(180deg,#d7f5ec,#bdeadd); box-shadow:inset 0 0 0 10px rgba(255,255,255,.6), inset 0 0 0 12px var(--choco), 0 10px 22px rgba(0,0,0,.18); }
+  .memo { font-size:18px; background:#d7f5ec; color:var(--choco); border-radius:12px; padding:10px 14px; margin-top:14px; }
+</style>
+</head>
+<body>
+<h1>案6: 盤面を「実機ケースの絵」で包む</h1>
+<div class="note">キーマップタブの盤面のまわりに、いま使ってるケースのシルエットを描く。上の出っ張りはUSB口。</div>
+
+<section>
+  <h2>四角ケース(白・透明PLA風)</h2>
+  <div class="case-sq"><div class="usb"></div><div class="board" id="b1"></div></div>
+</section>
+
+<section>
+  <h2>丸ケース</h2>
+  <div class="case-rd"><div class="usb"></div><div class="board" id="b2"></div></div>
+</section>
+
+<section>
+  <h2>チョコミント色ケース(着せ替えと連動する例)</h2>
+  <div class="case-mint"><div class="usb"></div><div class="board" id="b3"></div></div>
+  <div class="memo">ケースの形(四角/丸)は接続した実機に合わせて自動で切り替え、色は🎨きせかえと連動、という組み方ができる。</div>
+</section>
+
+<script>
+const KEYS=["Q","W","E","R","T","A","S","D","F","G","Z","X","C","V","B"];
+for (const id of ["b1","b2","b3"]) {
+  const el = document.getElementById(id);
+  KEYS.forEach((k,i)=>{
+    const d=document.createElement("div");
+    d.className="key"+(i===6?" sel":"");
+    d.textContent=k;
+    d.onclick=()=>{ el.querySelectorAll(".key").forEach(x=>x.classList.remove("sel")); d.classList.add("sel"); };
+    el.appendChild(d);
+  });
+}
+</script>
+</body>
+</html>

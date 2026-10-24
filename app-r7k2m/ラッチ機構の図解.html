@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><title>電池ブタ式ラッチ 図解</title>
+<style>
+  body{margin:0;background:#f4f2f6;font-family:"Hiragino Maru Gothic ProN",Meiryo,sans-serif;padding:20px}
+  h1{font-size:26px;color:#5e3e2d;margin:0 0 6px}
+  .sub{font-size:17px;color:#777;margin-bottom:14px}
+  .card{background:#fff;border-radius:16px;padding:16px;margin-bottom:18px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+  .card h2{font-size:20px;color:#5e3e2d;margin:0 0 8px}
+  svg{width:100%;height:auto;display:block}
+  .note{font-size:16px;color:#666;line-height:1.7;margin-top:8px}
+</style></head>
+<body>
+<h1>電池ブタ式ラッチ(3辺差し込み+幅広ツメ1本)の図解</h1>
+<div class="sub">Onshapeで作る前の確認用。色: ミント=ケース / 白=ボトム板 / ピンク=しなるツメ / チョコ=引っかかり</div>
+
+<div class="card"><h2>① 横から見た断面(ツメのある辺)</h2>
+<svg viewBox="0 0 900 320">
+  <!-- ケース壁 -->
+  <rect x="700" y="20" width="60" height="260" fill="#bfe9e2" stroke="#127a75" stroke-width="3"/>
+  <text x="710" y="45" font-size="20" fill="#127a75" font-weight="bold">壁</text>
+  <!-- 壁の窓(貫通) -->
+  <rect x="700" y="180" width="60" height="60" fill="#fff" stroke="#127a75" stroke-width="3" stroke-dasharray="7 5"/>
+  <text x="770" y="215" font-size="19" fill="#127a75">←窓(貫通)</text>
+  <text x="770" y="240" font-size="16" fill="#888">外から指で押すと外せる</text>
+  <!-- 床 -->
+  <rect x="80" y="260" width="680" height="20" fill="#bfe9e2" stroke="#127a75" stroke-width="3"/>
+  <text x="90" y="300" font-size="18" fill="#127a75">ケースの床</text>
+  <!-- ボトム板 -->
+  <rect x="120" y="215" width="480" height="45" fill="#fff" stroke="#4a3123" stroke-width="4"/>
+  <text x="150" y="245" font-size="20" fill="#4a3123" font-weight="bold">ボトム板(厚3mm)</text>
+  <!-- ツメ(薄い・ピンク) -->
+  <rect x="600" y="215" width="130" height="22" fill="#ffb3d1" stroke="#c94f83" stroke-width="4"/>
+  <text x="560" y="200" font-size="19" fill="#c94f83" font-weight="bold">しなるツメ(厚1.6・幅24)</text>
+  <!-- フック -->
+  <path d="M710 215 L730 215 L730 188 L710 196 Z" fill="#7a5236" stroke="#4a3123" stroke-width="3"/>
+  <text x="640" y="175" font-size="19" fill="#5e3e2d" font-weight="bold">フック(1.2mm)が窓にパチン</text>
+  <!-- しなり矢印 -->
+  <path d="M665 250 q 20 26 46 22" fill="none" stroke="#f06ba0" stroke-width="4" marker-end="url(#a)"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#f06ba0"/></marker></defs>
+  <text x="600" y="292" font-size="17" fill="#f06ba0">入れる時はツメがしなって逃げる</text>
+</svg>
+<div class="note">押し込む→ツメが下にしなって窓に届いたらパチン。<b>力はツメ(幅24mmの板バネ)が受ける</b>ので、小さな突起に力が集中しない=折れにくい。外す時は窓から指でツメを押すだけ。</div></div>
+
+<div class="card"><h2>② 横から見た断面(反対側=差し込むだけの3辺)</h2>
+<svg viewBox="0 0 900 260">
+  <rect x="80" y="20" width="60" height="200" fill="#bfe9e2" stroke="#127a75" stroke-width="3"/>
+  <rect x="80" y="200" width="680" height="20" fill="#bfe9e2" stroke="#127a75" stroke-width="3"/>
+  <!-- リップ -->
+  <rect x="140" y="115" width="55" height="22" fill="#127a75"/>
+  <text x="205" y="132" font-size="19" fill="#127a75" font-weight="bold">← 押さえリップ(壁と一体・可動部なし)</text>
+  <!-- 板 -->
+  <rect x="150" y="150" width="480" height="45" fill="#fff" stroke="#4a3123" stroke-width="4"/>
+  <text x="180" y="180" font-size="20" fill="#4a3123" font-weight="bold">板のフチがリップの下に入るだけ</text>
+  <path d="M600 172 L520 172" stroke="#888" stroke-width="4" marker-end="url(#b)"/>
+  <defs><marker id="b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#888"/></marker></defs>
+  <text x="530" y="150" font-size="17" fill="#888">斜めに差し込む</text>
+</svg>
+<div class="note">こちら側は<b>壊れる部品がゼロ</b>(ただの棚に引っかけるだけ)。東・西+ツメの反対辺の3辺がこれ。</div></div>
+
+<div class="card"><h2>③ 上から見た図(ボトム板)</h2>
+<svg viewBox="0 0 900 480">
+  <!-- ケース外形 -->
+  <rect x="60" y="40" width="780" height="400" rx="26" fill="#bfe9e2" stroke="#127a75" stroke-width="4"/>
+  <!-- 板 -->
+  <rect x="110" y="80" width="680" height="320" rx="8" fill="#fff" stroke="#4a3123" stroke-width="4"/>
+  <!-- リップ(3辺・見えるように内側に描く) -->
+  <rect x="110" y="80" width="14" height="320" fill="#127a75"/>
+  <rect x="776" y="80" width="14" height="320" fill="#127a75"/>
+  <rect x="110" y="80" width="680" height="14" fill="#127a75"/>
+  <text x="130" y="70" font-size="19" fill="#127a75" font-weight="bold">押さえリップ(3辺)</text>
+  <!-- U字スリットとツメ -->
+  <rect x="380" y="300" width="16" height="100" fill="#bfe9e2"/>
+  <rect x="510" y="300" width="16" height="100" fill="#bfe9e2"/>
+  <rect x="396" y="300" width="114" height="100" fill="#ffe1ee" stroke="#c94f83" stroke-width="4"/>
+  <rect x="396" y="386" width="114" height="14" fill="#7a5236"/>
+  <text x="530" y="360" font-size="20" fill="#c94f83" font-weight="bold">← しなるツメ(幅24)</text>
+  <text x="530" y="388" font-size="19" fill="#5e3e2d" font-weight="bold">← 先端フック→壁の窓へ</text>
+  <text x="380" y="290" font-size="17" fill="#888">U字の切り込みでツメだけ動く</text>
+</svg>
+<div class="note">板の3辺はリップの下へ、最後にツメの辺を押してパチン。<b>ディンプル8ヶ所方式は廃止</b>(この1ヶ所に集約)。</div></div>
+
+<div class="card" style="border:4px solid #f06ba0"><h2>④ 案B「送りスライド+込み栓(こみせん)」= 組み木式・しなる部品ゼロ</h2>
+<svg viewBox="0 0 900 500">
+  <!-- 上から見た図 -->
+  <rect x="60" y="30" width="780" height="330" rx="24" fill="#bfe9e2" stroke="#127a75" stroke-width="4"/>
+  <rect x="110" y="65" width="640" height="260" rx="6" fill="#fff" stroke="#4a3123" stroke-width="4"/>
+  <rect x="110" y="65" width="640" height="14" fill="#127a75"/>
+  <rect x="110" y="311" width="640" height="14" fill="#127a75"/>
+  <rect x="110" y="65" width="14" height="260" fill="#127a75"/>
+  <text x="130" y="55" font-size="19" fill="#127a75" font-weight="bold">リップ(3辺・壁と一体)</text>
+  <text x="240" y="200" font-size="22" fill="#4a3123" font-weight="bold">① 板を左へスーッとスライドして差し込む</text>
+  <path d="M700 200 L560 200" stroke="#888" stroke-width="6" marker-end="url(#c)"/>
+  <defs><marker id="c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#888"/></marker></defs>
+  <!-- 込み栓の溝と栓 -->
+  <rect x="750" y="65" width="34" height="260" fill="#dff5f1" stroke="#127a75" stroke-width="3" stroke-dasharray="8 5"/>
+  <rect x="790" y="120" width="34" height="150" fill="#7a5236" stroke="#4a3123" stroke-width="4" rx="6"/>
+  <text x="705" y="400" font-size="21" fill="#5e3e2d" font-weight="bold">② 最後に「込み栓」を上からストンと落とす</text>
+  <path d="M807 260 L807 300" stroke="#5e3e2d" stroke-width="6" marker-end="url(#c)"/>
+  <text x="90" y="440" font-size="19" fill="#666">③ 栓が入ると板は横に戻れない+浮けない=完全ロック。外す時は底の小穴から栓を押し上げるだけ</text>
+  <text x="90" y="475" font-size="19" fill="#c94f83" font-weight="bold">動く部品なし・全部が3mm級のぶ厚い形。日本家具の「送り蟻+込み栓」と同じ原理</text>
+</svg>
+<div class="note">込み栓は断面が<b>下すぼみの台形(蟻形)</b>で、溝も同じ台形。重力+テーパーで勝手に締まり、ガタつかない。紛失が怖ければ栓に落下防止のヒモ穴も付けられる。</div></div>
+
+<div class="card"><h2>⑤ 案C「回転かんぬき」= 追加パーツ1個・90°回すだけ</h2>
+<svg viewBox="0 0 900 300">
+  <rect x="60" y="30" width="360" height="240" rx="18" fill="#bfe9e2" stroke="#127a75" stroke-width="4"/>
+  <rect x="100" y="70" width="280" height="160" fill="#fff" stroke="#4a3123" stroke-width="4"/>
+  <rect x="200" y="120" width="80" height="24" rx="10" fill="#7a5236" stroke="#4a3123" stroke-width="3"/>
+  <circle cx="240" cy="132" r="7" fill="#f06ba0"/>
+  <text x="130" y="290" font-size="19" fill="#666">解放(バーが板と平行)</text>
+  <rect x="480" y="30" width="360" height="240" rx="18" fill="#bfe9e2" stroke="#127a75" stroke-width="4"/>
+  <rect x="520" y="70" width="280" height="160" fill="#fff" stroke="#4a3123" stroke-width="4"/>
+  <rect x="648" y="80" width="24" height="104" rx="10" fill="#7a5236" stroke="#4a3123" stroke-width="3"/>
+  <circle cx="660" cy="132" r="7" fill="#f06ba0"/>
+  <text x="545" y="290" font-size="19" fill="#666">90°回すと板と床の両方に跨ってロック</text>
+</svg>
+<div class="note">底の外からコインや爪で90°回す蝶ネジ式。部品は太い1個だけ。ただし回転軸の受けをケース側に作る分、案Bより工事が多い。</div></div>
+
+<div class="card" style="border:4px solid #7a5236"><h2>⑥ 案D「かんざし式」= 棒1本を横から差すだけ</h2>
+<svg viewBox="0 0 900 430">
+  <!-- 上から見た図 -->
+  <rect x="60" y="30" width="780" height="300" rx="24" fill="#bfe9e2" stroke="#127a75" stroke-width="4"/>
+  <rect x="110" y="70" width="680" height="220" rx="6" fill="#fff" stroke="#4a3123" stroke-width="4"/>
+  <text x="330" y="150" font-size="22" fill="#4a3123" font-weight="bold">ボトム板</text>
+  <!-- 板のラグ(耳たぶ)3つ -->
+  <rect x="180" y="282" width="70" height="26" fill="#ffe1ee" stroke="#c94f83" stroke-width="3"/>
+  <rect x="415" y="282" width="70" height="26" fill="#ffe1ee" stroke="#c94f83" stroke-width="3"/>
+  <rect x="650" y="282" width="70" height="26" fill="#ffe1ee" stroke="#c94f83" stroke-width="3"/>
+  <text x="240" y="275" font-size="18" fill="#c94f83" font-weight="bold">板から生えた穴あきの耳(ラグ)×3 — ぶ厚くて折れない</text>
+  <!-- 壁のトンネル部 -->
+  <rect x="110" y="296" width="70" height="18" fill="#127a75"/>
+  <rect x="345" y="296" width="70" height="18" fill="#127a75"/>
+  <rect x="580" y="296" width="70" height="18" fill="#127a75"/>
+  <rect x="720" y="296" width="70" height="18" fill="#127a75"/>
+  <!-- 棒 -->
+  <rect x="40" y="299" width="380" height="12" rx="6" fill="#7a5236" stroke="#4a3123" stroke-width="3"/>
+  <path d="M420 305 L560 305" stroke="#5e3e2d" stroke-width="6" stroke-dasharray="10 8" marker-end="url(#c)"/>
+  <text x="90" y="360" font-size="21" fill="#5e3e2d" font-weight="bold">横の小穴から棒を1本スーッと通すだけ → 壁の穴と板の耳を串刺し=完全ロック</text>
+  <text x="90" y="395" font-size="19" fill="#666">外す時は反対側の穴から押し出す。棒はフィラメントの切れ端(1.75mm)でもいい=タダで無限に補充できる</text>
+</svg>
+<div class="note"><b>蝶番の芯棒・かんざしと同じ原理。</b>しなる部品ゼロ・板側の耳は厚さ3mm級で折れる要素なし。棒がせん断で受けるので保持力も最強クラス。弱点は「棒をなくすかも」だけ(→ケース底に予備棒の収納溝を彫っておける)。</div></div>
+
+<div class="card" style="border:4px solid #127a75"><h2>⑦ 案F「額縁式・回転こま」= 置くだけ+クルッ(出っ張り問題と無縁)</h2>
+<svg viewBox="0 0 900 330">
+  <!-- 断面 -->
+  <rect x="120" y="30" width="50" height="200" fill="#bfe9e2" stroke="#127a75" stroke-width="3"/>
+  <rect x="730" y="30" width="50" height="200" fill="#bfe9e2" stroke="#127a75" stroke-width="3"/>
+  <text x="128" y="60" font-size="18" fill="#127a75" font-weight="bold">壁</text>
+  <!-- 内側の出っ張り(バイブ等) -->
+  <rect x="330" y="130" width="110" height="70" fill="#e9e4ff" stroke="#6d5bd0" stroke-width="3"/>
+  <text x="335" y="120" font-size="17" fill="#6d5bd0" font-weight="bold">バイブ等の出っ張り(内側)⤴</text>
+  <!-- 板 -->
+  <rect x="170" y="200" width="560" height="30" fill="#fff" stroke="#4a3123" stroke-width="4"/>
+  <text x="380" y="222" font-size="19" fill="#4a3123" font-weight="bold">ボトム板</text>
+  <path d="M450 90 L450 150" stroke="#888" stroke-width="6" marker-end="url(#c)"/>
+  <text x="465" y="115" font-size="18" fill="#888">真上から置くだけ(スライドしない)</text>
+  <!-- 回転こま -->
+  <rect x="700" y="230" width="90" height="22" rx="8" fill="#7a5236" stroke="#4a3123" stroke-width="4"/>
+  <circle cx="758" cy="241" r="8" fill="#9a9aa6" stroke="#6d6d78" stroke-width="3"/>
+  <text x="530" y="292" font-size="20" fill="#5e3e2d" font-weight="bold">底の縁の「こま」をクルッ→板の外面に被さる</text>
+  <text x="530" y="320" font-size="18" fill="#c94f83" font-weight="bold">こまの厚み=そのままゴム足の高さに使う(足を兼ねる)</text>
+  <text x="150" y="292" font-size="18" fill="#666">板の外面は真っ平ら=こまと出っ張りは絶対に出会わない</text>
+</svg>
+<svg viewBox="0 0 900 300">
+  <!-- 底面図 before/after -->
+  <rect x="60" y="30" width="360" height="240" rx="18" fill="#bfe9e2" stroke="#127a75" stroke-width="4"/>
+  <rect x="90" y="55" width="300" height="190" fill="#fff" stroke="#4a3123" stroke-width="3"/>
+  <g fill="#7a5236" stroke="#4a3123" stroke-width="3">
+    <rect x="64" y="52" width="44" height="16" rx="7"/><rect x="372" y="52" width="44" height="16" rx="7"/>
+    <rect x="64" y="232" width="44" height="16" rx="7"/><rect x="372" y="232" width="44" height="16" rx="7"/>
+  </g>
+  <text x="120" y="290" font-size="19" fill="#666">開: こまは外向き(板が置ける)</text>
+  <rect x="480" y="30" width="360" height="240" rx="18" fill="#bfe9e2" stroke="#127a75" stroke-width="4"/>
+  <rect x="510" y="55" width="300" height="190" fill="#fff" stroke="#4a3123" stroke-width="3"/>
+  <g fill="#7a5236" stroke="#4a3123" stroke-width="3">
+    <rect x="502" y="66" width="16" height="44" rx="7"/><rect x="802" y="66" width="16" height="44" rx="7"/>
+    <rect x="502" y="190" width="16" height="44" rx="7"/><rect x="802" y="190" width="16" height="44" rx="7"/>
+  </g>
+  <text x="540" y="290" font-size="19" fill="#666">閉: 4つをクルッ→板の縁に被さってロック</text>
+</svg>
+<div class="note">寸法シビアさゼロ(回るだけ・遊びがあっても効く)/力ゼロ/しなる部品ゼロ。こまと軸はØ6級のぶ厚さ。<b>こまの上にゴム足シールを貼れば「足」も兼ねる</b>ので背も高くならない。組み立ては軸にこまを1回はめるだけ(キノコ頭の軸に置いて軽く押す・以後は回すだけ)。</div></div>
+
+<div class="card" style="border:5px solid #f06ba0"><h2>⑧ 案H「かんぬき(デッドボルト)式」= 板は置くだけ・太い棒を横に走らせる</h2>
+<svg viewBox="0 0 900 360">
+  <!-- 底面図 -->
+  <rect x="60" y="30" width="780" height="300" rx="24" fill="#bfe9e2" stroke="#127a75" stroke-width="4"/>
+  <rect x="110" y="65" width="680" height="230" rx="6" fill="#fff" stroke="#4a3123" stroke-width="4"/>
+  <text x="150" y="105" font-size="20" fill="#4a3123" font-weight="bold">ボトム板(真上から置くだけ・板は動かさない)</text>
+  <!-- 固定リップ側 -->
+  <rect x="110" y="65" width="680" height="16" fill="#127a75"/>
+  <text x="300" y="58" font-size="18" fill="#127a75" font-weight="bold">上の辺: 固定リップ(斜めに引っかけるだけ・可動部なし)</text>
+  <!-- ガイド(コの字) -->
+  <g fill="#127a75">
+    <rect x="150" y="270" width="70" height="26"/>
+    <rect x="640" y="270" width="70" height="26"/>
+  </g>
+  <text x="150" y="330" font-size="18" fill="#127a75" font-weight="bold">コの字ガイド×2(ケースと一体・ぶ厚い)</text>
+  <!-- かんぬきバー -->
+  <rect x="90" y="274" width="470" height="18" rx="9" fill="#7a5236" stroke="#4a3123" stroke-width="4"/>
+  <rect x="90" y="268" width="40" height="30" rx="8" fill="#5e3e2d"/>
+  <path d="M580 283 L700 283" stroke="#5e3e2d" stroke-width="7" stroke-dasharray="12 9" marker-end="url(#c)"/>
+  <text x="480" y="258" font-size="20" fill="#5e3e2d" font-weight="bold">かんぬき棒(幅10×厚3の板棒)を横にスーッ</text>
+</svg>
+<svg viewBox="0 0 900 240">
+  <!-- 断面 -->
+  <rect x="120" y="20" width="55" height="150" fill="#bfe9e2" stroke="#127a75" stroke-width="3"/>
+  <rect x="120" y="150" width="640" height="20" fill="#bfe9e2" stroke="#127a75" stroke-width="3"/>
+  <rect x="175" y="112" width="480" height="38" fill="#fff" stroke="#4a3123" stroke-width="4"/>
+  <text x="210" y="138" font-size="19" fill="#4a3123" font-weight="bold">板</text>
+  <!-- ガイドのコの字断面 -->
+  <path d="M600 170 L600 208 L700 208 L700 170 L676 170 L676 190 L624 190 L624 170 Z" fill="#127a75"/>
+  <!-- バー断面 -->
+  <rect x="628" y="170" width="44" height="16" rx="6" fill="#7a5236" stroke="#4a3123" stroke-width="3"/>
+  <text x="470" y="230" font-size="19" fill="#5e3e2d" font-weight="bold">バーはガイドの中を走り、板の縁の上に乗る=浮き完全ロック</text>
+  <text x="130" y="200" font-size="18" fill="#666">※動くのは棒だけ。板とバイブの出っ張りは無関係</text>
+</svg>
+<div class="note"><b>門のかんぬきと同じ=人類が数千年使ってる最強クラスの機構。</b>棒は10×3mmのぶ厚い板棒(しなり不要・遊び1mmでも効く)。抜け止めは終端の小さな峠(棒の背の低い山をガイドが乗り越えてカクン)か、棒の端を90°折ったL字にして指掛かり+止まりに。外す時は棒を反対へスーッと引くだけ。</div></div>
+</body></html>
