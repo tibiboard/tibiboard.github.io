@@ -380,4 +380,4 @@ body::before{z-index:-1 !important}
 
 /* ===== 2026-10-31 たけろう: 売れた子は棚に値段とキット/完成版を出さない(比べられて完成版が買いづらくならないように)。戻す時はこのかたまりを消す ===== */
 /* 2026-10-31 たけろう「値段は出した方がいい」: 値段は出す(キット/完成版だけ隠す) */
-.item.sold .tg.kit,.item.sold .tg.full{display:none !important}
+/* 2026-11-23 たけろう「やっぱり出そう」: 売れた子のキット/完成版の札を棚に戻した(値段の違いの理由が分かるように)。隠す時は次の1行を戻す: .item.sold .tg.kit,.item.sold .tg.full{display:none !important} */
