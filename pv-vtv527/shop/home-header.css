@@ -1,0 +1,130 @@
+/* Local header trial: one compact row, with the owners guide at the far right. */
+#world .home-topbar{display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:12px;padding:6px 16px!important;min-height:56px;box-sizing:border-box}
+#world .home-topbar .band-logo{display:flex;align-items:center;flex:0 0 auto;min-height:44px}
+#world .home-topbar .band-logo img{height:38px;width:auto}
+#world .home-topbar .home-nav{margin-left:auto;display:flex;align-items:center;justify-content:flex-end;gap:14px;min-width:0}
+#world .home-topbar .home-nav a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;box-sizing:border-box;color:inherit;font-size:16px;font-weight:800;line-height:1.4;white-space:nowrap}
+#world .home-topbar .lang{margin:0!important;padding:0 4px!important;min-width:44px;border:0!important;border-radius:0;background:transparent!important;text-decoration:none}
+#world .home-topbar .owners-guide{padding:0;text-decoration:underline;text-underline-offset:4px}
+#world>footer .footer-guide{margin:0 0 6px}
+#world>footer .footer-guide a{display:inline-flex;align-items:center;min-height:44px;color:inherit;font-size:18px;text-underline-offset:4px}
+@media(max-width:600px){
+ #world .home-topbar{gap:8px;padding:4px 12px!important;min-height:52px}
+ #world .home-topbar .band-logo img{height:32px}
+ #world .home-topbar .home-nav{gap:8px}
+}
+@media(max-width:360px){
+ #world .home-topbar{padding-inline:10px!important;gap:6px}
+ #world .home-topbar .band-logo img{height:28px}
+ #world .home-topbar .home-nav{gap:4px}
+ #world .home-topbar .home-nav a{font-size:14px}
+}
+
+/* Main-page panels share the official-song glass, without stacking white layers. */
+#world .home-topbar .owners-guide{color:#175781!important}
+#world .song-heading,#world .home-topbar,#world #shelf .item,
+#world #found-sec .found-card,#world #sponsor-sec .sponsor,
+#world #oshirase-sec .oshirase-board,#world #asobi-sec .ab-title,
+#world #asobi-sec .ab-zukan{
+ background:rgba(255,255,255,.55)!important;
+ -webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important;
+}
+#world #oshirase-sec{background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+@media(max-width:600px) and (orientation:portrait){
+ #world #hero .catch{font-size:28px}
+}
+@media(max-width:360px) and (orientation:portrait){
+ #world #hero .catch{font-size:26px}
+}
+
+/* Reversible trial: retain product-card glass, remove other main-page panels. */
+#world .home-topbar,#world .song-heading,#world #pv-sec .pv-head,
+#world #sponsor-sec .sponsor,#world #found-sec .found-card,
+#world #oshirase-sec,#world #oshirase-sec .oshirase-board,
+#world #oshirase-sec .oshirase-ttl,#world #oshirase-sec .oshirase-list li,
+#world #asobi-sec,#world #asobi-sec .ab-title,#world #asobi-sec .ab-step,
+#world #asobi-sec .ab-game,#world #asobi-sec .ab-zukan{
+ background:transparent!important;
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ box-shadow:none!important;
+}
+#world .song-heading,#world #found-sec .found-card{border-color:transparent!important}
+#world #asobi-sec .ab-game .ab-go.shop-metal{width:100%;box-sizing:border-box;min-height:64px!important;display:flex;align-items:center;justify-content:center}
+#world #asobi-sec .ab-game .metal-title{overflow-wrap:anywhere;text-wrap:balance}
+@media(max-width:600px){
+ #world #asobi-sec .ab-game .ab-go.shop-metal{padding-inline:25px!important}
+ #world #asobi-sec .ab-game .ab-go.shop-metal .metal-title{font-size:16px!important}
+}
+
+/* Deliberate Japanese line breaks on portrait phones only. */
+.phone-copy-break{display:none}
+@media(max-width:600px) and (orientation:portrait){
+ #pv-sec h2.pv-h{font-size:clamp(20px,6vw,24px)!important}
+ .phone-copy-break{display:block}
+ .phone-copy-line{white-space:nowrap}
+ #world #found-sec .found-text,#world #sponsor-sec .sponsor-copy{text-align:center}
+}
+
+/* Size the game plates to their illustrations instead of the whole column. */
+#world #asobi-sec .ab-game .ab-go.shop-metal{max-width:220px;min-height:52px!important;padding:9px 28px!important}
+#world #asobi-sec .ab-game .ab-go.shop-metal .metal-title{font-size:16px!important}
+#world #asobi-sec .ab-go.big.shop-metal{max-width:300px;min-height:54px!important;padding:10px 28px!important}
+#world #asobi-sec .ab-go.big.shop-metal .metal-title{font-size:20px!important}
+#world #asobi-sec .ab-go.shop-metal::before,#world #asobi-sec .ab-go.shop-metal::after{width:14px;height:14px;top:calc(50% - 7px)}
+@media(max-width:600px){
+ #world #asobi-sec .ab-game .ab-go.shop-metal{padding-inline:23px!important;min-height:56px!important}
+ #world #asobi-sec .ab-go.big.shop-metal{max-width:260px}
+ #world #asobi-sec .ab-go.big.shop-metal .metal-title{font-size:18px!important}
+}
+
+/* The collection uses the same compact engraved plate. */
+#world #asobi-sec a.ab-zukan.shop-metal{width:220px;max-width:100%;min-height:44px!important;margin:0;padding:7px 28px!important;background:#bac2ca url('assets/nameplate_metal.jpg') center/cover!important;box-shadow:inset 0 0 0 4px #dce2e7,0 5px 0 #697788,0 9px 12px #0002!important;gap:0}
+#world #asobi-sec a.ab-zukan.shop-metal .metal-title{font-size:16px!important}
+#world #asobi-sec a.ab-zukan.shop-metal::before,#world #asobi-sec a.ab-zukan.shop-metal::after{width:14px;height:14px;top:calc(50% - 7px)}
+/* Reduce vertical padding on computers; retain touch-device spacing. */
+@media(min-width:601px) and (hover:hover) and (pointer:fine){
+ #world #asobi-sec .ab-game .ab-go.shop-metal{min-height:40px!important;padding-block:4px!important}
+ #world #asobi-sec .ab-go.big.shop-metal{min-height:42px!important;padding-block:4px!important}
+ #world #asobi-sec a.ab-zukan.shop-metal{min-height:40px!important;padding-block:4px!important}
+}
+
+/* Computer plates hug their unchanged text; reserve space for the screws. */
+@media(min-width:601px) and (hover:hover) and (pointer:fine){
+ #world #asobi-sec .ab-game .ab-go.shop-metal,
+ #world #asobi-sec .ab-go.big.shop-metal,
+ #world #asobi-sec a.ab-zukan.shop-metal{width:max-content!important;max-width:100%;padding-inline:30px!important}
+ #world #asobi-sec .shop-metal .metal-title{white-space:nowrap;flex:0 0 auto;width:auto}
+}
+
+/* Sponsorship enlargement is computer-only; mobile retains its original 18px. */
+#world #sponsor-sec .sponsor-copy p,#world #sponsor-sec .sponsor-copy a{font-size:18px;line-height:1.6}
+@media(min-width:601px) and (hover:hover) and (pointer:fine){
+ #world #sponsor-sec .sponsor-copy p{font-size:26px}
+ #world #sponsor-sec .sponsor-copy a{font-size:22px}
+}
+
+/* Readable computer copy; preserve mobile layout and the engraved button type. */
+@media(min-width:601px) and (hover:hover) and (pointer:fine){
+ #world #pv-sec .pv-sub2,#world #pv-sec .song-version,
+ #world #found-sec .found-text,#world #asobi-sec .ab-head{font-size:22px!important;line-height:1.6}
+ #world #pv-sec .pv-listen,#world #asobi-sec .ab-zukan,
+ #world #oshirase-sec .oshirase-list .ot{font-size:20px!important;line-height:1.6}
+ #world #shelf-sec .item .nm{font-size:22px}
+ #world #shelf-sec .item .pr,#world #shelf-sec .item .st{font-size:20px}
+ #world #oshirase-sec .oshirase-list .od{font-size:16px}
+}
+
+/* Original brushed metal with pale laser-engraved lettering. */
+#world a.shop-metal,#world span.shop-metal,#world #asobi-sec a.ab-zukan.shop-metal{
+ background:#bac2ca url('assets/nameplate_metal.jpg') center/cover!important;
+}
+#world .shop-metal .metal-title{color:#f7f8f8!important;-webkit-text-stroke:.35px #30363b;paint-order:stroke fill;text-shadow:0 -1px 0 #343b41,0 1px 0 rgba(255,255,255,.22)!important}
+/* Only the logo has glass. Navigation sits in the middle of the header. */
+#world .home-topbar{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+#world .home-topbar .band-logo{grid-column:1;justify-self:start;padding:2px 8px;border-radius:8px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-sizing:border-box}
+#world .home-topbar .home-nav{grid-column:2;justify-self:center;margin-left:0;justify-content:center}
+@media(max-width:600px){
+ #world .home-topbar{grid-template-columns:auto minmax(0,1fr)}
+ #world .home-topbar .home-nav{grid-column:2;justify-self:center}
+ #world .home-topbar .band-logo{padding-inline:5px}
+}

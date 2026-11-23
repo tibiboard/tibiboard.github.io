@@ -1,0 +1,13 @@
+/* Keep each collaboration in one visual group, without extra animation. */
+#pv-sec .song-heading{display:block!important;max-width:900px}
+#pv-sec .song-heading .song-poster{width:min(180px,50vw);margin:14px auto 18px;padding:5px 5px 8px;flex:none}
+#sponsor-sec{max-width:900px;padding:14px 18px 24px}
+#sponsor-sec .sponsor{padding:20px 22px;text-align:left;border-radius:18px;box-shadow:none}
+#sponsor-sec .sponsor p{font-size:24px;line-height:1.65;margin:0}
+#sponsor-sec .sponsor a{display:inline-block;margin-top:10px;font-size:24px;color:inherit;text-underline-offset:4px}
+#found-sec .found-panel{margin-bottom:22px;transform:none}
+#found-sec .found-link{display:block;color:inherit;text-decoration:none}
+#found-sec .found-x{margin:20px 0 0!important}
+#found-sec .found-x .twitter-tweet{margin-bottom:0!important}
+#found-sec .found-panel:focus-within{outline:2px solid currentColor;outline-offset:4px}
+@media(max-width:600px){#pv-sec .song-heading .song-poster{width:145px}#sponsor-sec .sponsor{padding:18px}#found-sec .found-panel{padding:20px 14px}}

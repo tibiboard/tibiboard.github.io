@@ -1,0 +1,29 @@
+{
+  "status": "local preview only",
+  "desktop": {
+    "before": [
+      230,
+      46,
+      16
+    ],
+    "after": [
+      460,
+      92,
+      32
+    ],
+    "viewport": 1280,
+    "material_background": "none",
+    "media_min_width": 1024
+  },
+  "order": [
+    "shelf",
+    "games/key",
+    "song",
+    "FIREWORKS",
+    "NyattoLand",
+    "news"
+  ],
+  "inline_and_external_scripts_unchanged": true,
+  "ids_preserved": true,
+  "mobile_rule_unchanged": true
+}
